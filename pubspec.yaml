@@ -22,7 +22,7 @@ dependencies:
   tap_debouncer: ^2.2.0
 
 dev_dependencies: 
-  flutter_lints: ^2.0.0
+  flutter_lints: ">=2.0.0 <5.0.0"
   flutter_test:
     sdk: flutter
   very_good_analysis: ^5.1.0
