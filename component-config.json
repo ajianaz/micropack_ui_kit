@@ -1,0 +1,14 @@
+{
+    "appName": "Micropack",
+    "name": "article card",
+    "isStateful": true,
+    "hasEnum": false,
+    "prefix": "mp",
+    "properties": [
+        {
+            "name": "title",
+            "type": "String",
+            "isRequired": true
+        }
+    ]
+}

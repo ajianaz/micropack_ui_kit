@@ -1,0 +1,293 @@
+{
+    "name": "Micropack",
+    "prefix": "MP",
+    "fontFamily": "montserrat",
+    "githubUsername": "ajianaz",
+    "repositoryName": "micropack-ui-kit",
+    "colors": [
+        {
+            "isMaterialColor": false,
+            "name": "primary",
+            "value": "303F9F"
+        },
+        {
+            "isMaterialColor": false,
+            "name": "primarySurface",
+            "value": "F5F5FA"
+        },
+        {
+            "isMaterialColor": false,
+            "name": "primaryFocus",
+            "value": "D6D9EC"
+        },
+        {
+            "isMaterialColor": false,
+            "name": "primaryBorder",
+            "value": "BABFDF"
+        },
+        {
+            "isMaterialColor": false,
+            "name": "primaryHover",
+            "value": "283584"
+        },
+        {
+            "isMaterialColor": false,
+            "name": "primaryPressed",
+            "value": "182050"
+        },
+        {
+            "name": "neutral",
+            "isMaterialColor": true,
+            "defaultColor": "AEAEAE",
+            "value": [
+                {
+                    "level": 10,
+                    "value": "D9D9D9"
+                },
+                {
+                    "level": 20,
+                    "value": "DCDCDC"
+                },
+                {
+                    "level": 30,
+                    "value": "D5D5D5"
+                },
+                {
+                    "level": 40,
+                    "value": "C9C9C9"
+                },
+                {
+                    "level": 50,
+                    "value": "AEAEAE"
+                },
+                {
+                    "level": 60,
+                    "value": "8E8E8E"
+                },
+                {
+                    "level": 70,
+                    "value": "696969"
+                },
+                {
+                    "level": 80,
+                    "value": "535353"
+                },
+                {
+                    "level": 90,
+                    "value": "393939"
+                },
+                {
+                    "level": 100,
+                    "value": "090909"
+                }
+            ]
+        }
+    ],
+    "typography": [
+        {
+            "name": "title",
+            "fontSize": 42,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w800"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "heading1",
+            "fontSize": 34,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w700"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "heading2",
+            "fontSize": 27,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w700"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "heading3",
+            "fontSize": 21,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w700"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "body1",
+            "fontSize": 17,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w400"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "body2",
+            "fontSize": 14,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w400"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "caption",
+            "fontSize": 11,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w400"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration"
+                }
+            ]
+        },
+        {
+            "name": "overline",
+            "fontSize": 8,
+            "parameters": [
+                {
+                    "type": "Color?",
+                    "name": "color"
+                },
+                {
+                    "type": "FontWeight?",
+                    "name": "fontWeight",
+                    "default": "FontWeight.w400"
+                },
+                {
+                    "type": "TextDecoration?",
+                    "name": "decoration",
+                    "default": "TextDecoration.underline"
+                }
+            ]
+        }
+    ],
+    "textTheme": [
+        {
+            "name": "Display Large",
+            "style": "title"
+        },
+        {
+            "name": "Display Medium",
+            "style": "title",
+            "parameters": [
+                {
+                    "type": "FontWeight",
+                    "name": "fontWeight",
+                    "value": "FontWeight.w600"
+                }
+            ]
+        },
+        {
+            "name": "Display Small",
+            "style": "title",
+            "parameters": [
+                {
+                    "type": "FontWeight",
+                    "name": "fontWeight",
+                    "value": "FontWeight.w400"
+                }
+            ]
+        },
+        {
+            "name": "Title Large",
+            "style": "heading1"
+        },
+        {
+            "name": "Title Medium",
+            "style": "heading2"
+        },
+        {
+            "name": "Title Small",
+            "style": "heading3"
+        },
+        {
+            "name": "Body Large",
+            "style": "body2"
+        },
+        {
+            "name": "Body Medium",
+            "style": "body1"
+        },
+        {
+            "name": "Body Small",
+            "style": "caption"
+        }
+    ]
+}
