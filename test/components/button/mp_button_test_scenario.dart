@@ -8,8 +8,8 @@ List<WidgetTestScenarioModel> buttonTestScenario = [
     title: 'has label set to Save',
     widget: MPComponentInitTest(
       child: MPButton(
-        label: 'Save',
-        onpressed: () async {},
+        text: 'Save',
+        onPressed: () async {},
       ), //TODO: add your first test case for this widget,
     ),
   ),

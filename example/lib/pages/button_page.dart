@@ -12,7 +12,7 @@ class ButtonPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(20.r),
-        child: MPButton(label: 'Save', onpressed: () async {}),
+        child: MPButton(text: 'Save', onPressed: () async {}),
       ),
     );
   }
