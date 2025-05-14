@@ -1,55 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 class MPTextStyle {
-  // const MPTextStyle._();
+  /// Configurable text style for dynamic text usage
 
-  /// [maxLines] Mengatur maksimal baris dari teks
-  int? maxLines;
+  final int? maxLines;
+  final int? minLines;
+  final TextAlign? textAlign;
+  final TextOverflow? textOverflow;
+  final bool? softWrap;
+  final FontWeight? fontWeight;
+  final double? fontSize;
+  final FontStyle? fontStyle;
+  final double? letterSpacing;
+  final double? wordSpacing;
+  final double? height;
+  final TextBaseline? textBaseline;
+  final Color? color;
+  final TextDecoration? decoration;
+  final TextDecorationStyle? decorationStyle;
+  final Color? decorationColor;
+  final double? decorationThickness;
 
-  /// [minLines] Mengatur minimal baris dari teks.
-  /// Saat ini hanya berlaku di penggunaan [MPTextField]
-  int? minLines;
-
-  /// [textAlign] Mengatur perataan dari teks
-  TextAlign? textAlign;
-
-  /// [textOverflow] Mengatur luapan teks
-  TextOverflow? textOverflow;
-
-  /// [softWrap] mengatur text soft warp
-  bool? softWrap;
-
-  /// [fontWeight] Mengatur ketebalan font
-  FontWeight? fontWeight;
-
-  /// [fontSize] Mengatur ukuran font
-  double? fontSize;
-
-  /// [fontStyle] mengatur bentuk font
-  FontStyle? fontStyle;
-
-  /// [letterSpacing] mengatur jarak pada huruf
-  double? letterSpacing;
-
-  /// [color] Mengatur warna font
-  Color? color;
-
-  /// [decoration] mengatur dekorasi dari teks
-  TextDecoration? decoration;
-
-  /// [decorationStyle] mengatur gaya dari dekorasi (dashed, dotted, double atau combine)
-  TextDecorationStyle? decorationStyle;
-
-  /// [decorationColor] mengatur warna dari dekorasi
-  Color? decorationColor;
-
-  /// [decorationThickness] mengatur ketebalan dari dekorasi
-  double? decorationThickness;
-
-  MPTextStyle({
+  const MPTextStyle({
     this.maxLines,
     this.minLines,
     this.textAlign,
@@ -59,6 +33,9 @@ class MPTextStyle {
     this.fontSize,
     this.fontStyle,
     this.letterSpacing,
+    this.wordSpacing,
+    this.height,
+    this.textBaseline,
     this.color,
     this.decoration,
     this.decorationStyle,
@@ -66,6 +43,7 @@ class MPTextStyle {
     this.decorationThickness,
   });
 
+  /// Clone the style with override properties
   MPTextStyle copyWith({
     int? maxLines,
     int? minLines,
@@ -76,6 +54,9 @@ class MPTextStyle {
     double? fontSize,
     FontStyle? fontStyle,
     double? letterSpacing,
+    double? wordSpacing,
+    double? height,
+    TextBaseline? textBaseline,
     Color? color,
     TextDecoration? decoration,
     TextDecorationStyle? decorationStyle,
@@ -84,7 +65,7 @@ class MPTextStyle {
   }) {
     return MPTextStyle(
       maxLines: maxLines ?? this.maxLines,
-      minLines: maxLines ?? this.minLines,
+      minLines: minLines ?? this.minLines,
       textAlign: textAlign ?? this.textAlign,
       textOverflow: textOverflow ?? this.textOverflow,
       softWrap: softWrap ?? this.softWrap,
@@ -92,6 +73,9 @@ class MPTextStyle {
       fontSize: fontSize ?? this.fontSize,
       fontStyle: fontStyle ?? this.fontStyle,
       letterSpacing: letterSpacing ?? this.letterSpacing,
+      wordSpacing: wordSpacing ?? this.wordSpacing,
+      height: height ?? this.height,
+      textBaseline: textBaseline ?? this.textBaseline,
       color: color ?? this.color,
       decoration: decoration ?? this.decoration,
       decorationStyle: decorationStyle ?? this.decorationStyle,
@@ -100,9 +84,10 @@ class MPTextStyle {
     );
   }
 
+  /// Internal base text style
   static TextStyle _base({
     double fontSize = 14,
-    FontWeight? fontWeight = FontWeight.w400,
+    FontWeight fontWeight = FontWeight.w400,
     double letterSpacing = 0.0,
     TextDecoration? decoration,
     Color? color,
@@ -119,144 +104,135 @@ class MPTextStyle {
         color: color,
       );
 
-  //TODO: Define your text style variant and your main text theme
+  // === Text Variants ===
 
-  static TextTheme mainTextTheme = TextTheme(
-    displayLarge: MPTextStyle.title(),
-    displayMedium: MPTextStyle.title(
-      fontWeight: FontWeight.w600,
-    ),
-    displaySmall: MPTextStyle.title(
-      fontWeight: FontWeight.w400,
-    ),
-    titleLarge: MPTextStyle.heading1(),
-    titleMedium: MPTextStyle.heading2(),
-    titleSmall: MPTextStyle.heading3(),
-    bodyLarge: MPTextStyle.body2(),
-    bodyMedium: MPTextStyle.body1(),
-    bodySmall: MPTextStyle.caption(),
-  );
-  static TextTheme darkTextTheme = TextTheme(
-    displayLarge: MPTextStyle.title(),
-    displayMedium: MPTextStyle.title(
-      fontWeight: FontWeight.w600,
-    ),
-    displaySmall: MPTextStyle.title(
-      fontWeight: FontWeight.w400,
-    ),
-    titleLarge: MPTextStyle.heading1(),
-    titleMedium: MPTextStyle.heading2(),
-    titleSmall: MPTextStyle.heading3(),
-    bodyLarge: MPTextStyle.body2(),
-    bodyMedium: MPTextStyle.body1(),
-    bodySmall: MPTextStyle.caption(),
-  );
-
+  /// Big page title
   static TextStyle title({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w800,
+    FontWeight fontWeight = FontWeight.w800,
     TextDecoration? decoration,
   }) =>
       _base(
-        fontSize: 42,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 42,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Heading level 1
   static TextStyle heading1({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w700,
+    FontWeight fontWeight = FontWeight.w700,
     TextDecoration? decoration,
   }) =>
       _base(
-        fontSize: 34,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 34,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Heading level 2
   static TextStyle heading2({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w700,
+    FontWeight fontWeight = FontWeight.w700,
     TextDecoration? decoration,
   }) =>
       _base(
-        fontSize: 27,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 27,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Heading level 3
   static TextStyle heading3({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w700,
+    FontWeight fontWeight = FontWeight.w700,
     TextDecoration? decoration,
   }) =>
       _base(
-        fontSize: 21,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 21,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Normal body text
   static TextStyle body1({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w400,
+    FontWeight fontWeight = FontWeight.w400,
     TextDecoration? decoration,
   }) =>
       _base(
-        fontSize: 17,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 17,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Secondary body text
   static TextStyle body2({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w400,
+    FontWeight fontWeight = FontWeight.w400,
     TextDecoration? decoration,
   }) =>
       _base(
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 14,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Caption / helper text
   static TextStyle caption({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w400,
+    FontWeight fontWeight = FontWeight.w400,
     TextDecoration? decoration,
   }) =>
       _base(
-        fontSize: 11,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 11,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
 
+  /// Overline text
   static TextStyle overline({
     Color? color,
-    FontWeight? fontWeight = FontWeight.w400,
-    TextDecoration? decoration = TextDecoration.underline,
+    FontWeight fontWeight = FontWeight.w400,
+    TextDecoration decoration = TextDecoration.underline,
   }) =>
       _base(
-        fontSize: 8,
-        color: color,
-        fontWeight: fontWeight,
-        decoration: decoration,
-      );
+          fontSize: 8,
+          fontWeight: fontWeight,
+          color: color,
+          decoration: decoration);
+
+  /// Light theme text theme
+  static final TextTheme mainTextTheme = TextTheme(
+    displayLarge: title(),
+    displayMedium: title(fontWeight: FontWeight.w600),
+    displaySmall: title(fontWeight: FontWeight.w400),
+    titleLarge: heading1(),
+    titleMedium: heading2(),
+    titleSmall: heading3(),
+    bodyLarge: body2(),
+    bodyMedium: body1(),
+    bodySmall: caption(),
+    labelSmall: overline(),
+  );
+
+  /// Dark theme text theme
+  static final TextTheme darkTextTheme = mainTextTheme;
 }
 
+/// Extension method to convert `MPTextStyle` to Flutter `TextStyle`
 extension MPTextStyleExtension on MPTextStyle? {
   TextStyle toTextStyle() {
     return TextStyle(
       fontSize: this?.fontSize,
       fontWeight: this?.fontWeight,
-      color: this?.color,
       fontStyle: this?.fontStyle,
-      overflow: this?.textOverflow,
+      color: this?.color,
       letterSpacing: this?.letterSpacing,
+      wordSpacing: this?.wordSpacing,
+      height: this?.height,
+      textBaseline: this?.textBaseline,
+      overflow: this?.textOverflow,
       decoration: this?.decoration,
       decorationStyle: this?.decorationStyle,
       decorationColor: this?.decorationColor,
