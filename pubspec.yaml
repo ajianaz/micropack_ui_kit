@@ -2,13 +2,13 @@ name: micropack_ui_kit
 description: A UI Kit package for Micropack.
 version: 0.0.1
 homepage: https://github.com/ajianaz/micropack-ui-kit.git
-  
-environment: 
-  sdk: ">=3.0.1 <4.0.0"
-  flutter: ">=1.17.0"
+
+environment:
+  sdk: '>=3.0.1 <4.0.0'
+  flutter: '>=1.17.0'
 
 dependencies:
-  extended_image: ">=8.1.1 <10.0.0"
+  extended_image: '>=8.1.1 <10.0.0'
   flutter:
     sdk: flutter
   flutter_screenutil: ^5.9.0
@@ -16,13 +16,13 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_switch: ^0.3.2
   google_fonts: ^6.1.0
-  lottie: ^2.7.0
   nil: ^1.1.1
   skeletonizer: ^0.8.0
-  tap_debouncer: ^2.2.0
+  # lottie: ^2.7.0
+  # tap_debouncer: ^2.2.0
 
-dev_dependencies: 
-  flutter_lints: ">=2.0.0 <6.0.0"
+dev_dependencies:
+  flutter_lints: '>=2.0.0 <6.0.0'
   flutter_test:
     sdk: flutter
   very_good_analysis: ^5.1.0
