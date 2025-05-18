@@ -1,6 +1,7 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-import 'package:micropack_ui_kit/mp_ui_kit_settings.dart';
 
 class MPButton extends StatelessWidget {
   const MPButton({
@@ -11,7 +12,6 @@ class MPButton extends StatelessWidget {
     this.variant = MPButtonVariant.primary,
     this.enabled = true,
     this.background,
-    this.foreground,
     this.padding,
     this.radius,
     this.strokeWidth = 0,
@@ -35,8 +35,6 @@ class MPButton extends StatelessWidget {
   final bool enabled;
 
   final Color? background;
-
-  final Color? foreground;
 
   final EdgeInsets? padding;
 
@@ -69,29 +67,28 @@ class MPButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: background ?? MpUiKit.colorBrand,
-          foregroundColor: foreground ?? MpUiKit.colorBrand2,
-          padding: padding ?? const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius ?? MpUiKit.buttonRadius),
-            side: strokeWidth == 0
-                ? BorderSide.none
-                : BorderSide(
-                    color: strokeColor ?? MpUiKit.colorStroke,
-                    width: strokeWidth ?? 1.5,
-                  ),
-          ),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: background ?? MpUiKit.colorBrand,
+        foregroundColor: textColor ?? MpUiKit.colorBrand2,
+        padding: padding ?? const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius ?? MpUiKit.buttonRadius),
+          side: strokeWidth == 0
+              ? BorderSide.none
+              : BorderSide(
+                  color: strokeColor ?? MpUiKit.colorStroke,
+                  width: strokeWidth ?? 1.5,
+                ),
         ),
-        child: widthInfinity == true
-            ? Container(
-                width: MediaQuery.of(context).size.width,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: child ?? _defaultText(),
-                ))
-            : (child ?? _defaultText()));
+      ),
+      child: (widthInfinity ?? false)
+          ? Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              child: child ?? _defaultText())
+          : (child ?? _defaultText()),
+    );
   }
 
   Widget _defaultText() => MPText(

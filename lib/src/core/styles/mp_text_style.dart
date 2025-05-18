@@ -102,7 +102,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       GoogleFonts.getFont(
-        toTitleCase(fontFamily ?? defaultFontFamily),
+        toTitleCase(MpUiKit.fontName ?? fontFamily ?? defaultFontFamily),
         fontSize: fontSize * 1.sp,
         fontWeight: fontWeight,
         letterSpacing: letterSpacing * 1.sp,

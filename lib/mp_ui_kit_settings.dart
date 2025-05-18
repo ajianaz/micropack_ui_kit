@@ -5,7 +5,7 @@ import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 
 class MpUiKit {
-  static init({
+  static void init({
     /// [REQUIRED] Mengatur warna utama
     required Color colorBrand,
 
@@ -58,7 +58,7 @@ class MpUiKit {
     if (colorDisable != null) MpUiKit.colorDisable = colorDisable;
     if (colorError != null) MpUiKit.colorError = colorError;
     if (fontName != null) MpUiKit.fontName = fontName;
-    if (MPTextStyle != null) MpUiKit.textStyle = textStyle;
+    if (textStyle != null) MpUiKit.textStyle = textStyle;
     if (buttonBorderRadius != null) {
       MpUiKit.buttonRadius = buttonBorderRadius;
     }
@@ -169,7 +169,7 @@ class MpUiKit {
     package: 'MP_view',
   );
 
-  static initScreen(BuildContext context) {
+  static void initScreen(BuildContext context) {
     ScreenUtil.init(context, designSize: MediaQuery.of(context).size);
   }
 }
