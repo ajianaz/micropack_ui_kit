@@ -11,16 +11,16 @@ class TypographyPage extends StatelessWidget {
         title: const Text('Typography'),
       ),
       body: Column(
-         mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.all(20.r),
-            child: const Text(
-            'MONTSERRAT',
+            child: Text(
+              MPTextStyle.defaultFontFamily,
             ),
           ),
-           Expanded(
+          Expanded(
             child: ListView.separated(
               itemCount: _textStyles.length,
               padding: EdgeInsets.all(20.r),
@@ -38,22 +38,53 @@ class TypographyPage extends StatelessWidget {
   }
 
   static final _textStyles = [
-    SelectableText('Title',
-    style: MPTextStyle.title(),),
-    SelectableText('Heading1',
-    style: MPTextStyle.heading1(),),
-    SelectableText('Heading2',
-    style: MPTextStyle.heading2(),),
-    SelectableText('Heading3',
-    style: MPTextStyle.heading3(),),
-    SelectableText('Body1',
-    style: MPTextStyle.body1(),),
-    SelectableText('Body2',
-    style: MPTextStyle.body2(),),
-    SelectableText('Caption',
-    style: MPTextStyle.caption(),),
-    SelectableText('Overline',
-    style: MPTextStyle.overline(),),
-    
+    MPText(
+      'Title',
+      style: MPTextStyle.title(),
+    ),
+    MPText(
+      'Heading1',
+      style: MPTextStyle.heading1(),
+    ),
+    MPText(
+      'Heading2',
+      style: MPTextStyle.heading2(),
+    ),
+    MPText(
+      'Heading3',
+      style: MPTextStyle.heading3(),
+    ),
+    MPText(
+      'Body1',
+      style: MPTextStyle.body1(),
+    ),
+    MPText(
+      'Body2',
+      style: MPTextStyle.body2(),
+    ),
+    MPText(
+      'Caption',
+      style: MPTextStyle.caption(),
+    ),
+    MPText(
+      'Overline',
+      style: MPTextStyle.overline(),
+    ),
+    MPText.head(
+      'Head',
+    ),
+    MPText.subhead(
+      'Subhead',
+    ),
+    const MPText('Default'),
+    MPText.label(
+      'Label',
+    ),
+    MPText.body(
+      'Body',
+    ),
+    MPText.small(
+      'Small',
+    ),
   ];
 }

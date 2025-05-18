@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:micropack_ui_kit/src/core/styles/mp_text_style.dart';
+import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 enum MPTextType { HEAD, SUBHEAD, TITLE, BODY, CAPTION, LABEL, SMALL }
 
 class MPText extends StatelessWidget {
   final String text;
-  final MPTextStyle? style;
+  final TextStyle? style;
   final int? maxLines;
   final TextOverflow? textOverflow;
   final bool? softWrap;
@@ -63,11 +63,10 @@ class MPText extends StatelessWidget {
   });
 
   // ==== Named constructors ====
-
   factory MPText.head(
     String text, {
     Key? key,
-    MPTextStyle? style,
+    TextStyle? style,
     int? maxLines,
     TextOverflow? textOverflow,
     bool? softWrap,
@@ -85,7 +84,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style,
+      style: style ?? MPTextStyle.heading3(fontWeight: FontWeight.w500),
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -105,7 +104,7 @@ class MPText extends StatelessWidget {
   factory MPText.subhead(
     String text, {
     Key? key,
-    MPTextStyle? style,
+    TextStyle? style,
     int? maxLines,
     TextOverflow? textOverflow,
     bool? softWrap,
@@ -123,45 +122,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style,
-      maxLines: maxLines,
-      textOverflow: textOverflow,
-      softWrap: softWrap,
-      textAlign: textAlign,
-      fontWeight: fontWeight,
-      fontSize: fontSize,
-      fontStyle: fontStyle,
-      letterSpacing: letterSpacing,
-      color: color,
-      decoration: decoration,
-      decorationStyle: decorationStyle,
-      decorationColor: decorationColor,
-      decorationThickness: decorationThickness,
-    );
-  }
-
-  factory MPText.title(
-    String text, {
-    Key? key,
-    MPTextStyle? style,
-    int? maxLines,
-    TextOverflow? textOverflow,
-    bool? softWrap,
-    TextAlign? textAlign,
-    FontWeight fontWeight = FontWeight.bold,
-    double fontSize = 20,
-    FontStyle? fontStyle,
-    double? letterSpacing,
-    Color? color,
-    TextDecoration? decoration,
-    TextDecorationStyle? decorationStyle,
-    Color? decorationColor,
-    double? decorationThickness,
-  }) {
-    return MPText._internal(
-      text,
-      key: key,
-      style: style,
+      style: style ?? MPTextStyle.body1(fontWeight: FontWeight.w500),
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -181,7 +142,7 @@ class MPText extends StatelessWidget {
   factory MPText.body(
     String text, {
     Key? key,
-    MPTextStyle? style,
+    TextStyle? style,
     int? maxLines,
     TextOverflow? textOverflow,
     bool? softWrap,
@@ -199,7 +160,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style,
+      style: style ?? MPTextStyle.body2(),
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -216,48 +177,11 @@ class MPText extends StatelessWidget {
     );
   }
 
-  factory MPText.caption(
-    String text, {
-    Key? key,
-    MPTextStyle? style,
-    int? maxLines,
-    TextOverflow? textOverflow,
-    bool? softWrap,
-    TextAlign? textAlign,
-    FontWeight fontWeight = FontWeight.w400,
-    double fontSize = 12,
-    FontStyle? fontStyle,
-    double? letterSpacing,
-    Color? color,
-    TextDecoration? decoration,
-    TextDecorationStyle? decorationStyle,
-    Color? decorationColor,
-    double? decorationThickness,
-  }) {
-    return MPText._internal(
-      text,
-      key: key,
-      style: style,
-      maxLines: maxLines,
-      textOverflow: textOverflow,
-      softWrap: softWrap,
-      textAlign: textAlign,
-      fontWeight: fontWeight,
-      fontSize: fontSize,
-      fontStyle: fontStyle,
-      letterSpacing: letterSpacing,
-      color: color,
-      decoration: decoration,
-      decorationStyle: decorationStyle,
-      decorationColor: decorationColor,
-      decorationThickness: decorationThickness,
-    );
-  }
 
   factory MPText.label(
     String text, {
     Key? key,
-    MPTextStyle? style,
+    TextStyle? style,
     int? maxLines,
     TextOverflow? textOverflow,
     bool? softWrap,
@@ -275,7 +199,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style,
+      style: style ?? MPTextStyle.body2(fontWeight: FontWeight.w500),
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -295,7 +219,7 @@ class MPText extends StatelessWidget {
   factory MPText.small(
     String text, {
     Key? key,
-    MPTextStyle? style,
+    TextStyle? style,
     int? maxLines,
     TextOverflow? textOverflow,
     bool? softWrap,
@@ -313,7 +237,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style,
+      style: style ?? MPTextStyle.caption(),
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -338,7 +262,7 @@ class MPText extends StatelessWidget {
       overflow: textOverflow,
       softWrap: softWrap,
       textAlign: textAlign,
-      style: style.toTextStyle(),
+      style: style,
     );
   }
 }

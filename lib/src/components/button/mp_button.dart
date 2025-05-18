@@ -52,7 +52,7 @@ class MPButton extends StatelessWidget {
 
   /// Mengatur gaya teks. Jika [child] != null maka [textStyle] diabaikan.
   /// Jika [textStyle] != null maka [textColor],[textSize],[fontWeight],[fontFamily] diabaikan.
-  final MPTextStyle? textStyle;
+  final TextStyle? textStyle;
 
   /// Mengatur warna dari teks.
   /// Jika [child] != null atau [textStyle] != null maka [textColor] diabaikan

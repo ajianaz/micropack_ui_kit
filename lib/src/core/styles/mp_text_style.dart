@@ -1,10 +1,14 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 class MPTextStyle {
   /// Configurable text style for dynamic text usage
+  static String defaultFontFamily = 'Poppins'; // Default global font
 
+  final String? fontFamily;
   final int? maxLines;
   final int? minLines;
   final TextAlign? textAlign;
@@ -24,6 +28,7 @@ class MPTextStyle {
   final double? decorationThickness;
 
   const MPTextStyle({
+    this.fontFamily,
     this.maxLines,
     this.minLines,
     this.textAlign,
@@ -45,6 +50,7 @@ class MPTextStyle {
 
   /// Clone the style with override properties
   MPTextStyle copyWith({
+    String? fontFamily,
     int? maxLines,
     int? minLines,
     TextAlign? textAlign,
@@ -64,6 +70,7 @@ class MPTextStyle {
     double? decorationThickness,
   }) {
     return MPTextStyle(
+      fontFamily: fontFamily ?? this.fontFamily,
       maxLines: maxLines ?? this.maxLines,
       minLines: minLines ?? this.minLines,
       textAlign: textAlign ?? this.textAlign,
@@ -92,8 +99,10 @@ class MPTextStyle {
     TextDecoration? decoration,
     Color? color,
     double? height,
+    String? fontFamily,
   }) =>
-      GoogleFonts.montserrat(
+      GoogleFonts.getFont(
+        toTitleCase(fontFamily ?? defaultFontFamily),
         fontSize: fontSize * 1.sp,
         fontWeight: fontWeight,
         letterSpacing: letterSpacing * 1.sp,
@@ -111,96 +120,119 @@ class MPTextStyle {
     Color? color,
     FontWeight fontWeight = FontWeight.w800,
     TextDecoration? decoration,
+    String? fontFamily,
   }) =>
       _base(
-          fontSize: 42,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 42,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily ?? defaultFontFamily,
+      );
 
   /// Heading level 1
   static TextStyle heading1({
     Color? color,
     FontWeight fontWeight = FontWeight.w700,
     TextDecoration? decoration,
+    String? fontFamily,
   }) =>
       _base(
-          fontSize: 34,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 34,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily ?? defaultFontFamily,
+      );
 
   /// Heading level 2
   static TextStyle heading2({
     Color? color,
     FontWeight fontWeight = FontWeight.w700,
     TextDecoration? decoration,
+    String? fontFamily,
   }) =>
       _base(
-          fontSize: 27,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 27,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily ?? defaultFontFamily,
+      );
 
   /// Heading level 3
   static TextStyle heading3({
     Color? color,
     FontWeight fontWeight = FontWeight.w700,
     TextDecoration? decoration,
+    String? fontFamily,
   }) =>
       _base(
-          fontSize: 21,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 21,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily ?? defaultFontFamily,
+      );
 
   /// Normal body text
   static TextStyle body1({
     Color? color,
     FontWeight fontWeight = FontWeight.w400,
     TextDecoration? decoration,
+    String? fontFamily,
   }) =>
       _base(
-          fontSize: 17,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 17,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily ?? defaultFontFamily,
+      );
 
   /// Secondary body text
   static TextStyle body2({
     Color? color,
     FontWeight fontWeight = FontWeight.w400,
     TextDecoration? decoration,
+    String fontFamily = 'Poppins',
   }) =>
       _base(
-          fontSize: 14,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 14,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily,
+      );
 
   /// Caption / helper text
   static TextStyle caption({
     Color? color,
     FontWeight fontWeight = FontWeight.w400,
     TextDecoration? decoration,
+    String? fontFamily,
   }) =>
       _base(
-          fontSize: 11,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: decoration);
+        fontSize: 11,
+        fontWeight: fontWeight,
+        color: color,
+        decoration: decoration,
+        fontFamily: fontFamily ?? defaultFontFamily,
+      );
 
   /// Overline text
   static TextStyle overline({
     Color? color,
     FontWeight fontWeight = FontWeight.w400,
     TextDecoration decoration = TextDecoration.underline,
+    String? fontFamily,
   }) =>
       _base(
           fontSize: 8,
           fontWeight: fontWeight,
           color: color,
-          decoration: decoration);
+          decoration: decoration,
+          fontFamily: fontFamily ?? defaultFontFamily);
 
   /// Light theme text theme
   static final TextTheme mainTextTheme = TextTheme(
@@ -224,6 +256,7 @@ class MPTextStyle {
 extension MPTextStyleExtension on MPTextStyle? {
   TextStyle toTextStyle() {
     return TextStyle(
+      fontFamily: this?.fontFamily,
       fontSize: this?.fontSize,
       fontWeight: this?.fontWeight,
       fontStyle: this?.fontStyle,
