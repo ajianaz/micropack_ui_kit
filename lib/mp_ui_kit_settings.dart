@@ -154,19 +154,19 @@ class MpUiKit {
     "assets/checked.png",
     width: 48,
     height: 48,
-    package: 'MP_view',
+    package: 'micropack_ui_kit',
   );
   static Widget iconFailed = Image.asset(
     "assets/cancel.png",
     width: 48,
     height: 48,
-    package: 'MP_view',
+    package: 'micropack_ui_kit',
   );
   static Widget iconWarning = Image.asset(
     "assets/warning.png",
     width: 48,
     height: 48,
-    package: 'MP_view',
+    package: 'micropack_ui_kit',
   );
 
   static void initScreen(BuildContext context) {

@@ -4,6 +4,8 @@ import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit_example/pages/button_page.dart';
 
 import 'package:micropack_ui_kit_example/pages/color_page.dart';
+import 'package:micropack_ui_kit_example/pages/dialog_page.dart';
+import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -36,6 +38,8 @@ class HomePage extends StatelessWidget {
             title: 'Components',
           ),
           _Button(name: 'Button', page: ButtonPage()),
+          _Button(name: 'Dialog', page: DialogPage()),
+          _Button(name: 'Text Field', page: TextFieldPage()),
         ],
       ),
     );
