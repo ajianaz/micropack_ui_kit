@@ -177,7 +177,6 @@ class MPText extends StatelessWidget {
     );
   }
 
-
   factory MPText.label(
     String text, {
     Key? key,
@@ -254,6 +253,22 @@ class MPText extends StatelessWidget {
     );
   }
 
+  TextStyle composeTextStyle(BuildContext context) {
+    TextStyle baseStyle = style ?? const TextStyle();
+
+    return baseStyle.copyWith(
+      fontWeight: fontWeight,
+      fontSize: fontSize,
+      fontStyle: fontStyle,
+      letterSpacing: letterSpacing,
+      color: color,
+      decoration: decoration,
+      decorationStyle: decorationStyle,
+      decorationColor: decorationColor,
+      decorationThickness: decorationThickness,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -262,7 +277,7 @@ class MPText extends StatelessWidget {
       overflow: textOverflow,
       softWrap: softWrap,
       textAlign: textAlign,
-      style: style,
+      style: composeTextStyle(context),
     );
   }
 }
