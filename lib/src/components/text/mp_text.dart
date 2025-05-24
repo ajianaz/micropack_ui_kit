@@ -262,6 +262,7 @@ class MPText extends StatelessWidget {
       fontStyle: fontStyle,
       letterSpacing: letterSpacing,
       color: color,
+      overflow: textOverflow,
       decoration: decoration,
       decorationStyle: decorationStyle,
       decorationColor: decorationColor,
@@ -273,9 +274,9 @@ class MPText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      maxLines: maxLines,
-      overflow: textOverflow,
-      softWrap: softWrap,
+      maxLines: maxLines ?? 1,
+      overflow: textOverflow ?? TextOverflow.ellipsis,
+      softWrap: softWrap ?? false,
       textAlign: textAlign,
       style: composeTextStyle(context),
     );
