@@ -5,7 +5,7 @@ class MPTabRounded extends StatelessWidget {
   const MPTabRounded({
     super.key,
     required this.title,
-    this.tabLocation = Alignment.center,
+    this.tabLocation = 'center',
     this.tabColor = Colors.grey,
     this.tabColorActive,
     this.textColor = Colors.black,
@@ -18,7 +18,7 @@ class MPTabRounded extends StatelessWidget {
   });
 
   final String? title;
-  final Alignment? tabLocation;
+  final String? tabLocation;
   final Color? tabColorActive;
   final Color? tabColor;
   final Color? textColorActive;
@@ -39,10 +39,10 @@ class MPTabRounded extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             border: Border(
-              left: tabLocation == Alignment.center
+              left: tabLocation?.toLowerCase() == 'center'
                   ? BorderSide(color: deviderColor)
                   : BorderSide.none,
-              right: tabLocation == Alignment.center
+              right: tabLocation?.toLowerCase() == 'center'
                   ? BorderSide(color: deviderColor)
                   : BorderSide.none,
             ),
@@ -50,16 +50,16 @@ class MPTabRounded extends StatelessWidget {
                 ? (tabColorActive ?? MpUiKit.colorBrand)
                 : tabColor,
             borderRadius: BorderRadius.only(
-              topLeft: tabLocation == Alignment.centerLeft
+              topLeft: tabLocation?.toLowerCase() == 'left'
                   ? Radius.circular(dimen)
                   : Radius.zero,
-              bottomLeft: tabLocation == Alignment.centerLeft
+              bottomLeft: tabLocation?.toLowerCase() == 'left'
                   ? Radius.circular(dimen)
                   : Radius.zero,
-              topRight: tabLocation == Alignment.centerRight
+              topRight: tabLocation?.toLowerCase() == 'right'
                   ? Radius.circular(dimen)
                   : Radius.zero,
-              bottomRight: tabLocation == Alignment.centerRight
+              bottomRight: tabLocation?.toLowerCase() == 'right'
                   ? Radius.circular(dimen)
                   : Radius.zero,
             ),
