@@ -274,9 +274,10 @@ class MPText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      maxLines: maxLines ?? 1,
-      overflow: textOverflow ?? TextOverflow.ellipsis,
-      softWrap: softWrap ?? false,
+      maxLines: maxLines,
+      overflow:
+          textOverflow ?? (maxLines != null ? TextOverflow.ellipsis : null),
+      softWrap: softWrap ?? true,
       textAlign: textAlign,
       style: composeTextStyle(context),
     );
