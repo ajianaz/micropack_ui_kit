@@ -100,12 +100,14 @@ class MpUiKit {
   static String? fontName;
 
   /// Mengatur gaya teks [default]
+  /// Note: The color property will be overridden by theme-aware colors in components
+  /// This ensures proper dark mode support
   static MPTextStyle? textStyle = MPTextStyle(
     minLines: 1,
     textOverflow: TextOverflow.clip,
     fontSize: 14,
     fontWeight: FontWeight.normal,
-    color: colorText,
+    color: colorText, // This will be overridden by theme-aware colors
     fontStyle: FontStyle.normal,
   );
 

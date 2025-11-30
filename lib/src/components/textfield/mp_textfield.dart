@@ -11,16 +11,17 @@ import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 /// for consistent theming across light and dark modes.
 ///
 /// Theme Implementation:
+/// - Background: uses context.mp.adaptiveBackgroundColor
 /// - Cursor color: uses context.mp.primary
-/// - Icon colors: uses context.mp.primary, context.mp.subtitleColor, context.mp.captionColor
-/// - Clear button icon: uses context.mp.subtitleColor
+/// - Icon colors: uses context.mp.neutral80 for consistent visibility
+/// - Clear button icon: uses context.mp.neutral80
 /// - Loading indicator: uses context.mp.primary
 /// - Image placeholder: uses context.mp.neutral30 and context.mp.captionColor
 ///
 /// State Colors:
 /// - Enabled: uses context.mp.textColor
 /// - Disabled: uses context.mp.disabledColor
-/// - Hint text: uses context.mp.subtitleColor
+/// - Hint text: uses context.mp.neutral60
 /// - Label text: uses context.mp.textColor
 /// - Helper text: uses context.mp.subtitleColor
 /// - Error text: uses context.mp.errorColor
@@ -727,9 +728,9 @@ class _MPTextFieldState extends State<MPTextField> {
         icon: widget.icon,
         iconColor: widget.iconColor ?? themeColors.primary,
 
-        // Prefix icon with theme-aware primary color
+        // Prefix icon with theme-aware neutral80 color for consistency
         prefixIcon: widget.prefixIcon,
-        prefixIconColor: widget.prefixIconColor ?? themeColors.primary,
+        prefixIconColor: widget.prefixIconColor ?? themeColors.neutral80,
         prefix: widget.prefix,
         prefixText: widget.prefixText,
         prefixStyle:
@@ -739,7 +740,7 @@ class _MPTextFieldState extends State<MPTextField> {
 
         // Suffix elements with theme-aware colors
         suffixIcon: finalSuffixIcon,
-        suffixIconColor: widget.suffixIconColor ?? themeColors.subtitleColor,
+        suffixIconColor: widget.suffixIconColor ?? themeColors.neutral80,
         suffix: widget.suffix,
         suffixText: widget.suffixText,
         suffixStyle:
@@ -768,8 +769,10 @@ class _MPTextFieldState extends State<MPTextField> {
           color: widget.errorStyle?.color ?? themeColors.errorColor,
         ),
 
-        // Fill color with theme-aware surface color for proper contrast
-        fillColor: widget.fillColor ?? themeColors.primarySurface,
+        // Fill color using cardColor for proper dark mode contrast and visual separation
+        // In dark mode: uses neutral80 (medium-dark) for contrast against neutral90 background
+        // In light mode: uses neutral10 (white)
+        fillColor: widget.fillColor ?? themeColors.cardColor,
         filled: widget.filled ?? true,
         border: widget.border?.border?.toBorder() ??
             _getThemeAwareBorder(themeColors, 'default'),
@@ -790,6 +793,7 @@ class _MPTextFieldState extends State<MPTextField> {
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       // Text style with theme-aware text color for readability
+      // Always use theme-aware color unless explicitly overridden
       style:
           (widget.textStyle?.toTextStyle() ?? MpUiKit.textStyle.toTextStyle())
               .copyWith(
