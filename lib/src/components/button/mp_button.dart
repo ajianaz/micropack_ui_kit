@@ -25,6 +25,22 @@ class MPButton extends StatefulWidget {
     this.fontWeight,
     this.loading = false,
     this.loadingWidget,
+    this.icon,
+    this.iconPosition = MPButtonIconPosition.left,
+    this.iconSize,
+    this.iconColor,
+    this.shadowColor,
+    this.elevation,
+    this.hoverColor,
+    this.splashColor,
+    this.focusNode,
+    this.onLongPress,
+    this.onHover,
+    this.semanticLabel,
+    this.animationDuration,
+    this.borderRadius,
+    this.minimumSize,
+    this.maximumSize,
   });
 
   final String? text;
@@ -73,6 +89,54 @@ class MPButton extends StatefulWidget {
   /// Custom loading widget
   final Widget? loadingWidget;
 
+  /// Button icon
+  final IconData? icon;
+
+  /// Icon position relative to text
+  final MPButtonIconPosition iconPosition;
+
+  /// Icon size
+  final double? iconSize;
+
+  /// Icon color
+  final Color? iconColor;
+
+  /// Shadow color
+  final Color? shadowColor;
+
+  /// Button elevation
+  final double? elevation;
+
+  /// Hover color
+  final Color? hoverColor;
+
+  /// Splash color
+  final Color? splashColor;
+
+  /// Focus node
+  final FocusNode? focusNode;
+
+  /// Long press callback
+  final VoidCallback? onLongPress;
+
+  /// Hover callback
+  final ValueChanged<bool>? onHover;
+
+  /// Semantic label for accessibility
+  final String? semanticLabel;
+
+  /// Animation duration
+  final Duration? animationDuration;
+
+  /// Border radius
+  final BorderRadius? borderRadius;
+
+  /// Minimum size
+  final Size? minimumSize;
+
+  /// Maximum size
+  final Size? maximumSize;
+
   @override
   State<MPButton> createState() => _MPButtonState();
 }
@@ -82,20 +146,31 @@ class _MPButtonState extends State<MPButton> {
   Widget build(BuildContext context) {
     final buttonContent = widget.loading
         ? _buildLoadingContent()
-        : (widget.child ?? _defaultText());
+        : (widget.child ?? _buildButtonContent());
 
     return ElevatedButton(
-      onPressed: widget.loading ? null : (widget.enabled ? widget.onPressed : null),
+      onPressed:
+          widget.loading ? null : (widget.enabled ? widget.onPressed : null),
       style: ElevatedButton.styleFrom(
         backgroundColor: _getBackgroundColor(),
-        foregroundColor: widget.textColor ?? MpUiKit.colorBrand2,
+        foregroundColor: widget.textColor ?? _getTextColor(),
         padding: widget.padding ?? _getPadding(),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(widget.radius ?? MpUiKit.buttonRadius),
+          borderRadius: widget.borderRadius ??
+              BorderRadius.circular(widget.radius ?? MpUiKit.buttonRadius),
           side: _getBorderSide(),
         ),
-        elevation: widget.variant == MPButtonVariant.primary ? 4 : 0,
+        elevation: widget.elevation ??
+            (widget.variant == MPButtonVariant.primary ? 4 : 0),
+        shadowColor: widget.shadowColor,
+        splashFactory:
+            widget.splashColor != null ? InkSplash.splashFactory : null,
+        animationDuration: widget.animationDuration,
+        minimumSize: widget.minimumSize,
+        maximumSize: widget.maximumSize,
       ),
+      focusNode: widget.focusNode,
+      onLongPress: widget.onLongPress,
       child: (widget.widthInfinity ?? false)
           ? Container(
               alignment: Alignment.center,
@@ -139,11 +214,25 @@ class _MPButtonState extends State<MPButton> {
         return Colors.transparent;
       case MPButtonVariant.ghost:
         return Colors.transparent;
+      case MPButtonVariant.text:
+        return Colors.transparent;
+      case MPButtonVariant.danger:
+        return widget.background ?? Colors.red;
+      case MPButtonVariant.success:
+        return widget.background ?? Colors.green;
+      case MPButtonVariant.warning:
+        return widget.background ?? Colors.orange;
+      case MPButtonVariant.info:
+        return widget.background ?? Colors.blue;
     }
   }
 
   BorderSide _getBorderSide() {
-    if (widget.variant == MPButtonVariant.primary) {
+    if (widget.variant == MPButtonVariant.primary ||
+        widget.variant == MPButtonVariant.danger ||
+        widget.variant == MPButtonVariant.success ||
+        widget.variant == MPButtonVariant.warning ||
+        widget.variant == MPButtonVariant.info) {
       return widget.strokeWidth == 0
           ? BorderSide.none
           : BorderSide(
@@ -151,23 +240,176 @@ class _MPButtonState extends State<MPButton> {
               width: widget.strokeWidth ?? 1.5,
             );
     } else {
+      Color borderColor;
+      switch (widget.variant) {
+        case MPButtonVariant.outlined:
+          borderColor = widget.strokeColor ?? MpUiKit.colorBrand;
+          break;
+        case MPButtonVariant.ghost:
+          borderColor = widget.strokeColor ?? MpUiKit.colorBrand;
+          break;
+        case MPButtonVariant.text:
+          borderColor = Colors.transparent;
+          break;
+        case MPButtonVariant.danger:
+          borderColor = widget.strokeColor ?? Colors.red;
+          break;
+        case MPButtonVariant.success:
+          borderColor = widget.strokeColor ?? Colors.green;
+          break;
+        case MPButtonVariant.warning:
+          borderColor = widget.strokeColor ?? Colors.orange;
+          break;
+        case MPButtonVariant.info:
+          borderColor = widget.strokeColor ?? Colors.blue;
+          break;
+        default:
+          borderColor = widget.strokeColor ?? MpUiKit.colorBrand;
+          break;
+      }
+
       return BorderSide(
-        color: widget.strokeColor ?? MpUiKit.colorBrand,
+        color: borderColor,
         width: widget.strokeWidth ?? 1.5,
       );
+    }
+  }
+
+  Color _getTextColor() {
+    if (widget.textColor != null) return widget.textColor!;
+
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+      case MPButtonVariant.danger:
+      case MPButtonVariant.success:
+      case MPButtonVariant.warning:
+      case MPButtonVariant.info:
+        return Colors.white;
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+        return MpUiKit.colorBrand;
+      case MPButtonVariant.text:
+        return MpUiKit.colorBrand;
+    }
+  }
+
+  Widget _buildButtonContent() {
+    // If custom child is provided, use it
+    if (widget.child != null) {
+      return widget.child!;
+    }
+
+    // Build text with icon if provided
+    if (widget.icon != null) {
+      final icon = Icon(
+        widget.icon,
+        size: widget.iconSize ?? _getIconSize(),
+        color: widget.iconColor ?? _getIconColor(),
+      );
+
+      final text = MPText(
+        widget.text ?? "",
+        style: widget.textStyle,
+        color: widget.textColor,
+        fontSize: widget.textSize,
+        fontWeight: widget.fontWeight,
+      );
+
+      switch (widget.iconPosition) {
+        case MPButtonIconPosition.left:
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icon,
+              SizedBox(width: 8),
+              text,
+            ],
+          );
+        case MPButtonIconPosition.right:
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              text,
+              SizedBox(width: 8),
+              icon,
+            ],
+          );
+        case MPButtonIconPosition.top:
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icon,
+              SizedBox(height: 4),
+              text,
+            ],
+          );
+        case MPButtonIconPosition.bottom:
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              text,
+              SizedBox(height: 4),
+              icon,
+            ],
+          );
+      }
+    }
+
+    // Default text only
+    return MPText(
+      widget.text ?? "",
+      style: widget.textStyle,
+      color: widget.textColor,
+      fontSize: widget.textSize,
+      fontWeight: widget.fontWeight,
+    );
+  }
+
+  double _getIconSize() {
+    switch (widget.size) {
+      case MPButtonSize.small:
+        return 16;
+      case MPButtonSize.regular:
+        return 18;
+      case MPButtonSize.medium:
+        return 20;
+      case MPButtonSize.large:
+        return 22;
+    }
+  }
+
+  Color _getIconColor() {
+    if (widget.iconColor != null) return widget.iconColor!;
+
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+      case MPButtonVariant.danger:
+      case MPButtonVariant.success:
+      case MPButtonVariant.warning:
+      case MPButtonVariant.info:
+        return Colors.white;
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+        return MpUiKit.colorBrand;
+      case MPButtonVariant.text:
+        return widget.textColor ?? MpUiKit.colorBrand;
     }
   }
 
   EdgeInsets _getPadding() {
     switch (widget.size) {
       case MPButtonSize.small:
-        return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+        return widget.padding ??
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
       case MPButtonSize.regular:
-        return const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
+        return widget.padding ??
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
       case MPButtonSize.medium:
-        return const EdgeInsets.symmetric(horizontal: 32, vertical: 16);
+        return widget.padding ??
+            const EdgeInsets.symmetric(horizontal: 32, vertical: 16);
       case MPButtonSize.large:
-        return const EdgeInsets.symmetric(horizontal: 40, vertical: 20);
+        return widget.padding ??
+            const EdgeInsets.symmetric(horizontal: 40, vertical: 20);
     }
   }
 

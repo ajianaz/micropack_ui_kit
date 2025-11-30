@@ -8,13 +8,11 @@ import 'package:micropack_ui_kit_example/pages/color_page.dart';
 import 'package:micropack_ui_kit_example/pages/dialog_page.dart';
 import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
+import 'package:micropack_ui_kit_example/pages/tab_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key, 
-    required this.themeMode, 
-    required this.onThemeChanged
-  });
+  const HomePage(
+      {super.key, required this.themeMode, required this.onThemeChanged});
 
   final ThemeMode themeMode;
   final Function(ThemeMode) onThemeChanged;
@@ -27,9 +25,7 @@ class HomePage extends StatelessWidget {
         actions: [
           PopupMenuButton<ThemeMode>(
             icon: Icon(
-              themeMode == ThemeMode.dark 
-                ? Icons.dark_mode 
-                : Icons.light_mode,
+              themeMode == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
             ),
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<ThemeMode>(
@@ -94,6 +90,7 @@ class HomePage extends StatelessWidget {
           _Button(name: 'Dialog', page: DialogPage()),
           _Button(name: 'Text Field', page: TextFieldPage()),
           _Button(name: 'Article Card', page: ArticleCardPage()),
+          _Button(name: 'Tabs', page: const TabPage()),
         ],
       ),
     );

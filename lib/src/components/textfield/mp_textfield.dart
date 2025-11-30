@@ -7,6 +7,154 @@ import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 
 enum MPTextFieldType { DEFAULT, PASSWORD, BORDER, BORDER_PASSWORD }
 
+/// Input formatter for common patterns
+class MPInputFormatters {
+  /// Phone number formatter (XXX-XXX-XXXX)
+  static final TextInputFormatter phoneNumber = TextInputFormatter.withFunction(
+    (oldValue, newValue) {
+      final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (text.length > 10) return oldValue;
+
+      String formatted = '';
+      for (int i = 0; i < text.length; i++) {
+        if (i == 3 || i == 6) formatted += '-';
+        formatted += text[i];
+      }
+
+      return TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    },
+  );
+
+  /// Credit card formatter (XXXX-XXXX-XXXX-XXXX)
+  static final TextInputFormatter creditCard = TextInputFormatter.withFunction(
+    (oldValue, newValue) {
+      final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (text.length > 16) return oldValue;
+
+      String formatted = '';
+      for (int i = 0; i < text.length; i++) {
+        if (i > 0 && i % 4 == 0) formatted += '-';
+        formatted += text[i];
+      }
+
+      return TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    },
+  );
+
+  /// Currency formatter
+  static final TextInputFormatter currency = TextInputFormatter.withFunction(
+    (oldValue, newValue) {
+      final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (text.isEmpty) return const TextEditingValue(text: '');
+
+      final number = int.tryParse(text) ?? 0;
+      final formatted = '\$${number.toString().replaceAllMapped(
+            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+            (Match m) => '${m[1]},',
+          )}';
+
+      return TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    },
+  );
+}
+
+/// Common validators for text fields
+class MPValidators {
+  /// Required field validator
+  static String? required(String? value, [String? message]) {
+    if (value == null || value.trim().isEmpty) {
+      return message ?? 'This field is required';
+    }
+    return null;
+  }
+
+  /// Email validator
+  static String? email(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Email is required';
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  /// Phone number validator
+  static String? phoneNumber(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Phone number is required';
+    }
+    final digitsOnly = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.length != 10) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
+  }
+
+  /// Password validator
+  static String? password(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Password is required';
+    }
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!RegExp(r'(?=.*[a-z])').hasMatch(value)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!RegExp(r'(?=.*\d)').hasMatch(value)) {
+      return 'Password must contain at least one number';
+    }
+    return null;
+  }
+
+  /// Minimum length validator
+  static String? minLength(int length, String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'This field is required';
+    }
+    if (value.length < length) {
+      return 'Must be at least $length characters';
+    }
+    return null;
+  }
+
+  /// Maximum length validator
+  static String? maxLength(int length, String? value) {
+    if (value != null && value.length > length) {
+      return 'Must be no more than $length characters';
+    }
+    return null;
+  }
+
+  /// Number range validator
+  static String? numberRange(int min, int max, String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'This field is required';
+    }
+    final number = int.tryParse(value);
+    if (number == null) {
+      return 'Please enter a valid number';
+    }
+    if (number < min || number > max) {
+      return 'Must be between $min and $max';
+    }
+    return null;
+  }
+}
+
 class MPTextField extends StatefulWidget {
   /// Tipe yang tersedia pada Widget MPTextField
   MPTextFieldType? type;
@@ -181,6 +329,42 @@ class MPTextField extends StatefulWidget {
   /// Input Formatter
   final List<TextInputFormatter>? inputFormatter;
 
+  /// Character limit for the field
+  final int? maxLength;
+
+  /// Show character counter
+  final bool showCounter;
+
+  /// Show clear button when field is not empty
+  final bool showClearButton;
+
+  /// Clear button icon
+  final Widget? clearButtonIcon;
+
+  /// Callback when clear button is pressed
+  final VoidCallback? onClear;
+
+  /// Auto focus when field is built
+  final bool autofocus;
+
+  /// Text alignment
+  final TextAlign textAlign;
+
+  /// Enable suggestions
+  final bool enableSuggestions;
+
+  /// Enable autocorrect
+  final bool autocorrect;
+
+  /// Enable interactive selection
+  final bool enableInteractiveSelection;
+
+  /// Scroll padding for keyboard
+  final EdgeInsets? scrollPadding;
+
+  /// Text direction
+  final TextDirection? textDirection;
+
   MPTextField(
     this.controller, {
     super.key,
@@ -231,6 +415,18 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.DEFAULT;
   }
@@ -286,6 +482,18 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.PASSWORD;
   }
@@ -340,6 +548,18 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.DEFAULT;
     border = border ?? MpUiKit.border;
@@ -396,6 +616,18 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.BORDER_PASSWORD;
     border = border ?? MpUiKit.border;
@@ -420,11 +652,28 @@ class _MPTextFieldState extends State<MPTextField> {
   @override
   Widget build(BuildContext context) {
     settingSuffixIcon();
+
+    // Build combined input formatters
+    final List<TextInputFormatter> formatters = [];
+
+    // Add maxLength formatter if specified
+    if (widget.maxLength != null) {
+      formatters.add(LengthLimitingTextInputFormatter(widget.maxLength));
+    }
+
+    // Add custom formatters
+    if (widget.inputFormatter != null) {
+      formatters.addAll(widget.inputFormatter!);
+    }
+
+    // Build suffix icon with clear button
+    Widget? finalSuffixIcon = _buildSuffixIcon();
+
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
         hintText: widget.hint,
-        hintStyle: widget.hintStyle.toTextStyle(),
+        hintStyle: widget.hintStyle?.toTextStyle(),
         hintMaxLines: widget.hintStyle?.maxLines,
         labelText: widget.label,
         labelStyle: widget.labelStyle?.toTextStyle(),
@@ -439,17 +688,13 @@ class _MPTextFieldState extends State<MPTextField> {
         prefix: widget.prefix,
         prefixText: widget.prefixText,
         prefixStyle: widget.prefixTextStyle?.toTextStyle(),
-        suffixIcon: widget.type == MPTextFieldType.DEFAULT
-            ? widget.suffixIcon
-            : InkWell(
-                onTap: _togglePasswordView,
-                child: widget.suffixIcon,
-              ),
+        suffixIcon: finalSuffixIcon,
         suffixIconColor: widget.suffixIconColor,
         suffix: widget.suffix,
         suffixText: widget.suffixText,
         suffixStyle: widget.suffixTextStyle?.toTextStyle(),
-        counterText: widget.counterText,
+        counterText:
+            widget.showCounter ? _buildCounterText() : widget.counterText,
         counterStyle: widget.counterStyle?.toTextStyle(),
         helperText: widget.helperText,
         helperStyle: widget.helperStyle?.toTextStyle(),
@@ -474,7 +719,7 @@ class _MPTextFieldState extends State<MPTextField> {
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       style: widget.textStyle?.toTextStyle() ?? MpUiKit.textStyle.toTextStyle(),
-      textAlign: widget.textStyle?.textAlign ?? TextAlign.start,
+      textAlign: widget.textAlign,
       readOnly: widget.readOnly,
       obscureText: widget.obscureText,
       maxLines: widget.type == MPTextFieldType.PASSWORD ||
@@ -492,8 +737,83 @@ class _MPTextFieldState extends State<MPTextField> {
       onTap: widget.onTap,
       onChanged: widget.onChange,
       textCapitalization: widget.textCapitalization,
-      inputFormatters: widget.inputFormatter ?? [],
+      inputFormatters: formatters,
+      autofocus: widget.autofocus,
+      enableSuggestions: widget.enableSuggestions,
+      autocorrect: widget.autocorrect,
+      enableInteractiveSelection: widget.enableInteractiveSelection,
+      scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20.0),
+      textDirection: widget.textDirection,
     );
+  }
+
+  /// Build suffix icon with clear button and password toggle
+  Widget? _buildSuffixIcon() {
+    final List<Widget> icons = [];
+
+    // Add clear button if enabled and field is not empty
+    if (widget.showClearButton && widget.controller.text.isNotEmpty) {
+      icons.add(
+        GestureDetector(
+          onTap: () {
+            widget.controller.clear();
+            widget.onClear?.call();
+            widget.onChange?.call('');
+          },
+          child: widget.clearButtonIcon ??
+              Icon(
+                Icons.clear,
+                color: widget.suffixIconColor ??
+                    MpUiKit.colorText.withValues(alpha: 0.6),
+                size: 20,
+              ),
+        ),
+      );
+    }
+
+    // Add password toggle or custom suffix icon
+    if (widget.type == MPTextFieldType.DEFAULT) {
+      if (widget.suffixIcon != null) {
+        icons.add(widget.suffixIcon!);
+      }
+    } else {
+      // Password field - add toggle icon
+      icons.add(
+        GestureDetector(
+          onTap: _togglePasswordView,
+          child: widget.suffixIcon ??
+              (widget.obscureText
+                  ? _defaultSuffixIconEyeClose
+                  : _defaultSuffixIconEyeOpen),
+        ),
+      );
+    }
+
+    if (icons.isEmpty) return null;
+    if (icons.length == 1) return icons.first;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(
+        icons.length,
+        (index) => Padding(
+          padding: EdgeInsets.only(left: index > 0 ? 8.0 : 0.0),
+          child: icons[index],
+        ),
+      ),
+    );
+  }
+
+  /// Build counter text
+  String? _buildCounterText() {
+    final currentLength = widget.controller.text.length;
+    final maxLength = widget.maxLength;
+
+    if (maxLength != null) {
+      return '$currentLength/$maxLength';
+    } else {
+      return currentLength.toString();
+    }
   }
 
   void settingSuffixIcon() {

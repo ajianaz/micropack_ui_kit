@@ -26,7 +26,7 @@ class _ButtonPageState extends State<ButtonPage> {
           children: [
             MPText.head('Button Variants'),
             SizedBox(height: 16.h),
-            
+
             // Primary Buttons
             MPText.label('Primary Buttons'),
             SizedBox(height: 8.h),
@@ -36,34 +36,39 @@ class _ButtonPageState extends State<ButtonPage> {
               children: [
                 MPButton(
                   text: 'Small',
-                  onPressed: () => _showSnackBar(context, 'Small button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Small button clicked'),
                   size: MPButtonSize.small,
                 ),
                 MPButton(
                   text: 'Regular',
-                  onPressed: () => _showSnackBar(context, 'Regular button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Regular button clicked'),
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Medium',
-                  onPressed: () => _showSnackBar(context, 'Medium button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Medium button clicked'),
                   size: MPButtonSize.medium,
                 ),
                 MPButton(
                   text: 'Large',
-                  onPressed: () => _showSnackBar(context, 'Large button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Large button clicked'),
                   size: MPButtonSize.large,
                 ),
                 MPButton(
                   text: 'Full Width',
-                  onPressed: () => _showSnackBar(context, 'Full width button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Full width button clicked'),
                   widthInfinity: true,
                 ),
               ],
             ),
-            
+
             SizedBox(height: 24.h),
-            
+
             // Outlined Buttons
             MPText.label('Outlined Buttons'),
             SizedBox(height: 8.h),
@@ -73,13 +78,15 @@ class _ButtonPageState extends State<ButtonPage> {
               children: [
                 MPButton(
                   text: 'Outlined',
-                  onPressed: () => _showSnackBar(context, 'Outlined button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Outlined button clicked'),
                   variant: MPButtonVariant.outlined,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Outlined Large',
-                  onPressed: () => _showSnackBar(context, 'Outlined large button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Outlined large button clicked'),
                   variant: MPButtonVariant.outlined,
                   size: MPButtonSize.large,
                 ),
@@ -92,9 +99,9 @@ class _ButtonPageState extends State<ButtonPage> {
                 ),
               ],
             ),
-            
+
             SizedBox(height: 24.h),
-            
+
             // Ghost Buttons
             MPText.label('Ghost Buttons'),
             SizedBox(height: 8.h),
@@ -104,13 +111,15 @@ class _ButtonPageState extends State<ButtonPage> {
               children: [
                 MPButton(
                   text: 'Ghost',
-                  onPressed: () => _showSnackBar(context, 'Ghost button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Ghost button clicked'),
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Ghost Large',
-                  onPressed: () => _showSnackBar(context, 'Ghost large button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Ghost large button clicked'),
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.large,
                 ),
@@ -123,12 +132,12 @@ class _ButtonPageState extends State<ButtonPage> {
                 ),
               ],
             ),
-            
+
             SizedBox(height: 24.h),
-            
+
             MPText.head('Loading States'),
             SizedBox(height: 16.h),
-            
+
             // Loading Buttons
             MPText.label('Buttons with Loading States'),
             SizedBox(height: 8.h),
@@ -158,14 +167,14 @@ class _ButtonPageState extends State<ButtonPage> {
                 ),
               ],
             ),
-            
+
             SizedBox(height: 24.h),
-            
+
             MPText.head('Buttons with Icons'),
             SizedBox(height: 16.h),
-            
+
             // Icon Buttons
-            MPText.label('Buttons with Custom Child'),
+            MPText.label('Buttons with Icons'),
             SizedBox(height: 8.h),
             Wrap(
               spacing: 8.w,
@@ -174,52 +183,69 @@ class _ButtonPageState extends State<ButtonPage> {
                 MPButton(
                   text: 'Save',
                   onPressed: () => _showSnackBar(context, 'Save clicked'),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.save, size: 16.r),
-                      SizedBox(width: 8.w),
-                      MPText('Save'),
-                    ],
-                  ),
+                  icon: Icons.save,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Download',
                   onPressed: () => _showSnackBar(context, 'Download clicked'),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.download, size: 16.r),
-                      SizedBox(width: 8.w),
-                      MPText('Download'),
-                    ],
-                  ),
+                  icon: Icons.download,
+                  iconPosition: MPButtonIconPosition.right,
                   variant: MPButtonVariant.outlined,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Share',
                   onPressed: () => _showSnackBar(context, 'Share clicked'),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.share, size: 16.r),
-                      SizedBox(width: 8.w),
-                      MPText('Share'),
-                    ],
-                  ),
+                  icon: Icons.share,
+                  iconPosition: MPButtonIconPosition.top,
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.regular,
                 ),
               ],
             ),
-            
+
             SizedBox(height: 24.h),
-            
+
+            MPText.head('New Button Variants'),
+            SizedBox(height: 16.h),
+
+            // New Button Variants
+            MPText.label('Text, Info, and Warning Buttons'),
+            SizedBox(height: 8.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 8.h,
+              children: [
+                MPButton(
+                  text: 'Text Button',
+                  onPressed: () =>
+                      _showSnackBar(context, 'Text button clicked'),
+                  variant: MPButtonVariant.text,
+                  size: MPButtonSize.regular,
+                ),
+                MPButton(
+                  text: 'Info',
+                  onPressed: () =>
+                      _showSnackBar(context, 'Info button clicked'),
+                  icon: Icons.info,
+                  variant: MPButtonVariant.info,
+                  size: MPButtonSize.regular,
+                ),
+                MPButton(
+                  text: 'Warning',
+                  onPressed: () =>
+                      _showSnackBar(context, 'Warning button clicked'),
+                  icon: Icons.warning,
+                  variant: MPButtonVariant.warning,
+                  size: MPButtonSize.regular,
+                ),
+              ],
+            ),
+
             MPText.head('Custom Styled Buttons'),
             SizedBox(height: 16.h),
-            
+
             // Custom Styled Buttons
             MPText.label('Buttons with Custom Colors and Styles'),
             SizedBox(height: 8.h),
@@ -229,25 +255,29 @@ class _ButtonPageState extends State<ButtonPage> {
               children: [
                 MPButton(
                   text: 'Success',
-                  onPressed: () => _showSnackBar(context, 'Success button clicked'),
-                  background: Colors.green,
+                  onPressed: () =>
+                      _showSnackBar(context, 'Success button clicked'),
+                  variant: MPButtonVariant.success,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Warning',
-                  onPressed: () => _showSnackBar(context, 'Warning button clicked'),
-                  background: Colors.orange,
+                  onPressed: () =>
+                      _showSnackBar(context, 'Warning button clicked'),
+                  variant: MPButtonVariant.warning,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Danger',
-                  onPressed: () => _showSnackBar(context, 'Danger button clicked'),
-                  background: Colors.red,
+                  onPressed: () =>
+                      _showSnackBar(context, 'Danger button clicked'),
+                  variant: MPButtonVariant.danger,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
                   text: 'Custom Border',
-                  onPressed: () => _showSnackBar(context, 'Custom border button clicked'),
+                  onPressed: () =>
+                      _showSnackBar(context, 'Custom border button clicked'),
                   variant: MPButtonVariant.outlined,
                   strokeColor: Colors.purple,
                   strokeWidth: 2,
