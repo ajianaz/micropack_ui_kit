@@ -380,12 +380,10 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: MPText(message),
-        backgroundColor: context.mp.neutral90,
-        duration: const Duration(seconds: 2),
-      ),
+    MPSnackbar.info(
+      context,
+      message: message,
+      duration: const Duration(seconds: 2),
     );
   }
 }
