@@ -49,9 +49,7 @@ class TypographyPage extends StatelessWidget {
       builder: (context) => MPText(
         text,
         style: style.copyWith(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white.withOpacity(0.95)
-              : Colors.black.withOpacity(0.87),
+          color: context.mp.textColor,
         ),
       ),
     );

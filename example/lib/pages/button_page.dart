@@ -285,9 +285,9 @@ class _ButtonPageState extends State<ButtonPage> {
                   onPressed: () =>
                       _showSnackBar(context, 'Custom border button clicked'),
                   variant: MPButtonVariant.outlined,
-                  strokeColor: Colors.purple,
+                  strokeColor: context.mp.primary,
                   strokeWidth: 2,
-                  textColor: Colors.purple,
+                  textColor: context.mp.primary,
                   size: MPButtonSize.regular,
                 ),
               ],

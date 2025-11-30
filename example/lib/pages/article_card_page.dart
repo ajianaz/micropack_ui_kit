@@ -241,7 +241,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   child: Icon(
                     Icons.image,
                     size: 60.r,
-                    color: Colors.white,
+                    color: context.mp.neutral100,
                   ),
                 ),
               ),

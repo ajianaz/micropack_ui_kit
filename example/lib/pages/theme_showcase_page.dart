@@ -386,14 +386,17 @@ class ThemeShowcasePage extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: isSelected ? Colors.white : context.mp.textColor,
+                  color:
+                      isSelected ? context.mp.neutral100 : context.mp.textColor,
                   size: 18,
                 ),
                 SizedBox(width: 8.w),
                 Text(
                   label,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : context.mp.textColor,
+                    color: isSelected
+                        ? context.mp.neutral100
+                        : context.mp.textColor,
                     fontWeight:
                         isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
