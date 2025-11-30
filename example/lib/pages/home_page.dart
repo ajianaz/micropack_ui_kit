@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit_example/pages/article_card_page.dart';
 import 'package:micropack_ui_kit_example/pages/button_page.dart';
 
 import 'package:micropack_ui_kit_example/pages/color_page.dart';
@@ -9,13 +10,65 @@ import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({
+    super.key, 
+    required this.themeMode, 
+    required this.onThemeChanged
+  });
+
+  final ThemeMode themeMode;
+  final Function(ThemeMode) onThemeChanged;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Micropack UI Kit'),
+        actions: [
+          PopupMenuButton<ThemeMode>(
+            icon: Icon(
+              themeMode == ThemeMode.dark 
+                ? Icons.dark_mode 
+                : Icons.light_mode,
+            ),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<ThemeMode>(
+                value: ThemeMode.light,
+                child: Row(
+                  children: [
+                    Icon(Icons.light_mode, size: 20),
+                    SizedBox(width: 8),
+                    Text('Light'),
+                  ],
+                ),
+              ),
+              PopupMenuItem<ThemeMode>(
+                value: ThemeMode.dark,
+                child: Row(
+                  children: [
+                    Icon(Icons.dark_mode, size: 20),
+                    SizedBox(width: 8),
+                    Text('Dark'),
+                  ],
+                ),
+              ),
+              PopupMenuItem<ThemeMode>(
+                value: ThemeMode.system,
+                child: Row(
+                  children: [
+                    Icon(Icons.settings_brightness, size: 20),
+                    SizedBox(width: 8),
+                    Text('System'),
+                  ],
+                ),
+              ),
+            ],
+            onSelected: (ThemeMode mode) {
+              print('Theme changed to: $mode');
+              onThemeChanged(mode);
+            },
+          ),
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.only(
@@ -40,6 +93,7 @@ class HomePage extends StatelessWidget {
           _Button(name: 'Button', page: ButtonPage()),
           _Button(name: 'Dialog', page: DialogPage()),
           _Button(name: 'Text Field', page: TextFieldPage()),
+          _Button(name: 'Article Card', page: ArticleCardPage()),
         ],
       ),
     );
