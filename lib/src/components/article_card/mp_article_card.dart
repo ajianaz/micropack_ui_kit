@@ -97,9 +97,6 @@ class _MPArticleCardState extends State<MPArticleCard> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorTheme = theme.extension<MPColorTheme>()!;
-
     return Semantics(
       label: widget.semanticLabel ?? _buildSemanticLabel(),
       button: widget.onTap != null,
@@ -107,7 +104,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
       child: Container(
         margin: widget.margin ?? _getDefaultMargin(),
         child: Material(
-          color: _getBackgroundColor(colorTheme, context),
+          color: _getBackgroundColor(context),
           borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.r),
           elevation: widget.elevation ?? _getElevation(),
           child: MouseRegion(
@@ -137,7 +134,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
                   border: widget.variant == MPArticleCardVariant.outlined
                       ? Border.all(color: context.mp.adaptiveBorderColor)
                       : null,
-                  color: _getInteractionBackgroundColor(colorTheme, context),
+                  color: _getInteractionBackgroundColor(context),
                   boxShadow: _getBoxShadow(context),
                 ),
                 child: Focus(
@@ -201,12 +198,15 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return parts.join(', ');
   }
 
-  Color _getInteractionBackgroundColor(
-      MPColorTheme colorTheme, BuildContext context) {
+  Color _getInteractionBackgroundColor(BuildContext context) {
     // Theme-aware interaction background color
     if (!widget.enabled) {
-      // Use disabled color for disabled state
-      return context.mp.disabledColor;
+      // Use muted background for disabled state
+      // Dark mode: neutral80 (dark) with reduced opacity
+      // Light mode: neutral20 (light) with reduced opacity
+      return context.mp.isDarkMode
+          ? context.mp.neutral80.withValues(alpha: 0.5)
+          : context.mp.neutral20.withValues(alpha: 0.5);
     }
 
     if (_isPressed) {
@@ -216,10 +216,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
       }
 
       // Use theme-aware hover color for pressed state
-      // Dark mode: neutral30 (light gray), Light mode: neutral90 (dark gray)
+      // Dark mode: neutral60 (medium gray) - clear pressed feedback
+      // Light mode: neutral40 (medium-light gray) - clear pressed feedback
       return context.mp.isDarkMode
-          ? context.mp.neutral30
-          : context.mp.neutral90;
+          ? context.mp.neutral60
+          : context.mp.neutral40;
     }
 
     if (_isHovered) {
@@ -228,14 +229,15 @@ class _MPArticleCardState extends State<MPArticleCard> {
         return hoverColor;
       }
 
-      // Use theme-aware hover color
-      // Dark mode: neutral30 (light gray), Light mode: neutral90 (dark gray)
+      // Use theme-aware hover color with clear visual distinction
+      // Dark mode: neutral70 (medium-dark gray) - clear but subtle
+      // Light mode: neutral30 (light gray) - more visible than neutral20
       return context.mp.isDarkMode
-          ? context.mp.neutral30
-          : context.mp.neutral90;
+          ? context.mp.neutral70
+          : context.mp.neutral30;
     }
 
-    return _getBackgroundColor(colorTheme, context);
+    return _getBackgroundColor(context);
   }
 
   List<BoxShadow> _getBoxShadow(BuildContext context) {
@@ -340,7 +342,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
       widget.title,
       maxLines: widget.size == MPArticleCardSize.small ? 2 : 3,
       style: MPTextStyle.heading3(
-        color: widget.enabled ? context.mp.textColor : context.mp.disabledColor,
+        color: widget.enabled
+            ? context.mp.textColor
+            : context.mp.textColor.withValues(alpha: 0.4),
         fontWeight: FontWeight.bold,
       ).copyWith(fontSize: (_getFontSize() + 2).sp),
     );
@@ -353,7 +357,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
       style: MPTextStyle.body2(
         color: widget.enabled
             ? context.mp.textColor.withValues(alpha: 0.7)
-            : context.mp.disabledColor.withValues(alpha: 0.7),
+            : context.mp.textColor.withValues(alpha: 0.3),
       ).copyWith(fontSize: (_getFontSize() - 2).sp),
     );
   }
@@ -369,7 +373,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             size: 14.r,
             color: widget.enabled
                 ? context.mp.captionColor
-                : context.mp.disabledColor,
+                : context.mp.captionColor.withValues(alpha: 0.4),
           ),
           SizedBox(width: 4.w),
           MPText(
@@ -377,7 +381,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             style: MPTextStyle.caption(
               color: widget.enabled
                   ? context.mp.captionColor
-                  : context.mp.disabledColor,
+                  : context.mp.captionColor.withValues(alpha: 0.4),
             ).copyWith(fontSize: (_getFontSize() - 4).sp),
           ),
         ],
@@ -387,7 +391,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             size: 14.r,
             color: widget.enabled
                 ? context.mp.captionColor
-                : context.mp.disabledColor,
+                : context.mp.captionColor.withValues(alpha: 0.4),
           ),
           SizedBox(width: 4.w),
           MPText(
@@ -395,7 +399,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             style: MPTextStyle.caption(
               color: widget.enabled
                   ? context.mp.captionColor
-                  : context.mp.disabledColor,
+                  : context.mp.captionColor.withValues(alpha: 0.4),
             ).copyWith(fontSize: (_getFontSize() - 4).sp),
           ),
         ],
@@ -405,7 +409,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             size: 14.r,
             color: widget.enabled
                 ? context.mp.captionColor
-                : context.mp.disabledColor,
+                : context.mp.captionColor.withValues(alpha: 0.4),
           ),
           SizedBox(width: 4.w),
           MPText(
@@ -413,7 +417,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             style: MPTextStyle.caption(
               color: widget.enabled
                   ? context.mp.captionColor
-                  : context.mp.disabledColor,
+                  : context.mp.captionColor.withValues(alpha: 0.4),
             ).copyWith(fontSize: (_getFontSize() - 4).sp),
           ),
         ],
@@ -434,17 +438,20 @@ class _MPArticleCardState extends State<MPArticleCard> {
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
         // Use theme-aware neutral color for tag background
-        // Enabled state: neutral20, Disabled state: disabledColor
-        color: widget.enabled ? context.mp.neutral20 : context.mp.disabledColor,
+        // Enabled state: neutral20, Disabled state: neutral30 with opacity
+        color: widget.enabled
+            ? context.mp.neutral20
+            : context.mp.neutral30.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: MPText(
         tag,
         style: MPTextStyle.caption(
           // Use theme-aware neutral color for tag text
-          // Enabled state: neutral70, Disabled state: disabledColor
-          color:
-              widget.enabled ? context.mp.neutral70 : context.mp.disabledColor,
+          // Enabled state: neutral70, Disabled state: neutral70 with reduced opacity
+          color: widget.enabled
+              ? context.mp.neutral70
+              : context.mp.neutral70.withValues(alpha: 0.4),
         ).copyWith(fontSize: (_getFontSize() - 6).sp),
       ),
     );
@@ -592,7 +599,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
-  Color _getBackgroundColor(MPColorTheme colorTheme, BuildContext context) {
+  Color _getBackgroundColor(BuildContext context) {
     if (widget.backgroundColor != null) return widget.backgroundColor!;
 
     // Use theme-aware colors for better dark mode support
