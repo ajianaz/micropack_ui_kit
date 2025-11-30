@@ -7,6 +7,23 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
+  // Get the actual brightness of the currently active theme
+  Brightness getCurrentBrightness(BuildContext context) {
+    switch (_themeMode) {
+      case ThemeMode.light:
+        return Brightness.light;
+      case ThemeMode.dark:
+        return Brightness.dark;
+      case ThemeMode.system:
+        return MediaQuery.of(context).platformBrightness;
+    }
+  }
+
+  // Get the actual brightness name as string
+  String getCurrentBrightnessName(BuildContext context) {
+    return getCurrentBrightness(context) == Brightness.dark ? 'Dark' : 'Light';
+  }
+
   // Load saved theme preference
   Future<void> loadTheme() async {
     final prefs = await SharedPreferences.getInstance();

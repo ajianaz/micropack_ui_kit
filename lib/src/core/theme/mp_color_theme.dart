@@ -107,43 +107,71 @@ class MPColorTheme extends ThemeExtension<MPColorTheme> {
   }
 
   /// Light color scheme
+  /// Uses light mode colors with proper neutral scale (neutral10 = white, neutral100 = black)
   static final MPColorTheme light = MPColorTheme(
-    primary: MPColors.primary,
-    primarySurface: MPColors.primarySurface,
-    primaryFocus: MPColors.primaryFocus,
-    primaryBorder: MPColors.primaryBorder,
-    primaryHover: MPColors.primaryHover,
-    primaryPressed: MPColors.primaryPressed,
-    neutral10: MPColors.neutral[10],
-    neutral20: MPColors.neutral[20],
-    neutral30: MPColors.neutral[30],
-    neutral40: MPColors.neutral[40],
-    neutral50: MPColors.neutral[50],
-    neutral60: MPColors.neutral[60],
-    neutral70: MPColors.neutral[70],
-    neutral80: MPColors.neutral[80],
-    neutral90: MPColors.neutral[90],
-    neutral100: MPColors.neutral[100],
+    // Primary colors for light mode
+    primary: MPColors.getPrimary(
+        isDarkMode: false), // Main primary color for light mode
+    primarySurface: MPColors.getPrimarySurface(
+        isDarkMode: false), // Light surface for primary elements
+    primaryFocus: MPColors.getPrimaryFocus(
+        isDarkMode: false), // Focus state for primary elements
+    primaryBorder: MPColors.getPrimaryBorder(
+        isDarkMode: false), // Border color for primary elements
+    primaryHover: MPColors.getPrimaryHover(
+        isDarkMode: false), // Hover state for primary elements
+    primaryPressed: MPColors.getPrimaryPressed(
+        isDarkMode: false), // Pressed state for primary elements
+
+    // Neutral colors for light mode (neutral10 = lightest/white, neutral100 = darkest/black)
+    neutral10:
+        MPColors.getNeutral(10, isDarkMode: false), // White - lightest neutral
+    neutral20: MPColors.getNeutral(20, isDarkMode: false), // Very light gray
+    neutral30: MPColors.getNeutral(30, isDarkMode: false), // Light gray
+    neutral40: MPColors.getNeutral(40, isDarkMode: false), // Medium-light gray
+    neutral50: MPColors.getNeutral(50, isDarkMode: false), // Medium gray
+    neutral60: MPColors.getNeutral(60, isDarkMode: false), // Medium-dark gray
+    neutral70: MPColors.getNeutral(70, isDarkMode: false), // Dark gray
+    neutral80: MPColors.getNeutral(80, isDarkMode: false), // Very dark gray
+    neutral90:
+        MPColors.getNeutral(90, isDarkMode: false), // Extremely dark gray
+    neutral100:
+        MPColors.getNeutral(100, isDarkMode: false), // Black - darkest neutral
   );
 
   /// Dark color scheme
+  /// Uses dark mode colors with proper neutral scale (neutral10 = white, neutral100 = black)
   static final MPColorTheme dark = MPColorTheme(
-    primary: MPColors.primary,
-    primarySurface: const Color(0xFF1A1A1A), // Dark surface for primary
-    primaryFocus: const Color(0xFF3A3A3A), // Dark focus
-    primaryBorder: const Color(0xFF4A4A4A), // Dark border
-    primaryHover: const Color(0xFF2A2A2A), // Dark hover
-    primaryPressed: const Color(0xFF0A0A0A), // Dark pressed
-    neutral10: const Color(0xFF090909), // Darkest neutral
-    neutral20: const Color(0xFF1A1A1A), // Dark surface
-    neutral30: const Color(0xFF2A2A2A), // Dark elevated
-    neutral40: const Color(0xFF3A3A3A), // Dark border
-    neutral50: const Color(0xFF4A4A4A), // Dark disabled
-    neutral60: const Color(0xFF5A5A5A), // Dark placeholder
-    neutral70: const Color(0xFF6A6A6A), // Dark secondary
-    neutral80: const Color(0xFF9A9A9A), // Dark primary text
-    neutral90: const Color(0xFFBABABA), // Dark subtitle
-    neutral100: const Color(0xFFE5E5E5), // Dark background
+    // Primary colors for dark mode
+    primary: MPColors.getPrimary(
+        isDarkMode: true), // Main primary color for dark mode
+    primarySurface: MPColors.getPrimarySurface(
+        isDarkMode: true), // Dark surface for primary elements
+    primaryFocus: MPColors.getPrimaryFocus(
+        isDarkMode: true), // Focus state for primary elements in dark mode
+    primaryBorder: MPColors.getPrimaryBorder(
+        isDarkMode: true), // Border color for primary elements in dark mode
+    primaryHover: MPColors.getPrimaryHover(
+        isDarkMode: true), // Hover state for primary elements in dark mode
+    primaryPressed: MPColors.getPrimaryPressed(
+        isDarkMode: true), // Pressed state for primary elements in dark mode
+
+    // Neutral colors for dark mode (neutral10 = lightest/white, neutral100 = darkest/black)
+    // Note: In dark mode, we still use the same neutral scale where neutral10 is white (for text)
+    // and neutral100 is black (for backgrounds), but the context of how they're used changes
+    neutral10: MPColors.getNeutral(10,
+        isDarkMode:
+            true), // White - lightest neutral for text on dark backgrounds
+    neutral20: MPColors.getNeutral(20, isDarkMode: true), // Very light gray
+    neutral30: MPColors.getNeutral(30, isDarkMode: true), // Light gray
+    neutral40: MPColors.getNeutral(40, isDarkMode: true), // Medium-light gray
+    neutral50: MPColors.getNeutral(50, isDarkMode: true), // Medium gray
+    neutral60: MPColors.getNeutral(60, isDarkMode: true), // Medium-dark gray
+    neutral70: MPColors.getNeutral(70, isDarkMode: true), // Dark gray
+    neutral80: MPColors.getNeutral(80, isDarkMode: true), // Very dark gray
+    neutral90: MPColors.getNeutral(90, isDarkMode: true), // Extremely dark gray
+    neutral100: MPColors.getNeutral(100,
+        isDarkMode: true), // Black - darkest neutral for backgrounds
   );
 
   @override

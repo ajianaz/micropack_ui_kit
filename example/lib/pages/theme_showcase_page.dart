@@ -111,8 +111,9 @@ class ThemeShowcasePage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: context.mp.neutral90,
+        color: context.mp.adaptiveBackgroundColor,
         borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,8 +208,9 @@ class ThemeShowcasePage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: context.mp.neutral90,
+        color: context.mp.adaptiveBackgroundColor,
         borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,23 +274,31 @@ class ThemeShowcasePage extends StatelessWidget {
                     margin: EdgeInsets.all(8.r),
                     padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5FA),
+                      color: MPColorTheme.light.neutral100 ??
+                          const Color(0xFFF5F5F5),
                       borderRadius: BorderRadius.circular(6.r),
+                      border: Border.all(
+                          color: MPColorTheme.light.neutral40 ??
+                              const Color(0xFFC9C9C9)),
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.light_mode, color: const Color(0xFF303F9F)),
+                        Icon(Icons.light_mode,
+                            color: MPColorTheme.light.primary ??
+                                const Color(0xFF303F9F)),
                         SizedBox(height: 4.h),
                         Text(
                           'Light',
                           style: TextStyle(
-                            color: const Color(0xFF303F9F),
+                            color: MPColorTheme.light.neutral20 ??
+                                const Color(0xFF303F9F),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(height: 4.h),
                         MPButton(
-                          text: 'Sample Button',
+                          text: 'Sample',
                           onPressed: () {},
                           size: MPButtonSize.small,
                         ),
@@ -305,23 +315,31 @@ class ThemeShowcasePage extends StatelessWidget {
                     margin: EdgeInsets.all(8.r),
                     padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A1A),
+                      color: MPColorTheme.dark.neutral20 ??
+                          const Color(0xFF1E1E1E),
                       borderRadius: BorderRadius.circular(6.r),
+                      border: Border.all(
+                          color: MPColorTheme.dark.neutral40 ??
+                              const Color(0xFF404040)),
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.dark_mode, color: const Color(0xFF9A9A9A)),
+                        Icon(Icons.dark_mode,
+                            color: MPColorTheme.dark.neutral80 ??
+                                const Color(0xFFB8B8B8)),
                         SizedBox(height: 4.h),
                         Text(
                           'Dark',
                           style: TextStyle(
-                            color: const Color(0xFF9A9A9A),
+                            color: MPColorTheme.dark.neutral80 ??
+                                const Color(0xFFB8B8B8),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(height: 4.h),
                         MPButton(
-                          text: 'Sample Button',
+                          text: 'Sample',
                           onPressed: () {},
                           size: MPButtonSize.small,
                           variant: MPButtonVariant.outlined,
@@ -392,8 +410,9 @@ class ThemeShowcasePage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: context.mp.neutral90,
+        color: context.mp.adaptiveBackgroundColor,
         borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

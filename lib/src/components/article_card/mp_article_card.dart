@@ -13,7 +13,7 @@ enum MPArticleCardSize {
   large,
 }
 
-class MPArticleCard extends StatelessWidget {
+class MPArticleCard extends StatefulWidget {
   const MPArticleCard({
     required this.title,
     super.key,
@@ -40,6 +40,16 @@ class MPArticleCard extends StatelessWidget {
     this.backgroundColor,
     this.elevation,
     this.actionButtons,
+    this.enabled = true,
+    this.semanticLabel,
+    this.onHover,
+    this.focusNode,
+    this.autofocus = false,
+    this.cursor,
+    this.hoverColor,
+    this.splashColor,
+    this.focusColor,
+    this.highlightColor,
   });
 
   final String title;
@@ -66,59 +76,108 @@ class MPArticleCard extends StatelessWidget {
   final Color? backgroundColor;
   final double? elevation;
   final List<Widget>? actionButtons;
+  final bool enabled;
+  final String? semanticLabel;
+  final ValueChanged<bool>? onHover;
+  final FocusNode? focusNode;
+  final bool autofocus;
+  final MouseCursor? cursor;
+  final Color? hoverColor;
+  final Color? splashColor;
+  final Color? focusColor;
+  final Color? highlightColor;
+
+  @override
+  State<MPArticleCard> createState() => _MPArticleCardState();
+}
+
+class _MPArticleCardState extends State<MPArticleCard> {
+  bool _isHovered = false;
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorTheme = theme.extension<MPColorTheme>()!;
 
-    return Container(
-      margin: margin ?? _getDefaultMargin(),
-      child: Material(
-        color: _getBackgroundColor(colorTheme, context),
-        borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-        elevation: elevation ?? _getElevation(),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-          child: Container(
-            padding: padding ?? _getDefaultPadding(),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-              border: variant == MPArticleCardVariant.outlined
-                  ? Border.all(color: context.mp.adaptiveBorderColor)
-                  : null,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (_hasImage()) ...[
-                  _buildImage(),
-                  SizedBox(height: _getSpacing()),
-                ],
-                if (category != null) ...[
-                  _buildCategory(category!),
-                  SizedBox(height: _getSpacing() / 2),
-                ],
-                _buildTitle(),
-                if (description != null) ...[
-                  SizedBox(height: _getSpacing() / 2),
-                  _buildDescription(),
-                ],
-                if (author != null || date != null || readTime != null) ...[
-                  SizedBox(height: _getSpacing()),
-                  _buildMetadata(context),
-                ],
-                if (tags != null && tags!.isNotEmpty) ...[
-                  SizedBox(height: _getSpacing()),
-                  _buildTags(),
-                ],
-                if (_hasActions()) ...[
-                  SizedBox(height: _getSpacing()),
-                  _buildActions(),
-                ],
-              ],
+    return Semantics(
+      label: widget.semanticLabel ?? _buildSemanticLabel(),
+      button: widget.onTap != null,
+      enabled: widget.enabled,
+      child: Container(
+        margin: widget.margin ?? _getDefaultMargin(),
+        child: Material(
+          color: _getBackgroundColor(colorTheme, context),
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.r),
+          elevation: widget.elevation ?? _getElevation(),
+          child: MouseRegion(
+            onEnter: (_) {
+              if (widget.enabled) {
+                setState(() => _isHovered = true);
+                widget.onHover?.call(true);
+              }
+            },
+            onExit: (_) {
+              if (widget.enabled) {
+                setState(() => _isHovered = false);
+                widget.onHover?.call(false);
+              }
+            },
+            child: GestureDetector(
+              onTap: widget.enabled ? widget.onTap : null,
+              onTapDown: (_) => setState(() => _isPressed = true),
+              onTapUp: (_) => setState(() => _isPressed = false),
+              onTapCancel: () => setState(() => _isPressed = false),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: widget.padding ?? _getDefaultPadding(),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(widget.borderRadius ?? 12.r),
+                  border: widget.variant == MPArticleCardVariant.outlined
+                      ? Border.all(color: context.mp.adaptiveBorderColor)
+                      : null,
+                  color: _getInteractionBackgroundColor(colorTheme, context),
+                  boxShadow: _getBoxShadow(context),
+                ),
+                child: Focus(
+                  focusNode: widget.focusNode,
+                  autofocus: widget.autofocus,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_hasImage()) ...[
+                        _buildImage(),
+                        SizedBox(height: _getSpacing()),
+                      ],
+                      if (widget.category != null) ...[
+                        _buildCategory(widget.category!),
+                        SizedBox(height: _getSpacing() / 2),
+                      ],
+                      _buildTitle(),
+                      if (widget.description != null) ...[
+                        SizedBox(height: _getSpacing() / 2),
+                        _buildDescription(),
+                      ],
+                      if (widget.author != null ||
+                          widget.date != null ||
+                          widget.readTime != null) ...[
+                        SizedBox(height: _getSpacing()),
+                        _buildMetadata(context),
+                      ],
+                      if (widget.tags != null && widget.tags!.isNotEmpty) ...[
+                        SizedBox(height: _getSpacing()),
+                        _buildTags(),
+                      ],
+                      if (_hasActions()) ...[
+                        SizedBox(height: _getSpacing()),
+                        _buildActions(),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -126,40 +185,108 @@ class MPArticleCard extends StatelessWidget {
     );
   }
 
+  // Helper methods for new functionality
+  String _buildSemanticLabel() {
+    final parts = <String>[];
+    if (widget.category != null) parts.add('Category: ${widget.category}');
+    parts.add('Title: ${widget.title}');
+    if (widget.description != null)
+      parts.add('Description: ${widget.description}');
+    if (widget.author != null) parts.add('Author: ${widget.author}');
+    if (widget.date != null) parts.add('Date: ${widget.date}');
+    if (widget.readTime != null) parts.add('Read time: ${widget.readTime}');
+    if (widget.likeCount > 0) parts.add('${widget.likeCount} likes');
+    if (widget.isLiked) parts.add('Liked');
+    if (widget.isBookmarked) parts.add('Bookmarked');
+    return parts.join(', ');
+  }
+
+  Color _getInteractionBackgroundColor(
+      MPColorTheme colorTheme, BuildContext context) {
+    if (!widget.enabled) {
+      return context.mp.disabledColor;
+    }
+
+    if (_isPressed) {
+      final highlightColor = widget.highlightColor;
+      if (highlightColor != null) {
+        return highlightColor;
+      }
+
+      final isDarkMode = context.mp.isDarkMode;
+      if (isDarkMode) {
+        return colorTheme.neutral30 ?? const Color(0xFF2A2A2A);
+      } else {
+        return colorTheme.neutral90 ?? const Color(0xFFE5E5E5);
+      }
+    }
+
+    if (_isHovered) {
+      final hoverColor = widget.hoverColor;
+      if (hoverColor != null) {
+        return hoverColor;
+      }
+
+      final isDarkMode = context.mp.isDarkMode;
+      if (isDarkMode) {
+        return colorTheme.neutral30 ?? const Color(0xFF2A2A2A);
+      } else {
+        return colorTheme.neutral90 ?? const Color(0xFFE5E5E5);
+      }
+    }
+
+    return _getBackgroundColor(colorTheme, context);
+  }
+
+  List<BoxShadow> _getBoxShadow(BuildContext context) {
+    if (widget.variant == MPArticleCardVariant.elevated) {
+      return [
+        BoxShadow(
+          color: context.mp.adaptiveShadowColor,
+          blurRadius: _isHovered ? 8 : 4,
+          offset: Offset(0, _isHovered ? 4 : 2),
+        ),
+      ];
+    }
+    return [];
+  }
+
   Widget _buildImage() {
-    if (imageWidget != null) {
+    if (widget.imageWidget != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.r),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: _getImageHeight(),
           ),
-          child: imageWidget!,
+          child: widget.imageWidget!,
         ),
       );
     }
 
-    if (imageUrl != null) {
+    if (widget.imageUrl != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.r),
         child: Image.network(
-          imageUrl!,
+          widget.imageUrl!,
           width: double.infinity,
           height: _getImageHeight(),
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => _buildImagePlaceholder(),
+          errorBuilder: (context, error, stackTrace) =>
+              _buildImagePlaceholder(),
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
             return Container(
               width: double.infinity,
               height: _getImageHeight(),
-              color: Colors.grey.shade200,
+              color: context.mp.neutral30,
               child: Center(
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
                           loadingProgress.expectedTotalBytes!
                       : null,
+                  color: context.mp.primary,
                 ),
               ),
             );
@@ -175,11 +302,11 @@ class MPArticleCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: _getImageHeight(),
-      color: Colors.grey.shade200,
+      color: context.mp.neutral30,
       child: Icon(
         Icons.image_not_supported,
         size: 40.r,
-        color: Colors.grey.shade400,
+        color: context.mp.captionColor,
       ),
     );
   }
@@ -188,13 +315,13 @@ class MPArticleCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: MpUiKit.colorBrand.withValues(alpha: 0.1),
+        color: context.mp.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: MPText(
         category,
         style: MPTextStyle.body2(
-          color: MpUiKit.colorBrand,
+          color: context.mp.primary,
           fontWeight: FontWeight.w500,
         ).copyWith(fontSize: (_getFontSize() - 4).sp),
       ),
@@ -203,10 +330,10 @@ class MPArticleCard extends StatelessWidget {
 
   Widget _buildTitle() {
     return MPText(
-      title,
-      maxLines: size == MPArticleCardSize.small ? 2 : 3,
+      widget.title,
+      maxLines: widget.size == MPArticleCardSize.small ? 2 : 3,
       style: MPTextStyle.heading3(
-        color: MpUiKit.colorText,
+        color: widget.enabled ? context.mp.textColor : context.mp.disabledColor,
         fontWeight: FontWeight.bold,
       ).copyWith(fontSize: (_getFontSize() + 2).sp),
     );
@@ -214,10 +341,12 @@ class MPArticleCard extends StatelessWidget {
 
   Widget _buildDescription() {
     return MPText(
-      description!,
-      maxLines: size == MPArticleCardSize.small ? 2 : 3,
+      widget.description!,
+      maxLines: widget.size == MPArticleCardSize.small ? 2 : 3,
       style: MPTextStyle.body2(
-        color: MpUiKit.colorText.withValues(alpha: 0.7),
+        color: widget.enabled
+            ? context.mp.textColor.withValues(alpha: 0.7)
+            : context.mp.disabledColor.withValues(alpha: 0.7),
       ).copyWith(fontSize: (_getFontSize() - 2).sp),
     );
   }
@@ -227,45 +356,57 @@ class MPArticleCard extends StatelessWidget {
       spacing: 8.w,
       runSpacing: 4.h,
       children: [
-        if (author != null) ...[
+        if (widget.author != null) ...[
           Icon(
             Icons.person,
             size: 14.r,
-            color: context.mp.captionColor,
+            color: widget.enabled
+                ? context.mp.captionColor
+                : context.mp.disabledColor,
           ),
           SizedBox(width: 4.w),
           MPText(
-            author!,
+            widget.author!,
             style: MPTextStyle.caption(
-              color: context.mp.captionColor,
+              color: widget.enabled
+                  ? context.mp.captionColor
+                  : context.mp.disabledColor,
             ).copyWith(fontSize: (_getFontSize() - 4).sp),
           ),
         ],
-        if (date != null) ...[
+        if (widget.date != null) ...[
           Icon(
             Icons.calendar_today,
             size: 14.r,
-            color: context.mp.captionColor,
+            color: widget.enabled
+                ? context.mp.captionColor
+                : context.mp.disabledColor,
           ),
           SizedBox(width: 4.w),
           MPText(
-            date!,
+            widget.date!,
             style: MPTextStyle.caption(
-              color: context.mp.captionColor,
+              color: widget.enabled
+                  ? context.mp.captionColor
+                  : context.mp.disabledColor,
             ).copyWith(fontSize: (_getFontSize() - 4).sp),
           ),
         ],
-        if (readTime != null) ...[
+        if (widget.readTime != null) ...[
           Icon(
             Icons.access_time,
             size: 14.r,
-            color: context.mp.captionColor,
+            color: widget.enabled
+                ? context.mp.captionColor
+                : context.mp.disabledColor,
           ),
           SizedBox(width: 4.w),
           MPText(
-            readTime!,
+            widget.readTime!,
             style: MPTextStyle.caption(
-              color: context.mp.captionColor,
+              color: widget.enabled
+                  ? context.mp.captionColor
+                  : context.mp.disabledColor,
             ).copyWith(fontSize: (_getFontSize() - 4).sp),
           ),
         ],
@@ -277,7 +418,7 @@ class MPArticleCard extends StatelessWidget {
     return Wrap(
       spacing: 6.w,
       runSpacing: 4.h,
-      children: tags!.map((tag) => _buildTag(tag)).toList(),
+      children: widget.tags!.map((tag) => _buildTag(tag)).toList(),
     );
   }
 
@@ -285,13 +426,14 @@ class MPArticleCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: widget.enabled ? context.mp.neutral20 : context.mp.disabledColor,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: MPText(
         tag,
         style: MPTextStyle.caption(
-          color: Colors.grey.shade700,
+          color:
+              widget.enabled ? context.mp.neutral70 : context.mp.disabledColor,
         ).copyWith(fontSize: (_getFontSize() - 6).sp),
       ),
     );
@@ -300,50 +442,52 @@ class MPArticleCard extends StatelessWidget {
   Widget _buildActions() {
     final actions = <Widget>[];
 
-    if (onLike != null) {
+    if (widget.onLike != null) {
       actions.add(
         MPButton(
-          text: '$likeCount',
+          text: '${widget.likeCount}',
           child: Icon(
-            isLiked ? Icons.favorite : Icons.favorite_border,
+            widget.isLiked ? Icons.favorite : Icons.favorite_border,
             size: 18.r,
-            color: isLiked ? Colors.red : MpUiKit.colorText.withValues(alpha: 0.6),
+            color: widget.isLiked
+                ? context.mp.errorColor
+                : context.mp.subtitleColor,
           ),
-          onPressed: onLike,
+          onPressed: widget.enabled ? widget.onLike : null,
           background: Colors.transparent,
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           textSize: _getFontSize() - 4.sp,
-          textColor: MpUiKit.colorText.withValues(alpha: 0.6),
+          textColor: context.mp.subtitleColor,
         ),
       );
     }
 
-    if (onBookmark != null) {
+    if (widget.onBookmark != null) {
       actions.add(
         MPButton(
           text: '',
           child: Icon(
-            isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+            widget.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
             size: 18.r,
-            color: MpUiKit.colorText.withValues(alpha: 0.6),
+            color: context.mp.subtitleColor,
           ),
-          onPressed: onBookmark,
+          onPressed: widget.enabled ? widget.onBookmark : null,
           background: Colors.transparent,
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
         ),
       );
     }
 
-    if (onShare != null) {
+    if (widget.onShare != null) {
       actions.add(
         MPButton(
           text: '',
           child: Icon(
             Icons.share,
             size: 18.r,
-            color: MpUiKit.colorText.withValues(alpha: 0.6),
+            color: context.mp.subtitleColor,
           ),
-          onPressed: onShare,
+          onPressed: widget.enabled ? widget.onShare : null,
           background: Colors.transparent,
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
         ),
@@ -351,8 +495,8 @@ class MPArticleCard extends StatelessWidget {
     }
 
     // Add custom action buttons
-    if (actionButtons != null) {
-      actions.addAll(actionButtons!);
+    if (widget.actionButtons != null) {
+      actions.addAll(widget.actionButtons!);
     }
 
     return Row(
@@ -367,11 +511,15 @@ class MPArticleCard extends StatelessWidget {
   }
 
   // Helper methods
-  bool _hasImage() => imageUrl != null || imageWidget != null;
-  bool _hasActions() => onLike != null || onBookmark != null || onShare != null || (actionButtons != null && actionButtons!.isNotEmpty);
+  bool _hasImage() => widget.imageUrl != null || widget.imageWidget != null;
+  bool _hasActions() =>
+      widget.onLike != null ||
+      widget.onBookmark != null ||
+      widget.onShare != null ||
+      (widget.actionButtons != null && widget.actionButtons!.isNotEmpty);
 
   double _getFontSize() {
-    switch (size) {
+    switch (widget.size) {
       case MPArticleCardSize.small:
         return 12;
       case MPArticleCardSize.medium:
@@ -382,7 +530,7 @@ class MPArticleCard extends StatelessWidget {
   }
 
   double _getSpacing() {
-    switch (size) {
+    switch (widget.size) {
       case MPArticleCardSize.small:
         return 8.h;
       case MPArticleCardSize.medium:
@@ -393,7 +541,7 @@ class MPArticleCard extends StatelessWidget {
   }
 
   double _getImageHeight() {
-    switch (size) {
+    switch (widget.size) {
       case MPArticleCardSize.small:
         return 120.h;
       case MPArticleCardSize.medium:
@@ -404,7 +552,7 @@ class MPArticleCard extends StatelessWidget {
   }
 
   EdgeInsets _getDefaultPadding() {
-    switch (size) {
+    switch (widget.size) {
       case MPArticleCardSize.small:
         return EdgeInsets.all(12.r);
       case MPArticleCardSize.medium:
@@ -415,7 +563,7 @@ class MPArticleCard extends StatelessWidget {
   }
 
   EdgeInsets _getDefaultMargin() {
-    switch (size) {
+    switch (widget.size) {
       case MPArticleCardSize.small:
         return EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h);
       case MPArticleCardSize.medium:
@@ -426,10 +574,10 @@ class MPArticleCard extends StatelessWidget {
   }
 
   Color _getBackgroundColor(MPColorTheme colorTheme, BuildContext context) {
-    if (backgroundColor != null) return backgroundColor!;
-    
+    if (widget.backgroundColor != null) return widget.backgroundColor!;
+
     // Use theme-aware colors for better dark mode support
-    switch (variant) {
+    switch (widget.variant) {
       case MPArticleCardVariant.standard:
         return context.mp.adaptiveBackgroundColor;
       case MPArticleCardVariant.elevated:
@@ -440,9 +588,9 @@ class MPArticleCard extends StatelessWidget {
   }
 
   double _getElevation() {
-    if (elevation != null) return elevation!;
-    
-    switch (variant) {
+    if (widget.elevation != null) return widget.elevation!;
+
+    switch (widget.variant) {
       case MPArticleCardVariant.standard:
         return 0;
       case MPArticleCardVariant.elevated:
@@ -451,6 +599,4 @@ class MPArticleCard extends StatelessWidget {
         return 0;
     }
   }
-
-
 }

@@ -100,8 +100,9 @@ class MPTextStyle {
     Color? color,
     double? height,
     String? fontFamily,
-  }) =>
-      GoogleFonts.getFont(
+  }) {
+    try {
+      return GoogleFonts.getFont(
         toTitleCase(MpUiKit.fontName ?? fontFamily ?? defaultFontFamily),
         fontSize: fontSize * 1.sp,
         fontWeight: fontWeight,
@@ -112,6 +113,20 @@ class MPTextStyle {
         locale: const Locale('en', 'US'),
         color: color,
       );
+    } catch (e) {
+      return TextStyle(
+        fontFamily: MpUiKit.fontName ?? fontFamily ?? defaultFontFamily,
+        fontSize: fontSize * 1.sp,
+        fontWeight: fontWeight,
+        letterSpacing: letterSpacing * 1.sp,
+        height: height,
+        textBaseline: TextBaseline.alphabetic,
+        decoration: decoration,
+        locale: const Locale('en', 'US'),
+        color: color,
+      );
+    }
+  }
 
   // === Text Variants ===
 

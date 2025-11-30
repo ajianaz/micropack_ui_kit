@@ -22,7 +22,10 @@ class HomePage extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Micropack UI Kit'),
+            title: Text(
+              'Micropack UI Kit',
+              style: TextStyle(color: context.mp.textColor),
+            ),
             backgroundColor: context.mp.adaptiveBackgroundColor,
             elevation: 0,
             actions: [
@@ -131,9 +134,9 @@ class _ThemeInfoCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 24.h),
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: context.mp.primarySurface,
+        color: context.mp.adaptiveBackgroundColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: context.mp.primaryBorder),
+        border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +145,7 @@ class _ThemeInfoCard extends StatelessWidget {
             children: [
               Icon(
                 themeProvider.getThemeIcon(),
-                color: context.mp.primary,
+                color: context.mp.textColor,
                 size: 24,
               ),
               SizedBox(width: 12.w),
@@ -166,7 +169,7 @@ class _ThemeInfoCard extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            'Brightness: ${context.mp.isDarkMode ? 'Dark' : 'Light'}',
+            'Brightness: ${themeProvider.getCurrentBrightnessName(context)}',
             style: TextStyle(
               fontSize: 14.sp,
               color: context.mp.subtitleColor,

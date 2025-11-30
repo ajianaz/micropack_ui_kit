@@ -338,7 +338,7 @@ class _ButtonPageState extends State<ButtonPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: MPText(message),
-        backgroundColor: context.mp.neutral90,
+        backgroundColor: context.mp.adaptiveBackgroundColor,
         duration: const Duration(seconds: 2),
       ),
     );

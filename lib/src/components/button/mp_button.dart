@@ -67,8 +67,8 @@ class MPButton extends StatefulWidget {
 
   final Widget? child;
 
-  /// Mengatur gaya teks. Jika [child] != null maka [textStyle] diabaikan.
-  /// Jika [textStyle] != null maka [textColor],[textSize],[fontWeight],[fontFamily] diabaikan.
+  /// Mengatur gaya teks. Jika child tidak null maka textStyle diabaikan.
+  /// Jika textStyle tidak null maka textColor, textSize, fontWeight diabaikan.
   final TextStyle? textStyle;
 
   /// Mengatur warna dari teks.
@@ -151,23 +151,39 @@ class _MPButtonState extends State<MPButton> {
     return ElevatedButton(
       onPressed:
           widget.loading ? null : (widget.enabled ? widget.onPressed : null),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _getBackgroundColor(),
-        foregroundColor: widget.textColor ?? _getTextColor(),
-        padding: widget.padding ?? _getPadding(),
-        shape: RoundedRectangleBorder(
-          borderRadius: widget.borderRadius ??
-              BorderRadius.circular(widget.radius ?? MpUiKit.buttonRadius),
-          side: _getBorderSide(),
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(_getBackgroundColor()),
+        foregroundColor:
+            WidgetStateProperty.all(widget.textColor ?? _getTextColor()),
+        padding: WidgetStateProperty.all(widget.padding ?? _getPadding()),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: widget.borderRadius ??
+                BorderRadius.circular(widget.radius ?? MpUiKit.buttonRadius),
+            side: _getBorderSide(),
+          ),
         ),
-        elevation: widget.elevation ??
-            (widget.variant == MPButtonVariant.primary ? 4 : 0),
-        shadowColor: widget.shadowColor,
+        elevation: WidgetStateProperty.all(widget.elevation ??
+            (widget.variant == MPButtonVariant.primary ? 4 : 0)),
+        shadowColor: WidgetStateProperty.all(widget.shadowColor),
         splashFactory:
             widget.splashColor != null ? InkSplash.splashFactory : null,
         animationDuration: widget.animationDuration,
-        minimumSize: widget.minimumSize,
-        maximumSize: widget.maximumSize,
+        minimumSize: WidgetStateProperty.all(widget.minimumSize),
+        maximumSize: WidgetStateProperty.all(widget.maximumSize),
+        // Theme-aware state colors
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.hovered)) {
+            return _getHoverColor();
+          }
+          if (states.contains(WidgetState.pressed)) {
+            return _getPressedColor();
+          }
+          if (states.contains(WidgetState.focused)) {
+            return _getFocusColor();
+          }
+          return null;
+        }),
       ),
       focusNode: widget.focusNode,
       onLongPress: widget.onLongPress,
@@ -181,6 +197,7 @@ class _MPButtonState extends State<MPButton> {
     );
   }
 
+  /// Builds loading content with theme-aware spinner color
   Widget _buildLoadingContent() {
     if (widget.loadingWidget != null) {
       return widget.loadingWidget!;
@@ -191,25 +208,18 @@ class _MPButtonState extends State<MPButton> {
       width: _getLoadingSize(),
       child: Center(
         child: SpinKitThreeBounce(
-          color: widget.textColor ?? MpUiKit.colorBrand2,
+          color: widget.textColor ?? _getTextColor(),
           size: _getLoadingSize() * 0.6,
         ),
       ),
     );
   }
 
-  Widget _defaultText() => MPText(
-        widget.text ?? "",
-        style: widget.textStyle,
-        color: widget.textColor,
-        fontSize: widget.textSize,
-        fontWeight: widget.fontWeight,
-      );
-
+  /// Gets theme-aware background color based on button variant
   Color _getBackgroundColor() {
     switch (widget.variant) {
       case MPButtonVariant.primary:
-        return widget.background ?? MpUiKit.colorBrand;
+        return widget.background ?? context.mp.primary;
       case MPButtonVariant.outlined:
         return Colors.transparent;
       case MPButtonVariant.ghost:
@@ -217,16 +227,17 @@ class _MPButtonState extends State<MPButton> {
       case MPButtonVariant.text:
         return Colors.transparent;
       case MPButtonVariant.danger:
-        return widget.background ?? Colors.red;
+        return widget.background ?? context.mp.errorColor;
       case MPButtonVariant.success:
-        return widget.background ?? Colors.green;
+        return widget.background ?? context.mp.successColor;
       case MPButtonVariant.warning:
-        return widget.background ?? Colors.orange;
+        return widget.background ?? context.mp.warningColor;
       case MPButtonVariant.info:
-        return widget.background ?? Colors.blue;
+        return widget.background ?? context.mp.infoColor;
     }
   }
 
+  /// Gets theme-aware border side based on button variant
   BorderSide _getBorderSide() {
     if (widget.variant == MPButtonVariant.primary ||
         widget.variant == MPButtonVariant.danger ||
@@ -236,35 +247,35 @@ class _MPButtonState extends State<MPButton> {
       return widget.strokeWidth == 0
           ? BorderSide.none
           : BorderSide(
-              color: widget.strokeColor ?? MpUiKit.colorStroke,
+              color: widget.strokeColor ?? context.mp.primaryBorder,
               width: widget.strokeWidth ?? 1.5,
             );
     } else {
       Color borderColor;
       switch (widget.variant) {
+        case MPButtonVariant.primary:
+          borderColor = widget.strokeColor ?? context.mp.primaryBorder;
+          break;
         case MPButtonVariant.outlined:
-          borderColor = widget.strokeColor ?? MpUiKit.colorBrand;
+          borderColor = widget.strokeColor ?? context.mp.primary;
           break;
         case MPButtonVariant.ghost:
-          borderColor = widget.strokeColor ?? MpUiKit.colorBrand;
+          borderColor = widget.strokeColor ?? context.mp.primary;
           break;
         case MPButtonVariant.text:
           borderColor = Colors.transparent;
           break;
         case MPButtonVariant.danger:
-          borderColor = widget.strokeColor ?? Colors.red;
+          borderColor = widget.strokeColor ?? context.mp.errorColor;
           break;
         case MPButtonVariant.success:
-          borderColor = widget.strokeColor ?? Colors.green;
+          borderColor = widget.strokeColor ?? context.mp.successColor;
           break;
         case MPButtonVariant.warning:
-          borderColor = widget.strokeColor ?? Colors.orange;
+          borderColor = widget.strokeColor ?? context.mp.warningColor;
           break;
         case MPButtonVariant.info:
-          borderColor = widget.strokeColor ?? Colors.blue;
-          break;
-        default:
-          borderColor = widget.strokeColor ?? MpUiKit.colorBrand;
+          borderColor = widget.strokeColor ?? context.mp.infoColor;
           break;
       }
 
@@ -275,6 +286,7 @@ class _MPButtonState extends State<MPButton> {
     }
   }
 
+  /// Gets theme-aware text color based on button variant
   Color _getTextColor() {
     if (widget.textColor != null) return widget.textColor!;
 
@@ -284,12 +296,11 @@ class _MPButtonState extends State<MPButton> {
       case MPButtonVariant.success:
       case MPButtonVariant.warning:
       case MPButtonVariant.info:
-        return Colors.white;
+        return context.mp.neutral100; // Light text on colored background
       case MPButtonVariant.outlined:
       case MPButtonVariant.ghost:
-        return MpUiKit.colorBrand;
       case MPButtonVariant.text:
-        return MpUiKit.colorBrand;
+        return context.mp.primary; // Primary color for transparent buttons
     }
   }
 
@@ -308,7 +319,7 @@ class _MPButtonState extends State<MPButton> {
       );
 
       final text = MPText(
-        widget.text ?? "",
+        widget.text ?? '',
         style: widget.textStyle,
         color: widget.textColor,
         fontSize: widget.textSize,
@@ -319,45 +330,29 @@ class _MPButtonState extends State<MPButton> {
         case MPButtonIconPosition.left:
           return Row(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              icon,
-              SizedBox(width: 8),
-              text,
-            ],
+            children: [icon, const SizedBox(width: 8), text],
           );
         case MPButtonIconPosition.right:
           return Row(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              text,
-              SizedBox(width: 8),
-              icon,
-            ],
+            children: [text, const SizedBox(width: 8), icon],
           );
         case MPButtonIconPosition.top:
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              icon,
-              SizedBox(height: 4),
-              text,
-            ],
+            children: [icon, const SizedBox(height: 4), text],
           );
         case MPButtonIconPosition.bottom:
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              text,
-              SizedBox(height: 4),
-              icon,
-            ],
+            children: [text, const SizedBox(height: 4), icon],
           );
       }
     }
 
     // Default text only
     return MPText(
-      widget.text ?? "",
+      widget.text ?? '',
       style: widget.textStyle,
       color: widget.textColor,
       fontSize: widget.textSize,
@@ -378,6 +373,7 @@ class _MPButtonState extends State<MPButton> {
     }
   }
 
+  /// Gets theme-aware icon color based on button variant
   Color _getIconColor() {
     if (widget.iconColor != null) return widget.iconColor!;
 
@@ -387,15 +383,16 @@ class _MPButtonState extends State<MPButton> {
       case MPButtonVariant.success:
       case MPButtonVariant.warning:
       case MPButtonVariant.info:
-        return Colors.white;
+        return context.mp.neutral100; // Light icon on colored background
       case MPButtonVariant.outlined:
       case MPButtonVariant.ghost:
-        return MpUiKit.colorBrand;
       case MPButtonVariant.text:
-        return widget.textColor ?? MpUiKit.colorBrand;
+        return widget.textColor ??
+            context.mp.primary; // Primary color for transparent buttons
     }
   }
 
+  /// Gets padding based on button size
   EdgeInsets _getPadding() {
     switch (widget.size) {
       case MPButtonSize.small:
@@ -413,6 +410,7 @@ class _MPButtonState extends State<MPButton> {
     }
   }
 
+  /// Gets loading spinner size based on button size
   double _getLoadingSize() {
     switch (widget.size) {
       case MPButtonSize.small:
@@ -423,6 +421,66 @@ class _MPButtonState extends State<MPButton> {
         return 24;
       case MPButtonSize.large:
         return 28;
+    }
+  }
+
+  /// Gets theme-aware hover color based on button variant
+  Color _getHoverColor() {
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+        return context.mp.primaryHover;
+      case MPButtonVariant.danger:
+        return context.mp.errorColor.withValues(alpha: 0.8);
+      case MPButtonVariant.success:
+        return context.mp.successColor.withValues(alpha: 0.8);
+      case MPButtonVariant.warning:
+        return context.mp.warningColor.withValues(alpha: 0.8);
+      case MPButtonVariant.info:
+        return context.mp.infoColor.withValues(alpha: 0.8);
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+      case MPButtonVariant.text:
+        return context.mp.primaryHover.withValues(alpha: 0.1);
+    }
+  }
+
+  /// Gets theme-aware pressed color based on button variant
+  Color _getPressedColor() {
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+        return context.mp.primaryPressed;
+      case MPButtonVariant.danger:
+        return context.mp.errorColor.withValues(alpha: 0.6);
+      case MPButtonVariant.success:
+        return context.mp.successColor.withValues(alpha: 0.6);
+      case MPButtonVariant.warning:
+        return context.mp.warningColor.withValues(alpha: 0.6);
+      case MPButtonVariant.info:
+        return context.mp.infoColor.withValues(alpha: 0.6);
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+      case MPButtonVariant.text:
+        return context.mp.primaryPressed.withValues(alpha: 0.2);
+    }
+  }
+
+  /// Gets theme-aware focus color based on button variant
+  Color _getFocusColor() {
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+        return context.mp.primaryFocus;
+      case MPButtonVariant.danger:
+        return context.mp.errorColor.withValues(alpha: 0.3);
+      case MPButtonVariant.success:
+        return context.mp.successColor.withValues(alpha: 0.3);
+      case MPButtonVariant.warning:
+        return context.mp.warningColor.withValues(alpha: 0.3);
+      case MPButtonVariant.info:
+        return context.mp.infoColor.withValues(alpha: 0.3);
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+      case MPButtonVariant.text:
+        return context.mp.primaryFocus.withValues(alpha: 0.1);
     }
   }
 }

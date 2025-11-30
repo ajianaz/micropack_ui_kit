@@ -20,7 +20,7 @@ class App extends StatelessWidget {
                 MPColorTheme.light,
               ],
             ),
-            darkTheme: MPTheme.main().copyWith(
+            darkTheme: MPTheme.main(isDarkMode: true).copyWith(
               extensions: <ThemeExtension<dynamic>>[
                 MPColorTheme.dark,
               ],
