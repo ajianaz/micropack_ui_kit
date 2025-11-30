@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+// Commented out Google Fonts to avoid network issues
 import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 

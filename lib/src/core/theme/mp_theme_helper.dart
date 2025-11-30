@@ -49,20 +49,20 @@ class MPThemeUtilities {
   // ============ CRITICAL FIXES: ADAPTIVE COLORS ============
 
   /// Get adaptive text color based on theme brightness
-  /// FIXED: Dark mode now uses neutral20 (light text on dark background)
+  /// FIXED: Dark mode now uses neutral10 (white text on dark background)
   /// Light mode: uses neutral90 (dark text on light background)
   Color adaptiveTextColor(double opacity) {
     try {
       if (colorTheme != null) {
         // Use neutral colors from theme with CORRECT dark mode logic
         final baseColor = isDarkMode
-            ? (colorTheme!.neutral20 ?? MPThemeConfig.getNeutral(20))
+            ? (colorTheme!.neutral10 ?? MPThemeConfig.getNeutral(10))
             : (colorTheme!.neutral90 ?? MPThemeConfig.getNeutral(90));
         return baseColor.withValues(alpha: opacity);
       } else {
         // Fallback to MPThemeConfig helper with CORRECT logic
         final baseColor = isDarkMode
-            ? MPThemeConfig.getNeutral(20)
+            ? MPThemeConfig.getNeutral(10)
             : MPThemeConfig.getNeutral(90);
         return baseColor.withValues(alpha: opacity);
       }

@@ -142,7 +142,8 @@ Future<void> showMPAlertDialog(
                       width: width,
                       height: (width * 186) / 286,
                       decoration: ShapeDecoration(
-                        color: background ?? themeColors.primarySurface,
+                        color:
+                            background ?? themeColors.adaptiveBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),
                         ),
@@ -154,7 +155,7 @@ Future<void> showMPAlertDialog(
                     width: width,
                     height: (width * 186) / 286,
                     child: Material(
-                      color: background ?? themeColors.primarySurface,
+                      color: background ?? themeColors.adaptiveBackgroundColor,
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

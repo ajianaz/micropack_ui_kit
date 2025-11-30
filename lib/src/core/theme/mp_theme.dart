@@ -56,12 +56,16 @@ class MPTheme {
 
       // App bar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: MPThemeConfig.getPrimary(isDarkMode: false),
-        foregroundColor: MPThemeConfig.getNeutral(10), // Light text on primary
+        backgroundColor: MPThemeConfig.getBackgroundColor(
+            isDarkMode: false), // Use background color instead of primary
+        foregroundColor:
+            MPThemeConfig.getNeutral(90), // Dark text on light background
         elevation: 0,
-        titleTextStyle: MPTextStyle.heading1(
-          color: MPThemeConfig.getNeutral(10),
+        centerTitle: true,
+        titleTextStyle: MPTextStyle.heading2(
+          color: MPThemeConfig.getNeutral(90),
         ),
+        toolbarHeight: 56, // Standard app bar height
       ),
 
       // Button themes
@@ -159,12 +163,16 @@ class MPTheme {
 
       // App bar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: MPThemeConfig.getPrimary(isDarkMode: true),
-        foregroundColor: MPThemeConfig.getNeutral(10), // Light text on primary
+        backgroundColor: MPThemeConfig.getBackgroundColor(
+            isDarkMode: true), // Use background color instead of primary
+        foregroundColor:
+            MPThemeConfig.getNeutral(10), // Light text on dark background
         elevation: 0,
-        titleTextStyle: MPTextStyle.heading1(
+        centerTitle: true,
+        titleTextStyle: MPTextStyle.heading2(
           color: MPThemeConfig.getNeutral(10),
         ),
+        toolbarHeight: 56, // Standard app bar height
       ),
 
       // Button themes

@@ -106,6 +106,8 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               isLiked: isLiked1,
               isBookmarked: isBookmarked1,
               likeCount: likeCount1,
+              onTap: () => _showSnackBar(
+                  context, 'Opening article: Small Article Card with Image'),
               onLike: () => setState(() {
                 isLiked1 = !isLiked1;
                 likeCount1 += isLiked1 ? 1 : -1;
@@ -133,6 +135,8 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               isLiked: isLiked2,
               isBookmarked: isBookmarked2,
               likeCount: likeCount2,
+              onTap: () => _showSnackBar(
+                  context, 'Opening article: Medium Outlined Article Card'),
               onLike: () => setState(() {
                 isLiked2 = !isLiked2;
                 likeCount2 += isLiked2 ? 1 : -1;
@@ -164,6 +168,8 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               isLiked: isLiked3,
               isBookmarked: isBookmarked3,
               likeCount: likeCount3,
+              onTap: () => _showSnackBar(context,
+                  'Opening article: Large Elevated Article Card with Comprehensive Content'),
               onLike: () => setState(() {
                 isLiked3 = !isLiked3;
                 likeCount3 += isLiked3 ? 1 : -1;
@@ -414,12 +420,10 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: MPText(message),
-        backgroundColor: context.mp.adaptiveBackgroundColor,
-        duration: const Duration(seconds: 2),
-      ),
+    MPSnackbar.show(
+      context,
+      message: message,
+      duration: const Duration(seconds: 2),
     );
   }
 }

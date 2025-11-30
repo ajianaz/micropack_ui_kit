@@ -34,7 +34,8 @@ class MpUiKit {
     double? buttonBorderRadius,
 
     /// Mengatur penggunaan ScreenUtil. Jika bernilai true maka fontSize akan dikonversi ke .sp
-    bool useScreenUtil = false,
+    /// Changed default to true for better responsive design
+    bool useScreenUtil = true,
 
     /// Mengatur batas. width < limit = Small dan width > limit = Medium
     double? limitSmallMediumScreen,
@@ -145,9 +146,9 @@ class MpUiKit {
         radiusAll: buttonRadius),
   );
 
-  /// Layout Builder
-  static double limitSmallMediumScreen = 800;
-  static double limitMediumLargeScreen = 1200;
+  /// Layout Builder - Optimized breakpoints for better responsive design
+  static double limitSmallMediumScreen = 600;
+  static double limitMediumLargeScreen = 1024;
 
   /// Dialog
   static Widget iconSuccess = Image.asset(
