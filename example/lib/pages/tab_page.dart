@@ -29,9 +29,10 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: MPText.head(
           'Tab Components',
           style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
         ),
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,

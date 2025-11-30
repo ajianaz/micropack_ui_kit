@@ -169,14 +169,14 @@ Future<void> showMPAlertDialog(
                               visible: title != null,
                               child: MPText.head(
                                 title ?? '',
-                                style: titleStyle?.toTextStyle() ??
+                                style: titleStyle?.toTextStyle(context) ??
                                     TextStyle(color: themeColors.textColor),
                               ),
                             ),
                             const SizedBox(height: 16),
                             MPText(
                               content ?? '',
-                              style: contentStyle?.toTextStyle() ??
+                              style: contentStyle?.toTextStyle(context) ??
                                   TextStyle(color: themeColors.textColor),
                               maxLines: 4,
                               textOverflow: TextOverflow.ellipsis,

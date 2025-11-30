@@ -332,7 +332,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
           // Use theme-aware primary color for category text
           color: context.mp.primary,
           fontWeight: FontWeight.w500,
-        ).copyWith(fontSize: (_getFontSize() - 4).sp),
+        ),
+        fontSize: _getFontSize() - 4,
       ),
     );
   }
@@ -346,7 +347,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
             ? context.mp.textColor
             : context.mp.textColor.withValues(alpha: 0.4),
         fontWeight: FontWeight.bold,
-      ).copyWith(fontSize: (_getFontSize() + 2).sp),
+      ),
+      fontSize: _getFontSize() + 2,
     );
   }
 
@@ -358,7 +360,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
         color: widget.enabled
             ? context.mp.textColor.withValues(alpha: 0.7)
             : context.mp.textColor.withValues(alpha: 0.3),
-      ).copyWith(fontSize: (_getFontSize() - 2).sp),
+      ),
+      fontSize: _getFontSize() - 2,
     );
   }
 
@@ -382,7 +385,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
               color: widget.enabled
                   ? context.mp.captionColor
                   : context.mp.captionColor.withValues(alpha: 0.4),
-            ).copyWith(fontSize: (_getFontSize() - 4).sp),
+            ),
+            fontSize: _getFontSize() - 4,
           ),
         ],
         if (widget.date != null) ...[
@@ -400,7 +404,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
               color: widget.enabled
                   ? context.mp.captionColor
                   : context.mp.captionColor.withValues(alpha: 0.4),
-            ).copyWith(fontSize: (_getFontSize() - 4).sp),
+            ),
+            fontSize: _getFontSize() - 4,
           ),
         ],
         if (widget.readTime != null) ...[
@@ -418,7 +423,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
               color: widget.enabled
                   ? context.mp.captionColor
                   : context.mp.captionColor.withValues(alpha: 0.4),
-            ).copyWith(fontSize: (_getFontSize() - 4).sp),
+            ),
+            fontSize: _getFontSize() - 4,
           ),
         ],
       ],
@@ -452,7 +458,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
           color: widget.enabled
               ? context.mp.neutral70
               : context.mp.neutral70.withValues(alpha: 0.4),
-        ).copyWith(fontSize: (_getFontSize() - 6).sp),
+        ),
+        fontSize: _getFontSize() - 6,
       ),
     );
   }
@@ -477,7 +484,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-          textSize: _getFontSize() - 4.sp,
+          textSize: _getFontSize() - 4,
           // Use theme-aware subtitle color for like count text
           textColor: context.mp.subtitleColor,
         ),

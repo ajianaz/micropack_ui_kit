@@ -706,21 +706,24 @@ class _MPTextFieldState extends State<MPTextField> {
       decoration: InputDecoration(
         // Hint text with theme-aware subtitle color for better visibility
         hintText: widget.hint,
-        hintStyle: (widget.hintStyle?.toTextStyle() ?? TextStyle()).copyWith(
+        hintStyle:
+            (widget.hintStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
           color: widget.hintStyle?.color ?? themeColors.subtitleColor,
         ),
         hintMaxLines: widget.hintStyle?.maxLines,
 
         // Label text with theme-aware text color for consistency
         labelText: widget.label,
-        labelStyle: (widget.labelStyle?.toTextStyle() ?? TextStyle()).copyWith(
+        labelStyle:
+            (widget.labelStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
           color: widget.labelStyle?.color ?? themeColors.textColor,
         ),
         label: widget.labelCustom,
         floatingLabelAlignment: widget.floatingLabelAlignment,
         floatingLabelBehavior: widget.floatingLabelBehavior,
         floatingLabelStyle:
-            (widget.floatingLabelStyle?.toTextStyle() ?? TextStyle()).copyWith(
+            (widget.floatingLabelStyle?.toTextStyle(context) ?? TextStyle())
+                .copyWith(
           color: widget.floatingLabelStyle?.color ?? themeColors.textColor,
         ),
 
@@ -734,7 +737,8 @@ class _MPTextFieldState extends State<MPTextField> {
         prefix: widget.prefix,
         prefixText: widget.prefixText,
         prefixStyle:
-            (widget.prefixTextStyle?.toTextStyle() ?? TextStyle()).copyWith(
+            (widget.prefixTextStyle?.toTextStyle(context) ?? TextStyle())
+                .copyWith(
           color: widget.prefixTextStyle?.color ?? themeColors.subtitleColor,
         ),
 
@@ -744,7 +748,8 @@ class _MPTextFieldState extends State<MPTextField> {
         suffix: widget.suffix,
         suffixText: widget.suffixText,
         suffixStyle:
-            (widget.suffixTextStyle?.toTextStyle() ?? TextStyle()).copyWith(
+            (widget.suffixTextStyle?.toTextStyle(context) ?? TextStyle())
+                .copyWith(
           color: widget.suffixTextStyle?.color ?? themeColors.subtitleColor,
         ),
 
@@ -752,20 +757,21 @@ class _MPTextFieldState extends State<MPTextField> {
         counterText:
             widget.showCounter ? _buildCounterText() : widget.counterText,
         counterStyle:
-            (widget.counterStyle?.toTextStyle() ?? TextStyle()).copyWith(
+            (widget.counterStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
           color: widget.counterStyle?.color ?? themeColors.captionColor,
         ),
 
         // Helper text with theme-aware subtitle color
         helperText: widget.helperText,
         helperStyle:
-            (widget.helperStyle?.toTextStyle() ?? TextStyle()).copyWith(
+            (widget.helperStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
           color: widget.helperStyle?.color ?? themeColors.subtitleColor,
         ),
 
         // Error text with theme-aware error color for clear indication
         errorText: widget.errorText,
-        errorStyle: (widget.errorStyle?.toTextStyle() ?? TextStyle()).copyWith(
+        errorStyle:
+            (widget.errorStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
           color: widget.errorStyle?.color ?? themeColors.errorColor,
         ),
 
@@ -794,9 +800,9 @@ class _MPTextFieldState extends State<MPTextField> {
       textInputAction: widget.textInputAction,
       // Text style with theme-aware text color for readability
       // Always use theme-aware color unless explicitly overridden
-      style:
-          (widget.textStyle?.toTextStyle() ?? MpUiKit.textStyle.toTextStyle())
-              .copyWith(
+      style: (widget.textStyle?.toTextStyle(context) ??
+              MpUiKit.textStyle.toTextStyle(context))
+          .copyWith(
         color: widget.textStyle?.color ?? themeColors.textColor,
       ),
       textAlign: widget.textAlign,

@@ -9,9 +9,10 @@ class TypographyPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: MPText.head(
           'Typography',
           style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
         ),
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,
@@ -22,9 +23,10 @@ class TypographyPage extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(20.r),
-            child: Text(
+            child: MPText(
               MPTextStyle.defaultFontFamily,
               style: TextStyle(color: context.mp.textColor),
+              fontSize: 16,
             ),
           ),
           Expanded(
@@ -44,26 +46,27 @@ class TypographyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextWithTheme(String text, TextStyle style) {
+  Widget _buildTextWithTheme(String text, TextStyle style, double fontSize) {
     return Builder(
       builder: (context) => MPText(
         text,
         style: style.copyWith(
           color: context.mp.textColor,
         ),
+        fontSize: fontSize,
       ),
     );
   }
 
   List<Widget> _textStyles(BuildContext context) => [
-        _buildTextWithTheme('Title', MPTextStyle.title()),
-        _buildTextWithTheme('Heading1', MPTextStyle.heading1()),
-        _buildTextWithTheme('Heading2', MPTextStyle.heading2()),
-        _buildTextWithTheme('Heading3', MPTextStyle.heading3()),
-        _buildTextWithTheme('Body1', MPTextStyle.body1()),
-        _buildTextWithTheme('Body2', MPTextStyle.body2()),
-        _buildTextWithTheme('Caption', MPTextStyle.caption()),
-        _buildTextWithTheme('Overline', MPTextStyle.overline()),
+        _buildTextWithTheme('Title', MPTextStyle.title(), 24),
+        _buildTextWithTheme('Heading1', MPTextStyle.heading1(), 34),
+        _buildTextWithTheme('Heading2', MPTextStyle.heading2(), 27),
+        _buildTextWithTheme('Heading3', MPTextStyle.heading3(), 21),
+        _buildTextWithTheme('Body1', MPTextStyle.body1(), 17),
+        _buildTextWithTheme('Body2', MPTextStyle.body2(), 14),
+        _buildTextWithTheme('Caption', MPTextStyle.caption(), 11),
+        _buildTextWithTheme('Overline', MPTextStyle.overline(), 8),
         MPText.head(
           'Head',
         ),

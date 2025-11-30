@@ -253,7 +253,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
               fontWeight: widget.isActiveTab == true
                   ? FontWeight.w500
                   : FontWeight.w200,
-            ).copyWith(fontSize: _getFontSize()),
+            ),
+            fontSize: _getFontSize(),
           ),
         ),
       );
@@ -280,7 +281,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
               // Badge text: use neutral100 for high contrast against error color background
               color: widget.badgeTextColor ?? context.mp.neutral100,
               fontWeight: FontWeight.w500,
-            ).copyWith(fontSize: 10),
+            ),
+            fontSize: 10,
           ),
         ),
       );
@@ -297,7 +299,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
             color: _getTextColor(context),
             fontWeight:
                 widget.isActiveTab == true ? FontWeight.w500 : FontWeight.w200,
-          ).copyWith(fontSize: _getFontSize()),
+          ),
+          fontSize: _getFontSize(),
         ),
       );
     }

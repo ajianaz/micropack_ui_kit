@@ -36,9 +36,10 @@ class _TextFieldPageState extends State<TextFieldPage> {
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: MPText.head(
           'Text Field',
           style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
         ),
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,

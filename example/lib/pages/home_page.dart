@@ -55,9 +55,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: MPText.head(
           'Micropack UI Kit',
           style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
         ),
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,
@@ -219,39 +220,39 @@ class _ThemeInfoCard extends StatelessWidget {
                 size: 24,
               ),
               SizedBox(width: 12.w),
-              Text(
+              MPText(
                 'Theme Information',
                 style: TextStyle(
-                  fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                   color: context.mp.textColor,
                 ),
+                fontSize: 18,
               ),
             ],
           ),
           SizedBox(height: 12.h),
-          Text(
+          MPText(
             'Current Theme: $themeName',
             style: TextStyle(
-              fontSize: 14.sp,
               color: context.mp.subtitleColor,
             ),
+            fontSize: 14,
           ),
           SizedBox(height: 4.h),
-          Text(
+          MPText(
             'Brightness: $brightnessName',
             style: TextStyle(
-              fontSize: 14.sp,
               color: context.mp.subtitleColor,
             ),
+            fontSize: 14,
           ),
           SizedBox(height: 12.h),
-          Text(
+          MPText(
             'Tap the theme icon in the app bar to switch between Light, Dark, and System themes.',
             style: TextStyle(
-              fontSize: 12.sp,
               color: context.mp.captionColor,
             ),
+            fontSize: 12,
           ),
         ],
       ),
@@ -268,14 +269,14 @@ class _SectionTitle extends StatelessWidget {
         padding: EdgeInsets.only(
           top: 30.h,
         ),
-        child: Text(
+        child: MPText.head(
           title,
           style: TextStyle(
-            fontSize: 24.sp,
             fontWeight: FontWeight.w600,
             color: context.mp.textColor,
           ),
           textAlign: TextAlign.start,
+          fontSize: 24,
         ),
       );
 }

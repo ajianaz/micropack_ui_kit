@@ -57,9 +57,10 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: MPText.head(
           'Article Card',
           style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
         ),
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,
@@ -317,7 +318,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                 MPButton(
                   text: 'Read More',
                   onPressed: () => _showSnackBar(context, 'Opening article...'),
-                  textSize: 12.sp,
+                  textSize: 12,
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 ),
@@ -325,7 +326,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   text: 'Save',
                   variant: MPButtonVariant.outlined,
                   onPressed: () => _showSnackBar(context, 'Article saved!'),
-                  textSize: 12.sp,
+                  textSize: 12,
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 ),
@@ -365,25 +366,25 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
             SizedBox(height: 16.h),
 
             // Status indicator
-            Container(
-              padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(
-                color: context.mp.neutral20,
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MPText.subhead('Interactive Status'),
-                  SizedBox(height: 8.h),
-                  MPText.body(
-                      'Hovering over card: ${isHovered ? "Yes" : "No"}'),
-                  SizedBox(height: 4.h),
-                  MPText.small(
-                      'Try hovering over the first card to see the interaction state change.'),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.all(16.r),
+            //   decoration: BoxDecoration(
+            //     color: context.mp.neutral20,
+            //     borderRadius: BorderRadius.circular(12.r),
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       MPText.subhead('Interactive Status'),
+            //       SizedBox(height: 8.h),
+            //       MPText.body(
+            //           'Hovering over card: ${isHovered ? "Yes" : "No"}'),
+            //       SizedBox(height: 4.h),
+            //       MPText.small(
+            //           'Try hovering over the first card to see the interaction state change.'),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

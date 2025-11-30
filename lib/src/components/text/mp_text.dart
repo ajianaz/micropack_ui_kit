@@ -256,9 +256,15 @@ class MPText extends StatelessWidget {
   TextStyle composeTextStyle(BuildContext context) {
     TextStyle baseStyle = style ?? const TextStyle();
 
+    double? effectiveFontSize = fontSize;
+    if (effectiveFontSize != null) {
+      effectiveFontSize = ResponsiveFontHelper.getResponsiveFontSize(
+          effectiveFontSize, context);
+    }
+
     return baseStyle.copyWith(
       fontWeight: fontWeight,
-      fontSize: fontSize,
+      fontSize: effectiveFontSize,
       fontStyle: fontStyle,
       letterSpacing: letterSpacing,
       color: color,

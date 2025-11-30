@@ -270,10 +270,17 @@ class MPTextStyle {
 
 /// Extension method to convert `MPTextStyle` to Flutter `TextStyle`
 extension MPTextStyleExtension on MPTextStyle? {
-  TextStyle toTextStyle() {
+  TextStyle toTextStyle([BuildContext? context]) {
+    double? fontSize = this?.fontSize;
+
+    // Apply responsive scaling if context is provided
+    if (context != null && fontSize != null) {
+      fontSize = ResponsiveFontHelper.getResponsiveFontSize(fontSize, context);
+    }
+
     return TextStyle(
       fontFamily: this?.fontFamily,
-      fontSize: this?.fontSize,
+      fontSize: fontSize,
       fontWeight: this?.fontWeight,
       fontStyle: this?.fontStyle,
       color: this?.color,

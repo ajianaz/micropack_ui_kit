@@ -34,7 +34,8 @@ class MPSnackbar {
                 (themeColors.isDarkMode
                     ? themeColors.neutral10
                     : themeColors.neutral90),
-            fontSize: fontSize ?? 14.0,
+            fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                fontSize ?? 14.0, context),
           ),
         ),
         backgroundColor: backgroundColor ?? themeColors.adaptiveBackgroundColor,
@@ -73,7 +74,8 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
-                  fontSize: fontSize ?? 14.0,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
                 ),
               ),
             ),
@@ -114,7 +116,8 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
-                  fontSize: fontSize ?? 14.0,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
                 ),
               ),
             ),
@@ -155,7 +158,8 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
-                  fontSize: fontSize ?? 14.0,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
                 ),
               ),
             ),
@@ -196,7 +200,8 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
-                  fontSize: fontSize ?? 14.0,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
                 ),
               ),
             ),
