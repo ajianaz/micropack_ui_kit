@@ -165,7 +165,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 prefixIcon: Icon(Icons.search, color: context.mp.subtitleColor),
                 suffixIcon: Icon(Icons.mic, color: context.mp.subtitleColor),
                 filled: true,
-                fillColor: context.mp.neutral90,
+                fillColor: context.mp.primarySurface,
                 onChange: (value) => print('Icon field changed: $value'),
               ),
             ),

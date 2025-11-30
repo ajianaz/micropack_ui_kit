@@ -203,7 +203,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
 
   Color _getInteractionBackgroundColor(
       MPColorTheme colorTheme, BuildContext context) {
+    // Theme-aware interaction background color
     if (!widget.enabled) {
+      // Use disabled color for disabled state
       return context.mp.disabledColor;
     }
 
@@ -213,12 +215,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
         return highlightColor;
       }
 
-      final isDarkMode = context.mp.isDarkMode;
-      if (isDarkMode) {
-        return colorTheme.neutral30 ?? const Color(0xFF2A2A2A);
-      } else {
-        return colorTheme.neutral90 ?? const Color(0xFFE5E5E5);
-      }
+      // Use theme-aware hover color for pressed state
+      // Dark mode: neutral30 (light gray), Light mode: neutral90 (dark gray)
+      return context.mp.isDarkMode
+          ? context.mp.neutral30
+          : context.mp.neutral90;
     }
 
     if (_isHovered) {
@@ -227,12 +228,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
         return hoverColor;
       }
 
-      final isDarkMode = context.mp.isDarkMode;
-      if (isDarkMode) {
-        return colorTheme.neutral30 ?? const Color(0xFF2A2A2A);
-      } else {
-        return colorTheme.neutral90 ?? const Color(0xFFE5E5E5);
-      }
+      // Use theme-aware hover color
+      // Dark mode: neutral30 (light gray), Light mode: neutral90 (dark gray)
+      return context.mp.isDarkMode
+          ? context.mp.neutral30
+          : context.mp.neutral90;
     }
 
     return _getBackgroundColor(colorTheme, context);
@@ -242,6 +242,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     if (widget.variant == MPArticleCardVariant.elevated) {
       return [
         BoxShadow(
+          // Use theme-aware shadow color for better visibility in both modes
           color: context.mp.adaptiveShadowColor,
           blurRadius: _isHovered ? 8 : 4,
           offset: Offset(0, _isHovered ? 4 : 2),
@@ -279,6 +280,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
             return Container(
               width: double.infinity,
               height: _getImageHeight(),
+              // Use theme-aware neutral color for loading background
               color: context.mp.neutral30,
               child: Center(
                 child: CircularProgressIndicator(
@@ -286,6 +288,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
                       ? loadingProgress.cumulativeBytesLoaded /
                           loadingProgress.expectedTotalBytes!
                       : null,
+                  // Use theme-aware primary color for progress indicator
                   color: context.mp.primary,
                 ),
               ),
@@ -302,10 +305,12 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return Container(
       width: double.infinity,
       height: _getImageHeight(),
+      // Use theme-aware neutral color for placeholder background
       color: context.mp.neutral30,
       child: Icon(
         Icons.image_not_supported,
         size: 40.r,
+        // Use theme-aware caption color for placeholder icon
         color: context.mp.captionColor,
       ),
     );
@@ -315,12 +320,14 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
+        // Use theme-aware primary color with opacity for category background
         color: context.mp.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: MPText(
         category,
         style: MPTextStyle.body2(
+          // Use theme-aware primary color for category text
           color: context.mp.primary,
           fontWeight: FontWeight.w500,
         ).copyWith(fontSize: (_getFontSize() - 4).sp),
@@ -426,12 +433,16 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
+        // Use theme-aware neutral color for tag background
+        // Enabled state: neutral20, Disabled state: disabledColor
         color: widget.enabled ? context.mp.neutral20 : context.mp.disabledColor,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: MPText(
         tag,
         style: MPTextStyle.caption(
+          // Use theme-aware neutral color for tag text
+          // Enabled state: neutral70, Disabled state: disabledColor
           color:
               widget.enabled ? context.mp.neutral70 : context.mp.disabledColor,
         ).copyWith(fontSize: (_getFontSize() - 6).sp),
@@ -449,14 +460,18 @@ class _MPArticleCardState extends State<MPArticleCard> {
           child: Icon(
             widget.isLiked ? Icons.favorite : Icons.favorite_border,
             size: 18.r,
+            // Use theme-aware colors for like icon
+            // Liked state: errorColor (red), Default state: subtitleColor
             color: widget.isLiked
                 ? context.mp.errorColor
                 : context.mp.subtitleColor,
           ),
           onPressed: widget.enabled ? widget.onLike : null,
-          background: Colors.transparent,
+          // Use theme-aware transparent background
+          background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           textSize: _getFontSize() - 4.sp,
+          // Use theme-aware subtitle color for like count text
           textColor: context.mp.subtitleColor,
         ),
       );
@@ -469,10 +484,12 @@ class _MPArticleCardState extends State<MPArticleCard> {
           child: Icon(
             widget.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
             size: 18.r,
+            // Use theme-aware subtitle color for bookmark icon
             color: context.mp.subtitleColor,
           ),
           onPressed: widget.enabled ? widget.onBookmark : null,
-          background: Colors.transparent,
+          // Use theme-aware transparent background
+          background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
         ),
       );
@@ -485,10 +502,12 @@ class _MPArticleCardState extends State<MPArticleCard> {
           child: Icon(
             Icons.share,
             size: 18.r,
+            // Use theme-aware subtitle color for share icon
             color: context.mp.subtitleColor,
           ),
           onPressed: widget.enabled ? widget.onShare : null,
-          background: Colors.transparent,
+          // Use theme-aware transparent background
+          background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
         ),
       );

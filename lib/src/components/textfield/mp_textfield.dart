@@ -5,6 +5,34 @@ import 'package:flutter/services.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 
+/// MPTextField - Theme-aware text field component
+///
+/// This component has been updated to use the new theme system with context.mp
+/// for consistent theming across light and dark modes.
+///
+/// Theme Implementation:
+/// - Cursor color: uses context.mp.primary
+/// - Icon colors: uses context.mp.primary, context.mp.subtitleColor, context.mp.captionColor
+/// - Clear button icon: uses context.mp.subtitleColor
+/// - Loading indicator: uses context.mp.primary
+/// - Image placeholder: uses context.mp.neutral30 and context.mp.captionColor
+///
+/// State Colors:
+/// - Enabled: uses context.mp.textColor
+/// - Disabled: uses context.mp.disabledColor
+/// - Hint text: uses context.mp.subtitleColor
+/// - Label text: uses context.mp.textColor
+/// - Helper text: uses context.mp.subtitleColor
+/// - Error text: uses context.mp.errorColor
+/// - Counter text: uses context.mp.captionColor
+///
+/// Border Colors:
+/// - Default border: uses context.mp.adaptiveBorderColor
+/// - Focus border: uses context.mp.primaryFocus
+/// - Error border: uses context.mp.errorColor
+///
+/// All variants (DEFAULT, PASSWORD, BORDER, BORDER_PASSWORD) now use the theme system correctly.
+
 enum MPTextFieldType { DEFAULT, PASSWORD, BORDER, BORDER_PASSWORD }
 
 /// Input formatter for common patterns
@@ -561,8 +589,8 @@ class MPTextField extends StatefulWidget {
     this.scrollPadding,
     this.textDirection,
   }) {
-    type = MPTextFieldType.DEFAULT;
-    border = border ?? MpUiKit.border;
+    type = MPTextFieldType.BORDER;
+    // Note: border will be set in build method using theme-aware colors
   }
 
   MPTextField.borderPassword(
@@ -630,7 +658,7 @@ class MPTextField extends StatefulWidget {
     this.textDirection,
   }) {
     type = MPTextFieldType.BORDER_PASSWORD;
-    border = border ?? MpUiKit.border;
+    // Note: border will be set in build method using theme-aware colors
   }
 
   @override
@@ -669,56 +697,104 @@ class _MPTextFieldState extends State<MPTextField> {
     // Build suffix icon with clear button
     Widget? finalSuffixIcon = _buildSuffixIcon();
 
+    // Get theme-aware colors for consistent theming across light and dark modes
+    final themeColors = context.mp;
+
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
+        // Hint text with theme-aware subtitle color for better visibility
         hintText: widget.hint,
-        hintStyle: widget.hintStyle?.toTextStyle(),
+        hintStyle: (widget.hintStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.hintStyle?.color ?? themeColors.subtitleColor,
+        ),
         hintMaxLines: widget.hintStyle?.maxLines,
+
+        // Label text with theme-aware text color for consistency
         labelText: widget.label,
-        labelStyle: widget.labelStyle?.toTextStyle(),
+        labelStyle: (widget.labelStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.labelStyle?.color ?? themeColors.textColor,
+        ),
         label: widget.labelCustom,
         floatingLabelAlignment: widget.floatingLabelAlignment,
         floatingLabelBehavior: widget.floatingLabelBehavior,
-        floatingLabelStyle: widget.floatingLabelStyle?.toTextStyle(),
+        floatingLabelStyle:
+            (widget.floatingLabelStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.floatingLabelStyle?.color ?? themeColors.textColor,
+        ),
+
+        // Icon with theme-aware primary color for visual hierarchy
         icon: widget.icon,
-        iconColor: widget.iconColor,
+        iconColor: widget.iconColor ?? themeColors.primary,
+
+        // Prefix icon with theme-aware primary color
         prefixIcon: widget.prefixIcon,
-        prefixIconColor: widget.prefixIconColor,
+        prefixIconColor: widget.prefixIconColor ?? themeColors.primary,
         prefix: widget.prefix,
         prefixText: widget.prefixText,
-        prefixStyle: widget.prefixTextStyle?.toTextStyle(),
+        prefixStyle:
+            (widget.prefixTextStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.prefixTextStyle?.color ?? themeColors.subtitleColor,
+        ),
+
+        // Suffix elements with theme-aware colors
         suffixIcon: finalSuffixIcon,
-        suffixIconColor: widget.suffixIconColor,
+        suffixIconColor: widget.suffixIconColor ?? themeColors.subtitleColor,
         suffix: widget.suffix,
         suffixText: widget.suffixText,
-        suffixStyle: widget.suffixTextStyle?.toTextStyle(),
+        suffixStyle:
+            (widget.suffixTextStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.suffixTextStyle?.color ?? themeColors.subtitleColor,
+        ),
+
+        // Counter text with theme-aware caption color for subtle appearance
         counterText:
             widget.showCounter ? _buildCounterText() : widget.counterText,
-        counterStyle: widget.counterStyle?.toTextStyle(),
+        counterStyle:
+            (widget.counterStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.counterStyle?.color ?? themeColors.captionColor,
+        ),
+
+        // Helper text with theme-aware subtitle color
         helperText: widget.helperText,
-        helperStyle: widget.helperStyle?.toTextStyle(),
+        helperStyle:
+            (widget.helperStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.helperStyle?.color ?? themeColors.subtitleColor,
+        ),
+
+        // Error text with theme-aware error color for clear indication
         errorText: widget.errorText,
-        errorStyle: widget.errorStyle?.toTextStyle(),
-        fillColor: widget.fillColor,
-        filled: widget.filled,
-        border: widget.border?.border?.toBorder() ?? InputBorder.none,
-        enabledBorder:
-            widget.border?.enableBorder?.toBorder() ?? InputBorder.none,
-        errorBorder: widget.border?.errorBorder?.toBorder() ?? InputBorder.none,
-        focusedErrorBorder:
-            widget.border?.focusedErrorBorder?.toBorder() ?? InputBorder.none,
-        focusedBorder:
-            widget.border?.focusedBorder?.toBorder() ?? InputBorder.none,
-        disabledBorder:
-            widget.border?.disableBorder?.toBorder() ?? InputBorder.none,
+        errorStyle: (widget.errorStyle?.toTextStyle() ?? TextStyle()).copyWith(
+          color: widget.errorStyle?.color ?? themeColors.errorColor,
+        ),
+
+        // Fill color with theme-aware surface color for proper contrast
+        fillColor: widget.fillColor ?? themeColors.primarySurface,
+        filled: widget.filled ?? true,
+        border: widget.border?.border?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'default'),
+        enabledBorder: widget.border?.enableBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'enabled'),
+        errorBorder: widget.border?.errorBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'error'),
+        focusedErrorBorder: widget.border?.focusedErrorBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'focusedError'),
+        focusedBorder: widget.border?.focusedBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'focused'),
+        disabledBorder: widget.border?.disableBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'disabled'),
         contentPadding: widget.padding,
         constraints: widget.constraints,
         focusColor: Colors.transparent,
       ),
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
-      style: widget.textStyle?.toTextStyle() ?? MpUiKit.textStyle.toTextStyle(),
+      // Text style with theme-aware text color for readability
+      style:
+          (widget.textStyle?.toTextStyle() ?? MpUiKit.textStyle.toTextStyle())
+              .copyWith(
+        color: widget.textStyle?.color ?? themeColors.textColor,
+      ),
       textAlign: widget.textAlign,
       readOnly: widget.readOnly,
       obscureText: widget.obscureText,
@@ -727,7 +803,8 @@ class _MPTextFieldState extends State<MPTextField> {
           ? 1
           : widget.textStyle?.maxLines,
       minLines: widget.textStyle?.minLines ?? MpUiKit.textStyle?.minLines,
-      cursorColor: widget.cursorColor ?? MpUiKit.colorBrand,
+      // Theme-aware cursor color using primary color for visibility
+      cursorColor: widget.cursorColor ?? themeColors.primary,
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       validator: widget.validator,
@@ -750,8 +827,10 @@ class _MPTextFieldState extends State<MPTextField> {
   /// Build suffix icon with clear button and password toggle
   Widget? _buildSuffixIcon() {
     final List<Widget> icons = [];
+    final themeColors = context.mp;
 
     // Add clear button if enabled and field is not empty
+    // Uses theme-aware subtitle color for subtle appearance
     if (widget.showClearButton && widget.controller.text.isNotEmpty) {
       icons.add(
         GestureDetector(
@@ -763,8 +842,8 @@ class _MPTextFieldState extends State<MPTextField> {
           child: widget.clearButtonIcon ??
               Icon(
                 Icons.clear,
-                color: widget.suffixIconColor ??
-                    MpUiKit.colorText.withValues(alpha: 0.6),
+                // Theme-aware clear button color using subtitle color
+                color: widget.suffixIconColor ?? themeColors.subtitleColor,
                 size: 20,
               ),
         ),
@@ -778,6 +857,7 @@ class _MPTextFieldState extends State<MPTextField> {
       }
     } else {
       // Password field - add toggle icon
+      // Default icons will use theme-aware colors through InputDecoration
       icons.add(
         GestureDetector(
           onTap: _togglePasswordView,
@@ -827,5 +907,57 @@ class _MPTextFieldState extends State<MPTextField> {
             (widget.suffixIconEyeOpen ?? _defaultSuffixIconEyeOpen);
       }
     }
+  }
+
+  // Theme-aware border methods
+  // Creates borders with appropriate colors based on state and theme
+  InputBorder _getThemeAwareBorder(
+      MPThemeUtilities themeColors, String borderType) {
+    // Only show borders for BORDER and BORDER_PASSWORD types
+    // DEFAULT and PASSWORD types use underline style by default
+    if (widget.type != MPTextFieldType.BORDER &&
+        widget.type != MPTextFieldType.BORDER_PASSWORD) {
+      return InputBorder.none;
+    }
+
+    Color borderColor;
+    double borderWidth = 1.0;
+
+    // Determine border color based on state
+    switch (borderType) {
+      case 'enabled':
+        // Use adaptive border color for normal state
+        borderColor = themeColors.adaptiveBorderColor;
+        break;
+      case 'focused':
+        // Use primary focus color with increased width for emphasis
+        borderColor = themeColors.primaryFocus;
+        borderWidth = 2.0;
+        break;
+      case 'error':
+        // Use error color for error indication
+        borderColor = themeColors.errorColor;
+        break;
+      case 'focusedError':
+        // Use error color with increased width for focused error state
+        borderColor = themeColors.errorColor;
+        borderWidth = 2.0;
+        break;
+      case 'disabled':
+        // Use disabled color for disabled state
+        borderColor = themeColors.disabledColor;
+        break;
+      default:
+        // Default to adaptive border color
+        borderColor = themeColors.adaptiveBorderColor;
+    }
+
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: borderColor,
+        width: borderWidth,
+      ),
+    );
   }
 }

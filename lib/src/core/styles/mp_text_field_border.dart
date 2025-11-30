@@ -87,6 +87,9 @@ class MPTextFieldBorderProperty {
 
 extension MPTextFieldBorderPropertyExtension on MPTextFieldBorderProperty {
   InputBorder toBorder() {
+    // Use theme-aware color if sideColor is not provided
+    // Note: This extension doesn't have access to BuildContext, so we use MpUiKit.colorBrand as fallback
+    // The MPTextField widget handles theme-aware borders properly through _getThemeAwareBorder method
     BorderSide borderSide = BorderSide(
         color: sideColor ?? MpUiKit.colorBrand, width: sideWidth ?? 1);
 
