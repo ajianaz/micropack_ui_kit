@@ -32,7 +32,7 @@ void main() {
               home: Builder(
                 builder: (context) {
                   final color = context.mp.adaptiveTextColor(1.0);
-                  expect(color, MPColorTheme.light.neutral20);
+                  expect(color, MPColorTheme.light.neutral90);
                   expect(Theme.of(context).brightness, Brightness.light);
                   return Container();
                 },
@@ -58,7 +58,7 @@ void main() {
               home: Builder(
                 builder: (context) {
                   final color = context.mp.adaptiveTextColor(1.0);
-                  expect(color, MPColorTheme.dark.neutral90);
+                  expect(color, MPColorTheme.dark.neutral10);
                   expect(Theme.of(context).brightness, Brightness.dark);
                   return Container();
                 },
@@ -84,7 +84,7 @@ void main() {
               home: Builder(
                 builder: (context) {
                   final color = context.mp.adaptiveBackgroundColor;
-                  expect(color, MPColorTheme.light.neutral100);
+                  expect(color, MPColorTheme.light.neutral10);
                   expect(Theme.of(context).brightness, Brightness.light);
                   return Container();
                 },
@@ -110,7 +110,7 @@ void main() {
               home: Builder(
                 builder: (context) {
                   final color = context.mp.adaptiveBackgroundColor;
-                  expect(color, MPColorTheme.dark.neutral20);
+                  expect(color, MPColorTheme.dark.neutral100);
                   expect(Theme.of(context).brightness, Brightness.dark);
                   return Container();
                 },

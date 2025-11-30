@@ -138,7 +138,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 42,
+        fontSize: 24, // Reduced from 42 to 24 for better app bar sizing
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,

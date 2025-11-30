@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit_example/pages/article_card_page.dart';
@@ -11,125 +10,196 @@ import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_showcase_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 import 'package:micropack_ui_kit_example/pages/tab_page.dart';
-import 'package:micropack_ui_kit_example/providers/theme_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Add listener for theme changes
+    try {
+      MPThemeManager.instance.addListener(_onThemeChanged);
+    } catch (e) {
+      // Manager might not be initialized yet, ignore
+      debugPrint('Failed to add theme listener: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    // Remove theme listener
+    try {
+      MPThemeManager.instance.removeListener(_onThemeChanged);
+    } catch (e) {
+      // Manager might not be initialized, ignore
+      debugPrint('Failed to remove theme listener: $e');
+    }
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    if (mounted) {
+      setState(() {
+        // Rebuild UI when theme changes
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Micropack UI Kit',
-              style: TextStyle(color: context.mp.textColor),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Micropack UI Kit',
+          style: TextStyle(color: context.mp.textColor),
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
+        actions: [
+          // Theme toggle button
+          PopupMenuButton<ThemeMode>(
+            icon: Icon(
+              _getThemeIcon(),
+              color: context.mp.textColor,
             ),
-            backgroundColor: context.mp.adaptiveBackgroundColor,
-            elevation: 0,
-            actions: [
-              // Theme toggle button
-              PopupMenuButton<ThemeMode>(
-                icon: Icon(
-                  themeProvider.getThemeIcon(),
-                  color: context.mp.textColor,
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<ThemeMode>(
+                value: ThemeMode.light,
+                child: Row(
+                  children: [
+                    Icon(Icons.light_mode,
+                        size: 20, color: context.mp.textColor),
+                    SizedBox(width: 8),
+                    Text('Light',
+                        style: TextStyle(color: context.mp.textColor)),
+                  ],
                 ),
-                itemBuilder: (BuildContext context) => [
-                  PopupMenuItem<ThemeMode>(
-                    value: ThemeMode.light,
-                    child: Row(
-                      children: [
-                        Icon(Icons.light_mode,
-                            size: 20, color: context.mp.textColor),
-                        SizedBox(width: 8),
-                        Text('Light',
-                            style: TextStyle(color: context.mp.textColor)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem<ThemeMode>(
-                    value: ThemeMode.dark,
-                    child: Row(
-                      children: [
-                        Icon(Icons.dark_mode,
-                            size: 20, color: context.mp.textColor),
-                        SizedBox(width: 8),
-                        Text('Dark',
-                            style: TextStyle(color: context.mp.textColor)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem<ThemeMode>(
-                    value: ThemeMode.system,
-                    child: Row(
-                      children: [
-                        Icon(Icons.settings_brightness,
-                            size: 20, color: context.mp.textColor),
-                        SizedBox(width: 8),
-                        Text('System',
-                            style: TextStyle(color: context.mp.textColor)),
-                      ],
-                    ),
-                  ),
-                ],
-                onSelected: (ThemeMode mode) {
-                  themeProvider.setTheme(mode);
-                },
+              ),
+              PopupMenuItem<ThemeMode>(
+                value: ThemeMode.dark,
+                child: Row(
+                  children: [
+                    Icon(Icons.dark_mode,
+                        size: 20, color: context.mp.textColor),
+                    SizedBox(width: 8),
+                    Text('Dark', style: TextStyle(color: context.mp.textColor)),
+                  ],
+                ),
+              ),
+              PopupMenuItem<ThemeMode>(
+                value: ThemeMode.system,
+                child: Row(
+                  children: [
+                    Icon(Icons.settings_brightness,
+                        size: 20, color: context.mp.textColor),
+                    SizedBox(width: 8),
+                    Text('System',
+                        style: TextStyle(color: context.mp.textColor)),
+                  ],
+                ),
               ),
             ],
+            onSelected: (ThemeMode mode) async {
+              try {
+                await MPThemeManager.instance.setThemeMode(mode);
+              } catch (e) {
+                debugPrint('Failed to set theme mode: $e');
+              }
+            },
           ),
-          body: Container(
-            color: context.mp.adaptiveBackgroundColor,
-            child: ListView(
-              padding: EdgeInsets.only(
-                top: 16.h,
-                left: 20.w,
-                right: 20.w,
-                bottom: 32.h,
-              ),
-              shrinkWrap: true,
-              children: [
-                // Theme info card
-                _ThemeInfoCard(themeProvider: themeProvider),
+        ],
+      ),
+      body: Container(
+        color: context.mp.adaptiveBackgroundColor,
+        child: ListView(
+          padding: EdgeInsets.only(
+            top: 16.h,
+            left: 20.w,
+            right: 20.w,
+            bottom: 32.h,
+          ),
+          shrinkWrap: true,
+          children: [
+            // Theme info card
+            _ThemeInfoCard(),
 
-                const _SectionTitle(
-                  title: 'Assets',
-                ),
-                const _SectionTitle(
-                  title: 'Core',
-                ),
-                const _Button(name: 'Colors', page: ColorPage()),
-                const _Button(name: 'Typography', page: TypographyPage()),
-                const _SectionTitle(
-                  title: 'Theme',
-                ),
-                const _Button(
-                    name: 'Theme Showcase', page: ThemeShowcasePage()),
-                const _SectionTitle(
-                  title: 'Components',
-                ),
-                const _Button(name: 'Button', page: ButtonPage()),
-                const _Button(name: 'Dialog', page: DialogPage()),
-                const _Button(name: 'Text Field', page: TextFieldPage()),
-                const _Button(name: 'Article Card', page: ArticleCardPage()),
-                const _Button(name: 'Tabs', page: TabPage()),
-              ],
+            const _SectionTitle(
+              title: 'Assets',
             ),
-          ),
-        );
-      },
+            const _SectionTitle(
+              title: 'Core',
+            ),
+            _Button(
+              name: 'Colors',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const ColorPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Color Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            const _Button(name: 'Typography', page: TypographyPage()),
+            const _SectionTitle(
+              title: 'Theme',
+            ),
+            const _Button(name: 'Theme Showcase', page: ThemeShowcasePage()),
+            const _SectionTitle(
+              title: 'Components',
+            ),
+            const _Button(name: 'Button', page: ButtonPage()),
+            const _Button(name: 'Dialog', page: DialogPage()),
+            const _Button(name: 'Text Field', page: TextFieldPage()),
+            const _Button(name: 'Article Card', page: ArticleCardPage()),
+            const _Button(name: 'Tabs', page: TabPage()),
+          ],
+        ),
+      ),
     );
+  }
+
+  /// Get current theme icon from MPThemeManager
+  IconData _getThemeIcon() {
+    try {
+      return MPThemeManager.instance.getThemeIcon();
+    } catch (e) {
+      debugPrint('Failed to get theme icon: $e');
+      return Icons.settings_brightness; // Fallback
+    }
   }
 }
 
 class _ThemeInfoCard extends StatelessWidget {
-  const _ThemeInfoCard({required this.themeProvider});
-
-  final ThemeProvider themeProvider;
+  const _ThemeInfoCard();
 
   @override
   Widget build(BuildContext context) {
+    String themeName = 'System';
+    String brightnessName = 'Light';
+    IconData themeIcon = Icons.settings_brightness;
+
+    try {
+      final themeManager = MPThemeManager.instance;
+      themeName = themeManager.getThemeName();
+      themeIcon = themeManager.getThemeIcon();
+      brightnessName = themeManager.getCurrentBrightnessName(context);
+    } catch (e) {
+      debugPrint('Failed to get theme info: $e');
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 24.h),
       padding: EdgeInsets.all(16.w),
@@ -144,7 +214,7 @@ class _ThemeInfoCard extends StatelessWidget {
           Row(
             children: [
               Icon(
-                themeProvider.getThemeIcon(),
+                themeIcon,
                 color: context.mp.textColor,
                 size: 24,
               ),
@@ -161,7 +231,7 @@ class _ThemeInfoCard extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           Text(
-            'Current Theme: ${themeProvider.getThemeName()}',
+            'Current Theme: $themeName',
             style: TextStyle(
               fontSize: 14.sp,
               color: context.mp.subtitleColor,
@@ -169,7 +239,7 @@ class _ThemeInfoCard extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            'Brightness: ${themeProvider.getCurrentBrightnessName(context)}',
+            'Brightness: $brightnessName',
             style: TextStyle(
               fontSize: 14.sp,
               color: context.mp.subtitleColor,
@@ -211,10 +281,11 @@ class _SectionTitle extends StatelessWidget {
 }
 
 class _Button extends StatelessWidget {
-  const _Button({required this.name, required this.page});
+  const _Button({required this.name, this.page, this.onPressed});
 
   final String name;
-  final Widget page;
+  final Widget? page;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -223,11 +294,23 @@ class _Button extends StatelessWidget {
         ),
         child: MPButton(
           text: name,
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => page),
-            );
-          },
+          onPressed: onPressed ??
+              () async {
+                if (page != null) {
+                  try {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => page!),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Failed to open $name Page: $e'),
+                        backgroundColor: context.mp.errorColor,
+                      ),
+                    );
+                  }
+                }
+              },
         ),
       );
 }

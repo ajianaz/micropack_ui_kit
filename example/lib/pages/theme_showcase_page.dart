@@ -1,110 +1,161 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-import 'package:micropack_ui_kit_example/providers/theme_provider.dart';
 
-class ThemeShowcasePage extends StatelessWidget {
+class ThemeShowcasePage extends StatefulWidget {
   const ThemeShowcasePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return Scaffold(
-          backgroundColor: context.mp.adaptiveBackgroundColor,
-          appBar: AppBar(
-            title: Text(
-              'Theme Showcase',
-              style: TextStyle(color: context.mp.textColor),
-            ),
-            backgroundColor: context.mp.adaptiveBackgroundColor,
-            elevation: 0,
-          ),
-          body: SingleChildScrollView(
-            padding: EdgeInsets.all(20.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MPText.head('Theme System Overview'),
-                SizedBox(height: 16.h),
+  State<ThemeShowcasePage> createState() => _ThemeShowcasePageState();
+}
 
-                // Theme Info Card
-                Container(
-                  margin: EdgeInsets.only(bottom: 24.h),
-                  padding: EdgeInsets.all(16.r),
-                  decoration: BoxDecoration(
-                    color: context.mp.primarySurface,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: context.mp.primaryBorder),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Add listener for theme changes
+    try {
+      MPThemeManager.instance.addListener(_onThemeChanged);
+    } catch (e) {
+      // Manager might not be initialized yet, ignore
+      debugPrint('Failed to add theme listener: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    // Remove theme listener
+    try {
+      MPThemeManager.instance.removeListener(_onThemeChanged);
+    } catch (e) {
+      // Manager might not be initialized, ignore
+      debugPrint('Failed to remove theme listener: $e');
+    }
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    if (mounted) {
+      setState(() {
+        // Rebuild UI when theme changes
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
+      appBar: AppBar(
+        title: Text(
+          'Theme Showcase',
+          style: TextStyle(color: context.mp.textColor),
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MPText.head('Theme System Overview'),
+            SizedBox(height: 16.h),
+
+            // Theme Info Card
+            Container(
+              margin: EdgeInsets.only(bottom: 24.h),
+              padding: EdgeInsets.all(16.r),
+              decoration: BoxDecoration(
+                color: context.mp.primarySurface,
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(color: context.mp.primaryBorder),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            themeProvider.getThemeIcon(),
-                            color: context.mp.primary,
-                            size: 24,
-                          ),
-                          SizedBox(width: 12.w),
-                          Text(
-                            'Current Theme: ${themeProvider.getThemeName()}',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                              color: context.mp.textColor,
-                            ),
-                          ),
-                        ],
+                      Icon(
+                        _getThemeIcon(),
+                        color: context.mp.primary,
+                        size: 24,
                       ),
-                      SizedBox(height: 12.h),
+                      SizedBox(width: 12.w),
                       Text(
-                        'Brightness: ${context.mp.isDarkMode ? 'Dark' : 'Light'}',
+                        'Current Theme: ${_getThemeName()}',
                         style: TextStyle(
-                          fontSize: 14.sp,
-                          color: context.mp.subtitleColor,
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        'Theme persistence is ${themeProvider.getThemeName() == 'System' ? 'following system settings' : 'manually selected'}',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: context.mp.captionColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                          color: context.mp.textColor,
                         ),
                       ),
                     ],
                   ),
-                ),
-
-                SizedBox(height: 24.h),
-                MPText.head('Color Palette'),
-                SizedBox(height: 16.h),
-
-                // Color Palette Grid
-                _buildColorPalette(context),
-
-                SizedBox(height: 24.h),
-                MPText.head('Theme Switching Demo'),
-                SizedBox(height: 16.h),
-
-                // Theme Switching Demo
-                _buildThemeSwitchingDemo(context, themeProvider),
-
-                SizedBox(height: 24.h),
-                MPText.head('Component Examples'),
-                SizedBox(height: 16.h),
-
-                // Component Examples
-                _buildComponentExamples(context),
-              ],
+                  SizedBox(height: 12.h),
+                  Text(
+                    'Brightness: ${context.mp.isDarkMode ? 'Dark' : 'Light'}',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: context.mp.subtitleColor,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    'Theme persistence is ${_getThemeName() == 'System' ? 'following system settings' : 'manually selected'}',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: context.mp.captionColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+
+            SizedBox(height: 24.h),
+            MPText.head('Color Palette'),
+            SizedBox(height: 16.h),
+
+            // Color Palette Grid
+            _buildColorPalette(context),
+
+            SizedBox(height: 24.h),
+            MPText.head('Theme Switching Demo'),
+            SizedBox(height: 16.h),
+
+            // Theme Switching Demo
+            _buildThemeSwitchingDemo(context),
+
+            SizedBox(height: 24.h),
+            MPText.head('Component Examples'),
+            SizedBox(height: 16.h),
+
+            // Component Examples
+            _buildComponentExamples(context),
+          ],
+        ),
+      ),
     );
+  }
+
+  /// Get current theme icon from MPThemeManager
+  IconData _getThemeIcon() {
+    try {
+      return MPThemeManager.instance.getThemeIcon();
+    } catch (e) {
+      debugPrint('Failed to get theme icon: $e');
+      return Icons.settings_brightness; // Fallback
+    }
+  }
+
+  /// Get current theme name from MPThemeManager
+  String _getThemeName() {
+    try {
+      return MPThemeManager.instance.getThemeName();
+    } catch (e) {
+      debugPrint('Failed to get theme name: $e');
+      return 'System'; // Fallback
+    }
   }
 
   Widget _buildColorPalette(BuildContext context) {
@@ -203,8 +254,9 @@ class ThemeShowcasePage extends StatelessWidget {
     );
   }
 
-  Widget _buildThemeSwitchingDemo(
-      BuildContext context, ThemeProvider themeProvider) {
+  Widget _buildThemeSwitchingDemo(BuildContext context) {
+    final currentThemeMode = _getCurrentThemeMode();
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
@@ -234,24 +286,24 @@ class ThemeShowcasePage extends StatelessWidget {
                 'Light',
                 Icons.light_mode,
                 ThemeMode.light,
-                themeProvider.themeMode == ThemeMode.light,
-                () => themeProvider.setTheme(ThemeMode.light),
+                currentThemeMode == ThemeMode.light,
+                () => _setThemeMode(ThemeMode.light),
               ),
               _buildThemeButton(
                 context,
                 'Dark',
                 Icons.dark_mode,
                 ThemeMode.dark,
-                themeProvider.themeMode == ThemeMode.dark,
-                () => themeProvider.setTheme(ThemeMode.dark),
+                currentThemeMode == ThemeMode.dark,
+                () => _setThemeMode(ThemeMode.dark),
               ),
               _buildThemeButton(
                 context,
                 'System',
                 Icons.settings_brightness,
                 ThemeMode.system,
-                themeProvider.themeMode == ThemeMode.system,
-                () => themeProvider.setTheme(ThemeMode.system),
+                currentThemeMode == ThemeMode.system,
+                () => _setThemeMode(ThemeMode.system),
               ),
             ],
           ),
@@ -354,6 +406,25 @@ class ThemeShowcasePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Get current theme mode from MPThemeManager
+  ThemeMode _getCurrentThemeMode() {
+    try {
+      return MPThemeManager.instance.themeMode;
+    } catch (e) {
+      debugPrint('Failed to get theme mode: $e');
+      return ThemeMode.system; // Fallback
+    }
+  }
+
+  /// Set theme mode using MPThemeManager
+  Future<void> _setThemeMode(ThemeMode mode) async {
+    try {
+      await MPThemeManager.instance.setThemeMode(mode);
+    } catch (e) {
+      debugPrint('Failed to set theme mode: $e');
+    }
   }
 
   Widget _buildThemeButton(

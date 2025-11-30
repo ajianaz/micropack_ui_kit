@@ -6,8 +6,29 @@ class ColorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mpColors = Theme.of(context).extension<MPColorTheme>()!;
-    final names = mpColors
+    // Get color theme from context.mp instead of Theme.of(context)
+    final mpColors = context.mp.colorTheme;
+    if (mpColors == null) {
+      return Scaffold(
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        appBar: AppBar(
+          title: Text(
+            'Colors',
+            style: TextStyle(color: context.mp.textColor),
+          ),
+          backgroundColor: context.mp.adaptiveBackgroundColor,
+          elevation: 0,
+        ),
+        body: Center(
+          child: Text(
+            'Color theme not available',
+            style: TextStyle(color: context.mp.textColor),
+          ),
+        ),
+      );
+    }
+
+    final names = mpColors!
         .toString()
         .replaceAll('MPColorTheme(', '')
         .replaceAll(')', '')
@@ -51,21 +72,21 @@ class ColorPage extends StatelessWidget {
   }
 
   List<Color?> colorCollection(MPColorTheme mpColors) => [
-        mpColors.primary,
-        mpColors.primarySurface,
-        mpColors.primaryFocus,
-        mpColors.primaryBorder,
-        mpColors.primaryHover,
-        mpColors.primaryPressed,
-        mpColors.neutral10,
-        mpColors.neutral20,
-        mpColors.neutral30,
-        mpColors.neutral40,
-        mpColors.neutral50,
-        mpColors.neutral60,
-        mpColors.neutral70,
-        mpColors.neutral80,
-        mpColors.neutral90,
-        mpColors.neutral100,
+        mpColors?.primary,
+        mpColors?.primarySurface,
+        mpColors?.primaryFocus,
+        mpColors?.primaryBorder,
+        mpColors?.primaryHover,
+        mpColors?.primaryPressed,
+        mpColors?.neutral10,
+        mpColors?.neutral20,
+        mpColors?.neutral30,
+        mpColors?.neutral40,
+        mpColors?.neutral50,
+        mpColors?.neutral60,
+        mpColors?.neutral70,
+        mpColors?.neutral80,
+        mpColors?.neutral90,
+        mpColors?.neutral100,
       ];
 }

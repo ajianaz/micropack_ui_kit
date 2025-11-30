@@ -70,6 +70,8 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       tabLocation: 'left',
                       isActiveTab: _selectedIndex == 0,
                       onTab: () => _selectTab(0),
+                      size:
+                          MPTabRoundedSize.small, // Smaller size for better fit
                     ),
                   ),
                   Expanded(
@@ -78,6 +80,8 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       tabLocation: 'center',
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
+                      size:
+                          MPTabRoundedSize.small, // Smaller size for better fit
                     ),
                   ),
                   Expanded(
@@ -86,6 +90,8 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       tabLocation: 'right',
                       isActiveTab: _selectedIndex == 2,
                       onTab: () => _selectTab(2),
+                      size:
+                          MPTabRoundedSize.small, // Smaller size for better fit
                     ),
                   ),
                 ],
@@ -125,6 +131,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       tabLocation: 'left',
                       isDisabled: true,
                       onTab: () => _selectTab(0),
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -133,6 +140,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       tabLocation: 'center',
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -141,6 +149,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       tabLocation: 'right',
                       isDisabled: true,
                       onTab: () => _selectTab(2),
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                 ],
@@ -162,6 +171,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 0,
                       onTab: () => _selectTab(0),
                       variant: MPTabRoundedVariant.outlined,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -171,6 +181,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
                       variant: MPTabRoundedVariant.outlined,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -180,6 +191,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 2,
                       onTab: () => _selectTab(2),
                       variant: MPTabRoundedVariant.outlined,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                 ],
@@ -203,6 +215,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       variant: MPTabRoundedVariant.filled,
                       tabColorActive: context.mp.primary,
                       tabColor: context.mp.primarySurface,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -214,6 +227,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       variant: MPTabRoundedVariant.filled,
                       tabColorActive: context.mp.successColor,
                       tabColor: context.mp.successColor.withValues(alpha: 0.1),
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -225,6 +239,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       variant: MPTabRoundedVariant.filled,
                       tabColorActive: context.mp.warningColor,
                       tabColor: context.mp.warningColor.withValues(alpha: 0.1),
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                 ],
@@ -245,7 +260,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       icon: Icons.inbox,
                       isActiveTab: _selectedIndex == 0,
                       onTab: () => _selectTab(0),
-                      size: MPTabRoundedSize.large,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -254,7 +269,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       icon: Icons.star,
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
-                      size: MPTabRoundedSize.large,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -263,7 +278,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       icon: Icons.send,
                       isActiveTab: _selectedIndex == 2,
                       onTab: () => _selectTab(2),
-                      size: MPTabRoundedSize.large,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                 ],
@@ -285,6 +300,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 0,
                       onTab: () => _selectTab(0),
                       badgeColor: context.mp.errorColor,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -294,6 +310,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
                       badgeColor: context.mp.warningColor,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -303,6 +320,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 2,
                       onTab: () => _selectTab(2),
                       badgeColor: context.mp.successColor,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                 ],
@@ -318,6 +336,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       onTab: () => _selectTab(3),
                       badgeColor: context.mp.infoColor,
                       badgeTextColor: context.mp.neutral100,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                   Expanded(
@@ -328,6 +347,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       onTab: () => _selectTab(4),
                       badgeColor: context.mp.errorColor,
                       badgeTextColor: context.mp.neutral100,
+                      size: MPTabRoundedSize.small,
                     ),
                   ),
                 ],

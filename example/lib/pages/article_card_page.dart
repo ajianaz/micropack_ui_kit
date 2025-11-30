@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-import 'package:provider/provider.dart';
-import 'package:micropack_ui_kit_example/providers/theme_provider.dart';
 
 class ArticleCardPage extends StatefulWidget {
   const ArticleCardPage({super.key});
@@ -23,6 +21,38 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
   bool isHovered = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Add listener for theme changes
+    try {
+      MPThemeManager.instance.addListener(_onThemeChanged);
+    } catch (e) {
+      // Manager might not be initialized yet, ignore
+      debugPrint('Failed to add theme listener: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    // Remove theme listener
+    try {
+      MPThemeManager.instance.removeListener(_onThemeChanged);
+    } catch (e) {
+      // Manager might not be initialized, ignore
+      debugPrint('Failed to remove theme listener: $e');
+    }
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    if (mounted) {
+      setState(() {
+        // Rebuild UI when theme changes
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
@@ -34,23 +64,20 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,
         actions: [
-          Consumer<ThemeProvider>(
-            builder: (context, themeProvider, child) {
-              return IconButton(
-                icon: Icon(
-                  themeProvider.getThemeIcon(),
-                  color: context.mp.textColor,
-                ),
-                onPressed: () {
-                  // Toggle theme between light and dark
-                  final newTheme = themeProvider.themeMode == ThemeMode.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
-                  themeProvider.setTheme(newTheme);
-                  _showSnackBar(context,
-                      'Switched to ${newTheme == ThemeMode.light ? 'Light' : 'Dark'} theme');
-                },
-              );
+          IconButton(
+            icon: Icon(
+              _getThemeIcon(),
+              color: context.mp.textColor,
+            ),
+            onPressed: () async {
+              // Toggle theme between light and dark
+              final currentTheme = _getCurrentThemeMode();
+              final newTheme = currentTheme == ThemeMode.light
+                  ? ThemeMode.dark
+                  : ThemeMode.light;
+              await _setThemeMode(newTheme);
+              _showSnackBar(context,
+                  'Switched to ${newTheme == ThemeMode.light ? 'Light' : 'Dark'} theme');
             },
           ),
         ],
@@ -355,6 +382,35 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
         ),
       ),
     );
+  }
+
+  /// Get current theme icon from MPThemeManager
+  IconData _getThemeIcon() {
+    try {
+      return MPThemeManager.instance.getThemeIcon();
+    } catch (e) {
+      debugPrint('Failed to get theme icon: $e');
+      return Icons.settings_brightness; // Fallback
+    }
+  }
+
+  /// Get current theme mode from MPThemeManager
+  ThemeMode _getCurrentThemeMode() {
+    try {
+      return MPThemeManager.instance.themeMode;
+    } catch (e) {
+      debugPrint('Failed to get theme mode: $e');
+      return ThemeMode.system; // Fallback
+    }
+  }
+
+  /// Set theme mode using MPThemeManager
+  Future<void> _setThemeMode(ThemeMode mode) async {
+    try {
+      await MPThemeManager.instance.setThemeMode(mode);
+    } catch (e) {
+      debugPrint('Failed to set theme mode: $e');
+    }
   }
 
   void _showSnackBar(BuildContext context, String message) {

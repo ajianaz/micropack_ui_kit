@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/theme/mp_theme_config.dart';
 
 class MPTheme {
   // ============ MAIN THEME METHOD ============
@@ -32,54 +33,56 @@ class MPTheme {
       // Theme brightness
       brightness: Brightness.light,
 
-      // Primary colors using MPColors helper methods
-      primaryColor: MPColors.getPrimary(isDarkMode: false),
-      primaryColorDark: MPColors.getPrimaryPressed(isDarkMode: false),
-      primaryColorLight: MPColors.getPrimaryHover(isDarkMode: false),
+      // Primary colors using MPThemeConfig as single source of truth
+      primaryColor: MPThemeConfig.getPrimary(isDarkMode: false),
+      primaryColorDark: MPThemeConfig.getPrimaryPressed(isDarkMode: false),
+      primaryColorLight: MPThemeConfig.getPrimaryHover(isDarkMode: false),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: MPColors.getPrimary(isDarkMode: false),
+        seedColor: MPThemeConfig.getPrimary(isDarkMode: false),
         brightness: Brightness.light,
-        primary: MPColors.getPrimary(isDarkMode: false),
-        surface: MPColors.getPrimarySurface(isDarkMode: false),
-        onPrimary: MPColors.getNeutral(100), // Dark text on light primary
-        onSurface: MPColors.getNeutral(90), // Dark text on light surface
+        primary: MPThemeConfig.getPrimary(isDarkMode: false),
+        surface: MPThemeConfig.getPrimarySurface(isDarkMode: false),
+        onPrimary: MPThemeConfig.getNeutral(10), // Light text on primary
+        onSurface: MPThemeConfig.getNeutral(90), // Dark text on light surface
       ),
 
-      // Background colors
-      scaffoldBackgroundColor: MPColors.getNeutral(10), // Lightest neutral
-      cardColor: MPColors.getNeutral(20),
+      // Background colors using MPThemeConfig
+      scaffoldBackgroundColor:
+          MPThemeConfig.getBackgroundColor(isDarkMode: false),
+      cardColor: MPThemeConfig.getCardColor(isDarkMode: false),
 
       // Text theme for light mode
       textTheme: MPTextStyle.mainTextTheme,
 
       // App bar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: MPColors.getPrimary(isDarkMode: false),
-        foregroundColor: MPColors.getNeutral(10), // Light text on dark primary
+        backgroundColor: MPThemeConfig.getPrimary(isDarkMode: false),
+        foregroundColor: MPThemeConfig.getNeutral(10), // Light text on primary
         elevation: 0,
         titleTextStyle: MPTextStyle.heading1(
-          color: MPColors.getNeutral(10),
+          color: MPThemeConfig.getNeutral(10),
         ),
       ),
 
       // Button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: MPColors.getPrimary(isDarkMode: false),
-          foregroundColor: MPColors.getNeutral(10),
+          backgroundColor: MPThemeConfig.getPrimary(isDarkMode: false),
+          foregroundColor: MPThemeConfig.getNeutral(10),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
-            side:
-                BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: false)),
+            side: BorderSide(
+                color: MPThemeConfig.getPrimaryBorder(isDarkMode: false)),
           ),
         ),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: MPColors.getPrimary(isDarkMode: false),
-          side: BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: false)),
+          foregroundColor: MPThemeConfig.getPrimary(isDarkMode: false),
+          side: BorderSide(
+              color: MPThemeConfig.getPrimaryBorder(isDarkMode: false)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -88,7 +91,7 @@ class MPTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: MPColors.getPrimary(isDarkMode: false),
+          foregroundColor: MPThemeConfig.getPrimary(isDarkMode: false),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -99,26 +102,26 @@ class MPTheme {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: false)),
+          borderSide: BorderSide(
+              color: MPThemeConfig.getPrimaryBorder(isDarkMode: false)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              BorderSide(color: MPColors.getPrimaryFocus(isDarkMode: false)),
+          borderSide: BorderSide(
+              color: MPThemeConfig.getPrimaryFocus(isDarkMode: false)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: false)),
+          borderSide: BorderSide(
+              color: MPThemeConfig.getPrimaryBorder(isDarkMode: false)),
         ),
-        fillColor: MPColors.getPrimarySurface(isDarkMode: false),
+        fillColor: MPThemeConfig.getPrimarySurface(isDarkMode: false),
         filled: true,
       ),
 
       // Card theme
       cardTheme: CardTheme(
-        color: MPColors.getNeutral(20),
+        color: MPThemeConfig.getCardColor(isDarkMode: false),
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -133,54 +136,56 @@ class MPTheme {
       // Theme brightness
       brightness: Brightness.dark,
 
-      // Primary colors using MPColors helper methods
-      primaryColor: MPColors.getPrimary(isDarkMode: true),
-      primaryColorDark: MPColors.getPrimaryPressed(isDarkMode: true),
-      primaryColorLight: MPColors.getPrimaryHover(isDarkMode: true),
+      // Primary colors using MPThemeConfig as single source of truth
+      primaryColor: MPThemeConfig.getPrimary(isDarkMode: true),
+      primaryColorDark: MPThemeConfig.getPrimaryPressed(isDarkMode: true),
+      primaryColorLight: MPThemeConfig.getPrimaryHover(isDarkMode: true),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: MPColors.getPrimary(isDarkMode: true),
+        seedColor: MPThemeConfig.getPrimary(isDarkMode: true),
         brightness: Brightness.dark,
-        primary: MPColors.getPrimary(isDarkMode: true),
-        surface: MPColors.getPrimarySurface(isDarkMode: true),
-        onPrimary: MPColors.getNeutral(10), // Light text on dark primary
-        onSurface: MPColors.getNeutral(20), // Light text on dark surface
+        primary: MPThemeConfig.getPrimary(isDarkMode: true),
+        surface: MPThemeConfig.getPrimarySurface(isDarkMode: true),
+        onPrimary: MPThemeConfig.getNeutral(10), // Light text on primary
+        onSurface: MPThemeConfig.getNeutral(30), // Light text on dark surface
       ),
 
-      // Background colors
-      scaffoldBackgroundColor: MPColors.getNeutral(100), // Darkest neutral
-      cardColor: MPColors.getNeutral(90),
+      // Background colors using MPThemeConfig
+      scaffoldBackgroundColor:
+          MPThemeConfig.getBackgroundColor(isDarkMode: true),
+      cardColor: MPThemeConfig.getCardColor(isDarkMode: true),
 
       // Text theme for dark mode
       textTheme: MPTextStyle.darkTextTheme,
 
       // App bar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: MPColors.getPrimary(isDarkMode: true),
-        foregroundColor: MPColors.getNeutral(10), // Light text on dark primary
+        backgroundColor: MPThemeConfig.getPrimary(isDarkMode: true),
+        foregroundColor: MPThemeConfig.getNeutral(10), // Light text on primary
         elevation: 0,
         titleTextStyle: MPTextStyle.heading1(
-          color: MPColors.getNeutral(10),
+          color: MPThemeConfig.getNeutral(10),
         ),
       ),
 
       // Button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: MPColors.getPrimary(isDarkMode: true),
-          foregroundColor: MPColors.getNeutral(10),
+          backgroundColor: MPThemeConfig.getPrimary(isDarkMode: true),
+          foregroundColor: MPThemeConfig.getNeutral(10),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
-            side:
-                BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: true)),
+            side: BorderSide(
+                color: MPThemeConfig.getPrimaryBorder(isDarkMode: true)),
           ),
         ),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: MPColors.getPrimary(isDarkMode: true),
-          side: BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: true)),
+          foregroundColor: MPThemeConfig.getPrimary(isDarkMode: true),
+          side: BorderSide(
+              color: MPThemeConfig.getPrimaryBorder(isDarkMode: true)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -189,7 +194,7 @@ class MPTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: MPColors.getPrimary(isDarkMode: true),
+          foregroundColor: MPThemeConfig.getPrimary(isDarkMode: true),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -200,26 +205,26 @@ class MPTheme {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: true)),
+          borderSide: BorderSide(
+              color: MPThemeConfig.getPrimaryBorder(isDarkMode: true)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              BorderSide(color: MPColors.getPrimaryFocus(isDarkMode: true)),
+          borderSide: BorderSide(
+              color: MPThemeConfig.getPrimaryFocus(isDarkMode: true)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              BorderSide(color: MPColors.getPrimaryBorder(isDarkMode: true)),
+          borderSide: BorderSide(
+              color: MPThemeConfig.getPrimaryBorder(isDarkMode: true)),
         ),
-        fillColor: MPColors.getPrimarySurface(isDarkMode: true),
+        fillColor: MPThemeConfig.getPrimarySurface(isDarkMode: true),
         filled: true,
       ),
 
       // Card theme
       cardTheme: CardTheme(
-        color: MPColors.getNeutral(90),
+        color: MPThemeConfig.getCardColor(isDarkMode: true),
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
