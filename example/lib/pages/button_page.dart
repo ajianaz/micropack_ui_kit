@@ -87,6 +87,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   onPressed: () =>
                       _showSnackBar(context, 'Outlined button clicked'),
                   variant: MPButtonVariant.outlined,
+                  textColor: context.mp.primary,
                   size: MPButtonSize.regular,
                 ),
                 MPButton(
@@ -94,6 +95,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   onPressed: () =>
                       _showSnackBar(context, 'Outlined large button clicked'),
                   variant: MPButtonVariant.outlined,
+                  textColor: context.mp.primary,
                   size: MPButtonSize.large,
                 ),
                 MPButton(
@@ -101,6 +103,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   onPressed: () {},
                   enabled: false,
                   variant: MPButtonVariant.outlined,
+                  textColor: context.mp.primary,
                   size: MPButtonSize.regular,
                 ),
               ],
@@ -121,6 +124,7 @@ class _ButtonPageState extends State<ButtonPage> {
                       _showSnackBar(context, 'Ghost button clicked'),
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
                 MPButton(
                   text: 'Ghost Large',
@@ -128,6 +132,7 @@ class _ButtonPageState extends State<ButtonPage> {
                       _showSnackBar(context, 'Ghost large button clicked'),
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.large,
+                  textColor: context.mp.primary,
                 ),
                 MPButton(
                   text: 'Ghost Disabled',
@@ -135,6 +140,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   enabled: false,
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
               ],
             ),
@@ -163,6 +169,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   loading: _isLoading2,
                   variant: MPButtonVariant.outlined,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
                 MPButton(
                   text: _isLoading3 ? 'Loading...' : 'Ghost Loading',
@@ -170,6 +177,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   loading: _isLoading3,
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
               ],
             ),
@@ -199,6 +207,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   iconPosition: MPButtonIconPosition.right,
                   variant: MPButtonVariant.outlined,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
                 MPButton(
                   text: 'Share',
@@ -207,6 +216,7 @@ class _ButtonPageState extends State<ButtonPage> {
                   iconPosition: MPButtonIconPosition.top,
                   variant: MPButtonVariant.ghost,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
               ],
             ),
@@ -229,6 +239,7 @@ class _ButtonPageState extends State<ButtonPage> {
                       _showSnackBar(context, 'Text button clicked'),
                   variant: MPButtonVariant.text,
                   size: MPButtonSize.regular,
+                  textColor: context.mp.primary,
                 ),
                 MPButton(
                   text: 'Info',

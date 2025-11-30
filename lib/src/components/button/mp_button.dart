@@ -313,9 +313,14 @@ class _MPButtonState extends State<MPButton> {
       case MPButtonVariant.info:
         return context.mp.neutral100; // Light text on colored background
       case MPButtonVariant.outlined:
+        return context.mp.isDarkMode
+            ? context.mp.neutral10
+            : context.mp.primary; // Use same color as border for light mode
       case MPButtonVariant.ghost:
       case MPButtonVariant.text:
-        return context.mp.primary; // Primary color for transparent buttons
+        return context.mp.isDarkMode
+            ? context.mp.neutral10
+            : context.mp.primary; // Use same color as border for light mode
     }
   }
 
@@ -406,7 +411,10 @@ class _MPButtonState extends State<MPButton> {
       case MPButtonVariant.ghost:
       case MPButtonVariant.text:
         return widget.textColor ??
-            context.mp.primary; // Primary color for transparent buttons
+            (context.mp.isDarkMode
+                ? context.mp.neutral10
+                : context
+                    .mp.neutral90); // Theme-aware text for transparent buttons
     }
   }
 
