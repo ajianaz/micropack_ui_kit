@@ -159,7 +159,7 @@ class _MPButtonState extends State<MPButton> {
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: widget.borderRadius ??
-                BorderRadius.circular(widget.radius ?? MpUiKit.buttonRadius),
+                BorderRadius.circular(widget.radius ?? 8),
             side: _getBorderSide(),
           ),
         ),
@@ -173,6 +173,9 @@ class _MPButtonState extends State<MPButton> {
         maximumSize: WidgetStateProperty.all(widget.maximumSize),
         // Theme-aware state colors
         overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return context.mp.disabledColor;
+          }
           if (states.contains(WidgetState.hovered)) {
             return _getHoverColor();
           }
@@ -198,6 +201,7 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Builds loading content with theme-aware spinner color
+  /// Uses the appropriate text color for the spinner based on button variant
   Widget _buildLoadingContent() {
     if (widget.loadingWidget != null) {
       return widget.loadingWidget!;
@@ -216,6 +220,10 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware background color based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary: uses theme primary color
+  /// - outlined/ghost/text: transparent background
+  /// - danger/success/warning/info: uses respective theme colors
   Color _getBackgroundColor() {
     switch (widget.variant) {
       case MPButtonVariant.primary:
@@ -238,6 +246,10 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware border side based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary/danger/success/warning/info: uses primaryBorder or respective color borders
+  /// - outlined/ghost: uses primary color for border
+  /// - text: transparent border
   BorderSide _getBorderSide() {
     if (widget.variant == MPButtonVariant.primary ||
         widget.variant == MPButtonVariant.danger ||
@@ -287,6 +299,9 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware text color based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary/danger/success/warning/info: uses neutral100 (light text on colored background)
+  /// - outlined/ghost/text: uses primary color for transparent buttons
   Color _getTextColor() {
     if (widget.textColor != null) return widget.textColor!;
 
@@ -374,6 +389,9 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware icon color based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary/danger/success/warning/info: uses neutral100 (light icon on colored background)
+  /// - outlined/ghost/text: uses primary color for transparent buttons
   Color _getIconColor() {
     if (widget.iconColor != null) return widget.iconColor!;
 
@@ -425,6 +443,10 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware hover color based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary: uses primaryHover
+  /// - danger/success/warning/info: uses respective color with 0.8 opacity
+  /// - outlined/ghost/text: uses primaryHover with 0.1 opacity
   Color _getHoverColor() {
     switch (widget.variant) {
       case MPButtonVariant.primary:
@@ -445,6 +467,10 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware pressed color based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary: uses primaryPressed
+  /// - danger/success/warning/info: uses respective color with 0.6 opacity
+  /// - outlined/ghost/text: uses primaryPressed with 0.2 opacity
   Color _getPressedColor() {
     switch (widget.variant) {
       case MPButtonVariant.primary:
@@ -465,6 +491,10 @@ class _MPButtonState extends State<MPButton> {
   }
 
   /// Gets theme-aware focus color based on button variant
+  /// Uses appropriate theme colors for each variant:
+  /// - primary: uses primaryFocus
+  /// - danger/success/warning/info: uses respective color with 0.3 opacity
+  /// - outlined/ghost/text: uses primaryFocus with 0.1 opacity
   Color _getFocusColor() {
     switch (widget.variant) {
       case MPButtonVariant.primary:
