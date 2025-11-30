@@ -21,11 +21,14 @@ class MPTabRounded extends StatefulWidget {
     this.tabColor,
     this.tabColorActive,
     this.textColor,
-    this.textColorActive = Colors.white,
+    // Removed hardcoded white color, will use theme-aware color in implementation
+    this.textColorActive,
     this.height = 50,
     this.isActiveTab = false,
+    this.isDisabled = false,
     this.onTab,
-    this.deviderColor = Colors.white,
+    // Removed hardcoded white color, will use theme-aware color in implementation
+    this.deviderColor,
     this.dimen = 32.0,
     this.variant = MPTabRoundedVariant.standard,
     this.size = MPTabRoundedSize.medium,
@@ -54,8 +57,9 @@ class MPTabRounded extends StatefulWidget {
   final Color? textColor;
   final double? height;
   final bool? isActiveTab;
+  final bool isDisabled;
   final void Function()? onTab;
-  final Color deviderColor;
+  final Color? deviderColor;
   final double dimen;
   final MPTabRoundedVariant variant;
   final MPTabRoundedSize size;
@@ -84,6 +88,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
   late AnimationController _animationController;
   late Animation<double> _animation;
   late Animation<double> _indicatorAnimation;
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -132,11 +137,14 @@ class _MPTabRoundedState extends State<MPTabRounded>
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: widget.flex,
+    // Remove the Expanded wrapper to avoid ParentDataWidget conflicts
+    // The parent widget should handle the Expanded wrapper
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
-        onTap: widget.onTab ?? () {},
-        onLongPress: widget.onLongPress,
+        onTap: widget.isDisabled ? null : (widget.onTab ?? () {}),
+        onLongPress: widget.isDisabled ? null : widget.onLongPress,
         child: AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -147,13 +155,17 @@ class _MPTabRoundedState extends State<MPTabRounded>
               decoration: BoxDecoration(
                 border: Border(
                   left: widget.tabLocation?.toLowerCase() == 'center'
-                      ? BorderSide(color: widget.deviderColor)
+                      ? BorderSide(
+                          color: widget.deviderColor ??
+                              context.mp.adaptiveBorderColor)
                       : BorderSide.none,
                   right: widget.tabLocation?.toLowerCase() == 'center'
-                      ? BorderSide(color: widget.deviderColor)
+                      ? BorderSide(
+                          color: widget.deviderColor ??
+                              context.mp.adaptiveBorderColor)
                       : BorderSide.none,
                 ),
-                color: _getBackgroundColor(),
+                color: _getBackgroundColor(context),
                 borderRadius: widget.borderRadius ??
                     BorderRadius.only(
                       topLeft: widget.tabLocation?.toLowerCase() == 'left'
@@ -173,7 +185,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
               child: Stack(
                 children: [
                   // Tab content
-                  _buildTabContent(),
+                  _buildTabContent(context),
                   // Indicator
                   if (widget.showIndicator && widget.isActiveTab == true)
                     Positioned(
@@ -188,8 +200,9 @@ class _MPTabRoundedState extends State<MPTabRounded>
                             width: _indicatorAnimation.value *
                                 MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
+                              // Use theme-aware primary color for indicator
                               color:
-                                  widget.indicatorColor ?? MpUiKit.colorBrand,
+                                  widget.indicatorColor ?? context.mp.primary,
                               borderRadius: BorderRadius.circular(2),
                             ),
                           );
@@ -205,7 +218,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
     );
   }
 
-  Widget _buildTabContent() {
+  Widget _buildTabContent(BuildContext context) {
     final List<Widget> children = [];
 
     // Add icon if provided
@@ -214,9 +227,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
         Icon(
           widget.icon,
           size: widget.iconSize ?? _getIconSize(),
-          color: widget.isActiveTab == true
-              ? widget.textColorActive ?? Colors.white
-              : widget.textColor ?? MpUiKit.colorText,
+          // Use theme-aware colors for icon with disabled state
+          color: _getTextColor(context),
         ),
       );
 
@@ -233,9 +245,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
           child: MPText.label(
             widget.title!,
             style: MPTextStyle.body2(
-              color: widget.isActiveTab == true
-                  ? widget.textColorActive ?? Colors.white
-                  : widget.textColor ?? MpUiKit.colorText,
+              // Use theme-aware colors for text with disabled state
+              color: _getTextColor(context),
               fontWeight: widget.isActiveTab == true
                   ? FontWeight.w500
                   : FontWeight.w200,
@@ -252,7 +263,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
           margin: const EdgeInsets.only(left: 4),
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: widget.badgeColor ?? Colors.red,
+            // Use error color for badge (semantic color)
+            color: widget.badgeColor ?? context.mp.errorColor,
             borderRadius: BorderRadius.circular(10),
           ),
           constraints: const BoxConstraints(
@@ -262,7 +274,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
           child: MPText.label(
             widget.badge!,
             style: MPTextStyle.caption(
-              color: widget.badgeTextColor ?? Colors.white,
+              // Use neutral100 (white) for badge text
+              color: widget.badgeTextColor ?? context.mp.neutral100,
               fontWeight: FontWeight.w500,
             ).copyWith(fontSize: 10),
           ),
@@ -277,9 +290,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
         child: MPText.label(
           widget.title!,
           style: MPTextStyle.body2(
-            color: widget.isActiveTab == true
-                ? widget.textColorActive ?? Colors.white
-                : widget.textColor ?? MpUiKit.colorText,
+            // Use theme-aware colors for text with disabled state
+            color: _getTextColor(context),
             fontWeight:
                 widget.isActiveTab == true ? FontWeight.w500 : FontWeight.w200,
           ).copyWith(fontSize: _getFontSize()),
@@ -298,21 +310,54 @@ class _MPTabRoundedState extends State<MPTabRounded>
     );
   }
 
-  Color _getBackgroundColor() {
+  Color _getBackgroundColor(BuildContext context) {
+    // Handle disabled state first
+    if (widget.isDisabled) {
+      return context.mp.disabledColor.withValues(alpha: 0.1);
+    }
+
     switch (widget.variant) {
       case MPTabRoundedVariant.standard:
-        return widget.isActiveTab == true
-            ? (widget.tabColorActive ?? MpUiKit.colorBrand)
-            : widget.tabColor ?? Colors.grey;
+        // Use theme-aware colors for standard variant with hover state
+        if (widget.isActiveTab == true) {
+          return widget.tabColorActive ?? context.mp.primary;
+        } else if (_isHovered) {
+          return widget.tabColor ?? context.mp.primaryHover;
+        } else {
+          return widget.tabColor ?? context.mp.adaptiveBackgroundColor;
+        }
       case MPTabRoundedVariant.outlined:
-        return widget.isActiveTab == true
-            ? (widget.tabColorActive ?? MpUiKit.colorBrand)
-            : Colors.transparent;
+        // Use theme-aware colors for outlined variant with hover state
+        if (widget.isActiveTab == true) {
+          return widget.tabColorActive ?? context.mp.primary;
+        } else if (_isHovered) {
+          return context.mp.primarySurface;
+        } else {
+          return Colors.transparent;
+        }
       case MPTabRoundedVariant.filled:
-        return widget.isActiveTab == true
-            ? (widget.tabColorActive ?? MpUiKit.colorBrand)
-            : (widget.tabColor ?? Colors.grey).withValues(alpha: 0.1);
+        // Use theme-aware colors for filled variant with opacity and hover state
+        if (widget.isActiveTab == true) {
+          return widget.tabColorActive ?? context.mp.primary;
+        } else if (_isHovered) {
+          return (widget.tabColor ?? context.mp.subtitleColor)
+              .withValues(alpha: 0.2);
+        } else {
+          return (widget.tabColor ?? context.mp.subtitleColor)
+              .withValues(alpha: 0.1);
+        }
     }
+  }
+
+  // Helper method to get text color with disabled state
+  Color _getTextColor(BuildContext context) {
+    if (widget.isDisabled) {
+      return context.mp.disabledColor;
+    }
+
+    return widget.isActiveTab == true
+        ? widget.textColorActive ?? context.mp.neutral100
+        : widget.textColor ?? context.mp.subtitleColor;
   }
 
   double _getHeight() {

@@ -113,6 +113,38 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
+              SizedBox(height: 24.h),
+              // Disabled Tabs Demo
+              MPText.head('Disabled Tabs'),
+              SizedBox(height: 16.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: MPTabRounded(
+                      title: 'Disabled',
+                      tabLocation: 'left',
+                      isDisabled: true,
+                      onTab: () => _selectTab(0),
+                    ),
+                  ),
+                  Expanded(
+                    child: MPTabRounded(
+                      title: 'Active',
+                      tabLocation: 'center',
+                      isActiveTab: _selectedIndex == 1,
+                      onTab: () => _selectTab(1),
+                    ),
+                  ),
+                  Expanded(
+                    child: MPTabRounded(
+                      title: 'Disabled',
+                      tabLocation: 'right',
+                      isDisabled: true,
+                      onTab: () => _selectTab(2),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
 
@@ -285,7 +317,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 3,
                       onTab: () => _selectTab(3),
                       badgeColor: context.mp.infoColor,
-                      badgeTextColor: Colors.white,
+                      badgeTextColor: context.mp.neutral100,
                     ),
                   ),
                   Expanded(
@@ -295,7 +327,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 4,
                       onTab: () => _selectTab(4),
                       badgeColor: context.mp.errorColor,
-                      badgeTextColor: Colors.white,
+                      badgeTextColor: context.mp.neutral100,
                     ),
                   ),
                 ],
