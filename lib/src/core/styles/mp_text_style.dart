@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Commented out Google Fonts to avoid network issues
 import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'mp_font_sizes.dart';
 
 class MPTextStyle {
   /// Configurable text style for dynamic text usage
@@ -139,7 +140,8 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 24, // Reduced from 42 to 24 for better app bar sizing
+        fontSize: MPFontSizes
+            .title, // Reduced from 42 to 24 for better app bar sizing
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -154,7 +156,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 34,
+        fontSize: MPFontSizes.heading1,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -169,7 +171,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 27,
+        fontSize: MPFontSizes.heading2,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -184,7 +186,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 21,
+        fontSize: MPFontSizes.heading3,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -199,7 +201,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 17,
+        fontSize: MPFontSizes.body1,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -214,7 +216,7 @@ class MPTextStyle {
     String fontFamily = 'Poppins',
   }) =>
       _base(
-        fontSize: 14,
+        fontSize: MPFontSizes.body2,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -229,7 +231,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 11,
+        fontSize: MPFontSizes.caption,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -244,7 +246,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-          fontSize: 8,
+          fontSize: MPFontSizes.overline,
           fontWeight: fontWeight,
           color: color,
           decoration: decoration,

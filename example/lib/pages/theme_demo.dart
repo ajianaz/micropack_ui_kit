@@ -9,7 +9,11 @@ class ThemeDemoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MPThemeConfig Demo'),
+        title: MPText.head(
+          'MPThemeConfig Demo',
+          fontSize: 20,
+          style: TextStyle(color: MPThemeConfig.getNeutral(10)),
+        ),
         backgroundColor: MPThemeConfig.getPrimary(),
         foregroundColor: MPThemeConfig.getNeutral(10),
       ),

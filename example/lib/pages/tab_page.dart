@@ -53,6 +53,18 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
             Tab(text: 'With Icons'),
             Tab(text: 'With Badges'),
           ],
+          labelStyle: TextStyle(
+            fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                MPFontSizes.body2, context),
+            fontWeight: FontWeight.w600,
+            fontFamily: MPTextStyle.defaultFontFamily,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                MPFontSizes.body2, context),
+            fontWeight: FontWeight.w400,
+            fontFamily: MPTextStyle.defaultFontFamily,
+          ),
         ),
       ),
       body: TabBarView(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
 
 enum MPTextType { HEAD, SUBHEAD, TITLE, BODY, CAPTION, LABEL, SMALL }
 
@@ -72,7 +73,7 @@ class MPText extends StatelessWidget {
     bool? softWrap,
     TextAlign? textAlign,
     FontWeight fontWeight = FontWeight.w800,
-    double fontSize = 24,
+    double fontSize = MPFontSizes.title,
     FontStyle? fontStyle,
     double? letterSpacing,
     Color? color,
@@ -110,7 +111,7 @@ class MPText extends StatelessWidget {
     bool? softWrap,
     TextAlign? textAlign,
     FontWeight fontWeight = FontWeight.w600,
-    double fontSize = 18,
+    double fontSize = MPFontSizes.subhead,
     FontStyle? fontStyle,
     double? letterSpacing,
     Color? color,
@@ -148,7 +149,7 @@ class MPText extends StatelessWidget {
     bool? softWrap,
     TextAlign? textAlign,
     FontWeight fontWeight = FontWeight.normal,
-    double fontSize = 14,
+    double fontSize = MPFontSizes.body,
     FontStyle? fontStyle,
     double? letterSpacing,
     Color? color,
@@ -186,7 +187,7 @@ class MPText extends StatelessWidget {
     bool? softWrap,
     TextAlign? textAlign,
     FontWeight fontWeight = FontWeight.w500,
-    double fontSize = 13,
+    double fontSize = MPFontSizes.label,
     FontStyle? fontStyle,
     double? letterSpacing,
     Color? color,
@@ -224,7 +225,7 @@ class MPText extends StatelessWidget {
     bool? softWrap,
     TextAlign? textAlign,
     FontWeight fontWeight = FontWeight.w400,
-    double fontSize = 10,
+    double fontSize = MPFontSizes.small,
     FontStyle? fontStyle,
     double? letterSpacing,
     Color? color,

@@ -47,9 +47,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: MPText.head(
           'Theme Showcase',
           style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
         ),
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,
@@ -82,31 +83,31 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                         size: 24,
                       ),
                       SizedBox(width: 12.w),
-                      Text(
+                      MPText(
                         'Current Theme: ${_getThemeName()}',
                         style: TextStyle(
-                          fontSize: 18.sp,
                           fontWeight: FontWeight.w600,
                           color: context.mp.textColor,
                         ),
+                        fontSize: 18,
                       ),
                     ],
                   ),
                   SizedBox(height: 12.h),
-                  Text(
+                  MPText(
                     'Brightness: ${context.mp.isDarkMode ? 'Dark' : 'Light'}',
                     style: TextStyle(
-                      fontSize: 14.sp,
                       color: context.mp.subtitleColor,
                     ),
+                    fontSize: 14,
                   ),
                   SizedBox(height: 8.h),
-                  Text(
+                  MPText(
                     'Theme persistence is ${_getThemeName() == 'System' ? 'following system settings' : 'manually selected'}',
                     style: TextStyle(
-                      fontSize: 12.sp,
                       color: context.mp.captionColor,
                     ),
+                    fontSize: 12,
                   ),
                 ],
               ),
@@ -169,13 +170,13 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          MPText(
             'Primary Colors',
             style: TextStyle(
-              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: context.mp.textColor,
             ),
+            fontSize: 16,
           ),
           SizedBox(height: 12.h),
           Wrap(
@@ -191,13 +192,13 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ],
           ),
           SizedBox(height: 16.h),
-          Text(
+          MPText(
             'Neutral Colors',
             style: TextStyle(
-              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: context.mp.textColor,
             ),
+            fontSize: 16,
           ),
           SizedBox(height: 12.h),
           Wrap(
@@ -242,12 +243,12 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ),
           ),
           SizedBox(height: 4.h),
-          Text(
+          MPText(
             label,
             style: TextStyle(
-              fontSize: 10.sp,
               color: _getContrastColor(color),
             ),
+            fontSize: 10,
           ),
         ],
       ),
@@ -267,13 +268,13 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          MPText(
             'Theme Switching Controls',
             style: TextStyle(
-              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: context.mp.textColor,
             ),
+            fontSize: 16,
           ),
           SizedBox(height: 16.h),
 
@@ -491,13 +492,13 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          MPText(
             'Component Examples',
             style: TextStyle(
-              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: context.mp.textColor,
             ),
+            fontSize: 16,
           ),
           SizedBox(height: 16.h),
 

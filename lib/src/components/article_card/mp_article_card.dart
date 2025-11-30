@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
 
 enum MPArticleCardVariant {
   standard,
@@ -554,11 +555,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
   double _getFontSize() {
     switch (widget.size) {
       case MPArticleCardSize.small:
-        return 12;
+        return MPFontSizes.articleCardSmall;
       case MPArticleCardSize.medium:
-        return 14;
+        return MPFontSizes.articleCardMedium;
       case MPArticleCardSize.large:
-        return 16;
+        return MPFontSizes.articleCardLarge;
     }
   }
 
