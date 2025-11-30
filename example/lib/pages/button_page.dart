@@ -335,12 +335,11 @@ class _ButtonPageState extends State<ButtonPage> {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: MPText(message),
-        backgroundColor: context.mp.adaptiveBackgroundColor,
-        duration: const Duration(seconds: 2),
-      ),
+    MPSnackbar.show(
+      context,
+      message: message,
+      fontSize: 12.0, // Smaller font size for better readability
+      duration: const Duration(seconds: 2),
     );
   }
 }

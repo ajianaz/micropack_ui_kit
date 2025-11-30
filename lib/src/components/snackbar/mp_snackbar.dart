@@ -19,6 +19,7 @@ class MPSnackbar {
     required String message,
     Color? backgroundColor,
     Color? textColor,
+    double? fontSize,
     Duration? duration,
     SnackBarAction? action,
   }) {
@@ -29,7 +30,11 @@ class MPSnackbar {
         content: Text(
           message,
           style: TextStyle(
-            color: textColor ?? themeColors.textColor,
+            color: textColor ??
+                (themeColors.isDarkMode
+                    ? themeColors.neutral10
+                    : themeColors.neutral90),
+            fontSize: fontSize ?? 14.0,
           ),
         ),
         backgroundColor: backgroundColor ?? themeColors.adaptiveBackgroundColor,
@@ -48,6 +53,7 @@ class MPSnackbar {
   static void success(
     BuildContext context, {
     required String message,
+    double? fontSize,
     Duration? duration,
   }) {
     final themeColors = context.mp;
@@ -67,6 +73,7 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
+                  fontSize: fontSize ?? 14.0,
                 ),
               ),
             ),
@@ -87,6 +94,7 @@ class MPSnackbar {
   static void error(
     BuildContext context, {
     required String message,
+    double? fontSize,
     Duration? duration,
   }) {
     final themeColors = context.mp;
@@ -106,6 +114,7 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
+                  fontSize: fontSize ?? 14.0,
                 ),
               ),
             ),
@@ -126,6 +135,7 @@ class MPSnackbar {
   static void warning(
     BuildContext context, {
     required String message,
+    double? fontSize,
     Duration? duration,
   }) {
     final themeColors = context.mp;
@@ -145,6 +155,7 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
+                  fontSize: fontSize ?? 14.0,
                 ),
               ),
             ),
@@ -165,6 +176,7 @@ class MPSnackbar {
   static void info(
     BuildContext context, {
     required String message,
+    double? fontSize,
     Duration? duration,
   }) {
     final themeColors = context.mp;
@@ -184,6 +196,7 @@ class MPSnackbar {
                 message,
                 style: TextStyle(
                   color: themeColors.neutral100,
+                  fontSize: fontSize ?? 14.0,
                 ),
               ),
             ),
