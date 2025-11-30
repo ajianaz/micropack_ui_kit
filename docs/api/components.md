@@ -14,7 +14,16 @@ Complete documentation for all Micropack UI Kit components.
 
 ## 📰 MPArticleCard
 
-Feature-rich article card component with multiple variants and sizes.
+Feature-rich article card component with multiple variants and sizes. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPArticleCard automatically adapts to the current theme:
+
+- **Background**: Uses `context.mp.adaptiveBackgroundColor` by default
+- **Text Colors**: Uses semantic colors (`textColor`, `subtitleColor`, `captionColor`)
+- **Borders**: Adapts using `context.mp.adaptiveBorderColor`
+- **Shadows**: Adjusts based on theme with `context.mp.adaptiveShadowColor`
 
 ### Basic Usage
 
@@ -27,6 +36,46 @@ MPArticleCard(
   readTime: '5 min read',
   imageUrl: 'https://example.com/image.jpg',
   onTap: () => print('Card tapped'),
+)
+```
+
+### Theme Customization
+
+```dart
+MPArticleCard(
+  title: 'Article Title',
+  description: 'Article description goes here...',
+  backgroundColor: context.mp.neutral100, // Light mode white, dark mode dark
+  borderColor: context.mp.primaryBorder,
+  titleStyle: TextStyle(color: context.mp.textColor),
+  subtitleStyle: TextStyle(color: context.mp.subtitleColor),
+  onTap: () => print('Card tapped'),
+)
+```
+
+### Light/Dark Theme Examples
+
+#### Light Theme
+```dart
+Theme(
+  data: ThemeData.light(),
+  child: MPArticleCard(
+    title: 'Light Theme Article',
+    description: 'This card uses light theme colors',
+    variant: MPArticleCardVariant.elevated,
+  ),
+)
+```
+
+#### Dark Theme
+```dart
+Theme(
+  data: ThemeData.dark(),
+  child: MPArticleCard(
+    title: 'Dark Theme Article',
+    description: 'This card uses dark theme colors',
+    variant: MPArticleCardVariant.elevated,
+  ),
 )
 ```
 
@@ -147,7 +196,17 @@ MPArticleCard(
 
 ## 🔘 MPButton
 
-Customizable button component with multiple variants and states.
+Customizable button component with multiple variants and states. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPButton automatically adapts to the current theme:
+
+- **Primary Variant**: Uses `context.mp.primary` for background
+- **Text Color**: Automatically adjusts for contrast
+- **Border Colors**: Uses `context.mp.primaryBorder` for outline variant
+- **Hover/Pressed States**: Uses `context.mp.primaryHover` and `context.mp.primaryPressed`
+- **Disabled State**: Uses `context.mp.disabledColor`
 
 ### Basic Usage
 
@@ -155,6 +214,69 @@ Customizable button component with multiple variants and states.
 MPButton(
   text: 'Get Started',
   onPressed: () => print('Button pressed'),
+)
+```
+
+### Theme Customization
+
+```dart
+MPButton(
+  text: 'Custom Button',
+  backgroundColor: context.mp.primary,
+  textColor: context.mp.isDarkMode ? Colors.white : Colors.black,
+  borderColor: context.mp.primaryBorder,
+  onPressed: () => print('Button pressed'),
+)
+```
+
+### Light/Dark Theme Examples
+
+#### Light Theme Buttons
+```dart
+Column(
+  children: [
+    MPButton(
+      text: 'Primary Button',
+      variant: MPButtonVariant.primary,
+      onPressed: () {},
+    ),
+    MPButton(
+      text: 'Secondary Button',
+      variant: MPButtonVariant.secondary,
+      onPressed: () {},
+    ),
+    MPButton(
+      text: 'Outline Button',
+      variant: MPButtonVariant.outline,
+      onPressed: () {},
+    ),
+  ],
+)
+```
+
+#### Dark Theme Buttons
+```dart
+Theme(
+  data: ThemeData.dark(),
+  child: Column(
+    children: [
+      MPButton(
+        text: 'Primary Button',
+        variant: MPButtonVariant.primary,
+        onPressed: () {},
+      ),
+      MPButton(
+        text: 'Secondary Button',
+        variant: MPButtonVariant.secondary,
+        onPressed: () {},
+      ),
+      MPButton(
+        text: 'Outline Button',
+        variant: MPButtonVariant.outline,
+        onPressed: () {},
+      ),
+    ],
+  ),
 )
 ```
 
@@ -256,7 +378,16 @@ MPButton(
 
 ## 📝 MPText
 
-Enhanced text component with built-in styling options.
+Enhanced text component with built-in styling options. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPText automatically adapts to the current theme:
+
+- **Default Color**: Uses `context.mp.textColor` for optimal contrast
+- **Subtitle Color**: Uses `context.mp.subtitleColor` for secondary text
+- **Caption Color**: Uses `context.mp.captionColor` for subtle text
+- **Adaptive Opacity**: Adjusts text opacity based on theme brightness
 
 ### Basic Usage
 
@@ -264,6 +395,81 @@ Enhanced text component with built-in styling options.
 MPText(
   'Hello World',
   style: MPTextStyle.headline1(),
+)
+```
+
+### Theme Customization
+
+```dart
+MPText(
+  'Themed Text',
+  style: MPTextStyle.headline2(
+    color: context.mp.textColor,
+  ),
+)
+
+MPText(
+  'Subtitle Text',
+  style: MPTextStyle.body1(
+    color: context.mp.subtitleColor,
+  ),
+)
+
+MPText(
+  'Caption Text',
+  style: MPTextStyle.caption(
+    color: context.mp.captionColor,
+  ),
+)
+```
+
+### Light/Dark Theme Examples
+
+#### Light Theme Text
+```dart
+Theme(
+  data: ThemeData.light(),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      MPText(
+        'Light Theme Title',
+        style: MPTextStyle.headline3(),
+      ),
+      MPText(
+        'Light theme subtitle with proper contrast',
+        style: MPTextStyle.body1(),
+      ),
+      MPText(
+        'Light theme caption',
+        style: MPTextStyle.caption(),
+      ),
+    ],
+  ),
+)
+```
+
+#### Dark Theme Text
+```dart
+Theme(
+  data: ThemeData.dark(),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      MPText(
+        'Dark Theme Title',
+        style: MPTextStyle.headline3(),
+      ),
+      MPText(
+        'Dark theme subtitle with proper contrast',
+        style: MPTextStyle.body1(),
+      ),
+      MPText(
+        'Dark theme caption',
+        style: MPTextStyle.caption(),
+      ),
+    ],
+  ),
 )
 ```
 
@@ -320,7 +526,18 @@ MPText(
 
 ## 📝 MPTextField
 
-Input field component with validation and theming support.
+Input field component with validation and theming support. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPTextField automatically adapts to the current theme:
+
+- **Background**: Uses `context.mp.adaptiveBackgroundColor`
+- **Border Color**: Uses `context.mp.adaptiveBorderColor` by default
+- **Focus Border**: Uses `context.mp.primaryFocus` when focused
+- **Text Color**: Uses `context.mp.textColor` for input text
+- **Hint Text**: Uses `context.mp.subtitleColor` for placeholder
+- **Error Text**: Uses `context.mp.errorColor` for validation errors
 
 ### Basic Usage
 
@@ -337,6 +554,47 @@ MPTextField(
     }
     return null;
   },
+)
+```
+
+### Theme Customization
+
+```dart
+MPTextField(
+  hintText: 'Custom themed field',
+  controller: _controller,
+  fillColor: context.mp.neutral100,
+  borderColor: context.mp.primaryBorder,
+  focusBorderColor: context.mp.primaryFocus,
+  textStyle: TextStyle(color: context.mp.textColor),
+  hintStyle: TextStyle(color: context.mp.subtitleColor),
+  errorStyle: TextStyle(color: context.mp.errorColor),
+)
+```
+
+### Light/Dark Theme Examples
+
+#### Light Theme TextField
+```dart
+Theme(
+  data: ThemeData.light(),
+  child: MPTextField(
+    hintText: 'Light theme input',
+    controller: _controller,
+    prefixIcon: Icons.email,
+  ),
+)
+```
+
+#### Dark Theme TextField
+```dart
+Theme(
+  data: ThemeData.dark(),
+  child: MPTextField(
+    hintText: 'Dark theme input',
+    controller: _controller,
+    prefixIcon: Icons.email,
+  ),
 )
 ```
 
@@ -413,7 +671,18 @@ MPTextField(
 
 ## 💬 MPDialog
 
-Modal dialog component with multiple display options.
+Modal dialog component with multiple display options. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPDialog automatically adapts to the current theme:
+
+- **Background**: Uses `context.mp.adaptiveBackgroundColor`
+- **Surface Color**: Uses `context.mp.primarySurface` for elevated surfaces
+- **Title Color**: Uses `context.mp.textColor` for titles
+- **Content Color**: Uses `context.mp.textColor` for content
+- **Border**: Uses `context.mp.adaptiveBorderColor`
+- **Shadow**: Uses `context.mp.adaptiveShadowColor`
 
 ### Basic Usage
 
@@ -425,6 +694,65 @@ MPDialog.show(
   confirmText: 'Delete',
   cancelText: 'Cancel',
   onConfirm: () => _deleteItem(),
+)
+```
+
+### Theme Customization
+
+```dart
+MPDialog.show(
+  context: context,
+  title: 'Custom Dialog',
+  content: Container(
+    color: context.mp.primarySurface,
+    child: Text(
+      'Custom themed dialog content',
+      style: TextStyle(color: context.mp.textColor),
+    ),
+  ),
+  backgroundColor: context.mp.adaptiveBackgroundColor,
+  borderColor: context.mp.primaryBorder,
+  titleStyle: TextStyle(color: context.mp.textColor),
+  contentStyle: TextStyle(color: context.mp.textColor),
+  onConfirm: () => Navigator.of(context).pop(),
+)
+```
+
+### Light/Dark Theme Examples
+
+#### Light Theme Dialog
+```dart
+Theme(
+  data: ThemeData.light(),
+  child: Builder(
+    builder: (context) => ElevatedButton(
+      onPressed: () => MPDialog.show(
+        context: context,
+        title: 'Light Theme Dialog',
+        content: Text('This dialog uses light theme colors'),
+        onConfirm: () => Navigator.of(context).pop(),
+      ),
+      child: Text('Show Light Dialog'),
+    ),
+  ),
+)
+```
+
+#### Dark Theme Dialog
+```dart
+Theme(
+  data: ThemeData.dark(),
+  child: Builder(
+    builder: (context) => ElevatedButton(
+      onPressed: () => MPDialog.show(
+        context: context,
+        title: 'Dark Theme Dialog',
+        content: Text('This dialog uses dark theme colors'),
+        onConfirm: () => Navigator.of(context).pop(),
+      ),
+      child: Text('Show Dark Dialog'),
+    ),
+  ),
 )
 ```
 
@@ -496,9 +824,55 @@ MPDialog.show(
 
 ---
 
+## 🌓 Theme-Specific Behaviors
+
+### Component Theme Adaptation
+
+All Micropack UI Kit components automatically adapt to theme changes:
+
+1. **Real-time Updates**: Components update immediately when theme changes
+2. **Smooth Transitions**: Theme changes animate smoothly when using `AnimatedTheme`
+3. **Persistent State**: Component states maintain during theme switches
+4. **Accessibility**: Contrast ratios maintained in both themes
+
+### Testing Theme Behavior
+
+```dart
+// Test component in both themes
+class ThemeTestWidget extends StatelessWidget {
+  const ThemeTestWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Light Theme', style: Theme.of(context).textTheme.headline6),
+        Theme(
+          data: ThemeData.light(),
+          child: MPButton(
+            text: 'Light Button',
+            onPressed: () {},
+          ),
+        ),
+        SizedBox(height: 20),
+        Text('Dark Theme', style: Theme.of(context).textTheme.headline6),
+        Theme(
+          data: ThemeData.dark(),
+          child: MPButton(
+            text: 'Dark Button',
+            onPressed: () {},
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
+
 ## 🔗 Related Links
 
 - [Theme Utilities](./theme-utilities.md) - Using context.mp
+- [Theming Guide](../guides/theming.md) - Comprehensive theme documentation
 - [Getting Started](../getting-started/README.md) - Setup guide
 - [Examples](../examples/README.md) - Complete code examples
 

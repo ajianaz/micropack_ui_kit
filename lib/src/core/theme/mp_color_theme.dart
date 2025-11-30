@@ -129,21 +129,21 @@ class MPColorTheme extends ThemeExtension<MPColorTheme> {
   /// Dark color scheme
   static final MPColorTheme dark = MPColorTheme(
     primary: MPColors.primary,
-    primarySurface: MPColors.primarySurface,
-    primaryFocus: MPColors.primaryFocus,
-    primaryBorder: MPColors.primaryBorder,
-    primaryHover: MPColors.primaryHover,
-    primaryPressed: MPColors.primaryPressed,
-    neutral10: MPColors.neutral[10],
-    neutral20: MPColors.neutral[20],
-    neutral30: MPColors.neutral[30],
-    neutral40: MPColors.neutral[40],
-    neutral50: MPColors.neutral[50],
-    neutral60: MPColors.neutral[60],
-    neutral70: MPColors.neutral[70],
-    neutral80: MPColors.neutral[80],
-    neutral90: MPColors.neutral[90],
-    neutral100: MPColors.neutral[100],
+    primarySurface: const Color(0xFF1A1A1A), // Dark surface for primary
+    primaryFocus: const Color(0xFF3A3A3A), // Dark focus
+    primaryBorder: const Color(0xFF4A4A4A), // Dark border
+    primaryHover: const Color(0xFF2A2A2A), // Dark hover
+    primaryPressed: const Color(0xFF0A0A0A), // Dark pressed
+    neutral10: const Color(0xFF090909), // Darkest neutral
+    neutral20: const Color(0xFF1A1A1A), // Dark surface
+    neutral30: const Color(0xFF2A2A2A), // Dark elevated
+    neutral40: const Color(0xFF3A3A3A), // Dark border
+    neutral50: const Color(0xFF4A4A4A), // Dark disabled
+    neutral60: const Color(0xFF5A5A5A), // Dark placeholder
+    neutral70: const Color(0xFF6A6A6A), // Dark secondary
+    neutral80: const Color(0xFF9A9A9A), // Dark primary text
+    neutral90: const Color(0xFFBABABA), // Dark subtitle
+    neutral100: const Color(0xFFE5E5E5), // Dark background
   );
 
   @override

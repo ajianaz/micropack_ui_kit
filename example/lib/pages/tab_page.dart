@@ -27,10 +27,19 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Tab Components'),
+        title: Text(
+          'Tab Components',
+          style: TextStyle(color: context.mp.textColor),
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: context.mp.primary,
+          labelColor: context.mp.primary,
+          unselectedLabelColor: context.mp.subtitleColor,
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
@@ -160,8 +169,8 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 0,
                       onTab: () => _selectTab(0),
                       variant: MPTabRoundedVariant.filled,
-                      tabColorActive: Colors.blue.shade700,
-                      tabColor: Colors.blue.shade100,
+                      tabColorActive: context.mp.primary,
+                      tabColor: context.mp.primarySurface,
                     ),
                   ),
                   Expanded(
@@ -171,8 +180,8 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
                       variant: MPTabRoundedVariant.filled,
-                      tabColorActive: Colors.green.shade700,
-                      tabColor: Colors.green.shade100,
+                      tabColorActive: context.mp.successColor,
+                      tabColor: context.mp.successColor.withValues(alpha: 0.1),
                     ),
                   ),
                   Expanded(
@@ -182,8 +191,8 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       isActiveTab: _selectedIndex == 2,
                       onTab: () => _selectTab(2),
                       variant: MPTabRoundedVariant.filled,
-                      tabColorActive: Colors.orange.shade700,
-                      tabColor: Colors.orange.shade100,
+                      tabColorActive: context.mp.warningColor,
+                      tabColor: context.mp.warningColor.withValues(alpha: 0.1),
                     ),
                   ),
                 ],
@@ -243,7 +252,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       badge: '12',
                       isActiveTab: _selectedIndex == 0,
                       onTab: () => _selectTab(0),
-                      badgeColor: Colors.red,
+                      badgeColor: context.mp.errorColor,
                     ),
                   ),
                   Expanded(
@@ -252,7 +261,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       badge: '99+',
                       isActiveTab: _selectedIndex == 1,
                       onTab: () => _selectTab(1),
-                      badgeColor: Colors.orange,
+                      badgeColor: context.mp.warningColor,
                     ),
                   ),
                   Expanded(
@@ -261,7 +270,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       badge: '5',
                       isActiveTab: _selectedIndex == 2,
                       onTab: () => _selectTab(2),
-                      badgeColor: Colors.green,
+                      badgeColor: context.mp.successColor,
                     ),
                   ),
                 ],
@@ -275,7 +284,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       badge: '3',
                       isActiveTab: _selectedIndex == 3,
                       onTab: () => _selectTab(3),
-                      badgeColor: Colors.blue,
+                      badgeColor: context.mp.infoColor,
                       badgeTextColor: Colors.white,
                     ),
                   ),
@@ -285,7 +294,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       badge: '!',
                       isActiveTab: _selectedIndex == 4,
                       onTab: () => _selectTab(4),
-                      badgeColor: Colors.red,
+                      badgeColor: context.mp.errorColor,
                       badgeTextColor: Colors.white,
                     ),
                   ),
@@ -309,6 +318,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: MPText(message),
+        backgroundColor: context.mp.neutral90,
         duration: const Duration(seconds: 2),
       ),
     );

@@ -13,47 +13,59 @@ class ColorPage extends StatelessWidget {
         .replaceAll(')', '')
         .split(', ');
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Colors'),
+        title: Text(
+          'Colors',
+          style: TextStyle(color: context.mp.textColor),
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
       ),
       body: ListView(
-        children: List.generate(colorCollection(mpColors).length, 
-        (index) {
-          final color = colorCollection(mpColors)[index];
-          final name = names[index].split(': ')[0];
+        children: List.generate(
+          colorCollection(mpColors).length,
+          (index) {
+            final color = colorCollection(mpColors)[index];
+            final name = names[index].split(': ')[0];
 
-          return ListTile(
-            tileColor: color,
-            title: SelectableText(
-              '$color - $name',
-            ),
-          );
-        },
+            return ListTile(
+              tileColor: color,
+              title: SelectableText(
+                '$color - $name',
+                style: TextStyle(
+                  color: _getContrastColor(color ?? Colors.grey),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
+  Color _getContrastColor(Color backgroundColor) {
+    // Calculate luminance to determine if we should use black or white text
+    final luminance = backgroundColor.computeLuminance();
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
 
   List<Color?> colorCollection(MPColorTheme mpColors) => [
-    
-    mpColors.primary,
-    mpColors.primarySurface,
-    mpColors.primaryFocus,
-    mpColors.primaryBorder,
-    mpColors.primaryHover,
-    mpColors.primaryPressed,
-    mpColors.neutral10,
-    mpColors.neutral20,
-    mpColors.neutral30,
-    mpColors.neutral40,
-    mpColors.neutral50,
-    mpColors.neutral60,
-    mpColors.neutral70,
-    mpColors.neutral80,
-    mpColors.neutral90,
-    mpColors.neutral100,
-    
-    
-  ];
+        mpColors.primary,
+        mpColors.primarySurface,
+        mpColors.primaryFocus,
+        mpColors.primaryBorder,
+        mpColors.primaryHover,
+        mpColors.primaryPressed,
+        mpColors.neutral10,
+        mpColors.neutral20,
+        mpColors.neutral30,
+        mpColors.neutral40,
+        mpColors.neutral50,
+        mpColors.neutral60,
+        mpColors.neutral70,
+        mpColors.neutral80,
+        mpColors.neutral90,
+        mpColors.neutral100,
+      ];
 }

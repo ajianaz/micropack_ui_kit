@@ -19,8 +19,14 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Article Card'),
+        title: Text(
+          'Article Card',
+          style: TextStyle(color: context.mp.textColor),
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.r),
@@ -29,11 +35,12 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
           children: [
             MPText.head('Article Card Variants'),
             SizedBox(height: 16.h),
-            
+
             // Small Card
             MPArticleCard(
               title: 'Small Article Card with Image',
-              description: 'This is a small article card with image and basic content. Perfect for compact layouts.',
+              description:
+                  'This is a small article card with image and basic content. Perfect for compact layouts.',
               imageUrl: 'https://picsum.photos/400/200',
               author: 'John Doe',
               date: 'Nov 28, 2024',
@@ -52,13 +59,14 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onBookmark: () => setState(() => isBookmarked1 = !isBookmarked1),
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
-            
+
             SizedBox(height: 16.h),
-            
+
             // Medium Card with Outlined Variant
             MPArticleCard(
               title: 'Medium Outlined Article Card',
-              description: 'This is a medium-sized article card with outlined variant. It includes metadata and action buttons for better user engagement.',
+              description:
+                  'This is a medium-sized article card with outlined variant. It includes metadata and action buttons for better user engagement.',
               imageUrl: 'https://picsum.photos/600/300',
               author: 'Jane Smith',
               date: 'Nov 27, 2024',
@@ -77,19 +85,25 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onBookmark: () => setState(() => isBookmarked2 = !isBookmarked2),
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
-            
+
             SizedBox(height: 16.h),
-            
+
             // Large Elevated Card
             MPArticleCard(
               title: 'Large Elevated Article Card with Comprehensive Content',
-              description: 'This is a large article card with elevated variant. It showcases all available features including image, metadata, tags, and action buttons. Perfect for featured content or highlight sections.',
+              description:
+                  'This is a large article card with elevated variant. It showcases all available features including image, metadata, tags, and action buttons. Perfect for featured content or highlight sections.',
               imageUrl: 'https://picsum.photos/800/400',
               author: 'Michael Johnson',
               date: 'Nov 26, 2024',
               readTime: '12 min read',
               category: 'Development',
-              tags: ['programming', 'flutter', 'best-practices', 'architecture'],
+              tags: [
+                'programming',
+                'flutter',
+                'best-practices',
+                'architecture'
+              ],
               size: MPArticleCardSize.large,
               variant: MPArticleCardVariant.elevated,
               isLiked: false,
@@ -99,13 +113,14 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onBookmark: () => _showSnackBar(context, 'Article bookmarked!'),
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
-            
+
             SizedBox(height: 16.h),
-            
+
             // Card without image
             MPArticleCard(
               title: 'Article Card Without Image',
-              description: 'This card demonstrates how article cards look without images. Focus is on the text content and metadata.',
+              description:
+                  'This card demonstrates how article cards look without images. Focus is on the text content and metadata.',
               author: 'Sarah Williams',
               date: 'Nov 25, 2024',
               readTime: '6 min read',
@@ -120,13 +135,14 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onBookmark: () => _showSnackBar(context, 'Article bookmarked!'),
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
-            
+
             SizedBox(height: 16.h),
-            
+
             // Card with custom action buttons
             MPArticleCard(
               title: 'Article Card with Custom Actions',
-              description: 'This card demonstrates custom action buttons in addition to the default ones.',
+              description:
+                  'This card demonstrates custom action buttons in addition to the default ones.',
               imageUrl: 'https://picsum.photos/500/250',
               author: 'Alex Brown',
               date: 'Nov 24, 2024',
@@ -144,7 +160,8 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   text: 'Read More',
                   onPressed: () => _showSnackBar(context, 'Opening article...'),
                   textSize: 12.sp,
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 ),
               ],
             ),
@@ -158,6 +175,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: MPText(message),
+        backgroundColor: context.mp.neutral90,
         duration: const Duration(seconds: 2),
       ),
     );

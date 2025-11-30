@@ -16,8 +16,14 @@ class _ButtonPageState extends State<ButtonPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Button'),
+        title: Text(
+          'Button',
+          style: TextStyle(color: context.mp.textColor),
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.r),
@@ -332,6 +338,7 @@ class _ButtonPageState extends State<ButtonPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: MPText(message),
+        backgroundColor: context.mp.neutral90,
         duration: const Duration(seconds: 2),
       ),
     );

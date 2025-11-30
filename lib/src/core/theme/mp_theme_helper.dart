@@ -16,13 +16,13 @@ class MPThemeUtilities {
 
   /// Get current theme
   ThemeData get theme => Theme.of(_context);
-  
+
   /// Get current color theme
   MPColorTheme? get colorTheme => Theme.of(_context).extension<MPColorTheme>();
-  
+
   /// Check if current theme is dark mode
   bool get isDarkMode => Theme.of(_context).brightness == Brightness.dark;
-  
+
   /// Get adaptive text color based on theme brightness and color scheme
   Color adaptiveTextColor(double opacity) {
     if (isDarkMode) {
@@ -41,10 +41,10 @@ class MPThemeUtilities {
   Color get adaptiveBackgroundColor {
     if (isDarkMode) {
       // In dark mode, use darker neutral from theme
-      return colorTheme?.neutral20 ?? Colors.grey.shade800;
+      return colorTheme?.neutral20 ?? const Color(0xFF1A1A1A);
     } else {
       // In light mode, use lighter neutral from theme
-      return colorTheme?.neutral100 ?? Colors.white;
+      return colorTheme?.neutral100 ?? const Color(0xFFD9D9D9);
     }
   }
 
@@ -52,10 +52,10 @@ class MPThemeUtilities {
   Color get adaptiveBorderColor {
     if (isDarkMode) {
       // In dark mode, use lighter border from theme
-      return colorTheme?.neutral60 ?? Colors.grey.shade600;
+      return colorTheme?.neutral40 ?? const Color(0xFF3A3A3A);
     } else {
       // In light mode, use darker border from theme
-      return colorTheme?.neutral40 ?? Colors.grey.shade300;
+      return colorTheme?.neutral40 ?? const Color(0xFFC9C9C9);
     }
   }
 
@@ -94,19 +94,19 @@ class MPThemeUtilities {
   Color get primaryPressed => colorTheme?.primaryPressed ?? MpUiKit.colorBrand;
 
   /// Get neutral colors with fallback
-  Color get neutral10 => colorTheme?.neutral10 ?? Colors.grey.shade50;
-  Color get neutral20 => colorTheme?.neutral20 ?? Colors.grey.shade100;
-  Color get neutral30 => colorTheme?.neutral30 ?? Colors.grey.shade200;
-  Color get neutral40 => colorTheme?.neutral40 ?? Colors.grey.shade300;
-  Color get neutral50 => colorTheme?.neutral50 ?? Colors.grey.shade400;
-  Color get neutral60 => colorTheme?.neutral60 ?? Colors.grey.shade500;
-  Color get neutral70 => colorTheme?.neutral70 ?? Colors.grey.shade600;
-  Color get neutral80 => colorTheme?.neutral80 ?? Colors.grey.shade700;
-  Color get neutral90 => colorTheme?.neutral90 ?? Colors.grey.shade800;
-  Color get neutral100 => colorTheme?.neutral100 ?? Colors.grey.shade900;
+  Color get neutral10 => colorTheme?.neutral10 ?? (isDarkMode ? const Color(0xFF090909) : const Color(0xFFD9D9D9));
+  Color get neutral20 => colorTheme?.neutral20 ?? (isDarkMode ? const Color(0xFF1A1A1A) : const Color(0xFFDCDCDC));
+  Color get neutral30 => colorTheme?.neutral30 ?? (isDarkMode ? const Color(0xFF2A2A2A) : const Color(0xFFD5D5D5));
+  Color get neutral40 => colorTheme?.neutral40 ?? (isDarkMode ? const Color(0xFF3A3A3A) : const Color(0xFFC9C9C9));
+  Color get neutral50 => colorTheme?.neutral50 ?? (isDarkMode ? const Color(0xFF4A4A4A) : const Color(0xFFAEAEAE));
+  Color get neutral60 => colorTheme?.neutral60 ?? (isDarkMode ? const Color(0xFF5A5A5A) : const Color(0xFF8E8E8E));
+  Color get neutral70 => colorTheme?.neutral70 ?? (isDarkMode ? const Color(0xFF6A6A6A) : const Color(0xFF696969));
+  Color get neutral80 => colorTheme?.neutral80 ?? (isDarkMode ? const Color(0xFF9A9A9A) : const Color(0xFF535353));
+  Color get neutral90 => colorTheme?.neutral90 ?? (isDarkMode ? const Color(0xFFBABABA) : const Color(0xFF393939));
+  Color get neutral100 => colorTheme?.neutral100 ?? (isDarkMode ? const Color(0xFFE5E5E5) : const Color(0xFF090909));
 
   /// Get text color based on theme
-  Color get textColor => isDarkMode ? neutral100 : neutral20;
+  Color get textColor => isDarkMode ? neutral90 : neutral20;
 
   /// Get subtitle text color based on theme
   Color get subtitleColor => isDarkMode ? neutral80 : neutral40;
@@ -166,7 +166,7 @@ class MPThemeHelper {
     final theme = Theme.of(context);
     final colorTheme = theme.extension<MPColorTheme>();
     final isDark = theme.brightness == Brightness.dark;
-    
+
     return TextStyle(
       fontSize: fontSize,
       fontWeight: fontWeight,

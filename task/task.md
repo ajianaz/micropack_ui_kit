@@ -2,6 +2,13 @@
 
 ## Phase 1: Komponen Core Completion
 
+### Theme Setup Prerequisites
+- [ ] Set up MPColorTheme.light and MPColorTheme.dark in MaterialApp
+- [ ] Implement theme switching functionality with state management
+- [ ] Add theme persistence using SharedPreferences
+- [ ] Create theme toggle UI component
+- [ ] Test theme switching in example app
+
 ### MPArticleCard
 - [ ] Review current implementation of MPArticleCard
 - [ ] Identify missing features and functionality gaps
@@ -13,8 +20,12 @@
 - [ ] Implement accessibility features (semantic labels, screen reader support)
 - [ ] Add loading state implementation
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for all functionality
 - [ ] Write widget tests for UI components
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPTextField Enhancement
@@ -29,8 +40,12 @@
 - [ ] Implement focus management and keyboard navigation
 - [ ] Add accessibility features (labels, hints, error announcements)
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for validation and formatting
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPButton Improvement
@@ -44,8 +59,12 @@
 - [ ] Add accessibility features (semantic labels, screen reader support)
 - [ ] Implement keyboard shortcuts and navigation
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for button behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPTabRounded Completion
@@ -58,11 +77,21 @@
 - [ ] Implement keyboard navigation
 - [ ] Add accessibility features (semantic labels, screen reader support)
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for tab behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ## Phase 2: Komponen Tambahan
+
+### Theme Setup Prerequisites
+- [ ] Verify theme system works with all existing components
+- [ ] Add theme switching to example app navigation
+- [ ] Create theme preview components for documentation
+- [ ] Test theme persistence across app restarts
 
 ### MPCard
 - [ ] Design MPCard component architecture
@@ -74,8 +103,12 @@
 - [ ] Implement responsive behavior
 - [ ] Add accessibility features
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for card behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPImage
@@ -88,8 +121,12 @@
 - [ ] Implement zoom and pan capabilities
 - [ ] Add accessibility features (alt text, semantic labels)
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for image loading and handling
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPList/MPListView
@@ -104,8 +141,12 @@
 - [ ] Create swipe actions for list items
 - [ ] Add accessibility features
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for list behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPChip/MPBadge
@@ -118,8 +159,12 @@
 - [ ] Implement chip group with flow layout
 - [ ] Add accessibility features
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for chip/badge behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPAvatar
@@ -132,8 +177,12 @@
 - [ ] Create fallback handling for missing images
 - [ ] Add accessibility features
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for avatar behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPDivider/MPSpacing
@@ -144,8 +193,12 @@
 - [ ] Implement responsive spacing
 - [ ] Add theme integration
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for divider/spacing behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPProgress
@@ -158,8 +211,12 @@
 - [ ] Create step progress indicator
 - [ ] Add accessibility features
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for progress behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ### MPBottomSheet
@@ -172,11 +229,21 @@
 - [ ] Create different animation styles
 - [ ] Add accessibility features
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware properties and behaviors
+- [ ] Add light/dark theme examples to documentation
 - [ ] Write unit tests for bottom sheet behavior
 - [ ] Write widget tests for all variants
+- [ ] Write tests for theme adaptation and switching
+- [ ] Test component in both light and dark themes
 - [ ] Test component in example app
 
 ## Phase 3: Responsive & Multiplatform Enhancement
+
+### Theme Setup Prerequisites
+- [ ] Test theme system across different screen sizes
+- [ ] Verify theme adaptation on different platforms
+- [ ] Create responsive theme switching components
+- [ ] Add theme testing for various device configurations
 
 ### Responsive Builder
 - [ ] Design responsive builder architecture
@@ -187,8 +254,12 @@
 - [ ] Create responsive spacing system
 - [ ] Add orientation change handling
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware responsive properties
+- [ ] Add light/dark theme examples for responsive layouts
 - [ ] Write unit tests for responsive behavior
 - [ ] Write widget tests for responsive layouts
+- [ ] Write tests for theme adaptation in responsive contexts
+- [ ] Test responsive system in both light and dark themes
 - [ ] Test responsive system in example app
 
 ### Platform-Specific Components
@@ -200,8 +271,12 @@
 - [ ] Implement desktop-specific adaptations
 - [ ] Add platform detection utilities
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware platform adaptations
+- [ ] Add light/dark theme examples for each platform
 - [ ] Write unit tests for platform-specific behavior
 - [ ] Write widget tests for platform adaptations
+- [ ] Write tests for theme adaptation on different platforms
+- [ ] Test platform-specific components in both light and dark themes
 - [ ] Test platform-specific components in example app
 
 ### Desktop Support
@@ -213,8 +288,12 @@
 - [ ] Implement desktop-specific layouts
 - [ ] Add mouse interaction patterns
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware desktop adaptations
+- [ ] Add light/dark theme examples for desktop interactions
 - [ ] Write unit tests for desktop behavior
 - [ ] Write widget tests for desktop adaptations
+- [ ] Write tests for theme adaptation in desktop context
+- [ ] Test desktop support in both light and dark themes
 - [ ] Test desktop support in example app
 
 ### Breakpoint System
@@ -225,11 +304,21 @@
 - [ ] Add breakpoint testing utilities
 - [ ] Implement breakpoint-specific theming
 - [ ] Create comprehensive documentation with examples
+- [ ] Document theme-aware breakpoint system
+- [ ] Add light/dark theme examples for different breakpoints
 - [ ] Write unit tests for breakpoint system
 - [ ] Write widget tests for breakpoint behavior
+- [ ] Write tests for theme adaptation across breakpoints
+- [ ] Test breakpoint system in both light and dark themes
 - [ ] Test breakpoint system in example app
 
 ## Phase 4: Developer Experience
+
+### Theme Setup Prerequisites
+- [ ] Create comprehensive theme documentation examples
+- [ ] Add theme switching to documentation site
+- [ ] Create interactive theme customization demos
+- [ ] Test all documentation examples in both themes
 
 ### Documentation
 - [ ] Review existing documentation structure
@@ -240,10 +329,13 @@
 - [ ] Create design system documentation
 - [ ] Write migration guide from other UI kits
 - [ ] Create troubleshooting guide
-- [ ] Add FAQ section
+- [ ] Add FAQ section with theme-related questions
 - [ ] Implement documentation search functionality
 - [ ] Create documentation versioning system
+- [ ] Add theme switching to documentation site
+- [ ] Create interactive theme examples
 - [ ] Test documentation for accuracy and completeness
+- [ ] Verify all examples work in both light and dark themes
 
 ### Enhanced Examples
 - [ ] Review existing example app
@@ -256,7 +348,10 @@
 - [ ] Create accessibility examples
 - [ ] Add platform-specific examples
 - [ ] Create performance optimization examples
+- [ ] Add theme switching to example app
+- [ ] Create theme showcase examples
 - [ ] Test all examples for functionality
+- [ ] Ensure examples work in both light and dark themes
 - [ ] Ensure examples are up-to-date with components
 
 ### Migration Guide
@@ -268,7 +363,9 @@
 - [ ] Create migration checklist
 - [ ] Add common migration issues and solutions
 - [ ] Create migration scripts if applicable
+- [ ] Add theme migration examples
 - [ ] Test migration guide with sample projects
+- [ ] Verify theme migration works correctly
 - [ ] Get feedback from early adopters
 
 ### Best Practices Guide
@@ -282,6 +379,7 @@
 - [ ] Create testing best practices
 - [ ] Add internationalization guidelines
 - [ ] Create code organization best practices
+- [ ] Add theme management best practices
 - [ ] Review and validate all guidelines
 
 ### Storybook/Widgetbook
@@ -295,7 +393,9 @@
 - [ ] Add theme switching functionality
 - [ ] Implement code export functionality
 - [ ] Create component categorization and search
+- [ ] Add theme preview to component stories
 - [ ] Test all stories for functionality
+- [ ] Test stories in both light and dark themes
 - [ ] Deploy documentation site
 
 ## Phase 5: Testing & Quality Assurance
@@ -332,6 +432,8 @@
 - [ ] Design integration test strategy
 - [ ] Create integration tests for component interactions
 - [ ] Add integration tests for theme system
+- [ ] Create integration tests for theme switching
+- [ ] Add integration tests for theme persistence
 - [ ] Create integration tests for responsive behavior
 - [ ] Add integration tests for platform-specific features
 - [ ] Create integration tests for accessibility
@@ -381,10 +483,12 @@
 - [ ] Implement gesture-based animations
 - [ ] Create animation performance optimizations
 - [ ] Add animation customization options
+- [ ] Create theme-aware animations
 - [ ] Create animation documentation
 - [ ] Write unit tests for animation utilities
 - [ ] Write widget tests for animated components
-- [ ] Test animation performance
+- [ ] Test animation performance in both themes
+- [ ] Test theme switching animations
 
 ### State Management Integration
 - [ ] Identify popular state management solutions
@@ -394,10 +498,12 @@
 - [ ] Add integration with Redux
 - [ ] Create integration with GetX
 - [ ] Add state management examples
+- [ ] Create theme-aware state management examples
 - [ ] Create state management documentation
 - [ ] Write unit tests for state management integration
 - [ ] Write widget tests for state management examples
 - [ ] Test state management performance
+- [ ] Test theme persistence with state management
 
 ### Accessibility
 - [ ] Conduct accessibility audit of all components
@@ -412,6 +518,8 @@
 - [ ] Create accessibility examples
 - [ ] Test with accessibility tools
 - [ ] Validate against WCAG guidelines
+- [ ] Test accessibility in both light and dark themes
+- [ ] Verify contrast ratios in both themes
 
 ### Internationalization
 - [ ] Design internationalization architecture
@@ -425,6 +533,7 @@
 - [ ] Create internationalization examples
 - [ ] Test with different locales
 - [ ] Validate text rendering in different languages
+- [ ] Test internationalization with theme switching
 - [ ] Create internationalization utilities
 
 ### Theme Builder
@@ -440,3 +549,5 @@
 - [ ] Write theme builder tests
 - [ ] Create theme builder examples
 - [ ] Test theme builder functionality
+- [ ] Test theme builder with state management
+- [ ] Test theme builder persistence
