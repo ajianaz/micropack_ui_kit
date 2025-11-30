@@ -153,14 +153,17 @@ class _MPTabRoundedState extends State<MPTabRounded>
               alignment: Alignment.center,
               padding: widget.padding ?? _getPadding(),
               decoration: BoxDecoration(
+                // Theme-aware border colors for tab separators
                 border: Border(
                   left: widget.tabLocation?.toLowerCase() == 'center'
                       ? BorderSide(
+                          // Use adaptive border color that works in both light/dark themes
                           color: widget.deviderColor ??
                               context.mp.adaptiveBorderColor)
                       : BorderSide.none,
                   right: widget.tabLocation?.toLowerCase() == 'center'
                       ? BorderSide(
+                          // Use adaptive border color that works in both light/dark themes
                           color: widget.deviderColor ??
                               context.mp.adaptiveBorderColor)
                       : BorderSide.none,
@@ -200,7 +203,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
                             width: _indicatorAnimation.value *
                                 MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              // Use theme-aware primary color for indicator
+                              // Indicator: use primary color for consistent brand identity
                               color:
                                   widget.indicatorColor ?? context.mp.primary,
                               borderRadius: BorderRadius.circular(2),
@@ -227,7 +230,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
         Icon(
           widget.icon,
           size: widget.iconSize ?? _getIconSize(),
-          // Use theme-aware colors for icon with disabled state
+          // Icon color: use same text color logic for visual consistency
           color: _getTextColor(context),
         ),
       );
@@ -263,7 +266,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
           margin: const EdgeInsets.only(left: 4),
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            // Use error color for badge (semantic color)
+            // Badge background: use error color for semantic meaning (notification/alert)
             color: widget.badgeColor ?? context.mp.errorColor,
             borderRadius: BorderRadius.circular(10),
           ),
@@ -274,7 +277,7 @@ class _MPTabRoundedState extends State<MPTabRounded>
           child: MPText.label(
             widget.badge!,
             style: MPTextStyle.caption(
-              // Use neutral100 (white) for badge text
+              // Badge text: use neutral100 for high contrast against error color background
               color: widget.badgeTextColor ?? context.mp.neutral100,
               fontWeight: FontWeight.w500,
             ).copyWith(fontSize: 10),
@@ -311,53 +314,67 @@ class _MPTabRoundedState extends State<MPTabRounded>
   }
 
   Color _getBackgroundColor(BuildContext context) {
-    // Handle disabled state first
+    // Handle disabled state first - use theme-aware disabled color with low opacity
     if (widget.isDisabled) {
       return context.mp.disabledColor.withValues(alpha: 0.1);
     }
 
     switch (widget.variant) {
       case MPTabRoundedVariant.standard:
-        // Use theme-aware colors for standard variant with hover state
+        // Standard variant: uses adaptive background with theme-aware states
         if (widget.isActiveTab == true) {
+          // Active tab: use primary color for highlighted state
           return widget.tabColorActive ?? context.mp.primary;
         } else if (_isHovered) {
+          // Hover state: use primary hover color for interactive feedback
           return widget.tabColor ?? context.mp.primaryHover;
         } else {
+          // Default state: use adaptive background color that works in both themes
           return widget.tabColor ?? context.mp.adaptiveBackgroundColor;
         }
       case MPTabRoundedVariant.outlined:
-        // Use theme-aware colors for outlined variant with hover state
+        // Outlined variant: transparent background with theme-aware hover/active states
         if (widget.isActiveTab == true) {
+          // Active tab: use primary color for filled appearance
           return widget.tabColorActive ?? context.mp.primary;
         } else if (_isHovered) {
+          // Hover state: use primary surface color for subtle highlight
           return context.mp.primarySurface;
         } else {
+          // Default state: fully transparent to show underlying content
           return Colors.transparent;
         }
       case MPTabRoundedVariant.filled:
-        // Use theme-aware colors for filled variant with opacity and hover state
+        // Filled variant: uses subtitle color with opacity for subtle background
         if (widget.isActiveTab == true) {
+          // Active tab: use primary color for strong visual hierarchy
           return widget.tabColorActive ?? context.mp.primary;
         } else if (_isHovered) {
+          // Hover state: increased opacity for interactive feedback
           return (widget.tabColor ?? context.mp.subtitleColor)
               .withValues(alpha: 0.2);
         } else {
+          // Default state: subtle opacity for background distinction
           return (widget.tabColor ?? context.mp.subtitleColor)
               .withValues(alpha: 0.1);
         }
     }
   }
 
-  // Helper method to get text color with disabled state
+  // Helper method to get text color with proper theme awareness and disabled state
   Color _getTextColor(BuildContext context) {
+    // Disabled state: use theme-aware disabled color for consistent appearance
     if (widget.isDisabled) {
       return context.mp.disabledColor;
     }
 
-    return widget.isActiveTab == true
-        ? widget.textColorActive ?? context.mp.neutral100
-        : widget.textColor ?? context.mp.subtitleColor;
+    if (widget.isActiveTab == true) {
+      // Active tab: use neutral100 (white/light) for contrast against primary background
+      return widget.textColorActive ?? context.mp.neutral100;
+    } else {
+      // Inactive tab: use subtitle color for secondary visual hierarchy
+      return widget.textColor ?? context.mp.subtitleColor;
+    }
   }
 
   double _getHeight() {
