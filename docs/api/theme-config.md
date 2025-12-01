@@ -1,36 +1,36 @@
 # MPThemeConfig - Single Source of Truth for Theme Configuration
 
-`MPThemeConfig` adalah single source of truth untuk semua definisi warna dan konfigurasi theme dalam MicroPack UI Kit. File ini menggantikan `MPColors` yang bermasalah dan menyediakan sistem yang lebih robust dan konsisten.
+`MPThemeConfig` is the single source of truth for all color definitions and theme configuration in MicroPack UI Kit. This file replaces the problematic `MPColors` and provides a more robust and consistent system.
 
-## Fitur Utama
+## Key Features
 
-### 🎨 Definisi Warna yang Benar
-- **Primary Colors**: Konsisten antara light dan dark mode
-- **Neutral Colors**: Scale yang benar dari 10 (terang) hingga 100 (gelap)
-- **Semantic Colors**: Success, warning, error, dan info colors
-- **Dark Mode Fix**: Perbaikan neutral scale untuk dark mode
+### 🎨 Correct Color Definitions
+- **Primary Colors**: Consistent between light and dark mode
+- **Neutral Colors**: Correct scale from 10 (light) to 100 (dark)
+- **Semantic Colors**: Success, warning, error, and info colors
+- **Dark Mode Fix**: Fixed neutral scale for dark mode
 
-### 🛠️ Helper Methods dengan Error Handling
-- Safe color access dengan fallback
-- Validation untuk input yang tidak valid
+### 🛠️ Helper Methods with Error Handling
+- Safe color access with fallback
+- Validation for invalid input
 - Context-aware color selection
-- Contrast ratio calculation dan validation
+- Contrast ratio calculation and validation
 
 ### ♿ Accessibility Features
 - WCAG AA/AAA compliance checking
 - Automatic contrast ratio calculation
 - Best text color selection
-- Theme validation dengan detailed reporting
+- Theme validation with detailed reporting
 
-## Penggunaan Dasar
+## Basic Usage
 
-### Mendapatkan Warna Primary
+### Getting Primary Colors
 
 ```dart
-// Mendapatkan primary color (sama untuk light dan dark mode)
+// Get primary color (same for light and dark mode)
 final primaryColor = MPThemeConfig.getPrimary();
 
-// Mendapatkan variant primary colors
+// Get variant primary colors
 final hoverColor = MPThemeConfig.getPrimaryHover();
 final pressedColor = MPThemeConfig.getPrimaryPressed();
 final focusColor = MPThemeConfig.getPrimaryFocus();
@@ -38,15 +38,15 @@ final borderColor = MPThemeConfig.getPrimaryBorder();
 final surfaceColor = MPThemeConfig.getPrimarySurface();
 ```
 
-### Mendapatkan Warna Neutral
+### Getting Neutral Colors
 
 ```dart
-// Mendapatkan neutral color dengan shade tertentu
+// Get neutral color with specific shade
 final neutral10 = MPThemeConfig.getNeutral(10); // White
 final neutral50 = MPThemeConfig.getNeutral(50); // Medium gray
 final neutral100 = MPThemeConfig.getNeutral(100); // Dark gray
 
-// Safe access dengan fallback
+// Safe access with fallback
 final safeColor = MPThemeConfig.getNeutralSafe(15, fallback: 50);
 ```
 
@@ -91,14 +91,14 @@ final infoBg = MPThemeConfig.getInfoBackgroundColor();
 ### Contrast Ratio Calculation
 
 ```dart
-// Menghitung contrast ratio antara dua warna
+// Calculate contrast ratio between two colors
 final ratio = MPThemeConfig.getContrastRatio(
   Colors.white, // foreground
   Colors.black, // background
 );
 print(ratio); // 21.0 (maximum contrast)
 
-// Mengecek apakah contrast cukup baik
+// Check if contrast is good enough
 final isGood = MPThemeConfig.hasGoodContrast(
   Colors.black,
   Colors.white,
@@ -109,19 +109,19 @@ final isGood = MPThemeConfig.hasGoodContrast(
 ### Best Text Color Selection
 
 ```dart
-// Otomatis memilih warna teks terbaik untuk background
+// Automatically select best text color for background
 final bestTextColor = MPThemeConfig.getBestTextColor(
   Colors.grey[800]!, // background
-); // Akan mengembalikan white atau black tergantung contrast
+); // Will return white or black depending on contrast
 ```
 
 ### Theme Validation
 
 ```dart
-// Validasi theme untuk memastikan semua contrast ratio baik
+// Validate theme to ensure all contrast ratios are good
 final validation = MPThemeConfig.validateThemeContrast(isDarkMode: false);
 
-// Cek hasil validasi
+// Check validation results
 if (validation['primary_text_on_background'] == false) {
   print('Primary text on background has poor contrast');
 }
@@ -145,11 +145,11 @@ print(summary);
 ### Available Neutral Shades
 
 ```dart
-// Mendapatkan semua shade yang tersedia
+// Get all available shades
 final shades = MPThemeConfig.availableNeutralShades;
 print(shades); // [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
-// Validasi shade
+// Validate shade
 final isValid = MPThemeConfig.isValidNeutralShade(25); // false
 final isValid = MPThemeConfig.isValidNeutralShade(50); // true
 ```
@@ -157,7 +157,7 @@ final isValid = MPThemeConfig.isValidNeutralShade(50); // true
 ### Shadow Colors
 
 ```dart
-// Mendapatkan shadow color yang sesuai dengan theme
+// Get shadow color appropriate for theme
 final lightShadow = MPThemeConfig.getShadowColor(isDarkMode: false);
 final darkShadow = MPThemeConfig.getShadowColor(isDarkMode: true);
 
@@ -168,28 +168,28 @@ final customShadow = MPThemeConfig.getShadowColor(
 );
 ```
 
-## Migration dari MPColors
+## Migration from MPColors
 
-### Sebelum (MPColors yang bermasalah):
+### Before (Problematic MPColors):
 
 ```dart
 // ❌ Problematic approach
-final color = MPColors.getNeutral(90, isDarkMode: true); // Tidak konsisten
-final primary = MPColors.getPrimary(isDarkMode: false); // Berbeda dengan dark mode
+final color = MPColors.getNeutral(90, isDarkMode: true); // Inconsistent
+final primary = MPColors.getPrimary(isDarkMode: false); // Different from dark mode
 ```
 
-### Sesudah (MPThemeConfig):
+### After (MPThemeConfig):
 
 ```dart
 // ✅ Correct approach
-final color = MPThemeConfig.getNeutral(90); // Konsisten
-final primary = MPThemeConfig.getPrimary(); // Sama untuk semua mode
+final color = MPThemeConfig.getNeutral(90); // Consistent
+final primary = MPThemeConfig.getPrimary(); // Same for all modes
 final contextColor = MPThemeConfig.getPrimaryTextColor(isDarkMode: isDarkMode);
 ```
 
 ## Best Practices
 
-### 1. Gunakan Context-Aware Methods
+### 1. Use Context-Aware Methods
 ```dart
 // ✅ Good
 final textColor = MPThemeConfig.getPrimaryTextColor(isDarkMode: isDarkMode);
@@ -199,7 +199,7 @@ final bgColor = MPThemeConfig.getBackgroundColor(isDarkMode: isDarkMode);
 final textColor = isDarkMode ? Colors.white : Colors.black;
 ```
 
-### 2. Validasi Contrast Ratio
+### 2. Validate Contrast Ratio
 ```dart
 // ✅ Validate important combinations
 final hasGoodContrast = MPThemeConfig.hasGoodContrast(
@@ -212,7 +212,7 @@ if (!hasGoodContrast) {
 }
 ```
 
-### 3. Gunakan Safe Methods untuk Input Dinamis
+### 3. Use Safe Methods for Dynamic Input
 ```dart
 // ✅ Safe for dynamic input
 final shade = userSelectedShade ?? 50;
@@ -222,7 +222,7 @@ final color = MPThemeConfig.getNeutralSafe(shade, fallback: 50);
 final color = MPThemeConfig.getNeutral(userSelectedShade); // Might throw
 ```
 
-### 4. Manfaatkan Theme Validation
+### 4. Leverage Theme Validation
 ```dart
 // ✅ Validate theme in development
 void validateTheme() {

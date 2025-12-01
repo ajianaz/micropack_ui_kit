@@ -6,50 +6,50 @@ import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 
 class MpUiKit {
   static void init({
-    /// [REQUIRED] Mengatur warna utama
+    /// [REQUIRED] Sets the main color
     required Color colorBrand,
 
-    /// [REQUIRED] Mengatur warna sekunder
+    /// [REQUIRED] Sets the secondary color
     required Color colorBrand2,
 
-    /// Mengatur warna border, digunakan untuk warna border di MPButton
+    /// Sets border color, used for border color in MPButton
     Color? colorStroke,
 
-    /// Mengatur warna teks untuk MPText
+    /// Sets text color for MPText
     Color? colorText,
 
-    /// Mengatur warna disable, seperti digunakan untuk MPButton disable
+    /// Sets disable color, such as used for MPButton disable
     Color? colorDisable,
 
-    /// Mengatur warna error
+    /// Sets error color
     Color? colorError,
 
-    /// Mengatur nama font yang ada di google
+    /// Sets font name available in Google
     String? fontName,
 
-    /// Mengatur style default untuk MPText
+    /// Sets default style for MPText
     MPTextStyle? textStyle,
 
-    /// Mengatur radius untuk MPButton atau MPTextField
+    /// Sets radius for MPButton or MPTextField
     double? buttonBorderRadius,
 
-    /// Mengatur penggunaan ScreenUtil. Jika bernilai true maka fontSize akan dikonversi ke .sp
+    /// Sets ScreenUtil usage. If true then fontSize will be converted to .sp
     /// Changed default to true for better responsive design
     bool useScreenUtil = true,
 
-    /// Mengatur batas. width < limit = Small dan width > limit = Medium
+    /// Sets boundary. width < limit = Small and width > limit = Medium
     double? limitSmallMediumScreen,
 
-    /// Mengatur batas. width < limit = Medium dan width > limit = Large
+    /// Sets boundary. width < limit = Medium and width > limit = Large
     double? limitMediumLargeScreen,
 
-    /// Mengatur icon Success dialog ketika EnumIconDialogType.success
+    /// Sets Success dialog icon when EnumIconDialogType.success
     Widget? iconSuccess,
 
-    /// Mengatur icon Success dialog ketika EnumIconDialogType.failed
+    /// Sets Failed dialog icon when EnumIconDialogType.failed
     Widget? iconFailed,
 
-    /// Mengatur icon Success dialog ketika EnumIconDialogType.warning
+    /// Sets Warning dialog icon when EnumIconDialogType.warning
     Widget? iconWarning,
   }) {
     MpUiKit.colorBrand = colorBrand;
@@ -75,31 +75,31 @@ class MpUiKit {
     if (iconWarning != null) MpUiKit.iconWarning = iconWarning;
   }
 
-  /// Mengatur warna Brand
+  /// Sets Brand color
   static Color colorBrand = Color(0xFF4086EF);
 
-  /// Mengatur warna Brand2 (Secondary)
+  /// Sets Brand2 (Secondary) color
   static Color colorBrand2 = Color(0xFFFFFFFF);
 
-  /// Mengatur warna Stroke
+  /// Sets Stroke color
   static Color colorStroke = colorBrand;
 
-  /// Mengatur warna Text
+  /// Sets Text color
   static Color colorText = Color(0xFF2F2F2F);
 
-  /// Mengatur warna Disable
+  /// Sets Disable color
   static Color colorDisable = Color(0xFFA9A9A9);
 
-  /// Mengatur warna Error
+  /// Sets Error color
   static Color colorError = Color(0xFFFF0000);
 
-  /// Mengatur penggunaan Screen Util (default : false)
+  /// Sets Screen Util usage (default : false)
   static bool useScreenUtil = false;
 
-  /// Mengatur nama font yang ada di google
+  /// Sets font name available in Google
   static String? fontName;
 
-  /// Mengatur gaya teks [default]
+  /// Sets text style [default]
   /// Note: The color property will be overridden by theme-aware colors in components
   /// This ensures proper dark mode support
   static MPTextStyle? textStyle = MPTextStyle(
@@ -111,10 +111,10 @@ class MpUiKit {
     fontStyle: FontStyle.normal,
   );
 
-  /// Mengatur radius tombol [default]
+  /// Sets button radius [default]
   static double buttonRadius = 20;
 
-  /// Mengatur border textfield [default]
+  /// Sets textfield border [default]
   static MPTextFieldBorder border = MPTextFieldBorder(
     border: MPTextFieldBorderProperty(
         type: MPTextFieldBorderType.OUTLINE,
