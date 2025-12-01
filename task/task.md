@@ -3,11 +3,11 @@
 ## Phase 1: Komponen Core Completion
 
 ### Theme Setup Prerequisites
-- [ ] Set up MPColorTheme.light and MPColorTheme.dark in MaterialApp
-- [ ] Implement theme switching functionality with state management
-- [ ] Add theme persistence using SharedPreferences
-- [ ] Create theme toggle UI component
-- [ ] Test theme switching in example app
+- [x] Set up MPColorTheme.light and MPColorTheme.dark in MaterialApp
+- [x] Implement theme switching functionality with state management
+- [x] Add theme persistence using SharedPreferences
+- [x] Create theme toggle UI component
+- [x] Test theme switching in example app
 
 ### MPArticleCard
 - [x] Review current implementation of MPArticleCard
