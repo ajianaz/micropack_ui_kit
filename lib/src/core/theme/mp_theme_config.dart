@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// MPThemeConfig - Single Source of Truth untuk semua definisi warna dan konfigurasi theme
+/// MPThemeConfig - Single Source of Truth for all color definitions and theme
+/// configuration
 ///
-/// File ini mendefinisikan semua warna primary dan neutral dengan benar,
-/// memperbaiki dark mode neutral scale, dan menyediakan helper methods
-/// untuk akses warna dengan error handling.
+/// This file defines all primary and neutral colors correctly,
+/// fixes dark mode neutral scale, and provides helper methods
+/// for color access with error handling.
 class MPThemeConfig {
   const MPThemeConfig._();
 
@@ -86,7 +87,9 @@ class MPThemeConfig {
   static Color getNeutral(int shade, {bool isDarkMode = false}) {
     if (!_neutralColors.containsKey(shade)) {
       throw ArgumentError(
-          'Invalid neutral shade: $shade. Must be one of: ${_neutralColors.keys.join(', ')}');
+        'Invalid neutral shade: $shade. Must be one of: '
+        '${_neutralColors.keys.join(', ')}',
+      );
     }
     return _neutralColors[shade]!;
   }
@@ -96,8 +99,11 @@ class MPThemeConfig {
   /// [shade] the requested shade
   /// [fallback] the shade to use if invalid (default: 50)
   /// [isDarkMode] determines which neutral scale to use
-  static Color getNeutralSafe(int shade,
-      {int fallback = 50, bool isDarkMode = false}) {
+  static Color getNeutralSafe(
+    int shade, {
+    int fallback = 50,
+    bool isDarkMode = false,
+  }) {
     try {
       return getNeutral(shade, isDarkMode: isDarkMode);
     } catch (e) {
@@ -224,16 +230,21 @@ class MPThemeConfig {
   /// Check if two colors have sufficient contrast
   /// WCAG AA standard: 4.5:1 for normal text, 3:1 for large text
   /// WCAG AAA standard: 7:1 for normal text, 4.5:1 for large text
-  static bool hasGoodContrast(Color foreground, Color background,
-      {double minimumRatio = 4.5}) {
+  static bool hasGoodContrast(
+    Color foreground,
+    Color background, {
+    double minimumRatio = 4.5,
+  }) {
     return getContrastRatio(foreground, background) >= minimumRatio;
   }
 
   /// Get the best text color for a given background
   /// Automatically chooses between light and dark text based on contrast
-  static Color getBestTextColor(Color background,
-      {Color lightColor = const Color(0xFFFFFFFF),
-      Color darkColor = const Color(0xFF000000)}) {
+  static Color getBestTextColor(
+    Color background, {
+    Color lightColor = const Color(0xFFFFFFFF),
+    Color darkColor = const Color(0xFF000000),
+  }) {
     final lightContrast = getContrastRatio(lightColor, background);
     final darkContrast = getContrastRatio(darkColor, background);
 
@@ -242,9 +253,9 @@ class MPThemeConfig {
 
   /// Calculate relative luminance of a color (internal helper)
   static double _calculateLuminance(Color color) {
-    final r = _gammaCorrect(color.red / 255.0);
-    final g = _gammaCorrect(color.green / 255.0);
-    final b = _gammaCorrect(color.blue / 255.0);
+    final r = _gammaCorrect(color.r / 255.0);
+    final g = _gammaCorrect(color.g / 255.0);
+    final b = _gammaCorrect(color.b / 255.0);
 
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
@@ -351,7 +362,8 @@ class MPThemeConfig {
 
     final allPassed = validation.values.every((result) => result);
     buffer.writeln(
-        '\nOverall: ${allPassed ? "✅ ALL TESTS PASSED" : "❌ SOME TESTS FAILED"}');
+      '\nOverall: ${allPassed ? "✅ ALL TESTS PASSED" : "❌ SOME TESTS FAILED"}',
+    );
 
     return buffer.toString();
   }

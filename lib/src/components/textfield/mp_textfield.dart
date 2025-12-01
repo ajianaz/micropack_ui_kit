@@ -394,6 +394,7 @@ class MPTextField extends StatefulWidget {
   /// Text direction
   final TextDirection? textDirection;
 
+  /// Creates a default MPTextField
   MPTextField(
     this.controller, {
     super.key,
@@ -460,6 +461,7 @@ class MPTextField extends StatefulWidget {
     type = MPTextFieldType.DEFAULT;
   }
 
+  /// Creates a password MPTextField
   MPTextField.password(
     this.controller, {
     super.key,
@@ -527,6 +529,7 @@ class MPTextField extends StatefulWidget {
     type = MPTextFieldType.PASSWORD;
   }
 
+  /// Creates a bordered MPTextField
   MPTextField.border(
     this.controller, {
     super.key,
@@ -594,6 +597,7 @@ class MPTextField extends StatefulWidget {
     // Note: border will be set in build method using theme-aware colors
   }
 
+  /// Creates a bordered password MPTextField
   MPTextField.borderPassword(
     this.controller, {
     super.key,
@@ -829,7 +833,7 @@ class _MPTextFieldState extends State<MPTextField> {
       enableSuggestions: widget.enableSuggestions,
       autocorrect: widget.autocorrect,
       enableInteractiveSelection: widget.enableInteractiveSelection,
-      scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20.0),
+      scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20),
       textDirection: widget.textDirection,
     );
   }
@@ -887,7 +891,7 @@ class _MPTextFieldState extends State<MPTextField> {
       children: List.generate(
         icons.length,
         (index) => Padding(
-          padding: EdgeInsets.only(left: index > 0 ? 8.0 : 0.0),
+          padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
           child: icons[index],
         ),
       ),
@@ -922,7 +926,9 @@ class _MPTextFieldState extends State<MPTextField> {
   // Theme-aware border methods
   // Creates borders with appropriate colors based on state and theme
   InputBorder _getThemeAwareBorder(
-      MPThemeUtilities themeColors, String borderType) {
+    MPThemeUtilities themeColors,
+    String borderType,
+  ) {
     // Only show borders for BORDER and BORDER_PASSWORD types
     // DEFAULT and PASSWORD types use underline style by default
     if (widget.type != MPTextFieldType.BORDER &&
@@ -963,7 +969,7 @@ class _MPTextFieldState extends State<MPTextField> {
     }
 
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(8),
       borderSide: BorderSide(
         color: borderColor,
         width: borderWidth,

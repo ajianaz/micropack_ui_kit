@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:micropack_ui_kit/src/core/theme/mp_color_theme.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme.dart';
-import 'package:micropack_ui_kit/src/core/theme/mp_theme_config.dart';
 
 /// MPThemeManager - Provider-free theme manager with singleton pattern
 ///
@@ -24,11 +24,15 @@ class MPThemeManager {
   static MPThemeManager? _instance;
   static final _lock = _Mutex();
 
+  MPThemeManager._();
+
   /// Get singleton instance
   static MPThemeManager get instance {
     if (_instance == null) {
       throw StateError(
-          'MPThemeManager must be initialized first. Call initialize() before accessing instance.');
+        'MPThemeManager must be initialized first. Call initialize() before accessing '
+        'instance.',
+      );
     }
     return _instance!;
   }
@@ -48,8 +52,6 @@ class MPThemeManager {
     }
     return _instance!;
   }
-
-  MPThemeManager._();
 
   // ============ STATE MANAGEMENT ============
 
@@ -163,7 +165,8 @@ class MPThemeManager {
   Future<void> setThemeMode(ThemeMode mode) async {
     if (!_isInitialized) {
       throw StateError(
-          'MPThemeManager is not initialized. Call initialize() first.');
+        'MPThemeManager is not initialized. Call initialize() first.',
+      );
     }
 
     await _lock.acquire();
@@ -202,12 +205,13 @@ class MPThemeManager {
   }) async {
     if (!_isInitialized) {
       throw StateError(
-          'MPThemeManager is not initialized. Call initialize() first.');
+        'MPThemeManager is not initialized. Call initialize() first.',
+      );
     }
 
     await _lock.acquire();
     try {
-      bool hasChanges = false;
+      var hasChanges = false;
 
       if (_customLightTheme != lightTheme) {
         _customLightTheme = lightTheme;
@@ -239,7 +243,8 @@ class MPThemeManager {
   ThemeData getCurrentThemeData(BuildContext context) {
     if (!_isInitialized) {
       debugPrint(
-          'Warning: MPThemeManager not initialized, using default theme');
+        'Warning: MPThemeManager not initialized, using default theme',
+      );
       return MPTheme.main(isDarkMode: _isDarkMode(context));
     }
 
@@ -368,14 +373,18 @@ class MPThemeManager {
 
       if (_customLightTheme != null) {
         await prefs!.setString(
-            _customLightThemeKey, _serializeTheme(_customLightTheme!));
+          _customLightThemeKey,
+          _serializeTheme(_customLightTheme!),
+        );
       } else {
         await prefs!.remove(_customLightThemeKey);
       }
 
       if (_customDarkTheme != null) {
-        await prefs!
-            .setString(_customDarkThemeKey, _serializeTheme(_customDarkTheme!));
+        await prefs!.setString(
+          _customDarkThemeKey,
+          _serializeTheme(_customDarkTheme!),
+        );
       } else {
         await prefs!.remove(_customDarkThemeKey);
       }
@@ -464,7 +473,8 @@ class MPThemeManager {
   Future<void> resetToDefaults() async {
     if (!_isInitialized) {
       throw StateError(
-          'MPThemeManager is not initialized. Call initialize() first.');
+        'MPThemeManager is not initialized. Call initialize() first.',
+      );
     }
 
     await _lock.acquire();
@@ -507,7 +517,8 @@ class MPThemeManager {
   Map<String, dynamic> exportThemeConfig() {
     if (!_isInitialized) {
       throw StateError(
-          'MPThemeManager is not initialized. Call initialize() first.');
+        'MPThemeManager is not initialized. Call initialize() first.',
+      );
     }
 
     return {
@@ -524,7 +535,8 @@ class MPThemeManager {
   Future<void> importThemeConfig(Map<String, dynamic> config) async {
     if (!_isInitialized) {
       throw StateError(
-          'MPThemeManager is not initialized. Call initialize() first.');
+        'MPThemeManager is not initialized. Call initialize() first.',
+      );
     }
 
     await _lock.acquire();
@@ -563,13 +575,15 @@ class MPThemeManager {
   Future<void> dispose() async {
     await _lock.acquire();
     try {
-      _listenerMutex.acquire().then((_) {
-        try {
-          _listeners.clear();
-        } finally {
-          _listenerMutex.release();
-        }
-      });
+      unawaited(
+        _listenerMutex.acquire().then((_) {
+          try {
+            _listeners.clear();
+          } finally {
+            _listenerMutex.release();
+          }
+        }),
+      );
     } finally {
       _lock.release();
     }
@@ -610,7 +624,8 @@ Future<dynamic> _importSharedPreferences() async {
   // This is a placeholder for dynamic import
   // In practice, this would be handled by the build system
   throw UnimplementedError(
-      'SharedPreferences not available - add to pubspec.yaml');
+    'SharedPreferences not available - add to pubspec.yaml',
+  );
 }
 
 // ============ MUTEX FOR THREAD SAFETY ============

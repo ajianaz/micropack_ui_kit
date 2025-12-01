@@ -1,10 +1,13 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
+/// A customizable button component with theme support.
+///
+/// This button component supports multiple variants, sizes, and states
+/// with built-in loading indicators and icon support.
 class MPButton extends StatefulWidget {
+  /// Creates a new [MPButton] widget.
   const MPButton({
     required this.text,
     required this.onPressed,
@@ -43,98 +46,111 @@ class MPButton extends StatefulWidget {
     this.maximumSize,
   });
 
+  /// The text to display on the button.
   final String? text;
 
+  /// Callback when the button is pressed.
   final void Function()? onPressed;
 
+  /// The size of the button.
   final MPButtonSize size;
 
+  /// The visual style variant of the button.
   final MPButtonVariant variant;
 
+  /// Whether the button is enabled.
   final bool enabled;
 
+  /// Custom background color for the button.
   final Color? background;
 
+  /// Custom padding for the button.
   final EdgeInsets? padding;
 
+  /// Border radius for the button.
   final double? radius;
 
+  /// Stroke width for the button border.
   final double? strokeWidth;
 
+  /// Stroke color for the button border.
   final Color? strokeColor;
 
+  /// Whether the button should take full width.
   final bool? widthInfinity;
 
+  /// Custom child widget to display instead of text.
   final Widget? child;
 
-  /// Mengatur gaya teks. Jika child tidak null maka textStyle diabaikan.
-  /// Jika textStyle tidak null maka textColor, textSize, fontWeight diabaikan.
+  /// Text style for the button text.
+  /// If child is not null then textStyle is ignored.
+  /// If textStyle is not null then textColor, textSize, fontWeight are ignored.
   final TextStyle? textStyle;
 
-  /// Mengatur warna dari teks.
-  /// Jika [child] != null atau [textStyle] != null maka [textColor] diabaikan
+  /// Text color for the button.
+  /// If [child] != null or [textStyle] != null then [textColor] is ignored.
   final Color? textColor;
 
-  /// Mengatur ukuran font.
-  /// Jika [child] != null atau [textStyle] != null maka [textSize] diabaikan
+  /// Font size for the button text.
+  /// If [child] != null or [textStyle] != null then [textSize] is ignored.
   final double? textSize;
 
-  /// Mengatur ketebalan font.
-  /// Jika [child] != null atau [textStyle] != null maka [fontWeight] diabaikan
+  /// Font weight for the button text.
+  /// If [child] != null or [textStyle] != null then [fontWeight] is ignored.
   final FontWeight? fontWeight;
 
-  /// Loading state
+  /// Whether the button is in a loading state.
   final bool loading;
 
-  /// Custom loading widget
+  /// Custom widget to show when loading.
   final Widget? loadingWidget;
 
-  /// Button icon
+  /// Icon to display on the button.
   final IconData? icon;
 
-  /// Icon position relative to text
+  /// Position of the icon relative to the text.
   final MPButtonIconPosition iconPosition;
 
-  /// Icon size
+  /// Size of the icon.
   final double? iconSize;
 
-  /// Icon color
+  /// Color of the icon.
   final Color? iconColor;
 
-  /// Shadow color
+  /// Shadow color for the button.
   final Color? shadowColor;
 
-  /// Button elevation
+  /// Elevation of the button.
   final double? elevation;
 
-  /// Hover color
+  /// Color when the button is hovered.
   final Color? hoverColor;
 
-  /// Splash color
+  /// Splash color for ripple effect.
   final Color? splashColor;
 
-  /// Focus node
+  /// Focus node for the button.
   final FocusNode? focusNode;
 
-  /// Long press callback
+  /// Callback when the button is long pressed.
   final VoidCallback? onLongPress;
 
-  /// Hover callback
+  /// Callback when hover state changes.
   final ValueChanged<bool>? onHover;
 
-  /// Semantic label for accessibility
+  /// Semantic label for accessibility.
   final String? semanticLabel;
 
-  /// Animation duration
+  /// Animation duration for state changes.
   final Duration? animationDuration;
 
-  /// Border radius
+  /// Border radius for the button.
   final BorderRadius? borderRadius;
 
-  /// Minimum size
+  /// Minimum size of the button.
   final Size? minimumSize;
 
-  /// Maximum size
+  /// Maximum size of the button.
   final Size? maximumSize;
 
   @override
@@ -163,8 +179,10 @@ class _MPButtonState extends State<MPButton> {
             side: _getBorderSide(),
           ),
         ),
-        elevation: WidgetStateProperty.all(widget.elevation ??
-            (widget.variant == MPButtonVariant.primary ? 4 : 0)),
+        elevation: WidgetStateProperty.all(
+          widget.elevation ??
+              (widget.variant == MPButtonVariant.primary ? 4 : 0),
+        ),
         shadowColor: WidgetStateProperty.all(widget.shadowColor),
         splashFactory:
             widget.splashColor != null ? InkSplash.splashFactory : null,

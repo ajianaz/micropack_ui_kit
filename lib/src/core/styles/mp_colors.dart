@@ -1,38 +1,68 @@
 import 'package:flutter/material.dart';
 
+/// MPColors - Legacy color constants class
+///
+/// This class provides static color constants for the UI kit.
+/// Note: This is deprecated and will be removed in future versions.
+/// Use MPThemeConfig instead for new implementations.
 class MPColors {
   const MPColors._();
 
   // ============ LIGHT MODE COLORS ============
 
   // Primary colors for light mode
-  static const Color primary =
-      Color(0xFF303F9F); // Main primary color for light mode
-  static const Color primarySurface =
-      Color(0xFFF5F5FA); // Light surface for primary elements
-  static const Color primaryFocus =
-      Color(0xFFD6D9EC); // Focus state for primary elements
-  static const Color primaryBorder =
-      Color(0xFFBABFDF); // Border color for primary elements
-  static const Color primaryHover =
-      Color(0xFF283584); // Hover state for primary elements
-  static const Color primaryPressed =
-      Color(0xFF182050); // Pressed state for primary elements
+  /// Main primary color for light mode
+  static const Color primary = Color(0xFF303F9F);
+
+  /// Light surface for primary elements
+  static const Color primarySurface = Color(0xFFF5F5FA);
+
+  /// Focus state for primary elements
+  static const Color primaryFocus = Color(0xFFD6D9EC);
+
+  /// Border color for primary elements
+  static const Color primaryBorder = Color(0xFFBABFDF);
+
+  /// Hover state for primary elements
+  static const Color primaryHover = Color(0xFF283584);
+
+  /// Pressed state for primary elements
+  static const Color primaryPressed = Color(0xFF182050);
 
   // Neutral colors for light mode (neutral10 = lightest, neutral100 = darkest)
+  /// Neutral colors for light mode
   static const MaterialColor neutral = MaterialColor(
     0xFFAEAEAE,
     {
-      10: Color(0xFFFFFFFF), // Lightest neutral - almost white
-      20: Color(0xFFF5F5F5), // Very light gray
-      30: Color(0xFFE5E5E5), // Light gray
-      40: Color(0xFFD4D4D4), // Medium-light gray
-      50: Color(0xFFAEAEAE), // Medium gray
-      60: Color(0xFF8E8E8E), // Medium-dark gray
-      70: Color(0xFF696969), // Dark gray
-      80: Color(0xFF535353), // Very dark gray
-      90: Color(0xFF393939), // Extremely dark gray
-      100: Color(0xFF090909), // Darkest neutral - almost black
+      /// Lightest neutral - almost white
+      10: Color(0xFFFFFFFF),
+
+      /// Very light gray
+      20: Color(0xFFF5F5F5),
+
+      /// Light gray
+      30: Color(0xFFE5E5E5),
+
+      /// Medium-light gray
+      40: Color(0xFFD4D4D4),
+
+      /// Medium gray
+      50: Color(0xFFAEAEAE),
+
+      /// Medium-dark gray
+      60: Color(0xFF8E8E8E),
+
+      /// Dark gray
+      70: Color(0xFF696969),
+
+      /// Very dark gray
+      80: Color(0xFF535353),
+
+      /// Extremely dark gray
+      90: Color(0xFF393939),
+
+      /// Darkest neutral - almost black
+      100: Color(0xFF090909),
     },
   );
 
@@ -53,26 +83,49 @@ class MPColors {
       Color(0xFF312E81); // Pressed state for primary elements in dark mode
 
   // Neutral colors for dark mode (neutral10 = lightest, neutral100 = darkest)
+  /// Neutral colors for dark mode
   static const MaterialColor neutralDark = MaterialColor(
     0xFF505050,
     {
-      10: Color(
-          0xFFFFFFFF), // Lightest neutral - white for text on dark backgrounds
-      20: Color(0xFFF5F5F5), // Very light gray
-      30: Color(0xFFE5E5E5), // Light gray
-      40: Color(0xFFD4D4D4), // Medium-light gray
-      50: Color(0xFFB8B8B8), // Medium gray
-      60: Color(0xFF8A8A8A), // Medium-dark gray
-      70: Color(0xFF6A6A6A), // Dark gray
-      80: Color(0xFF404040), // Very dark gray
-      90: Color(0xFF2E2E2E), // Extremely dark gray
-      100: Color(0xFF0D0D0D), // Darkest neutral - almost black for backgrounds
+      /// Lightest neutral - white for text on dark backgrounds
+      10: Color(0xFFFFFFFF),
+
+      /// Very light gray
+      20: Color(0xFFF5F5F5),
+
+      /// Light gray
+      30: Color(0xFFE5E5E5),
+
+      /// Medium-light gray
+      40: Color(0xFFD4D4D4),
+
+      /// Medium gray
+      50: Color(0xFFB8B8B8),
+
+      /// Medium-dark gray
+      60: Color(0xFF8A8A8A),
+
+      /// Dark gray
+      70: Color(0xFF6A6A6A),
+
+      /// Very dark gray
+      80: Color(0xFF404040),
+
+      /// Extremely dark gray
+      90: Color(0xFF2E2E2E),
+
+      /// Darkest neutral - almost black for backgrounds
+      100: Color(0xFF0D0D0D),
     },
   );
 
   // ============ HELPER METHODS ============
 
   // Get the appropriate neutral color based on theme mode
+  /// Get neutral color by shade and theme mode
+  ///
+  /// [shade] The neutral shade (10-100)
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getNeutral(int shade, {bool isDarkMode = false}) {
     if (isDarkMode) {
       return neutralDark[shade] ?? neutralDark[50]!;
@@ -81,31 +134,49 @@ class MPColors {
   }
 
   // Get the appropriate primary color based on theme mode
+  /// Get primary color by theme mode
+  ///
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getPrimary({bool isDarkMode = false}) {
     return isDarkMode ? primaryDark : primary;
   }
 
   // Get the appropriate primary surface color based on theme mode
+  /// Get primary surface color by theme mode
+  ///
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getPrimarySurface({bool isDarkMode = false}) {
     return isDarkMode ? primarySurfaceDark : primarySurface;
   }
 
   // Get the appropriate primary focus color based on theme mode
+  /// Get primary focus color by theme mode
+  ///
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getPrimaryFocus({bool isDarkMode = false}) {
     return isDarkMode ? primaryFocusDark : primaryFocus;
   }
 
   // Get the appropriate primary border color based on theme mode
+  /// Get primary border color by theme mode
+  ///
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getPrimaryBorder({bool isDarkMode = false}) {
     return isDarkMode ? primaryBorderDark : primaryBorder;
   }
 
   // Get the appropriate primary hover color based on theme mode
+  /// Get primary hover color by theme mode
+  ///
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getPrimaryHover({bool isDarkMode = false}) {
     return isDarkMode ? primaryHoverDark : primaryHover;
   }
 
   // Get the appropriate primary pressed color based on theme mode
+  /// Get primary pressed color by theme mode
+  ///
+  /// [isDarkMode] Whether to use dark mode colors
   static Color getPrimaryPressed({bool isDarkMode = false}) {
     return isDarkMode ? primaryPressedDark : primaryPressed;
   }

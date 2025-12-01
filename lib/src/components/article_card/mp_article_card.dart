@@ -183,7 +183,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
-  // Helper methods for new functionality
+  /// Builds semantic label for accessibility
   String _buildSemanticLabel() {
     final parts = <String>[];
     if (widget.category != null) parts.add('Category: ${widget.category}');
@@ -199,6 +199,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return parts.join(', ');
   }
 
+  /// Gets interaction background color based on state
   Color _getInteractionBackgroundColor(BuildContext context) {
     // Theme-aware interaction background color
     if (!widget.enabled) {
@@ -241,6 +242,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return _getBackgroundColor(context);
   }
 
+  /// Gets box shadow based on variant
   List<BoxShadow> _getBoxShadow(BuildContext context) {
     if (widget.variant == MPArticleCardVariant.elevated) {
       return [
@@ -255,6 +257,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return [];
   }
 
+  /// Builds the image widget for the article
   Widget _buildImage() {
     if (widget.imageWidget != null) {
       return ClipRRect(
@@ -304,6 +307,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     return const SizedBox.shrink();
   }
 
+  /// Builds placeholder widget when image fails to load
   Widget _buildImagePlaceholder() {
     return Container(
       width: double.infinity,
@@ -319,6 +323,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds category chip widget
   Widget _buildCategory(String category) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -339,6 +344,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds title widget
   Widget _buildTitle() {
     return MPText(
       widget.title,
@@ -353,6 +359,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds description widget
   Widget _buildDescription() {
     return MPText(
       widget.description!,
@@ -366,6 +373,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds metadata widget with author, date, and read time
   Widget _buildMetadata(BuildContext context) {
     return Wrap(
       spacing: 8.w,
@@ -432,6 +440,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds tags widget
   Widget _buildTags() {
     return Wrap(
       spacing: 6.w,
@@ -440,6 +449,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds individual tag widget
   Widget _buildTag(String tag) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
@@ -465,6 +475,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     );
   }
 
+  /// Builds action buttons widget
   Widget _buildActions() {
     final actions = <Widget>[];
 
@@ -545,13 +556,17 @@ class _MPArticleCardState extends State<MPArticleCard> {
   }
 
   // Helper methods
+  /// Checks if card has an image
   bool _hasImage() => widget.imageUrl != null || widget.imageWidget != null;
+
+  /// Checks if card has action buttons
   bool _hasActions() =>
       widget.onLike != null ||
       widget.onBookmark != null ||
       widget.onShare != null ||
       (widget.actionButtons != null && widget.actionButtons!.isNotEmpty);
 
+  /// Gets font size based on card size
   double _getFontSize() {
     switch (widget.size) {
       case MPArticleCardSize.small:
@@ -563,6 +578,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
+  /// Gets spacing based on card size
   double _getSpacing() {
     switch (widget.size) {
       case MPArticleCardSize.small:
@@ -574,6 +590,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
+  /// Gets image height based on card size
   double _getImageHeight() {
     switch (widget.size) {
       case MPArticleCardSize.small:
@@ -585,6 +602,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
+  /// Gets default padding based on card size
   EdgeInsets _getDefaultPadding() {
     switch (widget.size) {
       case MPArticleCardSize.small:
@@ -596,6 +614,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
+  /// Gets default margin based on card size
   EdgeInsets _getDefaultMargin() {
     switch (widget.size) {
       case MPArticleCardSize.small:
@@ -607,6 +626,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
+  /// Gets background color based on variant
   Color _getBackgroundColor(BuildContext context) {
     if (widget.backgroundColor != null) return widget.backgroundColor!;
 
@@ -621,6 +641,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
     }
   }
 
+  /// Gets elevation based on variant
   double _getElevation() {
     if (widget.elevation != null) return widget.elevation!;
 
