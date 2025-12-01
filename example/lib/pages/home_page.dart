@@ -6,10 +6,11 @@ import 'package:micropack_ui_kit_example/pages/button_page.dart';
 
 import 'package:micropack_ui_kit_example/pages/color_page.dart';
 import 'package:micropack_ui_kit_example/pages/dialog_page.dart';
+import 'package:micropack_ui_kit_example/pages/mp_card_page.dart';
+import 'package:micropack_ui_kit_example/pages/tab_page.dart';
 import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_showcase_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
-import 'package:micropack_ui_kit_example/pages/tab_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -165,6 +166,7 @@ class _HomePageState extends State<HomePage> {
             const _Button(name: 'Dialog', page: DialogPage()),
             const _Button(name: 'Text Field', page: TextFieldPage()),
             const _Button(name: 'Article Card', page: ArticleCardPage()),
+            const _Button(name: 'Card', page: MPCardPage()),
             const _Button(name: 'Tabs', page: TabPage()),
           ],
         ),

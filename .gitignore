@@ -1,4 +1,5 @@
 # Miscellaneous
+*.flutter-plugins-dependencies
 *.class
 *.log
 *.pyc
