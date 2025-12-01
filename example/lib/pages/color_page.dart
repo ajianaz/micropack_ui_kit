@@ -29,7 +29,7 @@ class ColorPage extends StatelessWidget {
       );
     }
 
-    final names = mpColors!
+    final names = mpColors
         .toString()
         .replaceAll('MPColorTheme(', '')
         .replaceAll(')', '')
@@ -74,21 +74,21 @@ class ColorPage extends StatelessWidget {
   }
 
   List<Color?> colorCollection(MPColorTheme mpColors) => [
-        mpColors?.primary,
-        mpColors?.primarySurface,
-        mpColors?.primaryFocus,
-        mpColors?.primaryBorder,
-        mpColors?.primaryHover,
-        mpColors?.primaryPressed,
-        mpColors?.neutral10,
-        mpColors?.neutral20,
-        mpColors?.neutral30,
-        mpColors?.neutral40,
-        mpColors?.neutral50,
-        mpColors?.neutral60,
-        mpColors?.neutral70,
-        mpColors?.neutral80,
-        mpColors?.neutral90,
-        mpColors?.neutral100,
+        mpColors.primary,
+        mpColors.primarySurface,
+        mpColors.primaryFocus,
+        mpColors.primaryBorder,
+        mpColors.primaryHover,
+        mpColors.primaryPressed,
+        mpColors.neutral10,
+        mpColors.neutral20,
+        mpColors.neutral30,
+        mpColors.neutral40,
+        mpColors.neutral50,
+        mpColors.neutral60,
+        mpColors.neutral70,
+        mpColors.neutral80,
+        mpColors.neutral90,
+        mpColors.neutral100,
       ];
 }

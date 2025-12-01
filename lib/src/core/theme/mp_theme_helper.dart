@@ -81,12 +81,12 @@ class MPThemeUtilities {
       if (colorTheme != null) {
         // Use CORRECT dark mode logic
         return isDarkMode
-            ? (colorTheme!.neutral90 ?? MPThemeConfig.getNeutral(90))
+            ? (colorTheme!.neutral100 ?? MPThemeConfig.getNeutral(100))
             : (colorTheme!.neutral10 ?? MPThemeConfig.getNeutral(10));
       }
       // Fallback to MPThemeConfig helper with CORRECT logic
       return isDarkMode
-          ? MPThemeConfig.getNeutral(90)
+          ? MPThemeConfig.getNeutral(100)
           : MPThemeConfig.getNeutral(10);
     } catch (e) {
       // Robust fallback

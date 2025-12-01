@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 import '../../util/mp_component_init_test.dart';
@@ -14,3 +15,16 @@ List<WidgetTestScenarioModel> buttonTestScenario = [
     ),
   ),
 ];
+
+void main() {
+  testWidgets('Button Scenario Test', (WidgetTester tester) async {
+    // This test is added to make the file runnable as a test
+    // The actual tests are in mp_button_test.dart
+
+    // Test that the scenario can be built without errors
+    await tester.pumpWidget(buttonTestScenario[0].widget);
+
+    // Verify the button is present
+    expect(find.byType(MPButton), findsOneWidget);
+  });
+}

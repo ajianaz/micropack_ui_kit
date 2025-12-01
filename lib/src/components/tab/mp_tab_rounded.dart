@@ -23,7 +23,7 @@ class MPTabRounded extends StatefulWidget {
     this.textColor,
     // Removed hardcoded white color, will use theme-aware color in implementation
     this.textColorActive,
-    this.height = 50,
+    this.height,
     this.isActiveTab = false,
     this.isDisabled = false,
     this.onTab,

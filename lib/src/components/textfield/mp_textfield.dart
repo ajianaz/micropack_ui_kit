@@ -231,6 +231,9 @@ class MPTextField extends StatefulWidget {
   /// Menangani aksi validasi akan dilakukan kapan
   final AutovalidateMode? autoValidateMode;
 
+  /// Semantic label for accessibility
+  final String? semanticLabel;
+
   /// Menangani aksi ketika [MPTextField] di-Tap
   final void Function()? onTap;
 
@@ -410,6 +413,7 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -477,6 +481,7 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -545,6 +550,7 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -613,6 +619,7 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -705,7 +712,8 @@ class _MPTextFieldState extends State<MPTextField> {
     // Get theme-aware colors for consistent theming across light and dark modes
     final themeColors = context.mp;
 
-    return TextFormField(
+    // Wrap with Semantics widget if semanticLabel is provided
+    Widget textField = TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
         // Hint text with theme-aware subtitle color for better visibility
@@ -836,6 +844,16 @@ class _MPTextFieldState extends State<MPTextField> {
       scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20),
       textDirection: widget.textDirection,
     );
+
+    // Add semantic label if provided
+    if (widget.semanticLabel != null) {
+      textField = Semantics(
+        label: widget.semanticLabel,
+        child: textField,
+      );
+    }
+
+    return textField;
   }
 
   /// Build suffix icon with clear button and password toggle

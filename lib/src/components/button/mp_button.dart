@@ -164,7 +164,7 @@ class _MPButtonState extends State<MPButton> {
         ? _buildLoadingContent()
         : (widget.child ?? _buildButtonContent());
 
-    return ElevatedButton(
+    final button = ElevatedButton(
       onPressed:
           widget.loading ? null : (widget.enabled ? widget.onPressed : null),
       style: ButtonStyle(
@@ -216,6 +216,16 @@ class _MPButtonState extends State<MPButton> {
             )
           : buttonContent,
     );
+
+    // Add semantic label if provided
+    if (widget.semanticLabel != null) {
+      return Semantics(
+        label: widget.semanticLabel,
+        child: button,
+      );
+    }
+
+    return button;
   }
 
   /// Builds loading content with theme-aware spinner color
