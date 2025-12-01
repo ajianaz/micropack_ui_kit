@@ -1,6 +1,6 @@
 name: micropack_ui_kit
 description: A UI Kit package for Micropack.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/ajianaz/micropack-ui-kit.git
 
 environment:

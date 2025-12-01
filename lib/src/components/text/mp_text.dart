@@ -23,7 +23,13 @@ class MPText extends StatelessWidget {
   final Color? decorationColor;
   final double? decorationThickness;
 
-  // ✅ Default constructor
+  /// Creates a text widget with optional styling parameters.
+  ///
+  /// When no color is explicitly provided, automatically uses context.mp.textColor
+  /// for optimal contrast and theme consistency. This makes MPText consistent with
+  /// other components in the library that automatically use theme-aware colors.
+  ///
+  /// The [color] parameter always takes precedence over the theme color.
   const MPText(
     this.text, {
     super.key,
@@ -64,6 +70,9 @@ class MPText extends StatelessWidget {
   });
 
   // ==== Named constructors ====
+
+  /// Creates a heading text with default styling.
+  /// Uses theme-aware text color when no color is explicitly provided.
   factory MPText.head(
     String text, {
     Key? key,
@@ -102,6 +111,8 @@ class MPText extends StatelessWidget {
     );
   }
 
+  /// Creates a subheading text with default styling.
+  /// Uses theme-aware text color when no color is explicitly provided.
   factory MPText.subhead(
     String text, {
     Key? key,
@@ -140,6 +151,8 @@ class MPText extends StatelessWidget {
     );
   }
 
+  /// Creates a body text with default styling.
+  /// Uses theme-aware text color when no color is explicitly provided.
   factory MPText.body(
     String text, {
     Key? key,
@@ -178,6 +191,8 @@ class MPText extends StatelessWidget {
     );
   }
 
+  /// Creates a label text with default styling.
+  /// Uses theme-aware text color when no color is explicitly provided.
   factory MPText.label(
     String text, {
     Key? key,
@@ -216,6 +231,8 @@ class MPText extends StatelessWidget {
     );
   }
 
+  /// Creates a small text with default styling.
+  /// Uses theme-aware text color when no color is explicitly provided.
   factory MPText.small(
     String text, {
     Key? key,
@@ -254,6 +271,11 @@ class MPText extends StatelessWidget {
     );
   }
 
+  /// Composes the text style with theme-aware color as default.
+  ///
+  /// Uses context.mp.textColor when no color is explicitly provided,
+  /// ensuring optimal contrast and theme consistency across the application.
+  /// Explicit color parameter always takes precedence over theme color.
   TextStyle composeTextStyle(BuildContext context) {
     TextStyle baseStyle = style ?? const TextStyle();
 
@@ -263,12 +285,15 @@ class MPText extends StatelessWidget {
           effectiveFontSize, context);
     }
 
+    // Use theme-aware text color as default when no color is explicitly provided
+    Color? effectiveColor = color ?? baseStyle.color ?? context.mp.textColor;
+
     return baseStyle.copyWith(
       fontWeight: fontWeight,
       fontSize: effectiveFontSize,
       fontStyle: fontStyle,
       letterSpacing: letterSpacing,
-      color: color,
+      color: effectiveColor,
       overflow: textOverflow,
       decoration: decoration,
       decorationStyle: decorationStyle,
