@@ -9,6 +9,8 @@ Complete documentation for all Micropack UI Kit components.
 - [MPText](#mptext)
 - [MPTextField](#mptextfield)
 - [MPDialog](#mpdialog)
+- [MPTabRounded](#mptabrounded)
+- [MPSnackbar](#mpsnackbar)
 
 ---
 
@@ -820,6 +822,137 @@ MPDialog.show(
   ),
   type: DialogType.success,
 )
+```
+
+---
+
+## 📑 MPTabRounded
+
+Tab component with rounded corners. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPTabRounded automatically adapts to current theme:
+
+- **Background**: Uses `context.mp.adaptiveBackgroundColor`
+- **Selected Color**: Uses `context.mp.primary` for selected tab
+- **Text Color**: Uses `context.mp.textColor` for labels
+- **Border**: Uses `context.mp.adaptiveBorderColor`
+
+### Basic Usage
+
+```dart
+MPTabRounded(
+  tabs: [
+    MPTabItem(title: 'Home', icon: Icons.home),
+    MPTabItem(title: 'Profile', icon: Icons.person),
+    MPTabItem(title: 'Settings', icon: Icons.settings),
+  ],
+  selectedIndex: _currentIndex,
+  onTap: (index) => setState(() => _currentIndex = index),
+)
+```
+
+### Constructor
+
+```dart
+MPTabRounded({
+  Key? key,
+  required this.tabs,
+  required this.selectedIndex,
+  this.onTap,
+  this.backgroundColor,
+  this.selectedColor,
+  this.textColor,
+  this.selectedTextColor,
+  this.borderRadius,
+  this.padding,
+})
+```
+
+### Properties
+
+| Property | Type | Default | Description |
+|-----------|--------|----------|-------------|
+| `tabs` | `List<MPTabItem>` | - | **Required**. List of tabs |
+| `selectedIndex` | `int` | - | **Required**. Currently selected tab index |
+| `onTap` | `Function(int)?` | `null` | Tab selection callback |
+| `backgroundColor` | `Color?` | `null` | Custom background color |
+| `selectedColor` | `Color?` | `null` | Custom selected color |
+| `textColor` | `Color?` | `null` | Custom text color |
+| `selectedTextColor` | `Color?` | `null` | Custom selected text color |
+| `borderRadius` | `double?` | `null` | Custom border radius |
+| `padding` | `EdgeInsets?` | `null` | Custom padding |
+
+---
+
+## 🔔 MPSnackbar
+
+Notification snackbar component with multiple variants. Fully theme-aware with automatic dark/light mode adaptation.
+
+### Theme-Aware Properties
+
+MPSnackbar automatically adapts to current theme:
+
+- **Background**: Uses `context.mp.adaptiveBackgroundColor`
+- **Success**: Uses `context.mp.successBackgroundColor` and `context.mp.successColor`
+- **Error**: Uses `context.mp.errorBackgroundColor` and `context.mp.errorColor`
+- **Warning**: Uses `context.mp.warningBackgroundColor` and `context.mp.warningColor`
+- **Info**: Uses `context.mp.infoBackgroundColor` and `context.mp.infoColor`
+
+### Basic Usage
+
+```dart
+MPSnackbar.show(
+  context: context,
+  message: 'Operation completed successfully',
+  type: MPSnackbarType.success,
+)
+
+MPSnackbar.show(
+  context: context,
+  message: 'An error occurred',
+  type: MPSnackbarType.error,
+)
+```
+
+### Static Methods
+
+#### Show Snackbar
+
+```dart
+MPSnackbar.show({
+  required BuildContext context,
+  required String message,
+  MPSnackbarType type = MPSnackbarType.info,
+  Duration duration = const Duration(seconds: 3),
+  VoidCallback? onAction,
+  String? actionText,
+})
+```
+
+### Properties
+
+| Parameter | Type | Default | Description |
+|-----------|--------|----------|-------------|
+| `context` | `BuildContext` | - | **Required**. Build context |
+| `message` | `String` | - | **Required**. Message to display |
+| `type` | `MPSnackbarType` | `info` | Snackbar type |
+| `duration` | `Duration` | `3 seconds` | Display duration |
+| `onAction` | `VoidCallback?` | `null` | Action button callback |
+| `actionText` | `String?` | `null` | Action button text |
+
+### Enums
+
+#### MPSnackbarType
+
+```dart
+enum MPSnackbarType {
+  success,  // Success notification
+  error,    // Error notification
+  warning,  // Warning notification
+  info,     // Info notification
+}
 ```
 
 ---

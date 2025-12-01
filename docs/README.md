@@ -67,7 +67,8 @@ Widget build(BuildContext context) {
 - **MPText**: Enhanced text components
 - **MPTextField**: Input fields with validation
 - **MPDialog**: Modal dialogs
-- **And more...**: Explore all components
+- **MPTabRounded**: Tab component with rounded corners
+- **MPSnackbar**: Notification snackbar component
 
 ## 🌓 Dark Mode Support
 
@@ -291,6 +292,7 @@ docs/
 - [Installation Guide](./getting-started/installation.md)
 - [Component API](./api/components.md)
 - [Theme System](./guides/theming.md)
+- [Testing Summary](./testing-summary.md)
 - [Examples Repository](https://github.com/your-repo/micropack_ui_kit_example)
 
 ## 🤝 Contributing
