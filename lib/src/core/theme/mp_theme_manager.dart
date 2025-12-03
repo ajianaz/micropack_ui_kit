@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:micropack_ui_kit/src/core/theme/mp_color_theme.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme.dart';
@@ -607,25 +608,14 @@ class MPThemeManager {
 // ============ SHARED PREFERENCES HELPER ============
 
 /// Try to get SharedPreferences instance (optional dependency)
-Future<dynamic> _getSharedPreferences() async {
+Future<SharedPreferences?> _getSharedPreferences() async {
   try {
-    // Try to import shared_preferences dynamically
-    // This will work if the package is available, otherwise throw exception
-    final sharedPreferences = await _importSharedPreferences();
+    final sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences;
   } catch (e) {
     debugPrint('SharedPreferences not available: $e');
     return null;
   }
-}
-
-/// Dynamic import for SharedPreferences
-Future<dynamic> _importSharedPreferences() async {
-  // This is a placeholder for dynamic import
-  // In practice, this would be handled by the build system
-  throw UnimplementedError(
-    'SharedPreferences not available - add to pubspec.yaml',
-  );
 }
 
 // ============ MUTEX FOR THREAD SAFETY ============
