@@ -51,6 +51,8 @@ class MPArticleCard extends StatefulWidget {
     this.splashColor,
     this.focusColor,
     this.highlightColor,
+    this.isLoading = false,
+    this.loadingChild,
   });
 
   final String title;

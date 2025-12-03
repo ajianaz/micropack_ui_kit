@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
-/// MPCard page demonstrating all MPCard features
 class MPCardPage extends StatefulWidget {
   const MPCardPage({super.key});
 
@@ -28,7 +27,7 @@ class _MPCardPageState extends State<MPCardPage> {
     try {
       MPThemeManager.instance.removeListener(_onThemeChanged);
     } catch (e) {
-      // Manager might not be initialized yet, ignore
+      // Manager might not be initialized, ignore
       debugPrint('Failed to remove theme listener: $e');
     }
     super.dispose();
@@ -40,43 +39,6 @@ class _MPCardPageState extends State<MPCardPage> {
         // Rebuild UI when theme changes
       });
     }
-  }
-
-  /// Get current theme icon from MPThemeManager
-  IconData _getThemeIcon() {
-    try {
-      return MPThemeManager.instance.getThemeIcon();
-    } catch (e) {
-      debugPrint('Failed to get theme icon: $e');
-      return Icons.settings_brightness; // Fallback
-    }
-  }
-
-  /// Get current theme mode from MPThemeManager
-  ThemeMode _getCurrentThemeMode() {
-    try {
-      return MPThemeManager.instance.themeMode;
-    } catch (e) {
-      debugPrint('Failed to get theme mode: $e');
-      return ThemeMode.system; // Fallback
-    }
-  }
-
-  /// Set theme mode using MPThemeManager
-  Future<void> _setThemeMode(ThemeMode mode) async {
-    try {
-      await MPThemeManager.instance.setThemeMode(mode);
-    } catch (e) {
-      debugPrint('Failed to set theme mode: $e');
-    }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    MPSnackbar.show(
-      context,
-      message: message,
-      duration: const Duration(seconds: 2),
-    );
   }
 
   @override
@@ -93,8 +55,8 @@ class _MPCardPageState extends State<MPCardPage> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(
-              _getThemeIcon(),
+            icon: const const Icon(
+              _getThemeconst const Icon(),
               color: context.mp.textColor,
             ),
             onPressed: () async {
@@ -103,33 +65,29 @@ class _MPCardPageState extends State<MPCardPage> {
               final newTheme = currentTheme == ThemeMode.light
                   ? ThemeMode.dark
                   : ThemeMode.light;
-              await _setThemeMode(newTheme);
-              if (mounted) {
-                _showSnackBar(
-                  context,
-                  'Switched to ${newTheme == ThemeMode.light ? 'Light' : 'Dark'} theme',
-                );
-              }
+              if (mounted) {await _setThemeMode(newTheme); if (mounted) {
+              \nif (mounted) {_showSnackBar(
+                  'Switched to ${newTheme == ThemeMode.light ? 'Light' : 'Dark'} theme');
             },
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const const EdgeInsets.all(16.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MPText.head('Enhanced MPCard Examples'),
-            SizedBox(height: 24),
+            const const SizedBox(height: 24.h),
 
             // Basic card with child
             MPCard(
               child: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('Basic card with child content'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text('Basic card with child content'),
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Card with structured header
             MPCard.withHeader(
@@ -138,17 +96,17 @@ class _MPCardPageState extends State<MPCardPage> {
                 subtitle: 'This card uses structured header data',
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.more_vert),
+                    icon: const const const Icon(Icons.more_vert),
                     onPressed: () {},
                   ),
                 ],
               ),
               body: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('This is body content with structured header.'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text('This is body content with structured header.'),
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Card with structured footer
             MPCard.withFooter(
@@ -156,21 +114,21 @@ class _MPCardPageState extends State<MPCardPage> {
                 actions: [
                   TextButton(
                     onPressed: () {},
-                    child: const Text('Cancel'),
+                    child: const const const Text('Cancel'),
                   ),
-                  SizedBox(width: 8),
+                  const const SizedBox(width: 8.w),
                   ElevatedButton(
                     onPressed: () {},
-                    child: const Text('Save'),
+                    child: const const const Text('Save'),
                   ),
                 ],
               ),
               body: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('This card has structured footer with actions.'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text('This card has structured footer with actions.'),
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Card with both header and footer
             MPCard.withSections(
@@ -179,60 +137,61 @@ class _MPCardPageState extends State<MPCardPage> {
                 subtitle: 'Header and footer example',
                 leading: CircleAvatar(
                   backgroundColor: context.mp.primary,
-                  child: const Text('AB', style: TextStyle(color: Colors.white)),
+                  child:
+                      const const const Text('AB', style: TextStyle(color: Colors.white)),
                 ),
               ),
               body: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('This card demonstrates both structured header and footer sections.'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text(
+                    'This card demonstrates both structured header and footer sections.'),
               ),
               footerData: MPCardFooterData(
                 content: MPText.small('Additional footer content'),
                 actions: [
                   TextButton(
                     onPressed: () {},
-                    child: const Text('Action'),
+                    child: const const const Text('Action'),
                   ),
                 ],
               ),
               variant: MPCardVariant.elevated,
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Interactive card with overflow handling
             MPCard(
               variant: MPCardVariant.interactive,
               enableOverflowHandling: true,
               onTap: () {
-                _showSnackBar(context, 'Card tapped!');
+                \nif (mounted) {_showSnackBar( 'Card tapped!');
               },
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MPText.subhead('Interactive Card'),
-                  SizedBox(height: 8),
-                  MPText('This card has overflow handling enabled for long content.'),
-                  SizedBox(height: 8),
+                  const const SizedBox(height: 8.h),
+                  MPconst const Text(
+                      'This card has overflow handling enabled for long content.'),
+                  const const SizedBox(height: 8.h),
                   ...List.generate(
                       10,
                       (index) => Padding(
-                            padding: EdgeInsets.symmetric(vertical: 4),
+                            padding: EdgeInsets.symmetric(vertical: 4.h),
                             child: Row(
                               children: [
-                                const Icon(Icons.circle, size: 8),
-                                SizedBox(width: 8),
+                                const const const Icon(Icons.circle, size: 8),
+                                const const SizedBox(width: 8.w),
                                 Expanded(
-                                    child: MPText(
-                                        'Content item ${index + 1} with some longer text to test overflow',
-                                    ),
-                                ),
+                                    child: MPconst const Text(
+                                        'Content item ${index + 1} with some longer text to test overflow')),
                               ],
                             ),
                           )),
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Responsive card
             MPCard.withSections(
@@ -241,14 +200,15 @@ class _MPCardPageState extends State<MPCardPage> {
                 subtitle: 'Adapts to screen size',
               ),
               body: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('This card uses responsive configuration to adapt layout based on screen size.'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text(
+                    'This card uses responsive configuration to adapt layout based on screen size.'),
               ),
               footerData: MPCardFooterData(
                 actions: [
                   TextButton(
                     onPressed: () {},
-                    child: const Text('Learn More'),
+                    child: const const const Text('Learn More'),
                   ),
                 ],
               ),
@@ -264,37 +224,38 @@ class _MPCardPageState extends State<MPCardPage> {
                 mobileSize: MPCardSize.small,
                 tabletSize: MPCardSize.medium,
                 desktopSize: MPCardSize.large,
-                mobilePadding: EdgeInsets.all(12),
-                tabletPadding: EdgeInsets.all(16),
-                desktopPadding: EdgeInsets.all(20),
+                mobilePadding: const const EdgeInsets.all(12.r),
+                tabletPadding: const const EdgeInsets.all(16.r),
+                desktopPadding: const const EdgeInsets.all(20.r),
                 mobileImageHeight: 160,
                 tabletImageHeight: 200,
                 desktopImageHeight: 240,
               ),
             ),
-            SizedBox(height: 24),
+            const const SizedBox(height: 24.h),
 
             // Advanced Responsive Examples Section
             MPText.head('Advanced Responsive Features'),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Responsive Grid Layout
             MPText.subhead('Responsive Grid Layout'),
-            SizedBox(height: 8),
+            const const SizedBox(height: 8.h),
             MPCard.withSections(
               headerData: MPCardHeaderData(
                 title: 'Grid Layout Card',
                 subtitle: 'Automatically adjusts columns',
               ),
               body: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('This card demonstrates responsive grid layout that adjusts column count based on screen size.'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text(
+                    'This card demonstrates responsive grid layout that adjusts column count based on screen size.'),
               ),
               footerData: MPCardFooterData(
                 actions: [
                   TextButton(
                     onPressed: () {},
-                    child: const Text('View Grid'),
+                    child: const const const Text('View Grid'),
                   ),
                 ],
               ),
@@ -306,11 +267,11 @@ class _MPCardPageState extends State<MPCardPage> {
                 desktopSize: MPCardSize.large,
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Responsive Media Card
             MPText.subhead('Responsive Media Card'),
-            SizedBox(height: 8),
+            const const SizedBox(height: 8.h),
             MPCard.media(
               mediaData: MPCardMediaData(
                 imageUrl: 'https://picsum.photos/400/200',
@@ -329,63 +290,64 @@ class _MPCardPageState extends State<MPCardPage> {
                 desktopSize: MPCardSize.large,
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Responsive Typography Card
             MPText.subhead('Responsive Typography Card'),
-            SizedBox(height: 8),
+            const const SizedBox(height: 8.h),
             MPCard.content(
               contentData: MPCardContentData(
                 title: 'Responsive Typography',
                 subtitle: 'Scalable text sizes',
                 description:
                     'This card demonstrates responsive typography that scales based on screen size for optimal readability.',
-                icon: Icon(Icons.text_fields, color: context.mp.primary),
+                icon: const const Icon(Icons.text_fields, color: context.mp.primary),
               ),
               responsive: MPCardResponsiveConfig(
                 enableResponsiveTypography: true,
                 mobileSize: MPCardSize.small,
                 tabletSize: MPCardSize.medium,
                 desktopSize: MPCardSize.large,
-                mobilePadding: EdgeInsets.all(12),
-                tabletPadding: EdgeInsets.all(16),
-                desktopPadding: EdgeInsets.all(20),
+                mobilePadding: const const EdgeInsets.all(12.r),
+                tabletPadding: const const EdgeInsets.all(16.r),
+                desktopPadding: const const EdgeInsets.all(20.r),
               ),
             ),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Responsive Constraints Card
             MPText.subhead('Responsive Constraints Card'),
-            SizedBox(height: 8),
+            const const SizedBox(height: 8.h),
             MPCard.withSections(
               headerData: MPCardHeaderData(
                 title: 'Responsive Constraints',
                 subtitle: 'Screen-aware sizing',
               ),
               body: Padding(
-                padding: EdgeInsets.all(16),
-                child: MPText('This card demonstrates responsive constraints that adapt to available screen space.'),
+                padding: const const EdgeInsets.all(16.r),
+                child: MPconst const Text(
+                    'This card demonstrates responsive constraints that adapt to available screen space.'),
               ),
               footerData: MPCardFooterData(
                 actions: [
                   TextButton(
                     onPressed: () {},
-                    child: const Text('View Details'),
+                    child: const const const Text('View Details'),
                   ),
                 ],
               ),
               responsive: MPCardResponsiveConfig(
-                mobileConstraints: const BoxConstraints(
+                mobileConstraints: BoxConstraints(
                   minWidth: 280,
                   maxWidth: 400,
                   minHeight: 200,
                 ),
-                tabletConstraints: const BoxConstraints(
+                tabletConstraints: BoxConstraints(
                   minWidth: 400,
                   maxWidth: 600,
                   minHeight: 250,
                 ),
-                desktopConstraints: const BoxConstraints(
+                desktopConstraints: BoxConstraints(
                   minWidth: 500,
                   maxWidth: 800,
                   minHeight: 300,
@@ -394,16 +356,16 @@ class _MPCardPageState extends State<MPCardPage> {
                 tabletMaxWidth: 1024,
               ),
             ),
-            SizedBox(height: 24),
+            const const SizedBox(height: 24.h),
 
             // Elevation Examples Section
             MPText.head('Elevation Level Examples'),
-            SizedBox(height: 16),
+            const const SizedBox(height: 16.h),
 
             // Different elevation levels
             Wrap(
-              spacing: 16,
-              runSpacing: 16,
+              spacing: 16.w,
+              runSpacing: 16.h,
               children: [
                 // Level 0 (No elevation)
                 MPCard(
@@ -473,7 +435,7 @@ class _MPCardPageState extends State<MPCardPage> {
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            const const SizedBox(height: 24.h),
 
             // Use case-specific variants section
             _buildUseCaseVariants(context),
@@ -483,18 +445,18 @@ class _MPCardPageState extends State<MPCardPage> {
     );
   }
 
-  /// Build use case-specific variants section
+  /// New section for use case-specific variants
   Widget _buildUseCaseVariants(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPText.head('Use Case-Specific Variants'),
-        SizedBox(height: 24),
+        const const SizedBox(height: 24.h),
 
         // Media Card Example
         MPText.subhead('Media Card'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPCard.media(
           mediaData: MPCardMediaData(
             imageUrl: 'https://picsum.photos/400/200',
@@ -504,65 +466,59 @@ class _MPCardPageState extends State<MPCardPage> {
                 'A stunning view of mountains and lakes during golden hour, showcasing beauty of natural landscapes.',
             metadata: Row(
               children: [
-                Icon(
-                  Icons.calendar_today,
-                  size: 16,
-                  color: context.mp.subtitleColor,
-                ),
-                SizedBox(width: 4),
+                const const Icon(Icons.calendar_today,
+                    size: 16, color: context.mp.subtitleColor),
+                const const SizedBox(width: 4.w),
                 MPText.small('2 days ago', color: context.mp.subtitleColor),
-                SizedBox(width: 16),
-                Icon(
-                  Icons.favorite_border,
-                  size: 16,
-                  color: context.mp.subtitleColor,
-                ),
-                SizedBox(width: 4),
+                const const SizedBox(width: 16.w),
+                const const Icon(Icons.favorite_border,
+                    size: 16, color: context.mp.subtitleColor),
+                const const SizedBox(width: 4.w),
                 MPText.small('234', color: context.mp.subtitleColor),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Share'),
+                child: const const const Text('Share'),
               ),
-              SizedBox(width: 8),
+              const const SizedBox(width: 8.w),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('View'),
+                child: const const const Text('View'),
               ),
             ],
           ),
           onTap: () {
-            _showSnackBar(context, 'Media card tapped!');
+            \nif (mounted) {_showSnackBar( 'Media card tapped!');
           },
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Content Card Example
         MPText.subhead('Content Card'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPCard.content(
           contentData: MPCardContentData(
             title: 'Design Principles',
             subtitle: 'UI/UX Fundamentals',
             description:
                 'Understanding core principles of design helps create better user experiences. This includes visual hierarchy, color theory, typography, and layout fundamentals.',
-            icon: Icon(Icons.palette, color: context.mp.primary),
+            icon: const const Icon(Icons.palette, color: context.mp.primary),
             showDivider: true,
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Read More'),
+                child: const const const Text('Read More'),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Product Card Example
         MPText.subhead('Product Card'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPCard.product(
           productData: MPCardProductData(
             name: 'Premium Headphones',
@@ -583,16 +539,16 @@ class _MPCardPageState extends State<MPCardPage> {
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Add to Cart'),
+                child: const const const Text('Add to Cart'),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Profile Card Example
         MPText.subhead('Profile Card'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPCard.profile(
           profileData: MPCardProfileData(
             name: 'Sarah Johnson',
@@ -601,40 +557,36 @@ class _MPCardPageState extends State<MPCardPage> {
                 'UI/UX Designer passionate about creating beautiful and functional user experiences. Love working with emerging technologies.',
             avatarUrl: 'https://picsum.photos/100/100',
             showVerifiedBadge: true,
-            isOnline: bool.parse('true'),
-            stats: const {
-              'Projects': '42',
-              'Followers': '1.2K',
-              'Following': '89'
-            },
+            isOnline: true,
+            stats: {'Projects': '42', 'Followers': '1.2K', 'Following': '89'},
             socialLinks: [
               IconButton(
-                icon: const Icon(Icons.link),
+                icon: const const const Icon(Icons.link),
                 onPressed: () {},
               ),
               IconButton(
-                icon: const Icon(Icons.email),
+                icon: const const const Icon(Icons.email),
                 onPressed: () {},
               ),
             ],
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Follow'),
+                child: const const const Text('Follow'),
               ),
-              SizedBox(width: 8),
+              const const SizedBox(width: 8.w),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Message'),
+                child: const const const Text('Message'),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Notification Card Example
         MPText.subhead('Notification Card'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPCard.notification(
           notificationData: MPCardNotificationData(
             title: 'System Update',
@@ -646,21 +598,21 @@ class _MPCardPageState extends State<MPCardPage> {
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Dismiss'),
+                child: const const const Text('Dismiss'),
               ),
-              SizedBox(width: 8),
+              const const SizedBox(width: 8.w),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Install'),
+                child: const const const Text('Install'),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Dashboard Card Example
         MPText.subhead('Dashboard Card'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
         MPCard.dashboard(
           dashboardData: MPCardDashboardData(
             title: 'Monthly Revenue',
@@ -670,10 +622,10 @@ class _MPCardPageState extends State<MPCardPage> {
             showTrend: true,
             trend: '+12%',
             trendColor: Colors.green,
-            icon: const Icon(Icons.trending_up, color: Colors.green),
+            icon: const const Icon(Icons.trending_up, color: Colors.green),
             chart: Container(
-              height: 60,
-              width: 100,
+              height: 60.h,
+              width: 100.w,
               child: const Placeholder(
                 color: Colors.grey,
                 strokeWidth: 1,
@@ -682,20 +634,20 @@ class _MPCardPageState extends State<MPCardPage> {
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('View Details'),
+                child: const const const Text('View Details'),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Interaction States Section
         MPText.subhead('Interaction States'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Basic interaction config example
         MPText.small('Basic Hover, Press, and Disabled States'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard(
           variant: MPCardVariant.interactive,
           interactionConfig: MPCardInteractionConfig(
@@ -704,33 +656,34 @@ class _MPCardPageState extends State<MPCardPage> {
             disabledOpacity: 0.38,
             pressedScale: 0.98,
             enableRipple: true,
-            hoverColor: context.mp.primaryHover,
-            pressedColor: context.mp.primaryPressed,
+            hoverColor: context.mp.primaryHover.withValues(alpha: 0.1),
+            pressedColor: context.mp.primaryPressed.withValues(alpha: 0.1),
             onStateChanged: (state) {
               debugPrint('Interaction state changed to: $state');
             },
           ),
-          onTap: () => _showSnackBar(context, 'Card tapped!'),
-          onLongPress: () => _showSnackBar(context, 'Card long pressed!'),
+          onTap: () => \nif (mounted) {_showSnackBar( 'Card tapped!'),
+          onLongPress: () => \nif (mounted) {_showSnackBar( 'Card long pressed!'),
           onHover: (isHovered) => debugPrint('Hover state: $isHovered'),
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const const EdgeInsets.all(16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MPText.subhead('Interactive States Demo'),
-                SizedBox(height: 8),
-                MPText('This card demonstrates all interaction states:'),
-                SizedBox(height: 8),
-                MPText.small('• Hover over card to see hover color'),
-                MPText.small('• Press and hold to see pressed state with scale'),
+                const const SizedBox(height: 8.h),
+                MPconst const Text('This card demonstrates all interaction states:'),
+                const const SizedBox(height: 8.h),
+                MPText.small('• Hover over the card to see hover color'),
+                MPText.small(
+                    '• Press and hold to see pressed state with scale'),
                 MPText.small('• Tap to see ripple effect'),
                 MPText.small('• Long press for long press callback'),
               ],
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Disabled state example
         Row(
@@ -744,31 +697,32 @@ class _MPCardPageState extends State<MPCardPage> {
                 ),
                 enabled: false,
                 body: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const const EdgeInsets.all(16.r),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MPText.subhead('Disabled Card'),
-                        SizedBox(height: 8),
-                        MPText.small('This card is disabled with reduced opacity'),
+                      const const SizedBox(height: 8.h),
+                      MPText.small(
+                          'This card is disabled with reduced opacity'),
                     ],
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 16),
+            const const SizedBox(width: 16.w),
             Expanded(
               child: MPCard(
                 variant: MPCardVariant.primary,
-                onTap: () => _showSnackBar(context, 'Enabled card tapped!'),
+                onTap: () => \nif (mounted) {_showSnackBar( 'Enabled card tapped!'),
                 body: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const const EdgeInsets.all(16.r),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MPText.subhead('Enabled Card'),
-                        SizedBox(height: 8),
-                        MPText.small('This card is enabled for comparison'),
+                      const const SizedBox(height: 8.h),
+                      MPText.small('This card is enabled for comparison'),
                     ],
                   ),
                 ),
@@ -776,31 +730,31 @@ class _MPCardPageState extends State<MPCardPage> {
             ),
           ],
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Custom interaction colors
         MPText.small('Custom Interaction Colors'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard(
           variant: MPCardVariant.surface,
           interactionConfig: MPCardInteractionConfig(
-            hoverColor: Colors.blue.withOpacity(0.1),
-            pressedColor: Colors.green.withOpacity(0.1),
-            rippleColor: Colors.orange.withOpacity(0.3),
+            hoverColor: Colors.blue.withValues(alpha: 0.1),
+            pressedColor: Colors.green.withValues(alpha: 0.1),
+            rippleColor: Colors.orange.withValues(alpha: 0.3),
             pressedScale: 0.95,
             hoverDuration: const Duration(milliseconds: 300),
             pressDuration: const Duration(milliseconds: 150),
           ),
-          onTap: () => _showSnackBar(context, 'Custom colors card tapped!'),
+          onTap: () => \nif (mounted) {_showSnackBar( 'Custom colors card tapped!'),
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const const EdgeInsets.all(16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MPText.subhead('Custom Colors'),
-                SizedBox(height: 8),
-                MPText('This card uses custom interaction colors:'),
-                SizedBox(height: 8),
+                const const SizedBox(height: 8.h),
+                MPconst const Text('This card uses custom interaction colors:'),
+                const const SizedBox(height: 8.h),
                 MPText.small('• Blue hover color'),
                 MPText.small('• Green pressed color'),
                 MPText.small('• Orange ripple effect'),
@@ -809,11 +763,11 @@ class _MPCardPageState extends State<MPCardPage> {
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // State change callbacks
         MPText.small('State Change Callbacks'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard(
           variant: MPCardVariant.elevated,
           interactionConfig: MPCardInteractionConfig(
@@ -836,45 +790,45 @@ class _MPCardPageState extends State<MPCardPage> {
                   stateMessage = 'Focused state';
                   break;
               }
-              _showSnackBar(context, 'State: $stateMessage');
+              \nif (mounted) {_showSnackBar( 'State: $stateMessage');
             },
           ),
           onTap: () {},
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const const EdgeInsets.all(16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MPText.subhead('State Callbacks'),
-                SizedBox(height: 8),
-                MPText('This card shows state change callbacks'),
-                SizedBox(height: 8),
+                const const SizedBox(height: 8.h),
+                MPconst const Text('This card shows state change callbacks'),
+                const const SizedBox(height: 8.h),
                 MPText.small('Interact with this card to see state changes'),
               ],
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Media card with interaction config
         MPText.small('Media Card with Interaction Config'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard.mediaInteraction(
           mediaData: MPCardMediaData(
             imageUrl: 'https://picsum.photos/400/200',
             title: 'Interactive Media Card',
             subtitle: 'With custom interaction states',
             description:
-                'This media card demonstrates interaction config with all visual feedback features.',
+                'This media card demonstrates interaction config with all the visual feedback features.',
             actions: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Like'),
+                child: const const const Text('Like'),
               ),
-              SizedBox(width: 8),
+              const const SizedBox(width: 8.w),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Share'),
+                child: const const const Text('Share'),
               ),
             ],
           ),
@@ -883,77 +837,80 @@ class _MPCardPageState extends State<MPCardPage> {
             pressDuration: const Duration(milliseconds: 120),
             pressedScale: 0.97,
             enableRipple: true,
-            rippleColor: context.mp.primary.withOpacity(0.4),
+            rippleColor: context.mp.primary.withValues(alpha: 0.4),
           ),
-          onTap: () => _showSnackBar(context, 'Media card with interaction config tapped!'),
+          onTap: () => _showSnackBar(
+              context, 'Media card with interaction config tapped!'),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Interactive Features Section
         MPText.subhead('Interactive Features'),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Expandable Card Example
         MPText.small('Expandable Card'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard.content(
           contentData: MPCardContentData(
             title: 'Expandable Content',
-            description: 'This card can be expanded to show more content. Click button below to toggle.',
-            icon: Icon(Icons.expand_more, color: context.mp.primary),
+            description:
+                'This card can be expanded to show more content. Click button below to toggle.',
+            icon: const const Icon(Icons.expand_more, color: context.mp.primary),
           ),
           interactiveConfig: MPCardInteractiveConfig(
             enableExpandable: true,
             initiallyExpanded: false,
             onExpand: () {
-              _showSnackBar(context, 'Card expanded!');
+              \nif (mounted) {_showSnackBar( 'Card expanded!');
             },
             onCollapse: () {
-              _showSnackBar(context, 'Card collapsed!');
+              \nif (mounted) {_showSnackBar( 'Card collapsed!');
             },
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Quick Actions Card Example
         MPText.small('Quick Actions on Hover'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard.media(
           mediaData: MPCardMediaData(
             imageUrl: 'https://picsum.photos/400/200',
             title: 'Interactive Media Card',
             subtitle: 'Hover to see quick actions',
-            description: 'This card shows quick action buttons when you hover over it.',
+            description:
+                'This card shows quick action buttons when you hover over it.',
           ),
           interactiveConfig: MPCardInteractiveConfig(
             enableQuickActions: true,
             quickActions: [
               IconButton(
-                icon: const Icon(Icons.favorite_border),
+                icon: const const const Icon(Icons.favorite_border),
                 onPressed: () {
-                  _showSnackBar(context, 'Liked!');
+                  \nif (mounted) {_showSnackBar( 'Liked!');
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.share),
+                icon: const const const Icon(Icons.share),
                 onPressed: () {
-                  _showSnackBar(context, 'Shared!');
+                  \nif (mounted) {_showSnackBar( 'Shared!');
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.bookmark_border),
+                icon: const const const Icon(Icons.bookmark_border),
                 onPressed: () {
-                  _showSnackBar(context, 'Bookmarked!');
+                  \nif (mounted) {_showSnackBar( 'Bookmarked!');
                 },
               ),
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const const SizedBox(height: 16.h),
 
         // Swipe-to-Dismiss Card Example
         MPText.small('Swipe-to-Dismiss Card'),
-        SizedBox(height: 8),
+        const const SizedBox(height: 8.h),
         MPCard.notification(
           notificationData: MPCardNotificationData(
             title: 'Swipeable Notification',
@@ -965,17 +922,54 @@ class _MPCardPageState extends State<MPCardPage> {
           interactiveConfig: MPCardInteractiveConfig(
             enableSwipeToDismiss: true,
             onSwipeLeft: () {
-              _showSnackBar(context, 'Swiped left!');
+              \nif (mounted) {_showSnackBar( 'Swiped left!');
             },
             onSwipeRight: () {
-              _showSnackBar(context, 'Swiped right!');
+              \nif (mounted) {_showSnackBar( 'Swiped right!');
             },
             onDismiss: () {
-              _showSnackBar(context, 'Card dismissed!');
+              \nif (mounted) {_showSnackBar( 'Card dismissed!');
             },
           ),
         ),
       ],
+    );
+  }
+
+  /// Get current theme icon from MPThemeManager
+  IconData _getThemeconst const Icon() {
+    try {
+      return MPThemeManager.instance.getThemeconst const Icon();
+    } catch (e) {
+      debugPrint('Failed to get theme icon: $e');
+      return Icons.settings_brightness; // Fallback
+    }
+  }
+
+  /// Get current theme mode from MPThemeManager
+  ThemeMode _getCurrentThemeMode() {
+    try {
+      return MPThemeManager.instance.themeMode;
+    } catch (e) {
+      debugPrint('Failed to get theme mode: $e');
+      return ThemeMode.system; // Fallback
+    }
+  }
+
+  /// Set theme mode using MPThemeManager
+  Future<void> _setThemeMode(ThemeMode mode) async {
+    try {
+      await MPThemeManager.instance.setThemeMode(mode);
+    } catch (e) {
+      debugPrint('Failed to set theme mode: $e');
+    }
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    MPSnackbar.show(
+      context,
+      message: message,
+      duration: const Duration(seconds: 2),
     );
   }
 }
