@@ -311,7 +311,37 @@ class MPText extends StatelessWidget {
           textOverflow ?? (maxLines != null ? TextOverflow.ellipsis : null),
       softWrap: softWrap ?? true,
       textAlign: textAlign,
-      style: composeTextStyle(context),
+      style: _getCachedStyle(context),
     );
+  }
+
+  // Performance optimization: Cache composed style to avoid recalculations
+  static final Map<String, TextStyle> _styleCache = {};
+  
+  TextStyle _getCachedStyle(BuildContext context) {
+    // Create cache key from style parameters
+    final params = [
+      style?.hashCode ?? 0,
+      fontSize?.hashCode ?? 0,
+      fontWeight?.hashCode ?? 0,
+      color?.hashCode ?? 0,
+      fontStyle?.hashCode ?? 0,
+      letterSpacing?.hashCode ?? 0,
+    ];
+    final cacheKey = params.join('_');
+    
+    if (_styleCache.containsKey(cacheKey)) {
+      return _styleCache[cacheKey]!;
+    }
+    
+    final composedStyle = composeTextStyle(context);
+    _styleCache[cacheKey] = composedStyle;
+    
+    // Limit cache size to prevent memory leaks
+    if (_styleCache.length > 50) {
+      _styleCache.remove(_styleCache.keys.first);
+    }
+    
+    return composedStyle;
   }
 }

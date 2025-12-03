@@ -157,26 +157,96 @@ class MPButton extends StatefulWidget {
   State<MPButton> createState() => _MPButtonState();
 }
 
-class _MPButtonState extends State<MPButton> {
+class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
+  // Performance optimization: Cache expensive calculations
+  late Color _cachedBackgroundColor;
+  late Color _cachedTextColor;
+  late EdgeInsets _cachedPadding;
+  late BorderSide _cachedBorderSide;
+  bool _isInitialized = false;
+
+  // Animation controllers for micro-interactions
+  late AnimationController _hoverController;
+  late AnimationController _pressController;
+  late Animation<double> _hoverAnimation;
+  late Animation<double> _pressAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // Initialize animation controllers
+    _hoverController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    
+    _pressController = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+    
+    // Initialize animations
+    _hoverAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
+    );
+    
+    _pressAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(
+      CurvedAnimation(parent: _pressController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _hoverController.dispose();
+    _pressController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(MPButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset cache when relevant properties change
+    if (oldWidget.variant != widget.variant ||
+        oldWidget.size != widget.size ||
+        oldWidget.background != widget.background ||
+        oldWidget.textColor != widget.textColor ||
+        oldWidget.padding != widget.padding) {
+      _isInitialized = false;
+    }
+  }
+
+  void _initializeCache(BuildContext context) {
+    if (_isInitialized) return;
+
+    _cachedBackgroundColor = _getBackgroundColor();
+    _cachedTextColor = widget.textColor ?? _getTextColor();
+    _cachedPadding = widget.padding ?? _getPadding();
+    _cachedBorderSide = _getBorderSide();
+    _isInitialized = true;
+  }
+
   @override
   Widget build(BuildContext context) {
+    _initializeCache(context);
+
     final buttonContent = widget.loading
         ? _buildLoadingContent()
         : (widget.child ?? _buildButtonContent());
 
-    final button = ElevatedButton(
+    // Performance optimization: Use RepaintBoundary for complex button animations
+    final elevatedButton = ElevatedButton(
       onPressed:
           widget.loading ? null : (widget.enabled ? widget.onPressed : null),
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(_getBackgroundColor()),
-        foregroundColor:
-            WidgetStateProperty.all(widget.textColor ?? _getTextColor()),
-        padding: WidgetStateProperty.all(widget.padding ?? _getPadding()),
+        backgroundColor: WidgetStateProperty.all(_cachedBackgroundColor),
+        foregroundColor: WidgetStateProperty.all(_cachedTextColor),
+        padding: WidgetStateProperty.all(_cachedPadding),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: widget.borderRadius ??
                 BorderRadius.circular(widget.radius ?? 8),
-            side: _getBorderSide(),
+            side: _cachedBorderSide,
           ),
         ),
         elevation: WidgetStateProperty.all(
@@ -217,15 +287,46 @@ class _MPButtonState extends State<MPButton> {
           : buttonContent,
     );
 
-    // Add semantic label if provided
+    // Wrap with MouseRegion and GestureDetector for custom animations
+    final button = MouseRegion(
+      onEnter: (_) => _hoverController.forward(),
+      onExit: (_) => _hoverController.reverse(),
+      child: GestureDetector(
+        onTapDown: (_) => _pressController.forward(),
+        onTapUp: (_) => _pressController.reverse(),
+        onTapCancel: () => _pressController.reverse(),
+        child: elevatedButton,
+      ),
+    );
+
+    // Wrap with RepaintBoundary for performance
+    final Widget buttonWithSemantics;
     if (widget.semanticLabel != null) {
-      return Semantics(
+      buttonWithSemantics = Semantics(
         label: widget.semanticLabel,
         child: button,
       );
+    } else {
+      buttonWithSemantics = button;
     }
 
-    return button;
+    // Add smooth transitions with scale animations
+    return AnimatedBuilder(
+      animation: Listenable.merge([_hoverAnimation, _pressAnimation]),
+      builder: (context, child) {
+        return Transform.scale(
+          scale: widget.enabled 
+              ? _pressAnimation.value * _hoverAnimation.value
+              : _hoverAnimation.value,
+          child: AnimatedContainer(
+            duration: widget.animationDuration ?? const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            child: RepaintBoundary(child: buttonWithSemantics),
+          ),
+        );
+      },
+      child: const SizedBox.shrink(), // Placeholder child
+    );
   }
 
   /// Builds loading content with theme-aware spinner color
