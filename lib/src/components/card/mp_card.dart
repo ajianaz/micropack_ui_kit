@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// MPCard variant enum for different visual styles
@@ -57,6 +59,74 @@ enum MPCardElevation {
   level24, // Maximum elevation
 }
 
+/// MPCard interaction state enum for different visual states
+enum MPCardInteractionState {
+  /// Normal state (no interaction)
+  normal,
+
+  /// Hover state (mouse over card)
+  hover,
+
+  /// Pressed state (mouse/touch down on card)
+  pressed,
+
+  /// Disabled state (card is not interactive)
+  disabled,
+
+  /// Focused state (card has keyboard focus)
+  focused,
+}
+
+/// MPCard interaction configuration for advanced interaction behavior
+class MPCardInteractionConfig {
+  /// Duration for hover animations
+  final Duration hoverDuration;
+
+  /// Duration for press animations
+  final Duration pressDuration;
+
+  /// Opacity when disabled
+  final double disabledOpacity;
+
+  /// Scale factor when pressed
+  final double pressedScale;
+
+  /// Enable ripple effect
+  final bool enableRipple;
+
+  /// Ripple color
+  final Color? rippleColor;
+
+  /// Custom hover color override
+  final Color? hoverColor;
+
+  /// Custom pressed color override
+  final Color? pressedColor;
+
+  /// Custom disabled color override
+  final Color? disabledColor;
+
+  /// Custom focus color override
+  final Color? focusColor;
+
+  /// Callback when interaction state changes
+  final ValueChanged<MPCardInteractionState>? onStateChanged;
+
+  const MPCardInteractionConfig({
+    this.hoverDuration = const Duration(milliseconds: 200),
+    this.pressDuration = const Duration(milliseconds: 100),
+    this.disabledOpacity = 0.38,
+    this.pressedScale = 0.98,
+    this.enableRipple = true,
+    this.rippleColor,
+    this.hoverColor,
+    this.pressedColor,
+    this.disabledColor,
+    this.focusColor,
+    this.onStateChanged,
+  });
+}
+
 /// MPCard elevation constants for consistent shadow values
 class MPCardElevationConstants {
   static const double level0 = 0.0;
@@ -104,6 +174,29 @@ class MPCardResponsiveConfig {
   final bool enableOrientationAdaptation;
   final Duration? layoutTransitionDuration;
 
+  // Responsive sizing
+  final MPCardSize? mobileSize;
+  final MPCardSize? tabletSize;
+  final MPCardSize? desktopSize;
+
+  // Responsive spacing
+  final EdgeInsets? mobilePadding;
+  final EdgeInsets? tabletPadding;
+  final EdgeInsets? desktopPadding;
+
+  // Responsive constraints
+  final BoxConstraints? mobileConstraints;
+  final BoxConstraints? tabletConstraints;
+  final BoxConstraints? desktopConstraints;
+
+  // Responsive behavior
+  final bool enableHorizontalScrolling;
+  final bool enableResponsiveTypography;
+  final bool enableResponsiveImages;
+  final double? mobileImageHeight;
+  final double? tabletImageHeight;
+  final double? desktopImageHeight;
+
   const MPCardResponsiveConfig({
     this.mobileLayout,
     this.tabletLayout,
@@ -112,6 +205,21 @@ class MPCardResponsiveConfig {
     this.tabletMaxWidth = 1024,
     this.enableOrientationAdaptation = true,
     this.layoutTransitionDuration = const Duration(milliseconds: 200),
+    this.mobileSize,
+    this.tabletSize,
+    this.desktopSize,
+    this.mobilePadding,
+    this.tabletPadding,
+    this.desktopPadding,
+    this.mobileConstraints,
+    this.tabletConstraints,
+    this.desktopConstraints,
+    this.enableHorizontalScrolling = true,
+    this.enableResponsiveTypography = true,
+    this.enableResponsiveImages = true,
+    this.mobileImageHeight,
+    this.tabletImageHeight,
+    this.desktopImageHeight,
   });
 }
 
@@ -120,6 +228,33 @@ class MPCardBreakpoints {
   static const double mobile = 600;
   static const double tablet = 1024;
   static const double desktop = 1440;
+
+  // Extended breakpoints for more granular control
+  static const double smallMobile = 360;
+  static const double largeMobile = 600;
+  static const double smallTablet = 768;
+  static const double largeTablet = 1024;
+  static const double smallDesktop = 1440;
+  static const double largeDesktop = 1920;
+}
+
+/// MPCard screen size category for responsive behavior
+enum MPCardScreenSize {
+  smallMobile,
+  mobile,
+  largeMobile,
+  smallTablet,
+  tablet,
+  largeTablet,
+  smallDesktop,
+  desktop,
+  largeDesktop,
+}
+
+/// MPCard orientation for responsive behavior
+enum MPCardOrientation {
+  portrait,
+  landscape,
 }
 
 /// MPCard theme data for custom styling
@@ -407,6 +542,322 @@ class MPCardInteractiveConfig {
   });
 }
 
+/// MPCard accessibility configuration for comprehensive accessibility support
+class MPCardAccessibilityConfig {
+  /// Whether to enable accessibility features
+  final bool enabled;
+
+  /// Custom semantic label generator callback
+  final String Function(BuildContext context, MPCardVariant variant,
+      {MPCardHeaderData? headerData,
+      MPCardFooterData? footerData})? onSemanticLabel;
+
+  /// Custom semantic hint generator callback
+  final String Function(BuildContext context, MPCardVariant variant)?
+      onSemanticHint;
+
+  /// Whether to enable focus management
+  final bool enableFocusManagement;
+
+  /// Whether to enable keyboard navigation
+  final bool enableKeyboardNavigation;
+
+  /// Whether to respect reduced motion preferences
+  final bool respectReducedMotion;
+
+  /// Whether to enable high contrast support
+  final bool enableHighContrast;
+
+  /// Focus navigation configuration
+  final MPCardFocusNavigationConfig? focusNavigation;
+
+  /// Screen reader configuration
+  final MPCardScreenReaderConfig? screenReader;
+
+  /// High contrast configuration
+  final MPCardHighContrastConfig? highContrast;
+
+  /// Motion configuration
+  final MPCardMotionConfig? motion;
+
+  /// Keyboard navigation configuration
+  final MPCardKeyboardConfig? keyboard;
+
+  const MPCardAccessibilityConfig({
+    this.enabled = true,
+    this.onSemanticLabel,
+    this.onSemanticHint,
+    this.enableFocusManagement = true,
+    this.enableKeyboardNavigation = true,
+    this.respectReducedMotion = true,
+    this.enableHighContrast = true,
+    this.focusNavigation,
+    this.screenReader,
+    this.highContrast,
+    this.motion,
+    this.keyboard,
+  });
+}
+
+/// MPCard focus navigation configuration
+class MPCardFocusNavigationConfig {
+  /// Whether to enable arrow key navigation
+  final bool enableArrowKeyNavigation;
+
+  /// Whether to enable tab navigation
+  final bool enableTabNavigation;
+
+  /// Whether to trap focus within card boundaries
+  final bool trapFocus;
+
+  /// Focus highlight color
+  final Color? focusHighlightColor;
+
+  /// Focus highlight border width
+  final double focusHighlightWidth;
+
+  /// Focus highlight border radius
+  final double focusHighlightRadius;
+
+  /// Custom focus node for external control
+  final FocusNode? customFocusNode;
+
+  /// Whether to autofocus on mount
+  final bool autofocus;
+
+  /// Callback when focus changes
+  final ValueChanged<bool>? onFocusChange;
+
+  const MPCardFocusNavigationConfig({
+    this.enableArrowKeyNavigation = true,
+    this.enableTabNavigation = true,
+    this.trapFocus = false,
+    this.focusHighlightColor,
+    this.focusHighlightWidth = 2.0,
+    this.focusHighlightRadius = 8.0,
+    this.customFocusNode,
+    this.autofocus = false,
+    this.onFocusChange,
+  });
+}
+
+/// MPCard screen reader configuration
+class MPCardScreenReaderConfig {
+  /// Whether to announce state changes
+  final bool announceStateChanges;
+
+  /// Whether to announce interaction hints
+  final bool announceInteractionHints;
+
+  /// Custom reading order for content sections
+  final List<MPCardReadingOrder>? readingOrder;
+
+  /// Whether to group content semantically
+  final bool groupContent;
+
+  /// Custom accessibility actions
+  final List<SemanticsAction>? customActions;
+
+  /// Callback for custom accessibility actions
+  final void Function(SemanticsAction action)? onCustomAction;
+
+  /// Whether to announce live region updates
+  final bool announceLiveUpdates;
+
+  /// Live region politeness level
+  final bool? liveRegionPoliteness;
+
+  const MPCardScreenReaderConfig({
+    this.announceStateChanges = true,
+    this.announceInteractionHints = true,
+    this.readingOrder,
+    this.groupContent = true,
+    this.customActions,
+    this.onCustomAction,
+    this.announceLiveUpdates = false,
+    this.liveRegionPoliteness,
+  });
+}
+
+/// MPCard high contrast configuration
+class MPCardHighContrastConfig {
+  /// Whether to automatically detect high contrast mode
+  final bool autoDetect;
+
+  /// Custom high contrast theme data
+  final MPCardThemeData? highContrastTheme;
+
+  /// Minimum contrast ratio for text (WCAG AA: 4.5, AAA: 7.0)
+  final double minimumTextContrastRatio;
+
+  /// Minimum contrast ratio for interactive elements
+  final double minimumInteractiveContrastRatio;
+
+  /// Whether to enable high contrast borders
+  final bool enableHighContrastBorders;
+
+  /// High contrast border width
+  final double highContrastBorderWidth;
+
+  /// High contrast border color
+  final Color? highContrastBorderColor;
+
+  const MPCardHighContrastConfig({
+    this.autoDetect = true,
+    this.highContrastTheme,
+    this.minimumTextContrastRatio = 4.5,
+    this.minimumInteractiveContrastRatio = 3.0,
+    this.enableHighContrastBorders = true,
+    this.highContrastBorderWidth = 2.0,
+    this.highContrastBorderColor,
+  });
+}
+
+/// MPCard motion configuration
+class MPCardMotionConfig {
+  /// Whether to respect system reduced motion setting
+  final bool respectSystemReducedMotion;
+
+  /// Whether to enable animations by default
+  final bool enableAnimations;
+
+  /// Animation duration multiplier when reduced motion is enabled
+  final double reducedMotionDurationMultiplier;
+
+  /// Whether to disable hover effects
+  final bool disableHoverEffects;
+
+  /// Whether to disable transition animations
+  final bool disableTransitions;
+
+  /// Custom animation curve for reduced motion
+  final Curve? reducedMotionCurve;
+
+  /// Callback when motion preferences change
+  final ValueChanged<bool>? onMotionPreferenceChange;
+
+  const MPCardMotionConfig({
+    this.respectSystemReducedMotion = true,
+    this.enableAnimations = true,
+    this.reducedMotionDurationMultiplier = 0.1,
+    this.disableHoverEffects = false,
+    this.disableTransitions = false,
+    this.reducedMotionCurve,
+    this.onMotionPreferenceChange,
+  });
+}
+
+/// MPCard keyboard navigation configuration
+class MPCardKeyboardConfig {
+  /// Whether to enable arrow key navigation
+  final bool enableArrowKeys;
+
+  /// Whether to enable escape key handling
+  final bool enableEscapeKey;
+
+  /// Whether to enable enter/space key activation
+  final bool enableEnterSpaceActivation;
+
+  /// Custom key bindings
+  final Map<SingleActivator, VoidCallback>? customKeyBindings;
+
+  /// Callback when arrow key is pressed
+  final void Function(LogicalKeyboardKey key, bool isShiftPressed)? onArrowKey;
+
+  /// Callback when escape key is pressed
+  final VoidCallback? onEscapeKey;
+
+  /// Whether to enable keyboard shortcuts
+  final bool enableShortcuts;
+
+  /// Keyboard shortcuts configuration
+  final Map<ShortcutActivator, Intent>? shortcuts;
+
+  const MPCardKeyboardConfig({
+    this.enableArrowKeys = true,
+    this.enableEscapeKey = true,
+    this.enableEnterSpaceActivation = true,
+    this.customKeyBindings,
+    this.onArrowKey,
+    this.onEscapeKey,
+    this.enableShortcuts = false,
+    this.shortcuts,
+  });
+}
+
+/// MPCard reading order for screen readers
+enum MPCardReadingOrder {
+  /// Header first, then body, then footer
+  headerBodyFooter,
+
+  /// Body first, then header, then footer
+  bodyHeaderFooter,
+
+  /// Custom order defined by developer
+  custom,
+}
+
+/// MPCard accessibility state for tracking current accessibility context
+class MPCardAccessibilityState {
+  /// Whether high contrast mode is active
+  final bool isHighContrast;
+
+  /// Whether reduced motion is active
+  final bool isReducedMotion;
+
+  /// Whether screen reader is active
+  final bool isScreenReaderActive;
+
+  /// Current focus state
+  final bool isFocused;
+
+  /// Current reading order
+  final MPCardReadingOrder readingOrder;
+
+  /// Current semantic label
+  final String? semanticLabel;
+
+  /// Current semantic hint
+  final String? semanticHint;
+
+  const MPCardAccessibilityState({
+    this.isHighContrast = false,
+    this.isReducedMotion = false,
+    this.isScreenReaderActive = false,
+    this.isFocused = false,
+    this.readingOrder = MPCardReadingOrder.headerBodyFooter,
+    this.semanticLabel,
+    this.semanticHint,
+  });
+}
+
+/// MPCard accessibility action for custom interactions
+enum MPCardAccessibilityAction {
+  /// Expand card content
+  expand,
+
+  /// Collapse card content
+  collapse,
+
+  /// Dismiss card
+  dismiss,
+
+  /// Select card
+  select,
+
+  /// Deselect card
+  deselect,
+
+  /// Show more options
+  showMoreOptions,
+
+  /// Share card content
+  share,
+
+  /// Copy card content
+  copy,
+}
+
 /// A flexible, theme-aware card component designed for dynamic use cases across the Micropack UI Kit.
 ///
 /// MPCard combines the foundation approach of MPButton with the content flexibility of MPArticleCard,
@@ -506,6 +957,8 @@ class MPCard extends StatefulWidget {
     this.enableOverflowHandling = true,
     this.clipBehavior = Clip.antiAlias,
     this.interactiveConfig,
+    this.interactionConfig,
+    this.accessibilityConfig,
   });
 
   /// Header content widget (custom widget)
@@ -601,8 +1054,14 @@ class MPCard extends StatefulWidget {
   /// Clip behavior for the card
   final Clip clipBehavior;
 
-  /// Interactive elements configuration
+  /// Interaction elements configuration
   final MPCardInteractiveConfig? interactiveConfig;
+
+  /// Interaction configuration for advanced interaction behavior
+  final MPCardInteractionConfig? interactionConfig;
+
+  /// Accessibility configuration for comprehensive accessibility support
+  final MPCardAccessibilityConfig? accessibilityConfig;
 
   @override
   State<MPCard> createState() => _MPCardState();
@@ -640,6 +1099,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -673,6 +1133,80 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       interactiveConfig: interactiveConfig,
+      accessibilityConfig: accessibilityConfig,
+    );
+  }
+
+  /// Creates a card with structured header data and interaction config
+  factory MPCard.withHeaderInteraction({
+    Key? key,
+    required MPCardHeaderData headerData,
+    Widget? body,
+    Widget? footer,
+    MPCardFooterData? footerData,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardVariant variant = MPCardVariant.surface,
+    MPCardSize size = MPCardSize.medium,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      headerData: headerData,
+      body: body,
+      footer: footer,
+      footerData: footerData,
+      layout: layout,
+      variant: variant,
+      size: size,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -709,6 +1243,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -742,6 +1277,79 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       interactiveConfig: interactiveConfig,
+      accessibilityConfig: accessibilityConfig,
+    );
+  }
+
+  /// Creates a card with structured footer data and interaction config
+  factory MPCard.withFooterInteraction({
+    Key? key,
+    Widget? header,
+    MPCardHeaderData? headerData,
+    Widget? body,
+    required MPCardFooterData footerData,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardVariant variant = MPCardVariant.surface,
+    MPCardSize size = MPCardSize.medium,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      header: header,
+      headerData: headerData,
+      body: body,
+      footerData: footerData,
+      layout: layout,
+      variant: variant,
+      size: size,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
     );
   }
 
@@ -777,6 +1385,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -808,6 +1417,78 @@ class MPCard extends StatefulWidget {
       autofocus: autofocus,
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
+      accessibilityConfig: accessibilityConfig,
+    );
+  }
+
+  /// Creates a card with both structured header and footer data and interaction config
+  factory MPCard.withSectionsInteraction({
+    Key? key,
+    required MPCardHeaderData headerData,
+    Widget? body,
+    required MPCardFooterData footerData,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardVariant variant = MPCardVariant.surface,
+    MPCardSize size = MPCardSize.medium,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      headerData: headerData,
+      body: body,
+      footerData: footerData,
+      layout: layout,
+      variant: variant,
+      size: size,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -840,6 +1521,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -869,6 +1551,7 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       body: _buildMediaContent(mediaData),
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -901,6 +1584,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -930,6 +1614,7 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       body: _buildContentCard(contentData),
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -962,6 +1647,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -991,6 +1677,7 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       body: _buildProductContent(productData),
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -1023,6 +1710,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -1052,6 +1740,7 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       body: _buildProfileContent(profileData),
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -1084,6 +1773,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -1113,6 +1803,7 @@ class MPCard extends StatefulWidget {
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
       body: _buildNotificationContent(notificationData),
+      accessibilityConfig: accessibilityConfig,
     );
   }
 
@@ -1145,6 +1836,7 @@ class MPCard extends StatefulWidget {
     bool enableOverflowHandling = true,
     Clip clipBehavior = Clip.antiAlias,
     MPCardInteractiveConfig? interactiveConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
   }) {
     return MPCard(
       key: key,
@@ -1173,6 +1865,397 @@ class MPCard extends StatefulWidget {
       autofocus: autofocus,
       enableOverflowHandling: enableOverflowHandling,
       clipBehavior: clipBehavior,
+      body: _buildDashboardContent(dashboardData),
+      accessibilityConfig: accessibilityConfig,
+    );
+  }
+
+  /// Creates a media card with image, title, subtitle, and metadata and interaction config
+  factory MPCard.mediaInteraction({
+    Key? key,
+    required MPCardMediaData mediaData,
+    MPCardSize size = MPCardSize.medium,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      variant: MPCardVariant.media,
+      size: size,
+      layout: layout,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      body: _buildMediaContent(mediaData),
+    );
+  }
+
+  /// Creates a content card with text-focused layout and interaction config
+  factory MPCard.contentInteraction({
+    Key? key,
+    required MPCardContentData contentData,
+    MPCardSize size = MPCardSize.medium,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      variant: MPCardVariant.content,
+      size: size,
+      layout: layout,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      body: _buildContentCard(contentData),
+    );
+  }
+
+  /// Creates a product card with pricing, features, and actions and interaction config
+  factory MPCard.productInteraction({
+    Key? key,
+    required MPCardProductData productData,
+    MPCardSize size = MPCardSize.medium,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      variant: MPCardVariant.product,
+      size: size,
+      layout: layout,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      body: _buildProductContent(productData),
+    );
+  }
+
+  /// Creates a profile card with avatar, user info, and stats and interaction config
+  factory MPCard.profileInteraction({
+    Key? key,
+    required MPCardProfileData profileData,
+    MPCardSize size = MPCardSize.medium,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      variant: MPCardVariant.profile,
+      size: size,
+      layout: layout,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      body: _buildProfileContent(profileData),
+    );
+  }
+
+  /// Creates a notification card with alerts, actions, and timestamps and interaction config
+  factory MPCard.notificationInteraction({
+    Key? key,
+    required MPCardNotificationData notificationData,
+    MPCardSize size = MPCardSize.medium,
+    MPCardLayout layout = MPCardLayout.horizontal,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      variant: MPCardVariant.notification,
+      size: size,
+      layout: layout,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap ?? notificationData.onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
+      body: _buildNotificationContent(notificationData),
+    );
+  }
+
+  /// Creates a dashboard card with metrics, charts, and data visualization and interaction config
+  factory MPCard.dashboardInteraction({
+    Key? key,
+    required MPCardDashboardData dashboardData,
+    MPCardSize size = MPCardSize.medium,
+    MPCardLayout layout = MPCardLayout.vertical,
+    MPCardResponsiveConfig? responsive,
+    Color? backgroundColor,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
+    double? elevation,
+    MPCardElevation? elevationLevel,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    VoidCallback? onTap,
+    VoidCallback? onLongPress,
+    ValueChanged<bool>? onHover,
+    bool enabled = true,
+    bool selectable = false,
+    bool selected = false,
+    MPCardThemeData? themeData,
+    String? semanticLabel,
+    String? semanticHint,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool enableOverflowHandling = true,
+    Clip clipBehavior = Clip.antiAlias,
+    MPCardInteractiveConfig? interactiveConfig,
+    MPCardInteractionConfig? interactionConfig,
+    MPCardAccessibilityConfig? accessibilityConfig,
+  }) {
+    return MPCard(
+      key: key,
+      variant: MPCardVariant.dashboard,
+      size: size,
+      layout: layout,
+      responsive: responsive,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      elevationLevel: elevationLevel,
+      padding: padding,
+      margin: margin,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onHover: onHover,
+      enabled: enabled,
+      selectable: selectable,
+      selected: selected,
+      themeData: themeData,
+      semanticLabel: semanticLabel,
+      semanticHint: semanticHint,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enableOverflowHandling: enableOverflowHandling,
+      clipBehavior: clipBehavior,
+      interactiveConfig: interactiveConfig,
+      interactionConfig: interactionConfig,
       body: _buildDashboardContent(dashboardData),
     );
   }
@@ -1532,17 +2615,29 @@ class _MPCardContentBuilders {
   static Widget _buildProductImage(
       MPCardProductData data, BuildContext context) {
     Widget imageWidget;
+    // Calculate responsive height
+    final screenWidth = MediaQuery.of(context).size.width;
+    double responsiveHeight = 180.0;
+    if (screenWidth < MPCardBreakpoints.smallMobile) {
+      responsiveHeight = 120.0;
+    } else if (screenWidth < MPCardBreakpoints.largeMobile) {
+      responsiveHeight = 160.0;
+    } else if (screenWidth < MPCardBreakpoints.tablet) {
+      responsiveHeight = 180.0;
+    } else {
+      responsiveHeight = 200.0;
+    }
 
     if (data.image != null) {
       imageWidget = data.image!;
     } else if (data.imageUrl != null) {
       imageWidget = Image.network(
         data.imageUrl!,
-        height: 180,
+        height: responsiveHeight,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return Container(
-            height: 180,
+            height: responsiveHeight,
             color: context.mp.neutral20,
             child: Icon(
               Icons.shopping_bag_outlined,
@@ -1972,10 +3067,26 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   bool _isFocused = false;
   bool _isExpanded = false;
   bool _isSwiped = false;
+  MPCardInteractionState _currentState = MPCardInteractionState.normal;
   late final FocusNode _focusNode;
   late final AnimationController _animationController;
   late final Animation<double> _expandAnimation;
   late final Animation<double> _swipeAnimation;
+  late final AnimationController _interactionAnimationController;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _opacityAnimation;
+
+  // Responsive state
+  MPCardScreenSize _currentScreenSize = MPCardScreenSize.mobile;
+  MPCardOrientation _currentOrientation = MPCardOrientation.portrait;
+  late final VoidCallback _responsiveCallback;
+
+  // Accessibility state
+  late MPCardAccessibilityState _accessibilityState;
+  late MPCardAccessibilityConfig _accessibilityConfig;
+  bool _isHighContrastMode = false;
+  bool _isReducedMotion = false;
+  bool _isScreenReaderActive = false;
 
   @override
   void initState() {
@@ -1988,6 +3099,12 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
     _animationController = AnimationController(
       duration: widget.interactiveConfig?.animationDuration ??
           const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    // Initialize interaction animations
+    _interactionAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 150),
       vsync: this,
     );
 
@@ -2006,6 +3123,56 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
+
+    // Scale animation for pressed state
+    final config = widget.interactionConfig;
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: config?.pressedScale ?? 0.98,
+    ).animate(CurvedAnimation(
+      parent: _interactionAnimationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Opacity animation for disabled state
+    _opacityAnimation = Tween<double>(
+      begin: 1.0,
+      end: config?.disabledOpacity ?? 0.38,
+    ).animate(CurvedAnimation(
+      parent: _interactionAnimationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Set initial state
+    _updateCurrentState();
+
+    // Initialize responsive state
+    _updateResponsiveState();
+
+    // Initialize accessibility state
+    _initializeAccessibilityState();
+
+    // Set up responsive callback for performance optimization
+    _responsiveCallback = () {
+      _updateResponsiveState();
+    };
+
+    // Add responsive listener
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _responsiveCallback();
+    });
+  }
+
+  @override
+  void didUpdateWidget(MPCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Update responsive state if widget configuration changed
+    if (oldWidget.responsive != widget.responsive ||
+        oldWidget.size != widget.size ||
+        oldWidget.layout != widget.layout) {
+      _updateResponsiveState();
+    }
   }
 
   @override
@@ -2015,6 +3182,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
       _focusNode.dispose();
     }
     _animationController.dispose();
+    _interactionAnimationController.dispose();
     super.dispose();
   }
 
@@ -2022,13 +3190,334 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
     if (_isFocused != _focusNode.hasFocus) {
       setState(() {
         _isFocused = _focusNode.hasFocus;
+        _updateCurrentState();
       });
     }
   }
 
+  void _updateCurrentState() {
+    final oldState = _currentState;
+
+    if (!widget.enabled) {
+      _currentState = MPCardInteractionState.disabled;
+    } else if (_isPressed) {
+      _currentState = MPCardInteractionState.pressed;
+    } else if (_isHovered) {
+      _currentState = MPCardInteractionState.hover;
+    } else if (_isFocused) {
+      _currentState = MPCardInteractionState.focused;
+    } else {
+      _currentState = MPCardInteractionState.normal;
+    }
+
+    // Trigger animation when state changes
+    if (oldState != _currentState) {
+      _handleStateChange(oldState, _currentState);
+    }
+  }
+
+  void _handleStateChange(
+      MPCardInteractionState oldState, MPCardInteractionState newState) {
+    final config = widget.interactionConfig;
+
+    // Handle scale animation for pressed state
+    if (newState == MPCardInteractionState.pressed) {
+      _interactionAnimationController.duration =
+          config?.pressDuration ?? const Duration(milliseconds: 100);
+      _interactionAnimationController.forward();
+    } else if (oldState == MPCardInteractionState.pressed) {
+      _interactionAnimationController.reverse();
+    }
+
+    // Handle opacity animation for disabled state
+    if (newState == MPCardInteractionState.disabled) {
+      _interactionAnimationController.duration =
+          config?.hoverDuration ?? const Duration(milliseconds: 200);
+      _interactionAnimationController.forward();
+    } else if (oldState == MPCardInteractionState.disabled) {
+      _interactionAnimationController.reverse();
+    }
+
+    // Invoke state change callback
+    config?.onStateChanged?.call(newState);
+  }
+
+  /// Gets the current interaction state
+  void _updateResponsiveState() {
+    final newScreenSize = _getScreenSizeCategory();
+    final newOrientation = _getOrientation();
+
+    if (newScreenSize != _currentScreenSize ||
+        newOrientation != _currentOrientation) {
+      setState(() {
+        _currentScreenSize = newScreenSize;
+        _currentOrientation = newOrientation;
+      });
+    }
+  }
+
+  /// Gets current screen size category based on breakpoints
+  MPCardScreenSize _getScreenSizeCategory() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    if (screenWidth < MPCardBreakpoints.smallMobile) {
+      return MPCardScreenSize.smallMobile;
+    } else if (screenWidth < MPCardBreakpoints.largeMobile) {
+      return MPCardScreenSize.mobile;
+    } else if (screenWidth < MPCardBreakpoints.smallTablet) {
+      return MPCardScreenSize.largeMobile;
+    } else if (screenWidth < MPCardBreakpoints.tablet) {
+      return MPCardScreenSize.smallTablet;
+    } else if (screenWidth < MPCardBreakpoints.largeTablet) {
+      return MPCardScreenSize.tablet;
+    } else if (screenWidth < MPCardBreakpoints.smallDesktop) {
+      return MPCardScreenSize.largeTablet;
+    } else if (screenWidth < MPCardBreakpoints.largeDesktop) {
+      return MPCardScreenSize.smallDesktop;
+    } else if (screenWidth < MPCardBreakpoints.largeDesktop) {
+      return MPCardScreenSize.desktop;
+    } else {
+      return MPCardScreenSize.largeDesktop;
+    }
+  }
+
+  /// Gets current device orientation
+  MPCardOrientation _getOrientation() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return screenWidth > screenHeight
+        ? MPCardOrientation.landscape
+        : MPCardOrientation.portrait;
+  }
+
+  /// Initializes accessibility state and configuration
+  void _initializeAccessibilityState() {
+    // Initialize accessibility config with defaults if not provided
+    _accessibilityConfig =
+        widget.accessibilityConfig ?? const MPCardAccessibilityConfig();
+
+    // Initialize accessibility state
+    _accessibilityState = MPCardAccessibilityState(
+      isHighContrast: _isHighContrastMode,
+      isReducedMotion: _isReducedMotion,
+      isScreenReaderActive: _isScreenReaderActive,
+      isFocused: _isFocused,
+      readingOrder: MPCardReadingOrder.headerBodyFooter,
+      semanticLabel: widget.semanticLabel,
+      semanticHint: widget.semanticHint,
+    );
+
+    // Check system accessibility settings
+    _checkSystemAccessibilitySettings();
+  }
+
+  /// Checks system accessibility settings and updates state accordingly
+  void _checkSystemAccessibilitySettings() {
+    // Check for high contrast mode
+    _isHighContrastMode = MediaQuery.of(context).highContrast ?? false;
+
+    // Check for reduced motion preference
+    _isReducedMotion = MediaQuery.of(context).accessibleNavigation ?? false;
+
+    // Check for screen reader (this is a simplified check)
+    // In a real implementation, you might want to use more sophisticated detection
+    _isScreenReaderActive =
+        MediaQuery.of(context).accessibleNavigation ?? false;
+
+    // Update accessibility state
+    _updateAccessibilityState();
+  }
+
+  /// Updates accessibility state based on current conditions
+  void _updateAccessibilityState() {
+    setState(() {
+      _accessibilityState = MPCardAccessibilityState(
+        isHighContrast: _isHighContrastMode,
+        isReducedMotion: _isReducedMotion,
+        isScreenReaderActive: _isScreenReaderActive,
+        isFocused: _isFocused,
+        readingOrder: _accessibilityState.readingOrder,
+        semanticLabel: _generateSemanticLabel(),
+        semanticHint: _generateSemanticHint(),
+      );
+    });
+  }
+
+  /// Generates semantic label based on card content and configuration
+  String _generateSemanticLabel() {
+    // Use custom semantic label generator if provided
+    if (_accessibilityConfig.onSemanticLabel != null) {
+      final label = _accessibilityConfig.onSemanticLabel!(
+        context,
+        widget.variant,
+        headerData: widget.headerData,
+        footerData: widget.footerData,
+      );
+      return label is String ? label : '';
+    }
+
+    // Generate default semantic label
+    final parts = <String>[];
+
+    if (widget.headerData?.title != null) {
+      parts.add(widget.headerData!.title!);
+    }
+
+    if (widget.headerData?.subtitle != null) {
+      parts.add(widget.headerData!.subtitle!);
+    }
+
+    // Add variant information
+    parts.add('${widget.variant.name} card');
+
+    // Add interaction information
+    if (widget.onTap != null) {
+      parts.add('Double tap to activate');
+    }
+
+    if (widget.selected) {
+      parts.add('Selected');
+    }
+
+    return parts.join(', ');
+  }
+
+  /// Generates semantic hint based on card configuration
+  String _generateSemanticHint() {
+    // Use custom semantic hint generator if provided
+    if (_accessibilityConfig.onSemanticHint != null) {
+      final hint =
+          _accessibilityConfig.onSemanticHint!(context, widget.variant);
+      return hint is String ? hint : '';
+    }
+
+    // Generate default semantic hint
+    final hints = <String>[];
+
+    if (widget.onTap != null) {
+      hints.add('Double tap to interact');
+    }
+
+    if (widget.onLongPress != null) {
+      hints.add('Long press for more options');
+    }
+
+    if (widget.selectable) {
+      hints.add(
+          widget.selected ? 'Double tap to deselect' : 'Double tap to select');
+    }
+
+    return hints.join('. ');
+  }
+
+  /// Gets effective card size based on responsive configuration
+  MPCardSize _getResponsiveSize() {
+    final config = widget.responsive;
+    if (config == null) return widget.size;
+
+    final screenSize = _currentScreenSize;
+
+    // Check for custom size configuration
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+      case MPCardScreenSize.mobile:
+        return config.mobileSize ?? widget.size;
+      case MPCardScreenSize.largeMobile:
+      case MPCardScreenSize.smallTablet:
+      case MPCardScreenSize.tablet:
+        return config.tabletSize ?? widget.size;
+      case MPCardScreenSize.largeTablet:
+      case MPCardScreenSize.smallDesktop:
+      case MPCardScreenSize.desktop:
+      case MPCardScreenSize.largeDesktop:
+        return config.desktopSize ?? widget.size;
+    }
+  }
+
+  /// Gets responsive padding based on screen size and configuration
+  EdgeInsets _getResponsivePadding() {
+    // Use custom padding if provided
+    if (widget.padding != null) return widget.padding!;
+
+    final config = widget.responsive;
+    if (config != null) {
+      final screenSize = _currentScreenSize;
+
+      // Check for custom padding configuration
+      switch (screenSize) {
+        case MPCardScreenSize.smallMobile:
+        case MPCardScreenSize.mobile:
+          if (config.mobilePadding != null) return config.mobilePadding!;
+          break;
+        case MPCardScreenSize.largeMobile:
+        case MPCardScreenSize.smallTablet:
+        case MPCardScreenSize.tablet:
+          if (config.tabletPadding != null) return config.tabletPadding!;
+          break;
+        case MPCardScreenSize.largeTablet:
+        case MPCardScreenSize.smallDesktop:
+        case MPCardScreenSize.desktop:
+        case MPCardScreenSize.largeDesktop:
+          if (config.desktopPadding != null) return config.desktopPadding!;
+          break;
+      }
+    }
+
+    // Fall back to default padding based on size
+    return _getDefaultPadding();
+  }
+
+  /// Gets responsive image height based on screen size and configuration
+  double _getResponsiveImageHeight() {
+    final config = widget.responsive;
+    if (config == null || !config.enableResponsiveImages) return 200.0;
+
+    final screenSize = _currentScreenSize;
+
+    // Check for custom image height configuration
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+      case MPCardScreenSize.mobile:
+        return config.mobileImageHeight ?? 160.0;
+      case MPCardScreenSize.largeMobile:
+      case MPCardScreenSize.smallTablet:
+      case MPCardScreenSize.tablet:
+        return config.tabletImageHeight ?? 200.0;
+      case MPCardScreenSize.largeTablet:
+      case MPCardScreenSize.smallDesktop:
+      case MPCardScreenSize.desktop:
+      case MPCardScreenSize.largeDesktop:
+        return config.desktopImageHeight ?? 240.0;
+    }
+  }
+
+  MPCardInteractionState get currentState => _currentState;
+
+  /// Checks if the card is in a specific state
+  bool isState(MPCardInteractionState state) => _currentState == state;
+
   @override
   Widget build(BuildContext context) {
-    final cardContent = Semantics(
+    // Check if accessibility is enabled
+    if (!_accessibilityConfig.enabled) {
+      return _buildBasicCard(context);
+    }
+
+    final cardContent = _buildAccessibleCard(context);
+
+    // Apply interactive features if configured
+    if (widget.interactiveConfig != null) {
+      return _buildInteractiveCard(context, cardContent);
+    }
+
+    return cardContent;
+  }
+
+  /// Builds basic card without accessibility features
+  Widget _buildBasicCard(BuildContext context) {
+    return Semantics(
       label: widget.semanticLabel ?? _buildSemanticLabel(),
       hint: widget.semanticHint,
       button: widget.onTap != null,
@@ -2042,16 +3531,94 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+  }
 
-    // Apply interactive features if configured
-    if (widget.interactiveConfig != null) {
-      return _buildInteractiveCard(context, cardContent);
+  /// Builds card with comprehensive accessibility support
+  Widget _buildAccessibleCard(BuildContext context) {
+    // Get focus configuration
+    final focusConfig = _accessibilityConfig.focusNavigation;
+
+    // Get screen reader configuration
+    final screenReaderConfig = _accessibilityConfig.screenReader;
+
+    // Build semantic widget with enhanced accessibility
+    return Semantics(
+      // Use custom or generated semantic label
+      label: _accessibilityState.semanticLabel,
+
+      // Use custom or generated semantic hint
+      hint: _accessibilityState.semanticHint,
+
+      // Basic semantic properties
+      button: widget.onTap != null,
+      selected: widget.selected,
+      enabled: widget.enabled,
+
+      // Enhanced semantic properties
+      textDirection: Directionality.of(context),
+
+      // Live region for dynamic content updates
+      liveRegion: screenReaderConfig?.announceLiveUpdates == true,
+
+      // Custom accessibility actions
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+
+      // Focus management
+      focusable: _accessibilityConfig.enableFocusManagement && widget.enabled,
+
+      // Custom semantic properties based on configuration
+      // Note: 'properties' parameter is not available in Semantics widget
+      // Using explicit attributes instead
+
+      // Merge semantics with child content
+      child: Container(
+        margin: widget.margin ?? _getDefaultMargin(),
+        child: Material(
+          color: Colors.transparent,
+          child: _buildCard(context),
+        ),
+      ),
+    );
+  }
+
+  /// Builds semantic properties map based on accessibility configuration
+  Map<String, String> _buildSemanticProperties() {
+    final properties = <String, String>{};
+
+    // Add reading order information
+    if (_accessibilityConfig.screenReader?.readingOrder != null) {
+      properties['readingOrder'] = _accessibilityState.readingOrder.name;
     }
 
-    return cardContent;
+    // Add state information
+    if (_accessibilityConfig.screenReader?.announceStateChanges == true) {
+      properties['currentState'] = _currentState.name;
+    }
+
+    // Add variant information
+    properties['cardVariant'] = widget.variant.name;
+
+    // Add accessibility state information
+    if (_isHighContrastMode) {
+      properties['highContrast'] = 'enabled';
+    }
+
+    if (_isReducedMotion) {
+      properties['reducedMotion'] = 'enabled';
+    }
+
+    if (_isScreenReaderActive) {
+      properties['screenReader'] = 'active';
+    }
+
+    return properties;
   }
 
   Widget _buildCard(BuildContext context) {
+    final config = widget.interactionConfig;
+    final duration = config?.hoverDuration ?? const Duration(milliseconds: 200);
+
     return MouseRegion(
       onEnter: widget.enabled ? (_) => _handleHoverChange(true) : null,
       onExit: widget.enabled ? (_) => _handleHoverChange(false) : null,
@@ -2064,22 +3631,58 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
         child: Focus(
           focusNode: _focusNode,
           autofocus: widget.autofocus,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            padding: widget.padding ?? _getDefaultPadding(),
-            decoration: BoxDecoration(
-              color: _getBackgroundColor(context),
-              borderRadius: BorderRadius.circular(
-                  widget.borderRadius ?? _getDefaultBorderRadius()),
-              border: _getBorder(),
-              boxShadow: _getBoxShadow(context),
-            ),
-            child: _buildContent(),
+          child: AnimatedBuilder(
+            animation: Listenable.merge([_scaleAnimation, _opacityAnimation]),
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _isPressed ? _scaleAnimation.value : 1.0,
+                child: Opacity(
+                  opacity: _currentState == MPCardInteractionState.disabled
+                      ? _opacityAnimation.value
+                      : 1.0,
+                  child: AnimatedContainer(
+                    duration: duration,
+                    curve: Curves.easeInOut,
+                    padding: _getResponsivePadding(),
+                    decoration: BoxDecoration(
+                      color: _getInteractionColor(context),
+                      borderRadius: BorderRadius.circular(
+                          widget.borderRadius ?? _getDefaultBorderRadius()),
+                      border: _getBorder(),
+                      boxShadow: _getBoxShadow(context),
+                    ),
+                    child: _buildContentWithRipple(context),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildContentWithRipple(BuildContext context) {
+    final config = widget.interactionConfig;
+
+    // Add ripple effect if enabled
+    if (config?.enableRipple == true && widget.enabled) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
+          splashColor:
+              config?.rippleColor ?? context.mp.primary.withValues(alpha: 0.2),
+          highlightColor: Colors.transparent,
+          borderRadius: BorderRadius.circular(
+              widget.borderRadius ?? _getDefaultBorderRadius()),
+          child: _buildContent(),
+        ),
+      );
+    }
+
+    return _buildContent();
   }
 
   Widget _buildContent() {
@@ -2166,28 +3769,122 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildGridLayout() {
-    // For now, fall back to vertical layout
-    // Grid layout will be implemented in future enhancements
-    return _buildVerticalLayout();
+    final config = widget.responsive;
+    final screenSize = _currentScreenSize;
+
+    // Determine grid columns based on screen size
+    int crossAxisCount = 1;
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+      case MPCardScreenSize.mobile:
+        crossAxisCount = 1;
+        break;
+      case MPCardScreenSize.largeMobile:
+      case MPCardScreenSize.smallTablet:
+        crossAxisCount = 2;
+        break;
+      case MPCardScreenSize.tablet:
+      case MPCardScreenSize.largeTablet:
+        crossAxisCount = 3;
+        break;
+      case MPCardScreenSize.smallDesktop:
+      case MPCardScreenSize.desktop:
+        crossAxisCount = 4;
+        break;
+      case MPCardScreenSize.largeDesktop:
+        crossAxisCount = 5;
+        break;
+    }
+
+    // Build grid content
+    final children = _buildContentChildren();
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: _getContentSpacing(),
+        mainAxisSpacing: _getContentSpacing(),
+        childAspectRatio: _getGridChildAspectRatio(),
+      ),
+      itemBuilder: (context, index) {
+        if (index < children.length) {
+          return children[index];
+        }
+        return const SizedBox.shrink();
+      },
+      itemCount: children.length,
+    );
+  }
+
+  /// Gets the aspect ratio for grid children based on screen size
+  double _getGridChildAspectRatio() {
+    final screenSize = _currentScreenSize;
+
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+      case MPCardScreenSize.mobile:
+        return 1.2; // More vertical on small screens
+      case MPCardScreenSize.largeMobile:
+      case MPCardScreenSize.smallTablet:
+        return 1.0; // Square on medium screens
+      case MPCardScreenSize.tablet:
+      case MPCardScreenSize.largeTablet:
+        return 1.1; // Slightly wider on tablets
+      case MPCardScreenSize.smallDesktop:
+      case MPCardScreenSize.desktop:
+      case MPCardScreenSize.largeDesktop:
+        return 1.2; // Wider on desktop
+    }
   }
 
   Widget _buildAdaptiveLayout() {
     final screenWidth = MediaQuery.of(context).size.width;
     final config = widget.responsive;
+    final orientation = _currentOrientation;
 
     if (config != null) {
-      if (screenWidth <= (config.mobileMaxWidth ?? MPCardBreakpoints.mobile)) {
-        return _buildVerticalLayout();
-      } else if (screenWidth <=
-          (config.tabletMaxWidth ?? MPCardBreakpoints.tablet)) {
-        return config.tabletLayout == MPCardLayout.horizontal
-            ? _buildHorizontalLayout()
-            : _buildVerticalLayout();
+      // Orientation-aware layout adaptation
+      if (config.enableOrientationAdaptation &&
+          orientation == MPCardOrientation.landscape) {
+        // In landscape mode, prefer horizontal layout for better space utilization
+        if (screenWidth <=
+            (config.mobileMaxWidth ?? MPCardBreakpoints.mobile)) {
+          return _buildHorizontalLayout();
+        } else if (screenWidth <=
+            (config.tabletMaxWidth ?? MPCardBreakpoints.tablet)) {
+          return _buildHorizontalLayout();
+        } else {
+          return (config.desktopLayout ?? MPCardLayout.horizontal) ==
+                  MPCardLayout.horizontal
+              ? _buildHorizontalLayout()
+              : _buildVerticalLayout();
+        }
       } else {
-        return config.desktopLayout == MPCardLayout.horizontal
-            ? _buildHorizontalLayout()
-            : _buildVerticalLayout();
+        // Portrait mode or orientation adaptation disabled
+        if (screenWidth <=
+            (config.mobileMaxWidth ?? MPCardBreakpoints.mobile)) {
+          return (config.mobileLayout ?? MPCardLayout.vertical) ==
+                  MPCardLayout.horizontal
+              ? _buildHorizontalLayout()
+              : _buildVerticalLayout();
+        } else if (screenWidth <=
+            (config.tabletMaxWidth ?? MPCardBreakpoints.tablet)) {
+          return config.tabletLayout == MPCardLayout.horizontal
+              ? _buildHorizontalLayout()
+              : _buildVerticalLayout();
+        } else {
+          return config.desktopLayout == MPCardLayout.horizontal
+              ? _buildHorizontalLayout()
+              : _buildVerticalLayout();
+        }
       }
+    }
+
+    // Fallback to orientation-based layout if no config
+    if (orientation == MPCardOrientation.landscape && screenWidth > 600) {
+      return _buildHorizontalLayout();
     }
 
     return _buildVerticalLayout();
@@ -2317,6 +4014,21 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildScrollableContent(Widget content) {
+    final config = widget.responsive;
+    final screenSize = _currentScreenSize;
+    final isSmallScreen = screenSize == MPCardScreenSize.smallMobile ||
+        screenSize == MPCardScreenSize.mobile;
+
+    // Enable horizontal scrolling on small screens if configured
+    if (isSmallScreen && config?.enableHorizontalScrolling == true) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: widget.clipBehavior,
+        child: content,
+      );
+    }
+
+    // Default vertical scrolling
     return SingleChildScrollView(
       clipBehavior: widget.clipBehavior,
       child: content,
@@ -2381,7 +4093,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   EdgeInsets _getHeaderPadding() {
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
       case MPCardSize.medium:
@@ -2396,7 +4108,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   EdgeInsets _getFooterPadding() {
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
       case MPCardSize.medium:
@@ -2594,7 +4306,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   double _getDefaultBorderRadius() {
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return 8.0;
       case MPCardSize.medium:
@@ -2609,7 +4321,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   EdgeInsets _getDefaultPadding() {
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return const EdgeInsets.all(12.0);
       case MPCardSize.medium:
@@ -2624,7 +4336,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   EdgeInsets _getDefaultMargin() {
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return const EdgeInsets.all(4.0);
       case MPCardSize.medium:
@@ -2639,7 +4351,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
   }
 
   double _getContentSpacing() {
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return 8.0;
       case MPCardSize.medium:
@@ -2666,6 +4378,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
     if (_isHovered != isHovered) {
       setState(() {
         _isHovered = isHovered;
+        _updateCurrentState();
       });
       widget.onHover?.call(isHovered);
     }
@@ -2675,6 +4388,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
     if (_isPressed != isPressed) {
       setState(() {
         _isPressed = isPressed;
+        _updateCurrentState();
       });
     }
   }
@@ -2731,7 +4445,7 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
     double baseElevation = _getElevation;
 
     // Adjust elevation based on card size
-    switch (widget.size) {
+    switch (_getResponsiveSize()) {
       case MPCardSize.small:
         return baseElevation * 0.75; // Reduce elevation for small cards
       case MPCardSize.medium:
