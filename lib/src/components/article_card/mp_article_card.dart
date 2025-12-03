@@ -87,6 +87,8 @@ class MPArticleCard extends StatefulWidget {
   final Color? splashColor;
   final Color? focusColor;
   final Color? highlightColor;
+  final bool isLoading;
+  final Widget? loadingChild;
 
   @override
   State<MPArticleCard> createState() => _MPArticleCardState();
@@ -98,6 +100,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Show skeleton loading state if isLoading
+    if (widget.isLoading) {
+      return widget.loadingChild ?? MPSkeletonVariants.articleCard(context);
+    }
+
     return Semantics(
       label: widget.semanticLabel ?? _buildSemanticLabel(),
       button: widget.onTap != null,
