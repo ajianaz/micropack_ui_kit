@@ -31,12 +31,12 @@ Future<void> showMPDialog(
   await showDialog<void>(
     context: context,
     builder: (context) {
-      return MPDialog(
+      return MPDialogAnimated(
         background: background,
         maxHeight: maxHeight,
-        elevation: elevation,
+        elevation: elevation ?? 8.0,
         padding: padding,
-        cornerRadius: cornerRadius,
+        cornerRadius: cornerRadius ?? 16.0,
         child: child,
       );
     },
@@ -118,9 +118,9 @@ Future<void> showMPAlertDialog(
         builder: (context) {
           final themeColors = context.mp;
 
-          return MPDialog(
+          return MPDialogAnimated(
             background: Colors.transparent,
-            elevation: 0,
+            elevation: 0.0,
             child: SizedBox(
               width: width,
               child: Stack(

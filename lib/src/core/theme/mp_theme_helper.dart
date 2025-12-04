@@ -105,6 +105,9 @@ class MPThemeUtilities {
       colorTheme?.primarySurface ??
       MPThemeConfig.getPrimarySurface(isDarkMode: isDarkMode);
 
+  /// Background color based on theme
+  Color get backgroundColor => surfaceColor;
+
   /// Get primary focus color with fallback using MPThemeConfig
   Color get primaryFocus =>
       colorTheme?.primaryFocus ??

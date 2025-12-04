@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Enhanced rounded tab with smooth slide animations
-/// 
+///
 /// This tab component provides smooth slide transitions when switching
 /// between tabs, with configurable animations and rich interaction support.
 class MPTabRoundedAnimated extends StatefulWidget {
@@ -88,11 +88,11 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
   late AnimationController _selectionController;
   late AnimationController _slideController;
   late AnimationController _scaleController;
-  
+
   late Animation<double> _selectionAnimation;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _scaleAnimation;
-  
+
   bool _isHovered = false;
   bool _isPressed = false;
 
@@ -114,7 +114,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
   @override
   void didUpdateWidget(MPTabRoundedAnimated oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
+
     if (oldWidget.isSelected != widget.isSelected) {
       if (widget.isSelected) {
         _playSelectAnimation();
@@ -130,7 +130,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
       duration: widget.animationDuration,
       vsync: this,
     );
-    
+
     _selectionAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -145,7 +145,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
         duration: widget.animationDuration,
         vsync: this,
       );
-      
+
       _slideAnimation = Tween<Offset>(
         begin: _getSlideOffset(false),
         end: Offset.zero,
@@ -161,7 +161,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
         duration: const Duration(milliseconds: 150),
         vsync: this,
       );
-      
+
       _scaleAnimation = Tween<double>(
         begin: 1.0,
         end: 1.0,
@@ -193,7 +193,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
       ));
       _slideController.forward();
     }
-    
+
     _selectionController.forward();
   }
 
@@ -208,7 +208,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
       ));
       _slideController.forward();
     }
-    
+
     _selectionController.reverse();
   }
 
@@ -263,7 +263,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
   @override
   Widget build(BuildContext context) {
     Widget tabContent = _buildTabContent();
-    
+
     // Apply scale animation if enabled
     if (widget.enableScaleAnimation) {
       tabContent = AnimatedBuilder(
@@ -277,7 +277,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
         child: tabContent,
       );
     }
-    
+
     // Apply slide animation if enabled
     if (widget.enableSlideAnimation) {
       tabContent = AnimatedBuilder(
@@ -291,16 +291,16 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
         child: tabContent,
       );
     }
-    
+
     // Apply selection animation
     tabContent = AnimatedBuilder(
       animation: _selectionAnimation,
       builder: (context, child) {
-        return _buildAnimatedContainer(child);
+        return _buildAnimatedContainer(child!);
       },
       child: tabContent,
     );
-    
+
     // Wrap with interaction handlers
     return MouseRegion(
       onEnter: (_) => _handleMouseEnter(),
@@ -324,8 +324,8 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
 
   Widget _buildTabContent() {
     return Flex(
-      direction: widget.slideDirection == Axis.horizontal 
-          ? Axis.horizontal 
+      direction: widget.slideDirection == Axis.horizontal
+          ? Axis.horizontal
           : Axis.vertical,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -383,7 +383,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
         curve: widget.animationCurve,
         height: widget.indicatorHeight ?? 3.0,
         margin: EdgeInsets.symmetric(
-          horizontal: widget.indicatorWidth != null 
+          horizontal: widget.indicatorWidth != null
               ? (MediaQuery.of(context).size.width - widget.indicatorWidth!) / 2
               : 8.0,
         ),
@@ -420,7 +420,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
 
   Widget _getBadgeSpacing() {
     final spacing = widget.slideDirection == Axis.horizontal ? 6.0 : 4.0;
-    return widget.slideDirection == Axis.horizontal 
+    return widget.slideDirection == Axis.horizontal
         ? SizedBox(width: spacing)
         : SizedBox(height: spacing);
   }
@@ -429,11 +429,11 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
     if (widget.isDisabled) {
       return context.mp.neutral20;
     }
-    
+
     if (widget.isSelected) {
       return widget.tabColorActive ?? _getVariantActiveColor();
     }
-    
+
     return widget.tabColor ?? _getVariantColor();
   }
 
@@ -463,14 +463,14 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
     if (widget.isDisabled) {
       return context.mp.neutral60;
     }
-    
+
     if (widget.isSelected) {
-      return widget.textColorActive ?? 
-             (widget.variant == MPTabRoundedVariant.standard 
-                 ? context.mp.neutral100 
-                 : context.mp.primary);
+      return widget.textColorActive ??
+          (widget.variant == MPTabRoundedVariant.standard
+              ? context.mp.neutral100
+              : context.mp.primary);
     }
-    
+
     return widget.textColor ?? context.mp.neutral80;
   }
 
@@ -486,7 +486,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
     switch (widget.variant) {
       case MPTabRoundedVariant.outlined:
         return Border.all(
-          color: widget.isSelected 
+          color: widget.isSelected
               ? (widget.tabColorActive ?? context.mp.primary)
               : context.mp.neutral40,
           width: 1.0,
@@ -499,7 +499,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
 
   BorderRadius _getBorderRadius() {
     if (widget.borderRadius != null) return widget.borderRadius!;
-    
+
     switch (widget.size) {
       case MPTabRoundedSize.small:
         return BorderRadius.circular(8.0);
@@ -552,7 +552,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
   TextStyle _getTextStyle() {
     final fontSize = widget.slideDirection == Axis.horizontal ? 14.0 : 12.0;
     final fontWeight = widget.isSelected ? FontWeight.w600 : FontWeight.w500;
-    
+
     return TextStyle(
       color: _getTextColor(),
       fontSize: fontSize,
@@ -606,7 +606,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
 }
 
 /// Tab bar with smooth slide animations
-/// 
+///
 /// This widget provides a container for multiple animated tabs
 /// with smooth switching animations and consistent styling.
 class MPTabBarAnimated extends StatefulWidget {
@@ -659,13 +659,17 @@ class _MPTabBarAnimatedState extends State<MPTabBarAnimated> {
         children: widget.tabs.asMap().entries.map((entry) {
           final index = entry.key;
           final tab = entry.value;
-          
+
           return Flexible(
             flex: tab.flex,
             child: Padding(
               padding: widget.direction == Axis.horizontal
-                  ? EdgeInsets.only(right: index < widget.tabs.length - 1 ? widget.spacing : 0)
-                  : EdgeInsets.only(bottom: index < widget.tabs.length - 1 ? widget.spacing : 0),
+                  ? EdgeInsets.only(
+                      right:
+                          index < widget.tabs.length - 1 ? widget.spacing : 0)
+                  : EdgeInsets.only(
+                      bottom:
+                          index < widget.tabs.length - 1 ? widget.spacing : 0),
               child: MPTabRoundedAnimated(
                 title: tab.title,
                 isSelected: index == widget.selectedIndex,

@@ -1,8 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Animated dialog with smooth show/hide transitions
-/// 
+///
 /// This enhanced dialog component provides smooth fade, scale,
 /// and slide animations for show/hide transitions with configurable
 /// animations and comprehensive accessibility support.
@@ -113,7 +114,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
   void initState() {
     super.initState();
     _initializeAnimations();
-    
+
     // Start showing animation
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _startShowAnimation();
@@ -208,7 +209,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
                   ),
                 ),
               ),
-              
+
               // Animated dialog
               Center(
                 child: _buildAnimatedDialog(),
@@ -222,7 +223,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
 
   Widget _buildAnimatedDialog() {
     Widget dialog = _buildDialogContent();
-    
+
     // Apply animation based on type
     switch (widget.animationType) {
       case MPDialogAnimationType.fade:
@@ -290,7 +291,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
       builder: (context, constraints) {
         final deviceWidth = MediaQuery.of(context).size.width;
         var width = MediaQuery.of(context).size.width;
-        
+
         // Responsive width
         if (deviceWidth > MpUiKit.limitMediumLargeScreen) {
           width = widget.maxWidth ?? 600;
@@ -352,9 +353,10 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
       ),
       child: DefaultTextStyle(
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: context.mp.textColor,
-        ) ?? const TextStyle(),
+                  fontWeight: FontWeight.w600,
+                  color: context.mp.textColor,
+                ) ??
+            const TextStyle(),
         child: widget.title!,
       ),
     );
@@ -362,7 +364,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
 
   Widget _buildContentSection() {
     final content = widget.content ?? widget.child;
-    
+
     return Expanded(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -517,8 +519,8 @@ class MPDialogHelper {
   }) {
     return show<bool>(
       context: context,
+      child: Text(message),
       title: Text(title),
-      content: Text(message),
       actions: [
         TextButton(
           onPressed: () {
@@ -550,8 +552,8 @@ class MPDialogHelper {
   }) {
     return show<void>(
       context: context,
+      child: Text(message),
       title: Text(title),
-      content: Text(message),
       actions: [
         ElevatedButton(
           onPressed: () {

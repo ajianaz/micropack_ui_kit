@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/theme/mp_skeleton_theme.dart';
 
 /// Skeleton text field with loading animation
-/// 
+///
 /// This widget provides a skeleton loading state for text fields,
 /// matching the expected layout and styling of MPTextField.
 class MPTextFieldSkeleton extends StatefulWidget {
@@ -153,7 +154,7 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
               showContent: true,
             ),
           ),
-          
+
           // Prefix icon
           if (widget.prefixIcon != null) ...[
             Positioned(
@@ -169,7 +170,7 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
               ),
             ),
           ],
-          
+
           // Hint text placeholder
           if (widget.hint != null) ...[
             Positioned(
@@ -186,7 +187,7 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
               ),
             ),
           ],
-          
+
           // Suffix icon
           if (widget.suffixIcon != null) ...[
             Positioned(
@@ -218,7 +219,7 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
             borderRadius: BorderRadius.circular(2.0),
           ),
         ),
-        
+
         // Counter text skeleton
         if (widget.counterText != null) ...[
           const SizedBox(width: 8.0),
@@ -248,13 +249,14 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
     );
 
     // Add shimmer effect
-    if (widget.animationType == MPSkeletonAnimationType.shimmer && widget.isAnimating) {
+    if (widget.animationType == MPSkeletonAnimationType.shimmer &&
+        widget.isAnimating) {
       skeleton = AnimatedBuilder(
         animation: _shimmerAnimation,
         builder: (context, child) {
           return Stack(
             children: [
-              child,
+              if (child != null) child,
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: borderRadius,
@@ -268,7 +270,8 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
                           end: Alignment.centerRight,
                           colors: [
                             Colors.transparent,
-                            widget.highlightColor ?? Colors.white.withValues(alpha: 0.4),
+                            widget.highlightColor ??
+                                Colors.white.withValues(alpha: 0.4),
                             Colors.transparent,
                           ],
                         ),
@@ -283,9 +286,10 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
         child: skeleton,
       );
     }
-    
+
     // Add pulse effect
-    if (widget.animationType == MPSkeletonAnimationType.pulse && widget.isAnimating) {
+    if (widget.animationType == MPSkeletonAnimationType.pulse &&
+        widget.isAnimating) {
       skeleton = AnimatedBuilder(
         animation: _colorAnimation,
         builder: (context, child) {
@@ -298,6 +302,7 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
             ),
           );
         },
+        child: skeleton,
       );
     }
 
@@ -392,15 +397,8 @@ enum MPTextFieldSkeletonSize {
   large,
 }
 
-/// Skeleton animation types
-enum MPSkeletonAnimationType {
-  shimmer,
-  pulse,
-  fade,
-}
-
 /// Form skeleton loader for complete forms
-/// 
+///
 /// This widget provides skeleton loading states for entire forms
 /// with multiple text fields and consistent styling.
 class MPFormSkeleton extends StatelessWidget {

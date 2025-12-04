@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Skeleton theme data for consistent skeleton styling
-/// 
+///
 /// This class provides configuration options for skeleton
 /// loading states with customizable colors, animations, and variants.
-class MPSkeletonThemeData {
+class MPSkeletonThemeData extends ThemeExtension<MPSkeletonThemeData> {
   const MPSkeletonThemeData({
     this.baseColor,
     this.highlightColor,
@@ -66,7 +66,7 @@ class MPSkeletonThemeData {
   final Curve shimmerCurve;
 
   /// Creates a copy with updated values
-  MPSkeletonThemeData copyWith({
+  MPSkeletonThemeData copyWithValues({
     Color? baseColor,
     Color? highlightColor,
     Duration? animationDuration,
@@ -91,7 +91,8 @@ class MPSkeletonThemeData {
       textBorderRadius: textBorderRadius ?? this.textBorderRadius,
       avatarBorderRadius: avatarBorderRadius ?? this.avatarBorderRadius,
       buttonBorderRadius: buttonBorderRadius ?? this.buttonBorderRadius,
-      textFieldBorderRadius: textFieldBorderRadius ?? this.textFieldBorderRadius,
+      textFieldBorderRadius:
+          textFieldBorderRadius ?? this.textFieldBorderRadius,
       cardBorderRadius: cardBorderRadius ?? this.cardBorderRadius,
       enableShimmer: enableShimmer ?? this.enableShimmer,
       shimmerGradient: shimmerGradient ?? this.shimmerGradient,
@@ -101,7 +102,7 @@ class MPSkeletonThemeData {
   }
 
   /// Linear interpolation for theme transitions
-  static MPSkeletonThemeData lerp(
+  static MPSkeletonThemeData lerpStatic(
     MPSkeletonThemeData a,
     MPSkeletonThemeData b,
     double t,
@@ -112,13 +113,17 @@ class MPSkeletonThemeData {
     return MPSkeletonThemeData(
       baseColor: Color.lerp(a.baseColor, b.baseColor, t),
       highlightColor: Color.lerp(a.highlightColor, b.highlightColor, t),
-      animationDuration: lerpDuration(a.animationDuration, b.animationDuration, t),
+      animationDuration:
+          lerpDuration(a.animationDuration, b.animationDuration, t),
       animationType: t < 0.5 ? a.animationType : b.animationType,
       borderRadius: lerpDouble(a.borderRadius, b.borderRadius, t),
       textBorderRadius: lerpDouble(a.textBorderRadius, b.textBorderRadius, t),
-      avatarBorderRadius: lerpDouble(a.avatarBorderRadius, b.avatarBorderRadius, t),
-      buttonBorderRadius: lerpDouble(a.buttonBorderRadius, b.buttonBorderRadius, t),
-      textFieldBorderRadius: lerpDouble(a.textFieldBorderRadius, b.textFieldBorderRadius, t),
+      avatarBorderRadius:
+          lerpDouble(a.avatarBorderRadius, b.avatarBorderRadius, t),
+      buttonBorderRadius:
+          lerpDouble(a.buttonBorderRadius, b.buttonBorderRadius, t),
+      textFieldBorderRadius:
+          lerpDouble(a.textFieldBorderRadius, b.textFieldBorderRadius, t),
       cardBorderRadius: lerpDouble(a.cardBorderRadius, b.cardBorderRadius, t),
       enableShimmer: t < 0.5 ? a.enableShimmer : b.enableShimmer,
       shimmerGradient: t < 0.5 ? a.shimmerGradient : b.shimmerGradient,
@@ -129,17 +134,64 @@ class MPSkeletonThemeData {
 
   static Duration lerpDuration(Duration a, Duration b, double t) {
     return Duration(
-      milliseconds: lerpDouble(a.inMilliseconds.toDouble(), b.inMilliseconds.toDouble(), t).toInt(),
+      milliseconds: lerpDouble(
+              a.inMilliseconds.toDouble(), b.inMilliseconds.toDouble(), t)
+          .toInt(),
     );
   }
 
   static double lerpDouble(double a, double b, double t) {
     return a + (b - a) * t;
   }
+
+  @override
+  ThemeExtension<MPSkeletonThemeData> copyWith({
+    Color? baseColor,
+    Color? highlightColor,
+    Duration? animationDuration,
+    MPSkeletonAnimationType? animationType,
+    double? borderRadius,
+    double? textBorderRadius,
+    double? avatarBorderRadius,
+    double? buttonBorderRadius,
+    double? textFieldBorderRadius,
+    double? cardBorderRadius,
+    bool? enableShimmer,
+    Gradient? shimmerGradient,
+    Curve? pulseCurve,
+    Curve? shimmerCurve,
+  }) {
+    return MPSkeletonThemeData(
+      baseColor: baseColor ?? this.baseColor,
+      highlightColor: highlightColor ?? this.highlightColor,
+      animationDuration: animationDuration ?? this.animationDuration,
+      animationType: animationType ?? this.animationType,
+      borderRadius: borderRadius ?? this.borderRadius,
+      textBorderRadius: textBorderRadius ?? this.textBorderRadius,
+      avatarBorderRadius: avatarBorderRadius ?? this.avatarBorderRadius,
+      buttonBorderRadius: buttonBorderRadius ?? this.buttonBorderRadius,
+      textFieldBorderRadius:
+          textFieldBorderRadius ?? this.textFieldBorderRadius,
+      cardBorderRadius: cardBorderRadius ?? this.cardBorderRadius,
+      enableShimmer: enableShimmer ?? this.enableShimmer,
+      shimmerGradient: shimmerGradient ?? this.shimmerGradient,
+      pulseCurve: pulseCurve ?? this.pulseCurve,
+      shimmerCurve: shimmerCurve ?? this.shimmerCurve,
+    );
+  }
+
+  @override
+  ThemeExtension<MPSkeletonThemeData> lerp(
+    covariant ThemeExtension<MPSkeletonThemeData>? other,
+    double t,
+  ) {
+    if (other is! MPSkeletonThemeData) return this;
+    return MPSkeletonThemeData.lerpStatic(this, other, t);
+  }
 }
 
 /// Skeleton theme extension for easy access
-extension MPSkeletonTheme on BuildContext {
+extension MPSkeletonThemeExtension on BuildContext {
   MPSkeletonThemeData get skeletonTheme {
     final theme = Theme.of(this);
     return theme.extension<MPSkeletonThemeData>() ??
@@ -161,7 +213,7 @@ class MPSkeletonTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Theme(
       data: theme.copyWith(
         extensions: [
@@ -217,40 +269,48 @@ class MPSkeletonThemeManager {
   /// Initialize default themes
   static void initializeDefaultThemes() {
     // Light theme
-    registerTheme('light', const MPSkeletonThemeData(
-      baseColor: Color(0xFFE0E0E0),
-      highlightColor: Color(0xFFF5F5F5),
-      animationDuration: Duration(milliseconds: 1500),
-      animationType: MPSkeletonAnimationType.shimmer,
-      enableShimmer: true,
-    ));
+    registerTheme(
+        'light',
+        const MPSkeletonThemeData(
+          baseColor: Color(0xFFE0E0E0),
+          highlightColor: Color(0xFFF5F5F5),
+          animationDuration: Duration(milliseconds: 1500),
+          animationType: MPSkeletonAnimationType.shimmer,
+          enableShimmer: true,
+        ));
 
     // Dark theme
-    registerTheme('dark', const MPSkeletonThemeData(
-      baseColor: Color(0xFF424242),
-      highlightColor: Color(0xFF616161),
-      animationDuration: Duration(milliseconds: 1500),
-      animationType: MPSkeletonAnimationType.shimmer,
-      enableShimmer: true,
-    ));
+    registerTheme(
+        'dark',
+        const MPSkeletonThemeData(
+          baseColor: Color(0xFF424242),
+          highlightColor: Color(0xFF616161),
+          animationDuration: Duration(milliseconds: 1500),
+          animationType: MPSkeletonAnimationType.shimmer,
+          enableShimmer: true,
+        ));
 
     // Minimal theme
-    registerTheme('minimal', const MPSkeletonThemeData(
-      baseColor: Color(0xFFF5F5F5),
-      highlightColor: Color(0xFFE0E0E0),
-      animationDuration: Duration(milliseconds: 2000),
-      animationType: MPSkeletonAnimationType.pulse,
-      enableShimmer: false,
-    ));
+    registerTheme(
+        'minimal',
+        const MPSkeletonThemeData(
+          baseColor: Color(0xFFF5F5F5),
+          highlightColor: Color(0xFFE0E0E0),
+          animationDuration: Duration(milliseconds: 2000),
+          animationType: MPSkeletonAnimationType.pulse,
+          enableShimmer: false,
+        ));
 
     // Colorful theme
-    registerTheme('colorful', const MPSkeletonThemeData(
-      baseColor: Color(0xFFE8EAF6),
-      highlightColor: Color(0xFFC5CAE9),
-      animationDuration: Duration(milliseconds: 1200),
-      animationType: MPSkeletonAnimationType.shimmer,
-      enableShimmer: true,
-    ));
+    registerTheme(
+        'colorful',
+        const MPSkeletonThemeData(
+          baseColor: Color(0xFFE8EAF6),
+          highlightColor: Color(0xFFC5CAE9),
+          animationDuration: Duration(milliseconds: 1200),
+          animationType: MPSkeletonAnimationType.shimmer,
+          enableShimmer: true,
+        ));
   }
 }
 
@@ -350,13 +410,13 @@ class MPSkeletonThemed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = themeData ?? context.skeletonTheme;
-    
+
     return MPSkeletonAdvanced(
       width: width,
       height: height,
       borderRadius: borderRadius ?? theme.borderRadius,
-      baseColor: baseColor ?? _getBaseColor(theme),
-      highlightColor: highlightColor ?? _getHighlightColor(theme),
+      baseColor: baseColor ?? _getBaseColor(theme, context),
+      highlightColor: highlightColor ?? _getHighlightColor(theme, context),
       isCircle: isCircle,
       animationType: animationType ?? theme.animationType,
       animationDuration: animationDuration ?? theme.animationDuration,
@@ -367,18 +427,18 @@ class MPSkeletonThemed extends StatelessWidget {
     );
   }
 
-  Color _getBaseColor(MPSkeletonThemeData theme) {
+  Color _getBaseColor(MPSkeletonThemeData theme, BuildContext context) {
     if (theme.baseColor != null) return theme.baseColor!;
-    
+
     // Use theme-aware color
     return context.mp.isDarkMode
         ? const Color(0xFF424242)
         : const Color(0xFFE0E0E0);
   }
 
-  Color _getHighlightColor(MPSkeletonThemeData theme) {
+  Color _getHighlightColor(MPSkeletonThemeData theme, BuildContext context) {
     if (theme.highlightColor != null) return theme.highlightColor!;
-    
+
     // Use theme-aware color
     return context.mp.isDarkMode
         ? const Color(0xFF616161)
@@ -480,6 +540,9 @@ class _MPSkeletonAdvancedState extends State<MPSkeletonAdvanced>
         }
       case MPSkeletonAnimationType.pulse:
         _pulseController.repeat(reverse: true);
+      case MPSkeletonAnimationType.fade:
+        // No controller needed for fade animation
+        break;
     }
   }
 
@@ -490,28 +553,29 @@ class _MPSkeletonAdvancedState extends State<MPSkeletonAdvanced>
       height: widget.height,
       decoration: BoxDecoration(
         color: widget.baseColor ?? const Color(0xFFE0E0E0),
-        borderRadius: widget.isCircle
-            ? null
-            : BorderRadius.circular(widget.borderRadius),
+        borderRadius:
+            widget.isCircle ? null : BorderRadius.circular(widget.borderRadius),
         shape: widget.isCircle ? BoxShape.circle : BoxShape.rectangle,
       ),
     );
 
     // Apply shimmer effect
-    if (widget.animationType == MPSkeletonAnimationType.shimmer && widget.enableShimmer) {
+    if (widget.animationType == MPSkeletonAnimationType.shimmer &&
+        widget.enableShimmer) {
       skeleton = AnimatedBuilder(
         animation: _shimmerAnimation,
         builder: (context, child) {
           return Stack(
             children: [
-              child,
+              if (child != null) child,
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: widget.isCircle
-                      ? null
+                      ? BorderRadius.zero
                       : BorderRadius.circular(widget.borderRadius),
                   child: Transform.translate(
-                    offset: Offset(_shimmerAnimation.value * (widget.width ?? 100), 0),
+                    offset: Offset(
+                        _shimmerAnimation.value * (widget.width ?? 100), 0),
                     child: Container(
                       width: (widget.width ?? 100) * 0.3,
                       decoration: BoxDecoration(
@@ -521,7 +585,8 @@ class _MPSkeletonAdvancedState extends State<MPSkeletonAdvanced>
                               end: Alignment.centerRight,
                               colors: [
                                 Colors.transparent,
-                                widget.highlightColor ?? Colors.white.withValues(alpha: 0.4),
+                                widget.highlightColor ??
+                                    Colors.white.withValues(alpha: 0.4),
                                 Colors.transparent,
                               ],
                             ),

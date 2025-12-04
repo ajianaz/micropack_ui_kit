@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Enhanced snackbar with smooth scale animations
-/// 
+///
 /// This snackbar component provides smooth scale and fade animations
 /// for entrance/exit transitions with customizable animations and themes.
 class MPSnackbarAnimated extends StatefulWidget {
@@ -66,7 +66,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
     super.initState();
     _initializeAnimations();
     _startEntranceAnimation();
-    
+
     // Auto-dismiss after duration
     Future.delayed(widget.duration, () {
       if (mounted) {
@@ -87,12 +87,12 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
       duration: widget.animationDuration,
       vsync: this,
     );
-    
+
     _exitController = AnimationController(
       duration: widget.animationDuration ~/ 2,
       vsync: this,
     );
-    
+
     // Scale animation
     _scaleAnimation = Tween<double>(
       begin: 0.0,
@@ -101,7 +101,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
       parent: _entranceController,
       curve: widget.animationCurve,
     ));
-    
+
     // Fade animation
     _fadeAnimation = Tween<double>(
       begin: 0.0,
@@ -110,7 +110,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
       parent: _entranceController,
       curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
     ));
-    
+
     // Slide animation
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0.0, 1.0),
@@ -134,7 +134,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
   @override
   Widget build(BuildContext context) {
     Widget snackbarContent = _buildSnackbarContent();
-    
+
     // Apply animations based on type
     switch (widget.animationType) {
       case MPSnackbarAnimationType.scale:
@@ -164,7 +164,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
           builder: (context, child) {
             return Transform.scale(
               scale: _scaleAnimation.value,
-              child: FadeTransition(
+              child: Opacity(
                 opacity: _fadeAnimation.value,
                 child: child,
               ),
@@ -203,7 +203,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
     final backgroundColor = widget.backgroundColor ?? _getBackgroundColor();
     final textColor = widget.textColor ?? _getTextColor();
     final padding = widget.padding ?? _getPadding();
-    
+
     return Container(
       margin: widget.margin ?? _getMargin(),
       decoration: BoxDecoration(
@@ -237,7 +237,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
                   ),
                   const SizedBox(width: 12.0),
                 ],
-                
+
                 // Message
                 Expanded(
                   child: Text(
@@ -249,14 +249,14 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
                     ),
                   ),
                 ),
-                
+
                 // Action button
                 if (widget.action != null) ...[
                   const SizedBox(width: 12.0),
                   TextButton(
                     onPressed: () {
                       widget.onActionPressed?.call();
-                      widget.action!.onPressed?.call();
+                      widget.action!.onPressed.call();
                       _startExitAnimation();
                     },
                     style: TextButton.styleFrom(
@@ -268,7 +268,7 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
                     child: Text(widget.action!.label),
                   ),
                 ],
-                
+
                 // Close button
                 if (widget.showCloseButton) ...[
                   const SizedBox(width: 12.0),
@@ -342,16 +342,16 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
 enum MPSnackbarAnimationType {
   /// Scale in from center
   scale,
-  
+
   /// Fade in
   fade,
-  
+
   /// Slide up from bottom
   slide,
-  
+
   /// Combined scale and fade
   scaleFade,
-  
+
   /// Combined slide and scale
   slideScale,
 }
@@ -432,7 +432,7 @@ class MPSnackbarAnimatedHelper {
     VoidCallback? onDismissed,
   }) {
     show(
-      context: context,
+      context,
       message: message,
       type: MPSnackbarType.success,
       fontSize: fontSize,
@@ -454,7 +454,7 @@ class MPSnackbarAnimatedHelper {
     VoidCallback? onDismissed,
   }) {
     show(
-      context: context,
+      context,
       message: message,
       type: MPSnackbarType.error,
       fontSize: fontSize,
@@ -476,7 +476,7 @@ class MPSnackbarAnimatedHelper {
     VoidCallback? onDismissed,
   }) {
     show(
-      context: context,
+      context,
       message: message,
       type: MPSnackbarType.warning,
       fontSize: fontSize,
@@ -498,7 +498,7 @@ class MPSnackbarAnimatedHelper {
     VoidCallback? onDismissed,
   }) {
     show(
-      context: context,
+      context,
       message: message,
       type: MPSnackbarType.info,
       fontSize: fontSize,

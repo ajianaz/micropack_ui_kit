@@ -8,6 +8,8 @@ export 'package:nil/nil.dart';
 export 'mp_ui_kit_settings.dart';
 // components
 export 'src/components/components.dart';
+// responsive
+export 'src/core/responsive/mp_responsive.dart';
 // styles
 export 'src/core/styles/styles.dart';
 // themes

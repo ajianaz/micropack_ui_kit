@@ -7,6 +7,7 @@ import 'package:micropack_ui_kit_example/pages/button_page.dart';
 import 'package:micropack_ui_kit_example/pages/color_page.dart';
 import 'package:micropack_ui_kit_example/pages/dialog_page.dart';
 import 'package:micropack_ui_kit_example/pages/mp_card_page.dart';
+import 'package:micropack_ui_kit_example/pages/responsive_page.dart';
 import 'package:micropack_ui_kit_example/pages/tab_page.dart';
 import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_showcase_page.dart';
@@ -155,6 +156,24 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const _Button(name: 'Typography', page: TypographyPage()),
+            _Button(
+              name: 'Responsive Design',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ResponsivePage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Responsive Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
             const _SectionTitle(
               title: 'Theme',
             ),

@@ -3061,7 +3061,7 @@ Widget _buildDashboardContent(MPCardDashboardData data) {
   );
 }
 
-class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
+class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   bool _isHovered = false;
   bool _isPressed = false;
   bool _isFocused = false;
@@ -3161,6 +3161,14 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _responsiveCallback();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Check system accessibility settings when dependencies change
+    _checkSystemAccessibilitySettings();
   }
 
   @override
@@ -3308,9 +3316,6 @@ class _MPCardState extends State<MPCard> with SingleTickerProviderStateMixin {
       semanticLabel: widget.semanticLabel,
       semanticHint: widget.semanticHint,
     );
-
-    // Check system accessibility settings
-    _checkSystemAccessibilitySettings();
   }
 
   /// Checks system accessibility settings and updates state accordingly

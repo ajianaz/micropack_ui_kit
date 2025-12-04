@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Builder pattern implementation for optimized MPCard rendering
-/// 
+///
 /// This class provides a fluent API for building cards with conditional
 /// rendering to avoid unnecessary widget creation and improve performance.
 class MPCardBuilder {
@@ -19,14 +19,14 @@ class MPCardBuilder {
   MPCardElevation? _elevationLevel;
   EdgeInsets? _padding;
   EdgeInsets? _margin;
-  
+
   // Content
   Widget? _header;
   MPCardHeaderData? _headerData;
   Widget? _body;
   Widget? _footer;
   MPCardFooterData? _footerData;
-  
+
   // Interaction
   VoidCallback? _onTap;
   VoidCallback? _onLongPress;
@@ -34,14 +34,14 @@ class MPCardBuilder {
   bool _enabled = true;
   bool _selectable = false;
   bool _selected = false;
-  
+
   // Advanced features
   bool _enableOverflowHandling = true;
   Clip _clipBehavior = Clip.antiAlias;
   MPCardInteractiveConfig? _interactiveConfig;
   MPCardInteractionConfig? _interactionConfig;
   MPCardAccessibilityConfig? _accessibilityConfig;
-  
+
   // Performance optimization flags
   bool _useLazyRendering = true;
   bool _useConditionalRendering = true;
@@ -63,20 +63,20 @@ class MPCardBuilder {
     _elevationLevel = card.elevationLevel;
     _padding = card.padding;
     _margin = card.margin;
-    
+
     _header = card.header;
     _headerData = card.headerData;
     _body = card.body;
     _footer = card.footer;
     _footerData = card.footerData;
-    
+
     _onTap = card.onTap;
     _onLongPress = card.onLongPress;
     _onHover = card.onHover;
     _enabled = card.enabled;
     _selectable = card.selectable;
     _selected = card.selected;
-    
+
     _enableOverflowHandling = card.enableOverflowHandling;
     _clipBehavior = card.clipBehavior;
     _interactiveConfig = card.interactiveConfig;
@@ -303,7 +303,8 @@ class MPCardBuilder {
     return this;
   }
 
-  MPCardBuilder spacingSymmetric({double horizontal = 16.0, double vertical = 12.0}) {
+  MPCardBuilder spacingSymmetric(
+      {double horizontal = 16.0, double vertical = 12.0}) {
     _padding = EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical);
     return this;
   }
@@ -314,7 +315,8 @@ class MPCardBuilder {
     double right = 0.0,
     double bottom = 0.0,
   }) {
-    _padding = EdgeInsets.only(left: left, top: top, right: right, bottom: bottom);
+    _padding =
+        EdgeInsets.only(left: left, top: top, right: right, bottom: bottom);
     return this;
   }
 
@@ -326,21 +328,24 @@ class MPCardBuilder {
     return this;
   }
 
-  MPCardBuilder whenNotNull<T>(T? value, MPCardBuilder Function(T value) builder) {
+  MPCardBuilder whenNotNull<T>(
+      T? value, MPCardBuilder Function(T value) builder) {
     if (_useConditionalRendering && value != null) {
       return builder(value);
     }
     return this;
   }
 
-  MPCardBuilder whenNotEmpty(String? value, MPCardBuilder Function(String value) builder) {
+  MPCardBuilder whenNotEmpty(
+      String? value, MPCardBuilder Function(String value) builder) {
     if (_useConditionalRendering && value != null && value.isNotEmpty) {
       return builder(value);
     }
     return this;
   }
 
-  MPCardBuilder whenListNotEmpty<T>(List<T>? list, MPCardBuilder Function(List<T> list) builder) {
+  MPCardBuilder whenListNotEmpty<T>(
+      List<T>? list, MPCardBuilder Function(List<T> list) builder) {
     if (_useConditionalRendering && list != null && list.isNotEmpty) {
       return builder(list);
     }
@@ -352,7 +357,7 @@ class MPCardBuilder {
     if (_useLazyRendering) {
       return _buildOptimized();
     } else {
-      return _buildStandard();
+      return _buildBasicCard();
     }
   }
 
@@ -466,8 +471,8 @@ class MPCardBuilder {
     return Text(
       _headerData!.title!,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w600,
-      ),
+            fontWeight: FontWeight.w600,
+          ),
     );
   }
 
@@ -503,7 +508,7 @@ class MPCardBuilder {
 
   Color _getBackgroundColor(BuildContext context) {
     if (_backgroundColor != null) return _backgroundColor!;
-    
+
     switch (_variant) {
       case MPCardVariant.primary:
         return context.mp.primary.withValues(alpha: 0.1);
@@ -540,9 +545,8 @@ class MPCardBuilder {
 
   Border? _buildBorder() {
     if (_variant == MPCardVariant.outlined || _borderWidth != null) {
-      final theme = Theme.of(context);
       return Border.all(
-        color: _borderColor ?? theme.colorScheme.outline,
+        color: _borderColor ?? Colors.grey.shade300,
         width: _borderWidth ?? 1.0,
       );
     }
@@ -551,7 +555,7 @@ class MPCardBuilder {
 
   List<BoxShadow> _buildBoxShadow(BuildContext context) {
     final elevation = _elevation ?? 0.0;
-    
+
     if (elevation > 0) {
       return [
         BoxShadow(
@@ -563,6 +567,44 @@ class MPCardBuilder {
     }
     return [];
   }
+
+  /// Builds a basic card without optimizations
+  Widget _buildBasicCard() {
+    return Builder(
+      builder: (context) {
+        return MPCard(
+          variant: _variant,
+          size: _size,
+          layout: _layout,
+          responsive: _responsive,
+          backgroundColor: _backgroundColor,
+          borderColor: _borderColor,
+          borderWidth: _borderWidth,
+          borderRadius: _borderRadius,
+          elevation: _elevation,
+          elevationLevel: _elevationLevel,
+          padding: _padding,
+          margin: _margin,
+          header: _header,
+          headerData: _headerData,
+          body: _body,
+          footer: _footer,
+          footerData: _footerData,
+          onTap: _onTap,
+          onLongPress: _onLongPress,
+          onHover: _onHover,
+          enabled: _enabled,
+          selectable: _selectable,
+          selected: _selected,
+          enableOverflowHandling: _enableOverflowHandling,
+          clipBehavior: _clipBehavior,
+          interactiveConfig: _interactiveConfig,
+          interactionConfig: _interactionConfig,
+          accessibilityConfig: _accessibilityConfig,
+        );
+      },
+    );
+  }
 }
 
 /// Extension methods for easier MPCardBuilder usage
@@ -573,7 +615,7 @@ extension MPCardBuilderExtensions on MPCardBuilder {
     if (built is MPCard) {
       return built;
     }
-    
+
     // Extract the configuration and create MPCard
     return MPCard(
       variant: _variant,

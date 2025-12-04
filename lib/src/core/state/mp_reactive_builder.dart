@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/foundation.dart';
+
 /// Reactive builder wrapper for ValueListenable types
-/// 
+///
 /// This widget provides a convenient way to build reactive UI
 /// components that respond to ValueListenable state changes.
 class MPReactiveBuilder<T> extends StatelessWidget {
@@ -38,7 +40,7 @@ class MPReactiveBuilder<T> extends StatelessWidget {
 }
 
 /// Reactive value notifier with enhanced functionality
-/// 
+///
 /// This class extends ValueNotifier with additional utilities
 /// for common reactive programming patterns.
 class MPReactiveNotifier<T> extends ValueNotifier<T> {
@@ -50,7 +52,8 @@ class MPReactiveNotifier<T> extends ValueNotifier<T> {
   }
 
   /// Update value only if the predicate is true
-  void updateIf(T Function(T current) updater, bool Function(T current) predicate) {
+  void updateIf(
+      T Function(T current) updater, bool Function(T current) predicate) {
     if (predicate(value)) {
       value = updater(value);
     }
@@ -59,7 +62,7 @@ class MPReactiveNotifier<T> extends ValueNotifier<T> {
   /// Toggle boolean value
   void toggle() {
     if (value is bool) {
-      value = (!value as bool) as T;
+      value = (!(value as bool)) as T;
     }
   }
 
@@ -86,9 +89,9 @@ class MPReactiveNotifier<T> extends ValueNotifier<T> {
   }
 
   /// Get value as specific type with null safety
-  T? asOrNull<R>() {
+  R? asOrNull<R>() {
     if (value is R) {
-      return value as R as T;
+      return value as R;
     }
     return null;
   }
@@ -108,10 +111,10 @@ class MPReactiveNotifier<T> extends ValueNotifier<T> {
       }
 
       addListener(listener);
-      
+
       // Send initial value
       controller.add(value);
-      
+
       // Cleanup when stream is cancelled
       controller.onCancel = () {
         removeListener(listener);
@@ -141,7 +144,7 @@ class MPReactiveListNotifier<T> extends ValueNotifier<List<T>> {
   /// Remove item from list
   bool remove(T item) {
     if (!value.contains(item)) return false;
-    
+
     final newList = List<T>.from(value);
     final removed = newList.remove(item);
     if (removed) {
@@ -153,7 +156,7 @@ class MPReactiveListNotifier<T> extends ValueNotifier<List<T>> {
   /// Remove item at index
   void removeAt(int index) {
     if (index < 0 || index >= value.length) return;
-    
+
     final newList = List<T>.from(value);
     newList.removeAt(index);
     value = newList;
@@ -174,7 +177,7 @@ class MPReactiveListNotifier<T> extends ValueNotifier<List<T>> {
   /// Replace item at index
   void replace(int index, T item) {
     if (index < 0 || index >= value.length) return;
-    
+
     final newList = List<T>.from(value);
     newList[index] = item;
     value = newList;
@@ -234,7 +237,7 @@ class MPReactiveMapNotifier<K, V> extends ValueNotifier<Map<K, V>> {
   /// Remove key
   V? remove(K key) {
     if (!value.containsKey(key)) return null;
-    
+
     final newMap = Map<K, V>.from(value);
     final removed = newMap.remove(key);
     this.value = newMap;
@@ -299,7 +302,7 @@ class MPReactiveSetNotifier<T> extends ValueNotifier<Set<T>> {
   /// Add item to set
   bool add(T item) {
     if (value.contains(item)) return false;
-    
+
     final newSet = Set<T>.from(value);
     newSet.add(item);
     value = newSet;
@@ -316,7 +319,7 @@ class MPReactiveSetNotifier<T> extends ValueNotifier<Set<T>> {
   /// Remove item from set
   bool remove(T item) {
     if (!value.contains(item)) return false;
-    
+
     final newSet = Set<T>.from(value);
     final removed = newSet.remove(item);
     if (removed) {
@@ -354,7 +357,7 @@ class MPReactiveSetNotifier<T> extends ValueNotifier<Set<T>> {
 }
 
 /// Reactive builder for multiple listenables
-/// 
+///
 /// This widget allows building UI that depends on multiple
 /// ValueListenable sources efficiently.
 class MPMultiReactiveBuilder extends StatelessWidget {
@@ -369,14 +372,15 @@ class MPMultiReactiveBuilder extends StatelessWidget {
   final List<ValueListenable> listenables;
 
   /// Builder function with all current values
-  final Widget Function(BuildContext context, List<dynamic> values, Widget? child) builder;
+  final Widget Function(
+      BuildContext context, List<dynamic> values, Widget? child) builder;
 
   /// Optional child that won't be rebuilt
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    Widget currentChild = child!;
+    Widget currentChild = child ?? const SizedBox.shrink();
 
     // Build nested ValueListenableBuilder for each listenable
     for (int i = 0; i < listenables.length; i++) {
@@ -421,14 +425,17 @@ class _NestedValueListenableBuilder extends StatefulWidget {
   final int total;
   final List<dynamic> currentValues;
   final List<ValueListenable> listenables;
-  final Widget Function(BuildContext context, List<dynamic> values, Widget? child) builder;
+  final Widget Function(
+      BuildContext context, List<dynamic> values, Widget? child) builder;
   final Widget? child;
 
   @override
-  State<_NestedValueListenableBuilder> createState() => _NestedValueListenableBuilderState();
+  State<_NestedValueListenableBuilder> createState() =>
+      _NestedValueListenableBuilderState();
 }
 
-class _NestedValueListenableBuilderState extends State<_NestedValueListenableBuilder> {
+class _NestedValueListenableBuilderState
+    extends State<_NestedValueListenableBuilder> {
   late List<dynamic> _values;
 
   @override
@@ -446,7 +453,7 @@ class _NestedValueListenableBuilderState extends State<_NestedValueListenableBui
 }
 
 /// Reactive widget mixin for StatefulWidget
-/// 
+///
 /// This mixin provides reactive functionality to State classes
 /// allowing them to easily use ValueListenableBuilder patterns.
 mixin MPReactiveWidgetMixin<T extends StatefulWidget> on State<T> {
