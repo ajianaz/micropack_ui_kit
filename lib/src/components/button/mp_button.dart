@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
@@ -40,10 +42,20 @@ class MPButton extends StatefulWidget {
     this.onLongPress,
     this.onHover,
     this.semanticLabel,
+    this.semanticHint,
+    this.excludeSemantics = false,
+    this.accessibilityProperties,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.respectReducedMotion = true,
+    this.enableHighContrast = true,
     this.animationDuration,
     this.borderRadius,
     this.minimumSize,
     this.maximumSize,
+    this.keyboardShortcut,
+    this.enableKeyboardNavigation = true,
+    this.focusOrder,
   });
 
   /// The text to display on the button.
@@ -141,8 +153,38 @@ class MPButton extends StatefulWidget {
   /// Semantic label for accessibility.
   final String? semanticLabel;
 
+  /// Semantic hint for accessibility.
+  final String? semanticHint;
+
+  /// Whether to exclude semantics for accessibility.
+  final bool excludeSemantics;
+
+  /// Additional accessibility properties.
+  final Map<String, dynamic>? accessibilityProperties;
+
+  /// Custom accessibility actions.
+  final List<SemanticsAction>? customAccessibilityActions;
+
+  /// Callback for accessibility actions.
+  final void Function(SemanticsAction)? onAccessibilityAction;
+
+  /// Whether to respect reduced motion settings.
+  final bool respectReducedMotion;
+
+  /// Whether to enable high contrast mode.
+  final bool enableHighContrast;
+
   /// Animation duration for state changes.
   final Duration? animationDuration;
+
+  /// Keyboard shortcut for the button.
+  final SingleActivator? keyboardShortcut;
+
+  /// Whether to enable keyboard navigation.
+  final bool enableKeyboardNavigation;
+
+  /// Focus order for keyboard navigation.
+  final int? focusOrder;
 
   /// Border radius for the button.
   final BorderRadius? borderRadius;
@@ -168,39 +210,117 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
   // Animation controllers for micro-interactions
   late AnimationController _hoverController;
   late AnimationController _pressController;
+  late AnimationController _focusController;
   late Animation<double> _hoverAnimation;
   late Animation<double> _pressAnimation;
+  late Animation<double> _focusAnimation;
+  late Animation<double> _disabledAnimation;
+
+  // State tracking
+  bool _isHovered = false;
+  bool _isPressed = false;
+  bool _isFocused = false;
+  bool _wasEnabled = true;
+
+  // Accessibility state
+  bool _isHighContrastMode = false;
+  bool _isReducedMotion = false;
+  bool _isScreenReaderActive = false;
+  late final Map<SingleActivator, VoidCallback> _keyboardShortcuts;
 
   @override
   void initState() {
     super.initState();
 
+    // Initialize accessibility state
+    _initializeAccessibilityState();
+
     // Initialize animation controllers
+    final animationDuration = widget.respectReducedMotion && _isReducedMotion
+        ? const Duration(milliseconds: 50)
+        : const Duration(milliseconds: 200);
+
     _hoverController = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: animationDuration,
       vsync: this,
     );
 
     _pressController = AnimationController(
-      duration: const Duration(milliseconds: 100),
+      duration: widget.respectReducedMotion && _isReducedMotion
+          ? const Duration(milliseconds: 25)
+          : const Duration(milliseconds: 100),
+      vsync: this,
+    );
+
+    _focusController = AnimationController(
+      duration: animationDuration,
       vsync: this,
     );
 
     // Initialize animations
     _hoverAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic),
     );
 
     _pressAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(
-      CurvedAnimation(parent: _pressController, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _pressController, curve: Curves.easeInCubic),
     );
+
+    _focusAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _focusController, curve: Curves.easeInOut),
+    );
+
+    _disabledAnimation = Tween<double>(begin: 1.0, end: 0.6).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
+    );
+
+    _wasEnabled = widget.enabled;
+
+    // Initialize keyboard shortcuts
+    _initializeKeyboardShortcuts();
+  }
+
+  /// Initializes accessibility state based on system preferences
+  void _initializeAccessibilityState() {
+    // These will be updated in didChangeDependencies
+    _isHighContrastMode = false;
+    _isReducedMotion = false;
+    _isScreenReaderActive = false;
+  }
+
+  /// Initializes keyboard shortcuts for accessibility
+  void _initializeKeyboardShortcuts() {
+    _keyboardShortcuts = <SingleActivator, VoidCallback>{
+      if (widget.keyboardShortcut != null)
+        widget.keyboardShortcut!: () => _handleActivation(),
+      const SingleActivator(LogicalKeyboardKey.enter): () =>
+          _handleActivation(),
+      const SingleActivator(LogicalKeyboardKey.space): () =>
+          _handleActivation(),
+    };
+  }
+
+  /// Handles button activation (keyboard or tap)
+  void _handleActivation() {
+    if (widget.enabled && !widget.loading && widget.onPressed != null) {
+      widget.onPressed!();
+    }
   }
 
   @override
   void dispose() {
     _hoverController.dispose();
     _pressController.dispose();
+    _focusController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Update accessibility state based on system preferences
+    _updateAccessibilityState();
   }
 
   @override
@@ -214,6 +334,29 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
         oldWidget.padding != widget.padding) {
       _isInitialized = false;
     }
+
+    // Handle enabled state changes
+    if (oldWidget.enabled != widget.enabled) {
+      _wasEnabled = oldWidget.enabled;
+      if (!widget.enabled) {
+        _hoverController.reverse();
+        _pressController.reverse();
+        _focusController.reverse();
+      }
+    }
+  }
+
+  /// Updates accessibility state based on system preferences
+  void _updateAccessibilityState() {
+    final mediaQuery = MediaQuery.of(context);
+
+    setState(() {
+      _isHighContrastMode =
+          widget.enableHighContrast && (mediaQuery.highContrast ?? false);
+      _isReducedMotion = widget.respectReducedMotion &&
+          (mediaQuery.accessibleNavigation ?? false);
+      _isScreenReaderActive = mediaQuery.accessibleNavigation ?? false;
+    });
   }
 
   void _initializeCache(BuildContext context) {
@@ -234,95 +377,114 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
         ? _buildLoadingContent()
         : (widget.child ?? _buildButtonContent());
 
-    // Performance optimization: Use RepaintBoundary for complex button animations
-    final elevatedButton = ElevatedButton(
-      onPressed:
-          widget.loading ? null : (widget.enabled ? widget.onPressed : null),
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(_cachedBackgroundColor),
-        foregroundColor: WidgetStateProperty.all(_cachedTextColor),
-        padding: WidgetStateProperty.all(_cachedPadding),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(
+    // Enhanced button with improved state handling
+    final button = Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap:
+            widget.loading ? null : (widget.enabled ? widget.onPressed : null),
+        onLongPress: widget.loading
+            ? null
+            : (widget.enabled ? widget.onLongPress : null),
+        onHover: widget.enabled ? _handleHoverChange : null,
+        onFocusChange: widget.enabled ? _handleFocusChange : null,
+        borderRadius:
+            widget.borderRadius ?? BorderRadius.circular(widget.radius ?? 8),
+        splashColor: widget.splashColor ?? _getSplashColor(),
+        highlightColor: _getHighlightColor(),
+        focusColor: _getFocusColor(),
+        hoverColor: _getHoverColor(),
+        child: AnimatedContainer(
+          duration:
+              widget.animationDuration ?? const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          padding: _cachedPadding,
+          decoration: BoxDecoration(
+            color: widget.enabled
+                ? _cachedBackgroundColor
+                : context.mp.disabledColor,
             borderRadius: widget.borderRadius ??
                 BorderRadius.circular(widget.radius ?? 8),
-            side: _cachedBorderSide,
+            border: _cachedBorderSide.width > 0
+                ? Border.fromBorderSide(_cachedBorderSide)
+                : null,
+            boxShadow: _getBoxShadow(),
           ),
+          child: buttonContent,
         ),
-        elevation: WidgetStateProperty.all(
-          widget.elevation ??
-              (widget.variant == MPButtonVariant.primary ? 4 : 0),
-        ),
-        shadowColor: WidgetStateProperty.all(widget.shadowColor),
-        splashFactory:
-            widget.splashColor != null ? InkSplash.splashFactory : null,
-        animationDuration: widget.animationDuration,
-        minimumSize: WidgetStateProperty.all(widget.minimumSize),
-        maximumSize: WidgetStateProperty.all(widget.maximumSize),
-        // Theme-aware state colors
-        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(WidgetState.disabled)) {
-            return context.mp.disabledColor;
-          }
-          if (states.contains(WidgetState.hovered)) {
-            return _getHoverColor();
-          }
-          if (states.contains(WidgetState.pressed)) {
-            return _getPressedColor();
-          }
-          if (states.contains(WidgetState.focused)) {
-            return _getFocusColor();
-          }
-          return null;
-        }),
       ),
-      focusNode: widget.focusNode,
-      onLongPress: widget.onLongPress,
-      child: (widget.widthInfinity ?? false)
-          ? Container(
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              child: buttonContent,
-            )
-          : buttonContent,
     );
 
     // Wrap with MouseRegion and GestureDetector for custom animations
-    final button = MouseRegion(
-      onEnter: (_) => _hoverController.forward(),
-      onExit: (_) => _hoverController.reverse(),
+    final interactiveButton = MouseRegion(
+      onEnter: widget.enabled ? (_) => _handleHoverChange(true) : null,
+      onExit: widget.enabled ? (_) => _handleHoverChange(false) : null,
       child: GestureDetector(
-        onTapDown: (_) => _pressController.forward(),
-        onTapUp: (_) => _pressController.reverse(),
-        onTapCancel: () => _pressController.reverse(),
-        child: elevatedButton,
+        onTapDown: widget.enabled ? (_) => _handlePressedChange(true) : null,
+        onTapUp: widget.enabled ? (_) => _handlePressedChange(false) : null,
+        onTapCancel: widget.enabled ? () => _handlePressedChange(false) : null,
+        child: button,
       ),
     );
 
     // Wrap with RepaintBoundary for performance
-    final Widget buttonWithSemantics;
-    if (widget.semanticLabel != null) {
-      buttonWithSemantics = Semantics(
-        label: widget.semanticLabel,
-        child: button,
-      );
-    } else {
-      buttonWithSemantics = button;
-    }
+    final Widget buttonWithSemantics = Semantics(
+      label: widget.semanticLabel ?? widget.text ?? 'Button',
+      hint: widget.semanticHint,
+      button: true,
+      excludeSemantics: widget.excludeSemantics,
+      enabled: widget.enabled && !widget.loading,
+      selected: false,
+      focusable: widget.enabled && !widget.loading,
+      onTap: widget.enabled && !widget.loading && widget.onPressed != null
+          ? () {
+              if (widget.onPressed != null) {
+                widget.onPressed!();
+              }
+            }
+          : null,
+      onLongPress:
+          widget.enabled && !widget.loading && widget.onLongPress != null
+              ? widget.onLongPress
+              : null,
+      child: widget.enableKeyboardNavigation
+          ? Focus(
+              focusNode: widget.focusNode,
+              autofocus: widget.focusOrder == 0,
+              child: CallbackShortcuts(
+                bindings: _keyboardShortcuts,
+                child: interactiveButton,
+              ),
+            )
+          : interactiveButton,
+    );
 
-    // Add smooth transitions with scale animations
+    // Add smooth transitions with improved animations
     return AnimatedBuilder(
-      animation: Listenable.merge([_hoverAnimation, _pressAnimation]),
+      animation: Listenable.merge([
+        _hoverAnimation,
+        _pressAnimation,
+        _focusAnimation,
+        _disabledAnimation
+      ]),
       builder: (context, child) {
+        // Get orientation information
+        final mediaQuery = MediaQuery.of(context);
+        final orientation = mediaQuery.orientation;
+        final isLandscape = orientation == Orientation.landscape;
+
         return Transform.scale(
-          scale: widget.enabled
-              ? _pressAnimation.value * _hoverAnimation.value
-              : _hoverAnimation.value,
-          child: AnimatedContainer(
+          scale: _getOrientationAwareAnimationScale(orientation, isLandscape),
+          child: AnimatedOpacity(
             duration:
                 widget.animationDuration ?? const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            child: RepaintBoundary(child: buttonWithSemantics),
+            opacity: widget.enabled ? 1.0 : _disabledAnimation.value,
+            child: Container(
+              width: (widget.widthInfinity ?? false)
+                  ? MediaQuery.of(context).size.width
+                  : null,
+              child: RepaintBoundary(child: buttonWithSemantics),
+            ),
           ),
         );
       },
@@ -332,6 +494,7 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   /// Builds loading content with theme-aware spinner color
   /// Uses the appropriate text color for the spinner based on button variant
+  /// Enhanced with consistent loading animation and theme integration
   Widget _buildLoadingContent() {
     if (widget.loadingWidget != null) {
       return widget.loadingWidget!;
@@ -341,9 +504,12 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       height: _getLoadingSize(),
       width: _getLoadingSize(),
       child: Center(
-        child: SpinKitThreeBounce(
-          color: widget.textColor ?? _getTextColor(),
-          size: _getLoadingSize() * 0.6,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: SpinKitThreeBounce(
+            color: widget.textColor ?? _getTextColor(),
+            size: _getLoadingSize() * 0.6,
+          ),
         ),
       ),
     );
@@ -555,35 +721,111 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
     }
   }
 
-  /// Gets padding based on button size
+  /// Gets padding based on button size and orientation
   EdgeInsets _getPadding() {
+    final mediaQuery = MediaQuery.of(context);
+    final orientation = mediaQuery.orientation;
+    final screenWidth = mediaQuery.size.width;
+
+    final basePadding = widget.padding ?? _getDefaultPadding();
+
+    // Use orientation-aware padding if available
+    return _getOrientationAwarePadding(orientation, screenWidth);
+  }
+
+  /// Gets default padding based on button size
+  EdgeInsets _getDefaultPadding() {
     switch (widget.size) {
       case MPButtonSize.small:
-        return widget.padding ??
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+        return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
       case MPButtonSize.regular:
-        return widget.padding ??
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
+        return const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
       case MPButtonSize.medium:
-        return widget.padding ??
-            const EdgeInsets.symmetric(horizontal: 32, vertical: 16);
+        return const EdgeInsets.symmetric(horizontal: 32, vertical: 16);
       case MPButtonSize.large:
-        return widget.padding ??
-            const EdgeInsets.symmetric(horizontal: 40, vertical: 20);
+        return const EdgeInsets.symmetric(horizontal: 40, vertical: 20);
     }
   }
 
+  /// Gets orientation-aware animation scale based on button state and orientation
+  double _getOrientationAwareAnimationScale(
+      Orientation orientation, bool isLandscape) {
+    if (!widget.enabled) {
+      return _disabledAnimation.value;
+    }
+
+    if (_isPressed) {
+      return _pressAnimation.value;
+    }
+
+    if (_isHovered) {
+      return _hoverAnimation.value;
+    }
+
+    // Adjust scale based on orientation for better visual feedback
+    if (isLandscape) {
+      // In landscape mode, slightly reduce scale for better proportions
+      return 0.95;
+    }
+
+    return 1.0;
+  }
+
+  /// Gets orientation-aware box shadow based on orientation
+  List<BoxShadow> _getOrientationAwareBoxShadow(
+      Orientation orientation, bool isLandscape) {
+    final baseShadow = _getBoxShadow();
+
+    if (baseShadow.isEmpty) return baseShadow;
+
+    // In landscape mode, adjust shadow for better visibility
+    if (isLandscape) {
+      return baseShadow
+          .map((shadow) => shadow.copyWith(
+                offset: Offset(
+                  shadow.offset.dx,
+                  shadow.offset.dy * 0.5, // Reduce vertical offset in landscape
+                ),
+                blurRadius: shadow.blurRadius *
+                    0.8, // Slightly reduce blur in landscape
+              ))
+          .toList();
+    }
+
+    return baseShadow;
+  }
+
+  /// Gets orientation-aware padding with adjustments for landscape mode
+  EdgeInsets _getOrientationAwarePadding(
+      Orientation orientation, double screenWidth) {
+    final basePadding = _getDefaultPadding();
+
+    // In landscape mode, reduce vertical padding and increase horizontal for better touch targets
+    if (orientation == Orientation.landscape) {
+      final horizontalMultiplier = screenWidth > 768 ? 1.2 : 1.1;
+      final verticalMultiplier = 0.8;
+
+      return EdgeInsets.symmetric(
+        horizontal: basePadding.horizontal * horizontalMultiplier,
+        vertical: basePadding.vertical * verticalMultiplier,
+      );
+    }
+
+    return basePadding;
+  }
+
   /// Gets loading spinner size based on button size
+  /// Enhanced with responsive sizing for better visual consistency
   double _getLoadingSize() {
     switch (widget.size) {
       case MPButtonSize.small:
-        return 16;
+        return 18; // Slightly larger for better visibility
       case MPButtonSize.regular:
-        return 20;
+        return 22; // Increased for better visibility
       case MPButtonSize.medium:
-        return 24;
+        return 26; // Increased for better visibility
       case MPButtonSize.large:
-        return 28;
+        return 30; // Increased for better visibility
     }
   }
 
@@ -657,5 +899,118 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       case MPButtonVariant.text:
         return context.mp.primaryFocus.withValues(alpha: 0.1);
     }
+  }
+
+  /// Handles hover state changes with proper animation
+  void _handleHoverChange(bool isHovered) {
+    if (_isHovered != isHovered && widget.enabled) {
+      setState(() {
+        _isHovered = isHovered;
+      });
+
+      if (isHovered) {
+        _hoverController.forward();
+        widget.onHover?.call(true);
+      } else {
+        _hoverController.reverse();
+        widget.onHover?.call(false);
+      }
+    }
+  }
+
+  /// Handles focus state changes with proper animation
+  void _handleFocusChange(bool isFocused) {
+    if (_isFocused != isFocused && widget.enabled) {
+      setState(() {
+        _isFocused = isFocused;
+      });
+
+      if (isFocused) {
+        _focusController.forward();
+      } else {
+        _focusController.reverse();
+      }
+    }
+  }
+
+  /// Handles pressed state changes with proper animation
+  void _handlePressedChange(bool isPressed) {
+    if (_isPressed != isPressed && widget.enabled) {
+      setState(() {
+        _isPressed = isPressed;
+      });
+
+      if (isPressed) {
+        _pressController.forward();
+      } else {
+        _pressController.reverse();
+      }
+    }
+  }
+
+  /// Gets splash color based on button variant
+  Color _getSplashColor() {
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+        return context.mp.primary.withValues(alpha: 0.2);
+      case MPButtonVariant.danger:
+        return context.mp.errorColor.withValues(alpha: 0.2);
+      case MPButtonVariant.success:
+        return context.mp.successColor.withValues(alpha: 0.2);
+      case MPButtonVariant.warning:
+        return context.mp.warningColor.withValues(alpha: 0.2);
+      case MPButtonVariant.info:
+        return context.mp.infoColor.withValues(alpha: 0.2);
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+      case MPButtonVariant.text:
+        return context.mp.primary.withValues(alpha: 0.1);
+    }
+  }
+
+  /// Gets highlight color based on button variant
+  Color _getHighlightColor() {
+    switch (widget.variant) {
+      case MPButtonVariant.primary:
+        return context.mp.primary.withValues(alpha: 0.1);
+      case MPButtonVariant.danger:
+        return context.mp.errorColor.withValues(alpha: 0.1);
+      case MPButtonVariant.success:
+        return context.mp.successColor.withValues(alpha: 0.1);
+      case MPButtonVariant.warning:
+        return context.mp.warningColor.withValues(alpha: 0.1);
+      case MPButtonVariant.info:
+        return context.mp.infoColor.withValues(alpha: 0.1);
+      case MPButtonVariant.outlined:
+      case MPButtonVariant.ghost:
+      case MPButtonVariant.text:
+        return context.mp.primary.withValues(alpha: 0.05);
+    }
+  }
+
+  /// Gets box shadow based on button variant and state
+  List<BoxShadow> _getBoxShadow() {
+    if (widget.variant == MPButtonVariant.primary && widget.enabled) {
+      return [
+        BoxShadow(
+          color:
+              widget.shadowColor ?? context.mp.primary.withValues(alpha: 0.3),
+          blurRadius: _isHovered ? 8 : 4,
+          offset: Offset(0, _isHovered ? 4 : 2),
+        ),
+      ];
+    }
+
+    if (widget.elevation != null && widget.elevation! > 0 && widget.enabled) {
+      return [
+        BoxShadow(
+          color: widget.shadowColor ?? Colors.black.withValues(alpha: 0.2),
+          blurRadius: widget.elevation!,
+          offset: Offset(0, widget.elevation! / 2),
+        ),
+      ];
+    }
+
+    return [];
   }
 }
