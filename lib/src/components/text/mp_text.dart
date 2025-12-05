@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
@@ -57,6 +58,40 @@ class MPText extends StatelessWidget {
   /// Callback when expand/collapse is triggered
   final VoidCallback? onExpandChanged;
 
+  // Accessibility properties
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Semantic hint for screen readers
+  final String? semanticHint;
+
+  /// Whether to exclude semantics for accessibility
+  final bool excludeSemantics;
+
+  /// Additional accessibility properties
+  final Map<String, dynamic>? accessibilityProperties;
+
+  /// Custom accessibility actions
+  final List<SemanticsAction>? customAccessibilityActions;
+
+  /// Callback for accessibility actions
+  final void Function(SemanticsAction)? onAccessibilityAction;
+
+  /// Whether to respect reduced motion settings
+  final bool respectReducedMotion;
+
+  /// Whether to enable high contrast mode
+  final bool enableHighContrast;
+
+  /// Focus node for keyboard navigation
+  final FocusNode? focusNode;
+
+  /// Whether to enable keyboard navigation
+  final bool enableKeyboardNavigation;
+
+  /// Focus order for keyboard navigation
+  final int? focusOrder;
+
   /// Creates a text widget with optional styling parameters.
   ///
   /// When no color is explicitly provided, automatically uses context.mp.textColor
@@ -86,6 +121,17 @@ class MPText extends StatelessWidget {
     this.expandText,
     this.collapseText,
     this.onExpandChanged,
+    this.semanticLabel,
+    this.semanticHint,
+    this.excludeSemantics = false,
+    this.accessibilityProperties,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.respectReducedMotion = true,
+    this.enableHighContrast = true,
+    this.focusNode,
+    this.enableKeyboardNavigation = true,
+    this.focusOrder,
   });
 
   // 🔒 Internal constructor (for named constructors only)
@@ -111,6 +157,17 @@ class MPText extends StatelessWidget {
     this.expandText,
     this.collapseText,
     this.onExpandChanged,
+    this.semanticLabel,
+    this.semanticHint,
+    this.excludeSemantics,
+    this.accessibilityProperties,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.respectReducedMotion,
+    this.enableHighContrast,
+    this.focusNode,
+    this.enableKeyboardNavigation,
+    this.focusOrder,
   });
 
   // ==== Named constructors ====
@@ -415,7 +472,7 @@ class MPText extends StatelessWidget {
 
   /// Build standard text with basic overflow handling
   Widget _buildStandardText(BuildContext context) {
-    return Text(
+    final textWidget = Text(
       text,
       maxLines: enableResponsiveTruncation
           ? _getResponsiveMaxLines(context)
@@ -425,6 +482,26 @@ class MPText extends StatelessWidget {
       softWrap: softWrap ?? true,
       textAlign: textAlign,
       style: _getCachedStyle(context),
+    );
+
+    // Wrap with accessibility features
+    if (excludeSemantics) {
+      return ExcludeSemantics(
+        child: textWidget,
+      );
+    }
+
+    return Semantics(
+      label: semanticLabel ?? text,
+      hint: semanticHint,
+      textDirection: TextDirection.ltr,
+      child: enableKeyboardNavigation && focusNode != null
+          ? Focus(
+              focusNode: focusNode,
+              autofocus: focusOrder == 0,
+              child: textWidget,
+            )
+          : textWidget,
     );
   }
 
