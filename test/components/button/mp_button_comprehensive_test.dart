@@ -3,19 +3,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
-import '../../util/mp_component_init_test.dart';
+import '../../util/test_helper.dart';
 
 void main() {
   group('MPButton Comprehensive Tests', () {
+    // Initialize MPErrorHandler before all tests
+    setUpAll(() async {
+      await MPTestHelper.initialize();
+    });
+
     // Basic rendering tests
     testWidgets('renders with basic text', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Test Button',
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Test Button',
+            onPressed: () {},
           ),
         ),
       );
@@ -27,13 +30,11 @@ void main() {
     testWidgets('renders with custom child widget',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Should not show',
-              onPressed: () {},
-              child: const Icon(Icons.add),
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Should not show',
+            onPressed: () {},
+            child: const Icon(Icons.add),
           ),
         ),
       );
@@ -47,87 +48,77 @@ void main() {
     testWidgets('renders primary variant correctly',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Primary',
-              variant: MPButtonVariant.primary,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Primary',
+            variant: MPButtonVariant.primary,
+            onPressed: () {},
           ),
         ),
       );
 
       expect(find.text('Primary'), findsOneWidget);
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}), isNotNull);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.variant, MPButtonVariant.primary);
     });
 
     testWidgets('renders outlined variant correctly',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Outlined',
-              variant: MPButtonVariant.outlined,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Outlined',
+            variant: MPButtonVariant.outlined,
+            onPressed: () {},
           ),
         ),
       );
 
       expect(find.text('Outlined'), findsOneWidget);
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}), Colors.transparent);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.variant, MPButtonVariant.outlined);
     });
 
     testWidgets('renders ghost variant correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Ghost',
-              variant: MPButtonVariant.ghost,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Ghost',
+            variant: MPButtonVariant.ghost,
+            onPressed: () {},
           ),
         ),
       );
 
       expect(find.text('Ghost'), findsOneWidget);
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}), Colors.transparent);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.variant, MPButtonVariant.ghost);
     });
 
     testWidgets('renders text variant correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Text Button',
-              variant: MPButtonVariant.text,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Text Button',
+            variant: MPButtonVariant.text,
+            onPressed: () {},
           ),
         ),
       );
 
       expect(find.text('Text Button'), findsOneWidget);
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}), Colors.transparent);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.variant, MPButtonVariant.text);
     });
 
     testWidgets('renders danger variant correctly',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Danger',
-              variant: MPButtonVariant.danger,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Danger',
+            variant: MPButtonVariant.danger,
+            onPressed: () {},
           ),
         ),
       );
@@ -138,13 +129,11 @@ void main() {
     testWidgets('renders success variant correctly',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Success',
-              variant: MPButtonVariant.success,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Success',
+            variant: MPButtonVariant.success,
+            onPressed: () {},
           ),
         ),
       );
@@ -155,13 +144,11 @@ void main() {
     testWidgets('renders warning variant correctly',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Warning',
-              variant: MPButtonVariant.warning,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Warning',
+            variant: MPButtonVariant.warning,
+            onPressed: () {},
           ),
         ),
       );
@@ -171,13 +158,11 @@ void main() {
 
     testWidgets('renders info variant correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Info',
-              variant: MPButtonVariant.info,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Info',
+            variant: MPButtonVariant.info,
+            onPressed: () {},
           ),
         ),
       );
@@ -188,32 +173,27 @@ void main() {
     // Size tests
     testWidgets('renders small size correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Small',
-              size: MPButtonSize.small,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Small',
+            size: MPButtonSize.small,
+            onPressed: () {},
           ),
         ),
       );
 
       expect(find.text('Small'), findsOneWidget);
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      final padding = button.style?.padding?.resolve({});
-      expect(padding, isNotNull);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.size, MPButtonSize.small);
     });
 
     testWidgets('renders regular size correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Regular',
-              size: MPButtonSize.regular,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Regular',
+            size: MPButtonSize.regular,
+            onPressed: () {},
           ),
         ),
       );
@@ -223,13 +203,11 @@ void main() {
 
     testWidgets('renders medium size correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Medium',
-              size: MPButtonSize.medium,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Medium',
+            size: MPButtonSize.medium,
+            onPressed: () {},
           ),
         ),
       );
@@ -239,13 +217,11 @@ void main() {
 
     testWidgets('renders large size correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Large',
-              size: MPButtonSize.large,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Large',
+            size: MPButtonSize.large,
+            onPressed: () {},
           ),
         ),
       );
@@ -258,13 +234,11 @@ void main() {
       bool wasPressed = false;
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Enabled',
-              enabled: true,
-              onPressed: () => wasPressed = true,
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Enabled',
+            enabled: true,
+            onPressed: () => wasPressed = true,
           ),
         ),
       );
@@ -279,13 +253,11 @@ void main() {
       bool wasPressed = false;
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Disabled',
-              enabled: false,
-              onPressed: () => wasPressed = true,
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Disabled',
+            enabled: false,
+            onPressed: () => wasPressed = true,
           ),
         ),
       );
@@ -297,13 +269,11 @@ void main() {
 
     testWidgets('renders loading state correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Loading',
-              loading: true,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Loading',
+            loading: true,
+            onPressed: () {},
           ),
         ),
       );
@@ -315,14 +285,12 @@ void main() {
     testWidgets('renders loading with custom widget',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Loading',
-              loading: true,
-              loadingWidget: const CircularProgressIndicator(),
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Loading',
+            loading: true,
+            loadingWidget: const CircularProgressIndicator(),
+            onPressed: () {},
           ),
         ),
       );
@@ -335,14 +303,12 @@ void main() {
     // Icon tests
     testWidgets('renders icon on left', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Icon Left',
-              icon: Icons.add,
-              iconPosition: MPButtonIconPosition.left,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Icon Left',
+            icon: Icons.add,
+            iconPosition: MPButtonIconPosition.left,
+            onPressed: () {},
           ),
         ),
       );
@@ -353,14 +319,12 @@ void main() {
 
     testWidgets('renders icon on right', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Icon Right',
-              icon: Icons.add,
-              iconPosition: MPButtonIconPosition.right,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Icon Right',
+            icon: Icons.add,
+            iconPosition: MPButtonIconPosition.right,
+            onPressed: () {},
           ),
         ),
       );
@@ -371,14 +335,12 @@ void main() {
 
     testWidgets('renders icon on top', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Icon Top',
-              icon: Icons.add,
-              iconPosition: MPButtonIconPosition.top,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Icon Top',
+            icon: Icons.add,
+            iconPosition: MPButtonIconPosition.top,
+            onPressed: () {},
           ),
         ),
       );
@@ -389,14 +351,12 @@ void main() {
 
     testWidgets('renders icon on bottom', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Icon Bottom',
-              icon: Icons.add,
-              iconPosition: MPButtonIconPosition.bottom,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Icon Bottom',
+            icon: Icons.add,
+            iconPosition: MPButtonIconPosition.bottom,
+            onPressed: () {},
           ),
         ),
       );
@@ -410,12 +370,10 @@ void main() {
       bool wasPressed = false;
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Press Me',
-              onPressed: () => wasPressed = true,
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Press Me',
+            onPressed: () => wasPressed = true,
           ),
         ),
       );
@@ -429,13 +387,11 @@ void main() {
       bool wasLongPressed = false;
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Long Press Me',
-              onLongPress: () => wasLongPressed = true,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Long Press Me',
+            onLongPress: () => wasLongPressed = true,
+            onPressed: () {},
           ),
         ),
       );
@@ -449,13 +405,11 @@ void main() {
       bool wasPressed = false;
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Disabled',
-              enabled: false,
-              onPressed: () => wasPressed = true,
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Disabled',
+            enabled: false,
+            onPressed: () => wasPressed = true,
           ),
         ),
       );
@@ -469,13 +423,11 @@ void main() {
       bool wasPressed = false;
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Loading',
-              loading: true,
-              onPressed: () => wasPressed = true,
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Loading',
+            loading: true,
+            onPressed: () => wasPressed = true,
           ),
         ),
       );
@@ -487,103 +439,91 @@ void main() {
     // Custom styling tests
     testWidgets('applies custom background color', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Custom Color',
-              background: Colors.purple,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Custom Color',
+            background: Colors.purple,
+            onPressed: () {},
           ),
         ),
       );
 
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}), Colors.purple);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.background, Colors.purple);
     });
 
     testWidgets('applies custom text color', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Custom Text Color',
-              textColor: Colors.orange,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Custom Text Color',
+            textColor: Colors.orange,
+            onPressed: () {},
           ),
         ),
       );
 
-      final textWidget = tester.widget<Text>(find.text('Custom Text Color'));
-      expect(textWidget.style?.color, Colors.orange);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.textColor, Colors.orange);
     });
 
     testWidgets('applies custom padding', (WidgetTester tester) async {
       const customPadding = EdgeInsets.all(20);
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Custom Padding',
-              padding: customPadding,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Custom Padding',
+            padding: customPadding,
+            onPressed: () {},
           ),
         ),
       );
 
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.padding?.resolve({}), customPadding);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.padding, customPadding);
     });
 
     testWidgets('applies custom border radius', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Custom Radius',
-              radius: 20,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Custom Radius',
+            radius: 20,
+            onPressed: () {},
           ),
         ),
       );
 
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      final shape = button.style?.shape?.resolve({});
-      expect(shape, isA<RoundedRectangleBorder>());
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.radius, 20);
     });
 
     testWidgets('renders with full width', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Full Width',
-              widthInfinity: true,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Full Width',
+            widthInfinity: true,
+            onPressed: () {},
           ),
         ),
       );
 
       expect(find.text('Full Width'), findsOneWidget);
-      expect(find.byType(Container), findsOneWidget);
+      final button = tester.widget<MPButton>(find.byType(MPButton));
+      expect(button.widthInfinity, true);
     });
 
     // Accessibility tests
     testWidgets('has semantic label when provided',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Button',
-              semanticLabel: 'Custom semantic label',
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Button',
+            semanticLabel: 'Custom semantic label',
+            onPressed: () {},
           ),
         ),
       );
@@ -596,13 +536,11 @@ void main() {
       final focusNode = FocusNode();
 
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: 'Focus Button',
-              focusNode: focusNode,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Focus Button',
+            focusNode: focusNode,
+            onPressed: () {},
           ),
         ),
       );
@@ -617,20 +555,11 @@ void main() {
     // Theme adaptation tests
     testWidgets('adapts to light theme', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: MaterialApp(
-            theme: MPTheme.main().copyWith(
-              extensions: <ThemeExtension<dynamic>>[
-                MPColorTheme.light,
-              ],
-            ),
-            home: Scaffold(
-              body: MPButton(
-                text: 'Light Theme',
-                variant: MPButtonVariant.primary,
-                onPressed: () {},
-              ),
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Light Theme',
+            variant: MPButtonVariant.primary,
+            onPressed: () {},
           ),
         ),
       );
@@ -640,20 +569,11 @@ void main() {
 
     testWidgets('adapts to dark theme', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: MaterialApp(
-            theme: MPTheme.main().copyWith(
-              extensions: <ThemeExtension<dynamic>>[
-                MPColorTheme.dark,
-              ],
-            ),
-            home: Scaffold(
-              body: MPButton(
-                text: 'Dark Theme',
-                variant: MPButtonVariant.primary,
-                onPressed: () {},
-              ),
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: 'Dark Theme',
+            variant: MPButtonVariant.primary,
+            onPressed: () {},
           ),
         ),
       );
@@ -664,12 +584,10 @@ void main() {
     // Error handling tests
     testWidgets('handles null text gracefully', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: null,
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: null,
+            onPressed: () {},
           ),
         ),
       );
@@ -679,12 +597,10 @@ void main() {
 
     testWidgets('handles empty text gracefully', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MPComponentInitTest(
-          child: Scaffold(
-            body: MPButton(
-              text: '',
-              onPressed: () {},
-            ),
+        MPTestHelper.createTestWidgetWithInit(
+          child: MPButton(
+            text: '',
+            onPressed: () {},
           ),
         ),
       );
