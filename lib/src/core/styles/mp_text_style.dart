@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
-// Commented out Google Fonts to avoid network issues
-import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
 import 'mp_font_sizes.dart';
 
 class MPTextStyle {
@@ -93,7 +92,7 @@ class MPTextStyle {
     );
   }
 
-  /// Internal base text style
+  /// Internal base text style with robust font fallback system
   static TextStyle _base({
     double fontSize = 14,
     FontWeight fontWeight = FontWeight.w400,
@@ -103,29 +102,36 @@ class MPTextStyle {
     double? height,
     String? fontFamily,
   }) {
+    final fontManager = MPFontManager();
+    final effectiveFontFamily =
+        MpUiKit.fontName ?? fontFamily ?? defaultFontFamily;
+
+    // Use the enhanced font manager with fallback system and error handling
     try {
-      return GoogleFonts.getFont(
-        toTitleCase(MpUiKit.fontName ?? fontFamily ?? defaultFontFamily),
+      return fontManager.getTextStyle(
+        fontFamily: effectiveFontFamily,
         fontSize: fontSize * 1.sp,
         fontWeight: fontWeight,
         letterSpacing: letterSpacing * 1.sp,
         height: height,
-        textBaseline: TextBaseline.alphabetic,
-        decoration: decoration,
-        locale: const Locale('en', 'US'),
         color: color,
+        decoration: decoration,
       );
     } catch (e) {
+      // Graceful error handling with fallback to system font
+      debugPrint(
+          'Font style error for $effectiveFontFamily: $e. Using fallback.');
       return TextStyle(
-        fontFamily: MpUiKit.fontName ?? fontFamily ?? defaultFontFamily,
+        fontFamily: MPFontManager.getPlatformFontFamily(effectiveFontFamily),
         fontSize: fontSize * 1.sp,
         fontWeight: fontWeight,
+        fontStyle: FontStyle.normal, // Ensure consistent style on error
         letterSpacing: letterSpacing * 1.sp,
         height: height,
-        textBaseline: TextBaseline.alphabetic,
-        decoration: decoration,
-        locale: const Locale('en', 'US'),
         color: color,
+        decoration: decoration,
+        // Add fallback font chain for maximum compatibility
+        fontFamilyFallback: ['system', 'Roboto', 'Arial', 'Helvetica'],
       );
     }
   }

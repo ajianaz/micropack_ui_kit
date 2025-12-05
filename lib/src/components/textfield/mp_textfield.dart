@@ -681,6 +681,24 @@ class _MPTextFieldState extends State<MPTextField> {
   final Widget _defaultSuffixIconEyeOpen = const Icon(FontAwesomeIcons.eye);
   final Widget _defaultSuffixIconEyeClose =
       const Icon(FontAwesomeIcons.eyeSlash);
+  bool _isLandscape = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateOrientation();
+  }
+
+  void _updateOrientation() {
+    final newOrientation = MediaQuery.of(context).orientation;
+    final newIsLandscape = newOrientation == Orientation.landscape;
+
+    if (_isLandscape != newIsLandscape) {
+      setState(() {
+        _isLandscape = newIsLandscape;
+      });
+    }
+  }
 
   void _togglePasswordView() {
     setState(() {
@@ -711,6 +729,9 @@ class _MPTextFieldState extends State<MPTextField> {
 
     // Get theme-aware colors for consistent theming across light and dark modes
     final themeColors = context.mp;
+
+    // Get orientation-aware padding
+    final orientationAwarePadding = _getOrientationAwarePadding();
 
     // Wrap with Semantics widget if semanticLabel is provided
     Widget textField = TextFormField(
@@ -804,8 +825,8 @@ class _MPTextFieldState extends State<MPTextField> {
             _getThemeAwareBorder(themeColors, 'focused'),
         disabledBorder: widget.border?.disableBorder?.toBorder() ??
             _getThemeAwareBorder(themeColors, 'disabled'),
-        contentPadding: widget.padding,
-        constraints: widget.constraints,
+        contentPadding: widget.padding ?? orientationAwarePadding,
+        constraints: widget.constraints ?? _getOrientationAwareConstraints(),
         focusColor: Colors.transparent,
       ),
       keyboardType: widget.keyboardType,
@@ -816,15 +837,13 @@ class _MPTextFieldState extends State<MPTextField> {
               MpUiKit.textStyle.toTextStyle(context))
           .copyWith(
         color: widget.textStyle?.color ?? themeColors.textColor,
+        fontSize: _getOrientationAwareFontSize(),
       ),
       textAlign: widget.textAlign,
       readOnly: widget.readOnly,
       obscureText: widget.obscureText,
-      maxLines: widget.type == MPTextFieldType.PASSWORD ||
-              widget.type == MPTextFieldType.BORDER_PASSWORD
-          ? 1
-          : widget.textStyle?.maxLines,
-      minLines: widget.textStyle?.minLines ?? MpUiKit.textStyle?.minLines,
+      maxLines: _getOrientationAwareMaxLines(),
+      minLines: _getOrientationAwareMinLines(),
       // Theme-aware cursor color using primary color for visibility
       cursorColor: widget.cursorColor ?? themeColors.primary,
       onEditingComplete: widget.onEditingComplete,
@@ -916,6 +935,61 @@ class _MPTextFieldState extends State<MPTextField> {
     );
   }
 
+  /// Get orientation-aware padding
+  EdgeInsets _getOrientationAwarePadding() {
+    if (_isLandscape) {
+      // More compact padding in landscape mode
+      return const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
+    }
+    return const EdgeInsets.symmetric(horizontal: 16, vertical: 12);
+  }
+
+  /// Get orientation-aware constraints
+  BoxConstraints _getOrientationAwareConstraints() {
+    if (_isLandscape) {
+      // Reduce height in landscape mode
+      return const BoxConstraints(minHeight: 40);
+    }
+    return const BoxConstraints(minHeight: 48);
+  }
+
+  /// Get orientation-aware font size
+  double _getOrientationAwareFontSize() {
+    final baseFontSize =
+        widget.textStyle?.fontSize ?? MpUiKit.textStyle?.fontSize ?? 16;
+    if (_isLandscape) {
+      // Slightly smaller font in landscape mode
+      return baseFontSize * 0.95;
+    }
+    return baseFontSize;
+  }
+
+  /// Get orientation-aware max lines
+  int? _getOrientationAwareMaxLines() {
+    if (widget.type == MPTextFieldType.PASSWORD ||
+        widget.type == MPTextFieldType.BORDER_PASSWORD) {
+      return 1; // Password fields always single line
+    }
+
+    final baseMaxLines = widget.textStyle?.maxLines;
+    if (_isLandscape && baseMaxLines != null && baseMaxLines > 1) {
+      // Reduce max lines in landscape mode for multi-line fields
+      return (baseMaxLines * 0.7).ceil().clamp(1, baseMaxLines);
+    }
+    return baseMaxLines;
+  }
+
+  /// Get orientation-aware min lines
+  int? _getOrientationAwareMinLines() {
+    final baseMinLines =
+        widget.textStyle?.minLines ?? MpUiKit.textStyle?.minLines;
+    if (_isLandscape && baseMinLines != null && baseMinLines > 1) {
+      // Reduce min lines in landscape mode for multi-line fields
+      return (baseMinLines * 0.7).ceil().clamp(1, baseMinLines);
+    }
+    return baseMinLines;
+  }
+
   /// Build counter text
   String? _buildCounterText() {
     final currentLength = widget.controller.text.length;
@@ -987,7 +1061,7 @@ class _MPTextFieldState extends State<MPTextField> {
     }
 
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(_isLandscape ? 6 : 8),
       borderSide: BorderSide(
         color: borderColor,
         width: borderWidth,

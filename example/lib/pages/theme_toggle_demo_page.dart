@@ -19,20 +19,25 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
   @override
   void initState() {
     super.initState();
-    _initializeTheme();
 
     // Add theme listener
     if (MPThemeManager.instance.isInitialized) {
       MPThemeManager.instance.addListener(_onThemeChanged);
+
+      // Initialize theme without accessing context
+      setState(() {
+        _currentThemeMode = MPThemeManager.instance.themeMode;
+        _themeInfo = 'Theme initialized. Waiting for build context...';
+      });
     }
   }
 
-  void _initializeTheme() {
-    if (MPThemeManager.instance.isInitialized) {
-      setState(() {
-        _currentThemeMode = MPThemeManager.instance.themeMode;
-        _updateThemeInfo();
-      });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Now we can safely access context
+    if (MPThemeManager.instance.isInitialized && _currentThemeMode != null) {
+      _updateThemeInfo();
     }
   }
 
@@ -251,10 +256,14 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
                 color: colorTheme?.neutral70 ?? context.mp.neutral70,
               ),
               const SizedBox(width: 8),
-              MPText(
-                'Theme Mode: ${MPThemeManager.instance.getThemeName()}',
-                style: MPTextStyle.body1(
-                  color: colorTheme?.neutral70 ?? context.mp.neutral70,
+              Expanded(
+                child: MPText(
+                  'Theme Mode: ${MPThemeManager.instance.getThemeName()}',
+                  style: MPTextStyle.body1(
+                    color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                  ),
+                  textOverflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
@@ -316,10 +325,14 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              MPText(
-                'MPThemeManager is initialized',
-                style: MPTextStyle.body1(
-                  color: colorTheme?.neutral70 ?? context.mp.neutral70,
+              Expanded(
+                child: MPText(
+                  'MPThemeManager is initialized',
+                  style: MPTextStyle.body1(
+                    color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                  ),
+                  textOverflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
@@ -333,10 +346,14 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              MPText(
-                'Theme preferences are persisted',
-                style: MPTextStyle.body1(
-                  color: colorTheme?.neutral70 ?? context.mp.neutral70,
+              Expanded(
+                child: MPText(
+                  'Theme preferences are persisted',
+                  style: MPTextStyle.body1(
+                    color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                  ),
+                  textOverflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
@@ -350,10 +367,14 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              MPText(
-                'Listeners are active',
-                style: MPTextStyle.body1(
-                  color: colorTheme?.neutral70 ?? context.mp.neutral70,
+              Expanded(
+                child: MPText(
+                  'Listeners are active',
+                  style: MPTextStyle.body1(
+                    color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                  ),
+                  textOverflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],

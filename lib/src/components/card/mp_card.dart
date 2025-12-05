@@ -2298,7 +2298,7 @@ class _MPCardContentBuilders {
           MPText.body(
             data.description!,
             color: context.mp.textColor,
-            maxLines: 3,
+            maxLines: _getMaxDescriptionLines(context),
             textOverflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 12),
@@ -2494,7 +2494,7 @@ class _MPCardContentBuilders {
           MPText.body(
             data.description!,
             color: context.mp.textColor,
-            maxLines: 2,
+            maxLines: _getMaxDescriptionLines(context),
             textOverflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 12),
@@ -2727,7 +2727,7 @@ class _MPCardContentBuilders {
             data.bio!,
             color: context.mp.textColor,
             textAlign: TextAlign.center,
-            maxLines: 3,
+            maxLines: _getMaxDescriptionLines(context),
             textOverflow: TextOverflow.ellipsis,
           ),
         ],
@@ -2886,7 +2886,7 @@ class _MPCardContentBuilders {
                 MPText.body(
                   data.message!,
                   color: context.mp.textColor,
-                  maxLines: 3,
+                  maxLines: _getMaxDescriptionLines(context),
                   textOverflow: TextOverflow.ellipsis,
                 ),
 
@@ -3015,6 +3015,21 @@ class _MPCardContentBuilders {
         ],
       ],
     );
+  }
+
+  /// Gets maximum description lines based on screen size
+  static int _getMaxDescriptionLines(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth < MPCardBreakpoints.smallMobile) {
+      return 2;
+    } else if (screenWidth < MPCardBreakpoints.largeMobile) {
+      return 3;
+    } else if (screenWidth < MPCardBreakpoints.tablet) {
+      return 4;
+    } else {
+      return 5;
+    }
   }
 }
 
@@ -3146,12 +3161,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     // Set initial state
     _updateCurrentState();
 
-    // Initialize responsive state
-    _updateResponsiveState();
-
-    // Initialize accessibility state
-    _initializeAccessibilityState();
-
     // Set up responsive callback for performance optimization
     _responsiveCallback = () {
       _updateResponsiveState();
@@ -3166,6 +3175,12 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    // Initialize responsive state
+    _updateResponsiveState();
+
+    // Initialize accessibility state
+    _initializeAccessibilityState();
 
     // Check system accessibility settings when dependencies change
     _checkSystemAccessibilitySettings();
@@ -3498,6 +3513,176 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     }
   }
 
+  /// Gets responsive constraints based on screen size and configuration
+  BoxConstraints _getResponsiveConstraints() {
+    final config = widget.responsive;
+    final screenSize = _currentScreenSize;
+    final orientation = _currentOrientation;
+
+    // Check for custom constraints configuration
+    if (config != null) {
+      switch (screenSize) {
+        case MPCardScreenSize.smallMobile:
+        case MPCardScreenSize.mobile:
+          if (config.mobileConstraints != null)
+            return config.mobileConstraints!;
+          break;
+        case MPCardScreenSize.largeMobile:
+        case MPCardScreenSize.smallTablet:
+        case MPCardScreenSize.tablet:
+          if (config.tabletConstraints != null)
+            return config.tabletConstraints!;
+          break;
+        case MPCardScreenSize.largeTablet:
+        case MPCardScreenSize.smallDesktop:
+        case MPCardScreenSize.desktop:
+        case MPCardScreenSize.largeDesktop:
+          if (config.desktopConstraints != null)
+            return config.desktopConstraints!;
+          break;
+      }
+    }
+
+    // Default responsive constraints
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+        return BoxConstraints(
+          minWidth: 280,
+          maxWidth: 320,
+          minHeight: 120,
+        );
+      case MPCardScreenSize.mobile:
+        return BoxConstraints(
+          minWidth: 320,
+          maxWidth: 380,
+          minHeight: 140,
+        );
+      case MPCardScreenSize.largeMobile:
+        return BoxConstraints(
+          minWidth: 360,
+          maxWidth: 420,
+          minHeight: 160,
+        );
+      case MPCardScreenSize.smallTablet:
+        // Adjust for orientation
+        if (orientation == MPCardOrientation.landscape) {
+          return BoxConstraints(
+            minWidth: 400,
+            maxWidth: 480,
+            minHeight: 140,
+          );
+        }
+        return BoxConstraints(
+          minWidth: 400,
+          maxWidth: 480,
+          minHeight: 180,
+        );
+      case MPCardScreenSize.tablet:
+        // Adjust for orientation
+        if (orientation == MPCardOrientation.landscape) {
+          return BoxConstraints(
+            minWidth: 480,
+            maxWidth: 560,
+            minHeight: 160,
+          );
+        }
+        return BoxConstraints(
+          minWidth: 480,
+          maxWidth: 560,
+          minHeight: 200,
+        );
+      case MPCardScreenSize.largeTablet:
+        // Adjust for orientation
+        if (orientation == MPCardOrientation.landscape) {
+          return BoxConstraints(
+            minWidth: 560,
+            maxWidth: 640,
+            minHeight: 180,
+          );
+        }
+        return BoxConstraints(
+          minWidth: 560,
+          maxWidth: 640,
+          minHeight: 220,
+        );
+      case MPCardScreenSize.smallDesktop:
+        return BoxConstraints(
+          minWidth: 640,
+          maxWidth: 720,
+          minHeight: 200,
+        );
+      case MPCardScreenSize.desktop:
+        return BoxConstraints(
+          minWidth: 720,
+          maxWidth: 800,
+          minHeight: 220,
+        );
+      case MPCardScreenSize.largeDesktop:
+        return BoxConstraints(
+          minWidth: 800,
+          maxWidth: 900,
+          minHeight: 240,
+        );
+    }
+  }
+
+  /// Gets responsive max width based on screen size and configuration
+  double? _getResponsiveMaxWidth() {
+    final config = widget.responsive;
+    final screenSize = _currentScreenSize;
+    final orientation = _currentOrientation;
+
+    // Check for custom max width configuration
+    if (config != null) {
+      switch (screenSize) {
+        case MPCardScreenSize.smallMobile:
+        case MPCardScreenSize.mobile:
+          return config.mobileMaxWidth;
+        case MPCardScreenSize.largeMobile:
+        case MPCardScreenSize.smallTablet:
+        case MPCardScreenSize.tablet:
+          return config.tabletMaxWidth;
+        case MPCardScreenSize.largeTablet:
+        case MPCardScreenSize.smallDesktop:
+        case MPCardScreenSize.desktop:
+        case MPCardScreenSize.largeDesktop:
+          return null; // No max width for desktop
+      }
+    }
+
+    // Default max width based on screen size and orientation
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+        return 320;
+      case MPCardScreenSize.mobile:
+        return 380;
+      case MPCardScreenSize.largeMobile:
+        return 420;
+      case MPCardScreenSize.smallTablet:
+        // Adjust for orientation
+        if (orientation == MPCardOrientation.landscape) {
+          return 480;
+        }
+        return 480;
+      case MPCardScreenSize.tablet:
+        // Adjust for orientation
+        if (orientation == MPCardOrientation.landscape) {
+          return 560;
+        }
+        return 560;
+      case MPCardScreenSize.largeTablet:
+        // Adjust for orientation
+        if (orientation == MPCardOrientation.landscape) {
+          return 640;
+        }
+        return 640;
+      case MPCardScreenSize.smallDesktop:
+      case MPCardScreenSize.desktop:
+      case MPCardScreenSize.largeDesktop:
+        return null; // No max width for desktop
+    }
+  }
+
   MPCardInteractionState get currentState => _currentState;
 
   /// Checks if the card is in a specific state
@@ -3645,18 +3830,26 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
                   opacity: _currentState == MPCardInteractionState.disabled
                       ? _opacityAnimation.value
                       : 1.0,
-                  child: AnimatedContainer(
-                    duration: duration,
-                    curve: Curves.easeInOut,
-                    padding: _getResponsivePadding(),
-                    decoration: BoxDecoration(
-                      color: _getInteractionColor(context),
-                      borderRadius: BorderRadius.circular(
-                          widget.borderRadius ?? _getDefaultBorderRadius()),
-                      border: _getBorder(),
-                      boxShadow: _getBoxShadow(context),
+                  child: ConstrainedBox(
+                    constraints: _getResponsiveConstraints(),
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: _getResponsiveMaxWidth() ?? double.infinity,
+                      ),
+                      child: AnimatedContainer(
+                        duration: duration,
+                        curve: Curves.easeInOut,
+                        padding: _getResponsivePadding(),
+                        decoration: BoxDecoration(
+                          color: _getInteractionColor(context),
+                          borderRadius: BorderRadius.circular(
+                              widget.borderRadius ?? _getDefaultBorderRadius()),
+                          border: _getBorder(),
+                          boxShadow: _getBoxShadow(context),
+                        ),
+                        child: _buildContentWithRipple(context),
+                      ),
                     ),
-                    child: _buildContentWithRipple(context),
                   ),
                 ),
               );
@@ -3846,8 +4039,11 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
   Widget _buildAdaptiveLayout() {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final config = widget.responsive;
     final orientation = _currentOrientation;
+    final screenSize = _currentScreenSize;
+    final aspectRatio = screenWidth / screenHeight;
 
     if (config != null) {
       // Orientation-aware layout adaptation
@@ -3856,9 +4052,17 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
         // In landscape mode, prefer horizontal layout for better space utilization
         if (screenWidth <=
             (config.mobileMaxWidth ?? MPCardBreakpoints.mobile)) {
+          // For small mobile in landscape, use compact layout
+          if (aspectRatio > 1.5) {
+            return _buildCompactLandscapeLayout();
+          }
           return _buildHorizontalLayout();
         } else if (screenWidth <=
             (config.tabletMaxWidth ?? MPCardBreakpoints.tablet)) {
+          // For tablets in landscape, check aspect ratio
+          if (aspectRatio > 1.8 && screenSize == MPCardScreenSize.smallTablet) {
+            return _buildCompactLandscapeLayout();
+          }
           return _buildHorizontalLayout();
         } else {
           return (config.desktopLayout ?? MPCardLayout.horizontal) ==
@@ -3889,10 +4093,74 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
     // Fallback to orientation-based layout if no config
     if (orientation == MPCardOrientation.landscape && screenWidth > 600) {
+      // Use compact layout for very wide aspect ratios
+      if (aspectRatio > 1.8) {
+        return _buildCompactLandscapeLayout();
+      }
       return _buildHorizontalLayout();
     }
 
     return _buildVerticalLayout();
+  }
+
+  /// Builds a compact landscape layout optimized for wide aspect ratios
+  Widget _buildCompactLandscapeLayout() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: _buildCompactLandscapeContentChildren(),
+    );
+  }
+
+  /// Builds content children for compact landscape layout
+  List<Widget> _buildCompactLandscapeContentChildren() {
+    final children = <Widget>[];
+    final hasMultipleSections = (_hasHeaderContent() && _hasBodyContent()) ||
+        (_hasBodyContent() && _hasFooterContent()) ||
+        (_hasHeaderContent() && _hasFooterContent());
+
+    if (!hasMultipleSections) {
+      // Simple case: just one section, use regular content children
+      return _buildContentChildren();
+    }
+
+    // Complex case: multiple sections in compact landscape layout
+    final headerWidget = _buildHeaderSection();
+    final bodyWidget = _buildBodySection();
+    final footerWidget = _buildFooterSection();
+
+    if (headerWidget != null) {
+      children.add(Expanded(
+        flex: 1,
+        child: headerWidget,
+      ));
+    }
+
+    if (bodyWidget != null) {
+      if (children.isNotEmpty) {
+        children.add(
+            SizedBox(width: _getContentSpacing() * 0.75)); // Reduced spacing
+      }
+      children.add(Expanded(
+        flex: 3,
+        child: widget.enableOverflowHandling
+            ? _buildScrollableContent(bodyWidget)
+            : bodyWidget,
+      ));
+    }
+
+    if (footerWidget != null) {
+      if (children.isNotEmpty) {
+        children.add(
+            SizedBox(width: _getContentSpacing() * 0.75)); // Reduced spacing
+      }
+      children.add(Expanded(
+        flex: 1,
+        child: footerWidget,
+      ));
+    }
+
+    return children;
   }
 
   List<Widget> _buildContentChildren() {
@@ -3910,7 +4178,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     // Build body section
     final bodyWidget = _buildBodySection();
     if (bodyWidget != null) {
-      children.add(Expanded(child: bodyWidget));
+      // Use Flexible instead of Expanded to avoid unbounded height constraints
+      children.add(Flexible(child: bodyWidget));
       if (_hasFooterContent()) {
         children.add(SizedBox(height: _getContentSpacing()));
       }
@@ -4021,22 +4290,66 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   Widget _buildScrollableContent(Widget content) {
     final config = widget.responsive;
     final screenSize = _currentScreenSize;
+    final orientation = _currentOrientation;
     final isSmallScreen = screenSize == MPCardScreenSize.smallMobile ||
         screenSize == MPCardScreenSize.mobile;
 
-    // Enable horizontal scrolling on small screens if configured
+    // Enhanced overflow handling with orientation awareness
     if (isSmallScreen && config?.enableHorizontalScrolling == true) {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         clipBehavior: widget.clipBehavior,
-        child: content,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width * 0.8,
+          ),
+          child: content,
+        ),
       );
     }
 
-    // Default vertical scrolling
-    return SingleChildScrollView(
-      clipBehavior: widget.clipBehavior,
-      child: content,
+    // For landscape mode on medium screens, use horizontal scrolling for better content display
+    if (orientation == MPCardOrientation.landscape &&
+        (screenSize == MPCardScreenSize.largeMobile ||
+            screenSize == MPCardScreenSize.smallTablet) &&
+        config?.enableHorizontalScrolling == true) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: widget.clipBehavior,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width * 0.6,
+          ),
+          child: content,
+        ),
+      );
+    }
+
+    // Default vertical scrolling with enhanced overflow handling
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Determine if content might overflow based on screen size
+        final maxContentHeight = _getMaxContentHeight(screenSize, orientation);
+
+        // Ensure constraints are normalized (minHeight <= maxHeight)
+        final minHeight =
+            constraints.hasBoundedHeight ? constraints.maxHeight : 0.0;
+        final maxHeight =
+            minHeight > maxContentHeight ? minHeight : maxContentHeight;
+
+        return SingleChildScrollView(
+          clipBehavior: widget.clipBehavior,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: minHeight,
+              maxHeight: maxHeight,
+            ),
+            child: IntrinsicHeight(
+              child: content,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -4646,4 +4959,29 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   }
 
   double get currentElevation => _getResponsiveElevation();
+
+  /// Gets maximum content height based on screen size and orientation
+  double _getMaxContentHeight(
+      MPCardScreenSize screenSize, MPCardOrientation orientation) {
+    switch (screenSize) {
+      case MPCardScreenSize.smallMobile:
+        return orientation == MPCardOrientation.landscape ? 120.0 : 200.0;
+      case MPCardScreenSize.mobile:
+        return orientation == MPCardOrientation.landscape ? 140.0 : 240.0;
+      case MPCardScreenSize.largeMobile:
+        return orientation == MPCardOrientation.landscape ? 160.0 : 280.0;
+      case MPCardScreenSize.smallTablet:
+        return orientation == MPCardOrientation.landscape ? 180.0 : 320.0;
+      case MPCardScreenSize.tablet:
+        return orientation == MPCardOrientation.landscape ? 200.0 : 360.0;
+      case MPCardScreenSize.largeTablet:
+        return orientation == MPCardOrientation.landscape ? 220.0 : 400.0;
+      case MPCardScreenSize.smallDesktop:
+        return orientation == MPCardOrientation.landscape ? 240.0 : 440.0;
+      case MPCardScreenSize.desktop:
+        return orientation == MPCardOrientation.landscape ? 260.0 : 480.0;
+      case MPCardScreenSize.largeDesktop:
+        return orientation == MPCardOrientation.landscape ? 280.0 : 520.0;
+    }
+  }
 }

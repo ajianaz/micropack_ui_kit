@@ -2,9 +2,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
 
 enum MPTextType { HEAD, SUBHEAD, TITLE, BODY, CAPTION, LABEL, SMALL }
+
+/// Text overflow behavior options
+enum MPTextOverflowBehavior {
+  /// Show ellipsis when text overflows
+  ellipsis,
+
+  /// Clip text without ellipsis
+  clip,
+
+  /// Fade text at the edges
+  fade,
+
+  /// Expandable text with "Show more" option
+  expandable,
+
+  /// Responsive truncation based on screen size
+  responsive,
+}
 
 class MPText extends StatelessWidget {
   final String text;
@@ -22,6 +41,21 @@ class MPText extends StatelessWidget {
   final TextDecorationStyle? decorationStyle;
   final Color? decorationColor;
   final double? decorationThickness;
+
+  /// Enhanced overflow behavior for better text handling
+  final MPTextOverflowBehavior? overflowBehavior;
+
+  /// Whether to enable responsive text truncation
+  final bool enableResponsiveTruncation;
+
+  /// Custom "Show more" text for expandable overflow
+  final String? expandText;
+
+  /// Custom "Show less" text for expandable overflow
+  final String? collapseText;
+
+  /// Callback when expand/collapse is triggered
+  final VoidCallback? onExpandChanged;
 
   /// Creates a text widget with optional styling parameters.
   ///
@@ -47,6 +81,11 @@ class MPText extends StatelessWidget {
     this.decorationStyle,
     this.decorationColor,
     this.decorationThickness,
+    this.overflowBehavior,
+    this.enableResponsiveTruncation = false,
+    this.expandText,
+    this.collapseText,
+    this.onExpandChanged,
   });
 
   // 🔒 Internal constructor (for named constructors only)
@@ -67,6 +106,11 @@ class MPText extends StatelessWidget {
     this.decorationStyle,
     this.decorationColor,
     this.decorationThickness,
+    this.overflowBehavior,
+    this.enableResponsiveTruncation = false,
+    this.expandText,
+    this.collapseText,
+    this.onExpandChanged,
   });
 
   // ==== Named constructors ====
@@ -90,6 +134,11 @@ class MPText extends StatelessWidget {
     TextDecorationStyle? decorationStyle,
     Color? decorationColor,
     double? decorationThickness,
+    MPTextOverflowBehavior? overflowBehavior,
+    bool enableResponsiveTruncation = false,
+    String? expandText,
+    String? collapseText,
+    VoidCallback? onExpandChanged,
   }) {
     return MPText._internal(
       text,
@@ -108,6 +157,11 @@ class MPText extends StatelessWidget {
       decorationStyle: decorationStyle,
       decorationColor: decorationColor,
       decorationThickness: decorationThickness,
+      overflowBehavior: overflowBehavior,
+      enableResponsiveTruncation: enableResponsiveTruncation,
+      expandText: expandText,
+      collapseText: collapseText,
+      onExpandChanged: onExpandChanged,
     );
   }
 
@@ -130,6 +184,11 @@ class MPText extends StatelessWidget {
     TextDecorationStyle? decorationStyle,
     Color? decorationColor,
     double? decorationThickness,
+    MPTextOverflowBehavior? overflowBehavior,
+    bool enableResponsiveTruncation = false,
+    String? expandText,
+    String? collapseText,
+    VoidCallback? onExpandChanged,
   }) {
     return MPText._internal(
       text,
@@ -148,6 +207,11 @@ class MPText extends StatelessWidget {
       decorationStyle: decorationStyle,
       decorationColor: decorationColor,
       decorationThickness: decorationThickness,
+      overflowBehavior: overflowBehavior,
+      enableResponsiveTruncation: enableResponsiveTruncation,
+      expandText: expandText,
+      collapseText: collapseText,
+      onExpandChanged: onExpandChanged,
     );
   }
 
@@ -170,6 +234,11 @@ class MPText extends StatelessWidget {
     TextDecorationStyle? decorationStyle,
     Color? decorationColor,
     double? decorationThickness,
+    MPTextOverflowBehavior? overflowBehavior,
+    bool enableResponsiveTruncation = false,
+    String? expandText,
+    String? collapseText,
+    VoidCallback? onExpandChanged,
   }) {
     return MPText._internal(
       text,
@@ -188,6 +257,11 @@ class MPText extends StatelessWidget {
       decorationStyle: decorationStyle,
       decorationColor: decorationColor,
       decorationThickness: decorationThickness,
+      overflowBehavior: overflowBehavior,
+      enableResponsiveTruncation: enableResponsiveTruncation,
+      expandText: expandText,
+      collapseText: collapseText,
+      onExpandChanged: onExpandChanged,
     );
   }
 
@@ -210,6 +284,11 @@ class MPText extends StatelessWidget {
     TextDecorationStyle? decorationStyle,
     Color? decorationColor,
     double? decorationThickness,
+    MPTextOverflowBehavior? overflowBehavior,
+    bool enableResponsiveTruncation = false,
+    String? expandText,
+    String? collapseText,
+    VoidCallback? onExpandChanged,
   }) {
     return MPText._internal(
       text,
@@ -228,6 +307,11 @@ class MPText extends StatelessWidget {
       decorationStyle: decorationStyle,
       decorationColor: decorationColor,
       decorationThickness: decorationThickness,
+      overflowBehavior: overflowBehavior,
+      enableResponsiveTruncation: enableResponsiveTruncation,
+      expandText: expandText,
+      collapseText: collapseText,
+      onExpandChanged: onExpandChanged,
     );
   }
 
@@ -250,6 +334,11 @@ class MPText extends StatelessWidget {
     TextDecorationStyle? decorationStyle,
     Color? decorationColor,
     double? decorationThickness,
+    MPTextOverflowBehavior? overflowBehavior,
+    bool enableResponsiveTruncation = false,
+    String? expandText,
+    String? collapseText,
+    VoidCallback? onExpandChanged,
   }) {
     return MPText._internal(
       text,
@@ -268,6 +357,11 @@ class MPText extends StatelessWidget {
       decorationStyle: decorationStyle,
       decorationColor: decorationColor,
       decorationThickness: decorationThickness,
+      overflowBehavior: overflowBehavior,
+      enableResponsiveTruncation: enableResponsiveTruncation,
+      expandText: expandText,
+      collapseText: collapseText,
+      onExpandChanged: onExpandChanged,
     );
   }
 
@@ -306,15 +400,130 @@ class MPText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Handle different overflow behaviors
+    switch (overflowBehavior) {
+      case MPTextOverflowBehavior.expandable:
+        return _buildExpandableText(context);
+      case MPTextOverflowBehavior.responsive:
+        return _buildResponsiveText(context);
+      case MPTextOverflowBehavior.fade:
+        return _buildFadeText(context);
+      default:
+        return _buildStandardText(context);
+    }
+  }
+
+  /// Build standard text with basic overflow handling
+  Widget _buildStandardText(BuildContext context) {
     return Text(
       text,
-      maxLines: maxLines,
+      maxLines: enableResponsiveTruncation
+          ? _getResponsiveMaxLines(context)
+          : maxLines,
       overflow:
           textOverflow ?? (maxLines != null ? TextOverflow.ellipsis : null),
       softWrap: softWrap ?? true,
       textAlign: textAlign,
       style: _getCachedStyle(context),
     );
+  }
+
+  /// Build expandable text with show more/less functionality
+  Widget _buildExpandableText(BuildContext context) {
+    return _MPExpandableText(
+      text: text,
+      style: _getCachedStyle(context),
+      maxLines: enableResponsiveTruncation
+          ? _getResponsiveMaxLines(context)
+          : maxLines ?? 3,
+      textAlign: textAlign,
+      softWrap: softWrap ?? true,
+      expandText: expandText ?? 'Show more',
+      collapseText: collapseText ?? 'Show less',
+      onExpandChanged: onExpandChanged,
+    );
+  }
+
+  /// Build responsive text that adapts to screen size
+  Widget _buildResponsiveText(BuildContext context) {
+    return Text(
+      text,
+      maxLines: _getResponsiveMaxLines(context),
+      overflow: TextOverflow.ellipsis,
+      softWrap: softWrap ?? true,
+      textAlign: textAlign,
+      style: _getCachedStyle(context),
+    );
+  }
+
+  /// Build text with fade overflow effect
+  Widget _buildFadeText(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) {
+        return LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            _getCachedStyle(context).color ?? Colors.black,
+            Colors.transparent,
+          ],
+          stops: const [0.8, 1.0],
+        ).createShader(bounds);
+      },
+      blendMode: BlendMode.dstIn,
+      child: Text(
+        text,
+        maxLines: _getResponsiveMaxLines(context),
+        overflow: TextOverflow.clip,
+        softWrap: softWrap ?? true,
+        textAlign: textAlign,
+        style: _getCachedStyle(context),
+      ),
+    );
+  }
+
+  /// Get responsive max lines based on screen size and text type
+  int _getResponsiveMaxLines(BuildContext context) {
+    if (!enableResponsiveTruncation) return maxLines ?? 999;
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
+    // Base max lines on text size and screen dimensions
+    int baseMaxLines;
+    if (fontSize != null) {
+      if (fontSize! > 24) {
+        // Large text
+        baseMaxLines = isPortrait ? 2 : 3;
+      } else if (fontSize! > 16) {
+        // Medium text
+        baseMaxLines = isPortrait ? 3 : 4;
+      } else {
+        // Small text
+        baseMaxLines = isPortrait ? 4 : 6;
+      }
+    } else {
+      // Default based on text type
+      baseMaxLines = isPortrait ? 3 : 4;
+    }
+
+    // Adjust for screen size
+    if (screenWidth < 360) {
+      // Small screens
+      baseMaxLines = (baseMaxLines * 0.7).round();
+    } else if (screenWidth > 768) {
+      // Large screens
+      baseMaxLines = (baseMaxLines * 1.3).round();
+    }
+
+    // Adjust for very wide screens in landscape
+    if (!isPortrait && screenWidth > screenHeight * 1.5) {
+      baseMaxLines = (baseMaxLines * 1.2).round();
+    }
+
+    return maxLines != null ? maxLines! : baseMaxLines.clamp(1, 10);
   }
 
   // Performance optimization: Cache composed style to avoid recalculations
@@ -345,5 +554,127 @@ class MPText extends StatelessWidget {
     }
 
     return composedStyle;
+  }
+}
+
+/// Expandable text widget with show more/less functionality
+class _MPExpandableText extends StatefulWidget {
+  const _MPExpandableText({
+    required this.text,
+    required this.style,
+    required this.maxLines,
+    this.textAlign,
+    this.softWrap = true,
+    required this.expandText,
+    required this.collapseText,
+    this.onExpandChanged,
+  });
+
+  final String text;
+  final TextStyle style;
+  final int maxLines;
+  final TextAlign? textAlign;
+  final bool softWrap;
+  final String expandText;
+  final String collapseText;
+  final VoidCallback? onExpandChanged;
+
+  @override
+  State<_MPExpandableText> createState() => _MPExpandableTextState();
+}
+
+class _MPExpandableTextState extends State<_MPExpandableText>
+    with TickerProviderStateMixin {
+  bool _isExpanded = false;
+  late AnimationController _animationController;
+  late Animation<double> _expandAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _expandAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleExpand() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+      widget.onExpandChanged?.call();
+    });
+  }
+
+  bool _isTextOverflowing() {
+    final textPainter = TextPainter(
+      text: TextSpan(text: widget.text, style: widget.style),
+      maxLines: widget.maxLines,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout(maxWidth: double.infinity);
+    return textPainter.didExceedMaxLines;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check if text overflows
+    if (!_isTextOverflowing() && !_isExpanded) {
+      return Text(
+        widget.text,
+        style: widget.style,
+        textAlign: widget.textAlign,
+        softWrap: widget.softWrap,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedBuilder(
+          animation: _expandAnimation,
+          builder: (context, child) {
+            return AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: Text(
+                widget.text,
+                style: widget.style,
+                textAlign: widget.textAlign,
+                softWrap: widget.softWrap,
+                maxLines: _isExpanded ? null : widget.maxLines,
+                overflow: TextOverflow.ellipsis,
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 4),
+        GestureDetector(
+          onTap: _toggleExpand,
+          child: Text(
+            _isExpanded ? widget.collapseText : widget.expandText,
+            style: widget.style.copyWith(
+              color: context.mp.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

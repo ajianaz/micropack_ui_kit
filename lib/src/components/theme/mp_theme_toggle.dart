@@ -58,6 +58,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
   late Animation<double> _rotationAnimation;
   late Animation<double> _scaleAnimation;
   ThemeMode? _currentThemeMode;
+  bool _isLandscape = false;
 
   @override
   void initState() {
@@ -68,6 +69,23 @@ class _MPThemeToggleState extends State<MPThemeToggle>
     // Add theme listener
     if (MPThemeManager.instance.isInitialized) {
       MPThemeManager.instance.addListener(_onThemeChanged);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateOrientation();
+  }
+
+  void _updateOrientation() {
+    final newOrientation = MediaQuery.of(context).orientation;
+    final newIsLandscape = newOrientation == Orientation.landscape;
+
+    if (_isLandscape != newIsLandscape) {
+      setState(() {
+        _isLandscape = newIsLandscape;
+      });
     }
   }
 
@@ -191,6 +209,24 @@ class _MPThemeToggleState extends State<MPThemeToggle>
     return isDark ? Colors.white : Colors.black87;
   }
 
+  double _getOrientationAwareIconSize() {
+    if (_isLandscape) {
+      return widget.iconSize * 0.9; // Slightly smaller in landscape
+    }
+    return widget.iconSize;
+  }
+
+  EdgeInsets _getOrientationAwarePadding() {
+    if (_isLandscape) {
+      // More compact padding in landscape mode
+      return EdgeInsets.symmetric(
+        horizontal: widget.padding.horizontal * 0.8,
+        vertical: widget.padding.vertical * 0.7,
+      );
+    }
+    return widget.padding;
+  }
+
   Widget _buildIconButton() {
     return AnimatedBuilder(
       animation: _animationController,
@@ -201,11 +237,11 @@ class _MPThemeToggleState extends State<MPThemeToggle>
             scale: _scaleAnimation.value,
             child: IconButton(
               onPressed: _switchToNextTheme,
-              padding: widget.padding,
+              padding: _getOrientationAwarePadding(),
               icon: widget.customIcon ??
                   Icon(
                     _getThemeIcon(_currentThemeMode ?? ThemeMode.system),
-                    size: widget.iconSize,
+                    size: _getOrientationAwareIconSize(),
                     color: _getIconColor(context),
                   ),
               tooltip: _getThemeLabel(_currentThemeMode ?? ThemeMode.system),
@@ -223,7 +259,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
         return TextButton.icon(
           onPressed: _switchToNextTheme,
           style: TextButton.styleFrom(
-            padding: widget.padding,
+            padding: _getOrientationAwarePadding(),
           ),
           icon: Transform.rotate(
             angle: _rotationAnimation.value * 2 * 3.14159,
@@ -232,7 +268,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
               child: widget.customIcon ??
                   Icon(
                     _getThemeIcon(_currentThemeMode ?? ThemeMode.system),
-                    size: widget.iconSize,
+                    size: _getOrientationAwareIconSize(),
                     color: _getIconColor(context),
                   ),
             ),
@@ -241,6 +277,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
             _getThemeLabel(_currentThemeMode ?? ThemeMode.system),
             style: TextStyle(
               color: _getIconColor(context),
+              fontSize: _isLandscape ? 12 : 14, // Smaller text in landscape
             ),
           ),
         );
@@ -255,7 +292,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(_isLandscape ? 6 : 8),
             border: Border.all(
               color: Theme.of(context).colorScheme.outline,
             ),
@@ -293,27 +330,27 @@ class _MPThemeToggleState extends State<MPThemeToggle>
                   },
                   child: AnimatedContainer(
                     duration: widget.animationDuration,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: _isLandscape ? 8 : 12,
+                      vertical: _isLandscape ? 6 : 8,
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? Theme.of(context).colorScheme.primary
                           : Colors.transparent,
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(_isLandscape ? 4 : 6),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           _getThemeIcon(mode),
-                          size: widget.iconSize * 0.8,
+                          size: _getOrientationAwareIconSize() * 0.8,
                           color: isSelected
                               ? Theme.of(context).colorScheme.onPrimary
                               : _getIconColor(context),
                         ),
-                        if (widget.showLabel) ...[
+                        if (widget.showLabel && !_isLandscape) ...[
                           const SizedBox(width: 6),
                           Text(
                             _getThemeLabel(mode),
@@ -321,7 +358,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
                               color: isSelected
                                   ? Theme.of(context).colorScheme.onPrimary
                                   : _getIconColor(context),
-                              fontSize: 12,
+                              fontSize: _isLandscape ? 10 : 12,
                               fontWeight: isSelected
                                   ? FontWeight.w600
                                   : FontWeight.normal,
