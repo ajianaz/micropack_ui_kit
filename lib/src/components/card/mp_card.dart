@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// MPCard variant enum for different visual styles
 enum MPCardVariant {
@@ -3690,6 +3691,47 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    return MPPerformanceProfilerWidget(
+      name: 'MPCard',
+      metadata: {
+        'variant': widget.variant.name,
+        'size': widget.size.name,
+        'layout': widget.layout.name,
+        'hasHeader': widget.header != null || widget.headerData != null,
+        'hasBody': widget.body != null || widget.child != null,
+        'hasFooter': widget.footer != null || widget.footerData != null,
+        'isInteractive': widget.onTap != null,
+        'hasResponsiveConfig': widget.responsive != null,
+      },
+      child: MPErrorBoundary(
+        errorCategory: MPErrorCategory.component,
+        errorSeverity: MPErrorSeverity.medium,
+        onError: (error) {
+          // Log card-specific error
+          MPErrorHandler.instance.handleComponentError(
+            code: 'CARD_RENDER_ERROR',
+            message: 'Card rendering failed: ${error.message}',
+            technicalDetails: error.technicalDetails,
+            context: {
+              'cardVariant': widget.variant.name,
+              'cardSize': widget.size.name,
+              'cardLayout': widget.layout.name,
+              'hasHeader': widget.header != null || widget.headerData != null,
+              'hasBody': widget.body != null || widget.child != null,
+              'hasFooter': widget.footer != null || widget.footerData != null,
+            },
+          );
+        },
+        child: Builder(
+          builder: (context) {
+            return _buildCardContentWithErrorHandling(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCardContentWithErrorHandling(BuildContext context) {
     // Check if accessibility is enabled
     if (!_accessibilityConfig.enabled) {
       return _buildBasicCard(context);
@@ -3757,9 +3799,11 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       // Focus management
       focusable: _accessibilityConfig.enableFocusManagement && widget.enabled,
 
-      // Custom semantic properties based on configuration
-      // Note: 'properties' parameter is not available in Semantics widget
-      // Using explicit attributes instead
+      // Add enhanced semantic descriptions for better accessibility
+      // Note: 'properties' parameter is not available in Semantics widget in Flutter
+      // Using explicit attributes instead for accessibility information
+      // Container for grouping related content
+      container: true,
 
       // Merge semantics with child content
       child: Container(

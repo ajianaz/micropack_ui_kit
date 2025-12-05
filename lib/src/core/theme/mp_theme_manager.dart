@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:micropack_ui_kit/src/core/theme/mp_color_theme.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// MPThemeManager - Provider-free theme manager with singleton pattern
 ///
@@ -60,6 +62,10 @@ class MPThemeManager {
   bool _isInitialized = false;
   bool _isInitializing = false;
   String? _initializationError;
+
+  // Performance optimization: Theme data cache
+  final Map<String, ThemeData> _themeDataCache = {};
+  final Map<String, MPColorTheme?> _colorThemeCache = {};
 
   /// Current theme mode
   ThemeMode get themeMode => _themeMode;
@@ -149,8 +155,22 @@ class MPThemeManager {
     try {
       await _loadThemeFromStorage();
       _isInitialized = true;
-    } catch (e) {
+    } catch (e, stackTrace) {
       _initializationError = e.toString();
+
+      // Handle theme initialization error
+      MPErrorHandler.instance.handleThemeError(
+        code: 'THEME_INIT_FAILED',
+        message: 'Failed to initialize theme manager',
+        technicalDetails: e.toString(),
+        originalError: e,
+        stackTrace: stackTrace,
+        context: {
+          'themeMode': _themeMode.toString(),
+          'hasCustomThemes': hasCustomThemes,
+        },
+      );
+
       debugPrint('Failed to initialize MPThemeManager: $e');
       // Set default values as fallback
       _themeMode = ThemeMode.system;
@@ -170,15 +190,38 @@ class MPThemeManager {
       );
     }
 
+    // Performance optimization: Start profiling
+    MPPerformanceProfiler.instance.startBuild('ThemeManager.setThemeMode');
+
     await _lock.acquire();
     try {
       if (_themeMode != mode) {
+        // Clear cache when theme changes
+        _themeDataCache.clear();
+        _colorThemeCache.clear();
+
         _themeMode = mode;
         await _saveThemeToStorage();
         _notifyListeners();
       }
+    } catch (e, stackTrace) {
+      // Handle theme switching error
+      MPErrorHandler.instance.handleThemeError(
+        code: 'THEME_SWITCH_FAILED',
+        message: 'Failed to switch theme mode',
+        technicalDetails: e.toString(),
+        originalError: e,
+        stackTrace: stackTrace,
+        context: {
+          'fromThemeMode': _themeMode.toString(),
+          'toThemeMode': mode.toString(),
+        },
+      );
     } finally {
       _lock.release();
+
+      // Performance optimization: End profiling
+      MPPerformanceProfiler.instance.endBuild('ThemeManager.setThemeMode');
     }
   }
 
@@ -210,6 +253,9 @@ class MPThemeManager {
       );
     }
 
+    // Performance optimization: Start profiling
+    MPPerformanceProfiler.instance.startBuild('ThemeManager.setCustomThemes');
+
     await _lock.acquire();
     try {
       var hasChanges = false;
@@ -225,11 +271,18 @@ class MPThemeManager {
       }
 
       if (hasChanges) {
+        // Clear cache when custom themes change
+        _themeDataCache.clear();
+        _colorThemeCache.clear();
+
         await _saveCustomThemesToStorage();
         _notifyListeners();
       }
     } finally {
       _lock.release();
+
+      // Performance optimization: End profiling
+      MPPerformanceProfiler.instance.endBuild('ThemeManager.setCustomThemes');
     }
   }
 
@@ -250,16 +303,28 @@ class MPThemeManager {
     }
 
     final isDark = _isDarkMode(context);
+    final cacheKey = '${isDark ? 'dark' : 'light'}_${_themeMode.toString()}';
 
-    // Use custom theme if available, otherwise use default
-    if (hasCustomThemes) {
-      final customTheme = isDark ? _customDarkTheme! : _customLightTheme!;
-      return MPTheme.main(isDarkMode: isDark).copyWith(
-        extensions: [customTheme],
-      );
+    // Check cache first
+    if (_themeDataCache.containsKey(cacheKey)) {
+      return _themeDataCache[cacheKey]!;
     }
 
-    return MPTheme.main(isDarkMode: isDark);
+    // Use custom theme if available, otherwise use default
+    ThemeData themeData;
+    if (hasCustomThemes) {
+      final customTheme = isDark ? _customDarkTheme! : _customLightTheme!;
+      themeData = MPTheme.main(isDarkMode: isDark).copyWith(
+        extensions: [customTheme],
+      );
+    } else {
+      themeData = MPTheme.main(isDarkMode: isDark);
+    }
+
+    // Cache the result
+    _themeDataCache[cacheKey] = themeData;
+
+    return themeData;
   }
 
   /// Get current color theme
@@ -267,12 +332,24 @@ class MPThemeManager {
     if (!_isInitialized) return null;
 
     final isDark = _isDarkMode(context);
+    final cacheKey = '${isDark ? 'dark' : 'light'}_color';
 
-    if (hasCustomThemes) {
-      return isDark ? _customDarkTheme : _customLightTheme;
+    // Check cache first
+    if (_colorThemeCache.containsKey(cacheKey)) {
+      return _colorThemeCache[cacheKey];
     }
 
-    return isDark ? MPColorTheme.dark : MPColorTheme.light;
+    MPColorTheme? colorTheme;
+    if (hasCustomThemes) {
+      colorTheme = isDark ? _customDarkTheme : _customLightTheme;
+    } else {
+      colorTheme = isDark ? MPColorTheme.dark : MPColorTheme.light;
+    }
+
+    // Cache the result
+    _colorThemeCache[cacheKey] = colorTheme;
+
+    return colorTheme;
   }
 
   /// Check if current theme is dark
@@ -585,9 +662,28 @@ class MPThemeManager {
           }
         }),
       );
+
+      // Clear caches on dispose
+      _themeDataCache.clear();
+      _colorThemeCache.clear();
     } finally {
       _lock.release();
     }
+  }
+
+  /// Clear theme caches (useful for testing or memory management)
+  void clearCaches() {
+    _themeDataCache.clear();
+    _colorThemeCache.clear();
+  }
+
+  /// Get cache statistics
+  Map<String, dynamic> getCacheStats() {
+    return {
+      'themeDataCacheSize': _themeDataCache.length,
+      'colorThemeCacheSize': _colorThemeCache.length,
+      'cacheKeys': _themeDataCache.keys.toList(),
+    };
   }
 
   // ============ DEBUG ============

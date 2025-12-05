@@ -9,55 +9,155 @@ export 'mp_responsive_container.dart';
 import 'package:flutter/material.dart';
 import 'mp_responsive_breakpoints.dart';
 import 'mp_responsive_padding.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// MPResponsive - Main responsive utilities class
 ///
 /// Provides comprehensive responsive design utilities for all components
 /// Combines breakpoint detection, padding, grids, and constraints
 class MPResponsive {
+  // ============ PERFORMANCE CACHE ============
+
+  // Performance optimization: Cache device size calculations
+  static final Map<String, MPDeviceSize> _deviceSizeCache = {};
+  static final Map<String, bool> _orientationCache = {};
+  static final Map<String, dynamic> _valueCache = {};
+
   // ============ DEVICE DETECTION ============
-  
+
   /// Get current device size
   static MPDeviceSize getDeviceSize(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return MPResponsiveBreakpoints.getDeviceSize(width);
+    final cacheKey = width.toString();
+
+    // Check cache first
+    if (_deviceSizeCache.containsKey(cacheKey)) {
+      return _deviceSizeCache[cacheKey]!;
+    }
+
+    final deviceSize = MPResponsiveBreakpoints.getDeviceSize(width);
+
+    // Cache the result
+    _deviceSizeCache[cacheKey] = deviceSize;
+
+    // Limit cache size
+    if (_deviceSizeCache.length > 20) {
+      _deviceSizeCache.remove(_deviceSizeCache.keys.first);
+    }
+
+    return deviceSize;
   }
-  
+
   /// Check if current device is mobile
   static bool isMobile(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return MPResponsiveBreakpoints.isMobile(width);
+    final cacheKey = 'mobile_${width.toString()}';
+
+    // Check cache first
+    if (_orientationCache.containsKey(cacheKey)) {
+      return _orientationCache[cacheKey]!;
+    }
+
+    final isMobile = MPResponsiveBreakpoints.isMobile(width);
+
+    // Cache the result
+    _orientationCache[cacheKey] = isMobile;
+
+    // Limit cache size
+    if (_orientationCache.length > 30) {
+      _orientationCache.remove(_orientationCache.keys.first);
+    }
+
+    return isMobile;
   }
-  
+
   /// Check if current device is tablet
   static bool isTablet(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return MPResponsiveBreakpoints.isTablet(width);
+    final cacheKey = 'tablet_${width.toString()}';
+
+    // Check cache first
+    if (_orientationCache.containsKey(cacheKey)) {
+      return _orientationCache[cacheKey]!;
+    }
+
+    final isTablet = MPResponsiveBreakpoints.isTablet(width);
+
+    // Cache the result
+    _orientationCache[cacheKey] = isTablet;
+
+    // Limit cache size
+    if (_orientationCache.length > 30) {
+      _orientationCache.remove(_orientationCache.keys.first);
+    }
+
+    return isTablet;
   }
-  
+
   /// Check if current device is desktop
   static bool isDesktop(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return MPResponsiveBreakpoints.isDesktop(width);
+    final cacheKey = 'desktop_${width.toString()}';
+
+    // Check cache first
+    if (_orientationCache.containsKey(cacheKey)) {
+      return _orientationCache[cacheKey]!;
+    }
+
+    final isDesktop = MPResponsiveBreakpoints.isDesktop(width);
+
+    // Cache the result
+    _orientationCache[cacheKey] = isDesktop;
+
+    // Limit cache size
+    if (_orientationCache.length > 30) {
+      _orientationCache.remove(_orientationCache.keys.first);
+    }
+
+    return isDesktop;
   }
-  
+
   /// Get current orientation
   static Orientation getOrientation(BuildContext context) {
-    return MediaQuery.of(context).orientation;
+    final mediaQuery = MediaQuery.of(context);
+    final cacheKey =
+        'orientation_${mediaQuery.size.width}_${mediaQuery.size.height}';
+
+    // Check cache first
+    if (_orientationCache.containsKey(cacheKey)) {
+      return _orientationCache[cacheKey]!
+          ? Orientation.portrait
+          : Orientation.landscape;
+    }
+
+    final orientation = mediaQuery.orientation;
+    final isPortrait = orientation == Orientation.portrait;
+
+    // Cache the result
+    _orientationCache[cacheKey] = isPortrait;
+
+    // Limit cache size
+    if (_orientationCache.length > 30) {
+      _orientationCache.remove(_orientationCache.keys.first);
+    }
+
+    return orientation;
   }
-  
+
   /// Check if current orientation is portrait
   static bool isPortrait(BuildContext context) {
-    return getOrientation(context) == Orientation.portrait;
+    final isPortrait = getOrientation(context) == Orientation.portrait;
+    return isPortrait;
   }
-  
+
   /// Check if current orientation is landscape
   static bool isLandscape(BuildContext context) {
-    return getOrientation(context) == Orientation.landscape;
+    final isLandscape = getOrientation(context) == Orientation.landscape;
+    return isLandscape;
   }
-  
+
   // ============ RESPONSIVE VALUES ============
-  
+
   /// Get responsive value based on device size
   static T getValue<T>({
     required BuildContext context,
@@ -73,31 +173,63 @@ class MPResponsive {
     T? ultraWide,
   }) {
     final deviceSize = getDeviceSize(context);
-    
+    final cacheKey =
+        'value_${deviceSize.name}_${mobile.hashCode}_${tablet?.hashCode ?? 0}_${desktop?.hashCode ?? 0}';
+
+    // Check cache first (only for simple types)
+    if (T == double || T == int) {
+      if (_valueCache.containsKey(cacheKey)) {
+        return _valueCache[cacheKey] as T;
+      }
+    }
+
+    T value;
     switch (deviceSize) {
       case MPDeviceSize.smallMobile:
-        return smallMobile ?? mobile;
+        value = smallMobile ?? mobile;
+        break;
       case MPDeviceSize.mobile:
-        return mobile;
+        value = mobile;
+        break;
       case MPDeviceSize.largeMobile:
-        return largeMobile ?? mobile;
+        value = largeMobile ?? mobile;
+        break;
       case MPDeviceSize.smallTablet:
-        return smallTablet ?? tablet ?? mobile;
+        value = smallTablet ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.tablet:
-        return tablet ?? mobile;
+        value = tablet ?? mobile;
+        break;
       case MPDeviceSize.largeTablet:
-        return largeTablet ?? tablet ?? mobile;
+        value = largeTablet ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.smallDesktop:
-        return smallDesktop ?? desktop ?? tablet ?? mobile;
+        value = smallDesktop ?? desktop ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.desktop:
-        return desktop ?? tablet ?? mobile;
+        value = desktop ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.largeDesktop:
-        return largeDesktop ?? desktop ?? tablet ?? mobile;
+        value = largeDesktop ?? desktop ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.ultraWide:
-        return ultraWide ?? largeDesktop ?? desktop ?? tablet ?? mobile;
+        value = ultraWide ?? largeDesktop ?? desktop ?? tablet ?? mobile;
+        break;
     }
+
+    // Cache the result (only for simple types)
+    if (T == double || T == int) {
+      _valueCache[cacheKey] = value as dynamic;
+
+      // Limit cache size
+      if (_valueCache.length > 50) {
+        _valueCache.remove(_valueCache.keys.first);
+      }
+    }
+
+    return value;
   }
-  
+
   /// Get responsive value based on orientation
   static T getValueByOrientation<T>({
     required BuildContext context,
@@ -106,7 +238,7 @@ class MPResponsive {
   }) {
     return isPortrait(context) ? portrait : landscape;
   }
-  
+
   /// Get responsive font size
   static double getFontSize({
     required BuildContext context,
@@ -121,7 +253,7 @@ class MPResponsive {
       desktop: desktop,
     );
   }
-  
+
   /// Get responsive spacing
   static double getSpacing({
     required BuildContext context,
@@ -136,7 +268,7 @@ class MPResponsive {
       desktop: desktop,
     );
   }
-  
+
   /// Get responsive border radius
   static double getBorderRadius({
     required BuildContext context,
@@ -151,9 +283,9 @@ class MPResponsive {
       desktop: desktop,
     );
   }
-  
+
   // ============ RESPONSIVE LAYOUTS ============
-  
+
   /// Build responsive layout based on device size
   static Widget buildLayout({
     required BuildContext context,
@@ -169,7 +301,7 @@ class MPResponsive {
     Widget? ultraWide,
   }) {
     final deviceSize = getDeviceSize(context);
-    
+
     switch (deviceSize) {
       case MPDeviceSize.smallMobile:
         return smallMobile ?? mobile;
@@ -193,7 +325,7 @@ class MPResponsive {
         return ultraWide ?? largeDesktop ?? desktop ?? tablet ?? mobile;
     }
   }
-  
+
   /// Build orientation-aware layout
   static Widget buildOrientationLayout({
     required BuildContext context,
@@ -202,9 +334,9 @@ class MPResponsive {
   }) {
     return isPortrait(context) ? portrait : landscape;
   }
-  
+
   // ============ LAYOUT BUILDERS ============
-  
+
   /// Builder for responsive layouts
   static Widget builder({
     required BuildContext context,
@@ -221,7 +353,7 @@ class MPResponsive {
       },
     );
   }
-  
+
   /// Builder for orientation-aware layouts
   static Widget orientationBuilder({
     required BuildContext context,
@@ -241,7 +373,7 @@ class MPResponsive {
       },
     );
   }
-  
+
   /// Combined responsive and orientation builder
   static Widget combinedBuilder({
     required BuildContext context,
@@ -260,79 +392,107 @@ class MPResponsive {
       },
     );
   }
-  
+
   // ============ MEDIA QUERY HELPERS ============
-  
+
   /// Get screen width
   static double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
-  
+
   /// Get screen height
   static double getScreenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
-  
+
   /// Get safe area padding
   static EdgeInsets getSafeAreaPadding(BuildContext context) {
     return MediaQuery.of(context).padding;
   }
-  
+
   /// Get view insets
   static EdgeInsets getViewInsets(BuildContext context) {
     return MediaQuery.of(context).viewInsets;
   }
-  
+
   /// Check if device has notch
   static bool hasNotch(BuildContext context) {
     return MediaQuery.of(context).padding.top > 24;
   }
-  
+
   /// Get text scale factor
   static double getTextScaleFactor(BuildContext context) {
     return MediaQuery.of(context).textScaleFactor.clamp(0.8, 2.0);
   }
-  
+
   /// Check if device has high contrast
   static bool isHighContrast(BuildContext context) {
     return MediaQuery.of(context).highContrast;
   }
-  
+
   /// Check if reduced motion is enabled
   static bool isReducedMotion(BuildContext context) {
-    return MediaQuery.of(context).accessibleNavigation || 
-           MediaQuery.of(context).disableAnimations;
+    return MediaQuery.of(context).accessibleNavigation ||
+        MediaQuery.of(context).disableAnimations;
   }
-  
+
   // ============ RESPONSIVE FORM FACTORS ============
-  
+
   /// Get platform-specific form factor
   static String getFormFactor(BuildContext context) {
     final deviceSize = getDeviceSize(context);
     final orientation = getOrientation(context);
-    
+
     if (deviceSize == MPDeviceSize.smallMobile ||
         deviceSize == MPDeviceSize.mobile ||
         deviceSize == MPDeviceSize.largeMobile) {
-      return orientation == Orientation.portrait ? 'phone-portrait' : 'phone-landscape';
+      return orientation == Orientation.portrait
+          ? 'phone-portrait'
+          : 'phone-landscape';
     } else if (deviceSize == MPDeviceSize.smallTablet ||
-               deviceSize == MPDeviceSize.tablet ||
-               deviceSize == MPDeviceSize.largeTablet) {
-      return orientation == Orientation.portrait ? 'tablet-portrait' : 'tablet-landscape';
+        deviceSize == MPDeviceSize.tablet ||
+        deviceSize == MPDeviceSize.largeTablet) {
+      return orientation == Orientation.portrait
+          ? 'tablet-portrait'
+          : 'tablet-landscape';
     } else {
       return 'desktop';
     }
   }
-  
+
   /// Check if touch is available
   static bool hasTouch(BuildContext context) {
-    return MediaQuery.of(context).navigationMode == NavigationMode.traditional ||
-           MediaQuery.of(context).devicePixelRatio > 1.0;
+    return MediaQuery.of(context).navigationMode ==
+            NavigationMode.traditional ||
+        MediaQuery.of(context).devicePixelRatio > 1.0;
   }
-  
+
   /// Check if mouse is available
   static bool hasMouse(BuildContext context) {
-    return MediaQuery.of(context).navigationMode == NavigationMode.traditional ||
-           MediaQuery.of(context).devicePixelRatio <= 1.0;
+    return MediaQuery.of(context).navigationMode ==
+            NavigationMode.traditional ||
+        MediaQuery.of(context).devicePixelRatio <= 1.0;
+  }
+
+  /// Clear all caches (useful for testing or memory management)
+  static void clearCaches() {
+    _deviceSizeCache.clear();
+    _orientationCache.clear();
+    _valueCache.clear();
+  }
+
+  /// Get cache statistics
+  static Map<String, dynamic> getCacheStats() {
+    return {
+      'deviceSizeCacheSize': _deviceSizeCache.length,
+      'orientationCacheSize': _orientationCache.length,
+      'valueCacheSize': _valueCache.length,
+    };
+  }
+
+  /// Initialize performance monitoring for responsive calculations
+  static void initializePerformanceMonitoring() {
+    MPPerformanceProfiler.instance
+        .startMonitoring(interval: Duration(seconds: 10));
   }
 }

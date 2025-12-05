@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
-import 'mp_font_sizes.dart';
+import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
 
 class MPTextStyle {
   /// Configurable text style for dynamic text usage
@@ -117,7 +118,23 @@ class MPTextStyle {
         color: color,
         decoration: decoration,
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // Handle font error through centralized error handler
+      MPErrorHandler.instance.handleFontError(
+        code: 'FONT_LOAD_FAILED',
+        message: 'Font style error for $effectiveFontFamily',
+        technicalDetails: e.toString(),
+        originalError: e,
+        stackTrace: stackTrace,
+        context: {
+          'fontFamily': effectiveFontFamily,
+          'fontSize': fontSize?.toString(),
+          'fontWeight': fontWeight?.toString(),
+          'letterSpacing': letterSpacing?.toString(),
+          'height': height?.toString(),
+        },
+      );
+
       // Graceful error handling with fallback to system font
       debugPrint(
           'Font style error for $effectiveFontFamily: $e. Using fallback.');

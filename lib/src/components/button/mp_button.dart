@@ -3,6 +3,7 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// A customizable button component with theme support.
 ///
@@ -232,52 +233,61 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // Initialize accessibility state
-    _initializeAccessibilityState();
+    // Initialize with error handling
+    MPErrorHandler.instance.executeWithErrorHandling(
+      () {
+        _initializeAccessibilityState();
 
-    // Initialize animation controllers
-    final animationDuration = widget.respectReducedMotion && _isReducedMotion
-        ? const Duration(milliseconds: 50)
-        : const Duration(milliseconds: 200);
+        // Initialize animation controllers
+        final animationDuration =
+            widget.respectReducedMotion && _isReducedMotion
+                ? const Duration(milliseconds: 50)
+                : const Duration(milliseconds: 200);
 
-    _hoverController = AnimationController(
-      duration: animationDuration,
-      vsync: this,
+        _hoverController = AnimationController(
+          duration: animationDuration,
+          vsync: this,
+        );
+
+        _pressController = AnimationController(
+          duration: widget.respectReducedMotion && _isReducedMotion
+              ? const Duration(milliseconds: 25)
+              : const Duration(milliseconds: 100),
+          vsync: this,
+        );
+
+        _focusController = AnimationController(
+          duration: animationDuration,
+          vsync: this,
+        );
+
+        // Initialize animations
+        _hoverAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+          CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic),
+        );
+
+        _pressAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(
+          CurvedAnimation(parent: _pressController, curve: Curves.easeInCubic),
+        );
+
+        _focusAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(parent: _focusController, curve: Curves.easeInOut),
+        );
+
+        _disabledAnimation = Tween<double>(begin: 1.0, end: 0.6).animate(
+          CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
+        );
+
+        _wasEnabled = widget.enabled;
+
+        // Initialize keyboard shortcuts
+        _initializeKeyboardShortcuts();
+      },
+      category: MPErrorCategory.component,
+      code: 'BUTTON_INIT_FAILED',
+      message: 'Button initialization failed',
+      context: {'buttonType': widget.variant.name},
     );
-
-    _pressController = AnimationController(
-      duration: widget.respectReducedMotion && _isReducedMotion
-          ? const Duration(milliseconds: 25)
-          : const Duration(milliseconds: 100),
-      vsync: this,
-    );
-
-    _focusController = AnimationController(
-      duration: animationDuration,
-      vsync: this,
-    );
-
-    // Initialize animations
-    _hoverAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic),
-    );
-
-    _pressAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(
-      CurvedAnimation(parent: _pressController, curve: Curves.easeInCubic),
-    );
-
-    _focusAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _focusController, curve: Curves.easeInOut),
-    );
-
-    _disabledAnimation = Tween<double>(begin: 1.0, end: 0.6).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
-    );
-
-    _wasEnabled = widget.enabled;
-
-    // Initialize keyboard shortcuts
-    _initializeKeyboardShortcuts();
   }
 
   /// Initializes accessibility state based on system preferences
@@ -296,6 +306,12 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       const SingleActivator(LogicalKeyboardKey.enter): () =>
           _handleActivation(),
       const SingleActivator(LogicalKeyboardKey.space): () =>
+          _handleActivation(),
+      // Add additional keyboard navigation for better accessibility
+      const SingleActivator(LogicalKeyboardKey.select): () =>
+          _handleActivation(),
+      // Support for numeric keypad enter key
+      const SingleActivator(LogicalKeyboardKey.numpadEnter): () =>
           _handleActivation(),
     };
   }
@@ -371,6 +387,44 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    return MPPerformanceProfilerWidget(
+      name: 'MPButton',
+      metadata: {
+        'variant': widget.variant.name,
+        'size': widget.size.name,
+        'enabled': widget.enabled,
+        'loading': widget.loading,
+        'hasIcon': widget.icon != null,
+        'hasText': widget.text != null,
+      },
+      child: MPErrorBoundary(
+        errorCategory: MPErrorCategory.component,
+        errorSeverity: MPErrorSeverity.medium,
+        onError: (error) {
+          // Log button-specific error
+          MPErrorHandler.instance.handleComponentError(
+            code: 'BUTTON_RENDER_ERROR',
+            message: 'Button rendering failed: ${error.message}',
+            technicalDetails: error.technicalDetails,
+            context: {
+              'buttonText': widget.text,
+              'buttonVariant': widget.variant.name,
+              'buttonSize': widget.size.name,
+              'enabled': widget.enabled,
+              'loading': widget.loading,
+            },
+          );
+        },
+        child: Builder(
+          builder: (context) {
+            return _buildButtonContentWithErrorHandling(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonContentWithErrorHandling(BuildContext context) {
     _initializeCache(context);
 
     final buttonContent = widget.loading
@@ -430,7 +484,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
     // Wrap with RepaintBoundary for performance
     final Widget buttonWithSemantics = Semantics(
       label: widget.semanticLabel ?? widget.text ?? 'Button',
-      hint: widget.semanticHint,
+      hint: widget.semanticHint ??
+          (widget.onPressed != null ? 'Double tap to activate' : null),
       button: true,
       excludeSemantics: widget.excludeSemantics,
       enabled: widget.enabled && !widget.loading,
@@ -438,15 +493,41 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       focusable: widget.enabled && !widget.loading,
       onTap: widget.enabled && !widget.loading && widget.onPressed != null
           ? () {
-              if (widget.onPressed != null) {
-                widget.onPressed!();
-              }
+              MPErrorHandler.instance.executeWithErrorHandling(
+                () {
+                  if (widget.onPressed != null) {
+                    widget.onPressed!();
+                  }
+                },
+                category: MPErrorCategory.component,
+                code: 'BUTTON_PRESS_ERROR',
+                message: 'Button press failed',
+                context: {
+                  'buttonText': widget.text,
+                  'buttonVariant': widget.variant.name,
+                },
+              );
             }
           : null,
       onLongPress:
           widget.enabled && !widget.loading && widget.onLongPress != null
-              ? widget.onLongPress
+              ? () {
+                  MPErrorHandler.instance.executeWithErrorHandling(
+                    () => widget.onLongPress!(),
+                    category: MPErrorCategory.component,
+                    code: 'BUTTON_LONG_PRESS_ERROR',
+                    message: 'Button long press failed',
+                    context: {
+                      'buttonText': widget.text,
+                      'buttonVariant': widget.variant.name,
+                    },
+                  );
+                }
               : null,
+      // Add enhanced semantic properties for better accessibility
+      textDirection: Directionality.of(context),
+      // Add live region for dynamic content updates
+      liveRegion: widget.loading,
       child: widget.enableKeyboardNavigation
           ? Focus(
               focusNode: widget.focusNode,
@@ -473,17 +554,26 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
         final orientation = mediaQuery.orientation;
         final isLandscape = orientation == Orientation.landscape;
 
+        // Respect reduced motion preferences for accessibility
+        final animationDuration = widget.respectReducedMotion &&
+                _isReducedMotion
+            ? const Duration(milliseconds: 50)
+            : (widget.animationDuration ?? const Duration(milliseconds: 200));
+
         return Transform.scale(
           scale: _getOrientationAwareAnimationScale(orientation, isLandscape),
           child: AnimatedOpacity(
-            duration:
-                widget.animationDuration ?? const Duration(milliseconds: 200),
+            duration: animationDuration,
             opacity: widget.enabled ? 1.0 : _disabledAnimation.value,
             child: Container(
               width: (widget.widthInfinity ?? false)
                   ? MediaQuery.of(context).size.width
                   : null,
-              child: RepaintBoundary(child: buttonWithSemantics),
+              // Add semantic container for better grouping
+              child: Semantics(
+                container: true,
+                child: RepaintBoundary(child: buttonWithSemantics),
+              ),
             ),
           ),
         );

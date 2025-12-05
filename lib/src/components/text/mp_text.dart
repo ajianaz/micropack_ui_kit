@@ -5,6 +5,8 @@ import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 enum MPTextType { HEAD, SUBHEAD, TITLE, BODY, CAPTION, LABEL, SMALL }
 
@@ -159,14 +161,14 @@ class MPText extends StatelessWidget {
     this.onExpandChanged,
     this.semanticLabel,
     this.semanticHint,
-    this.excludeSemantics,
+    this.excludeSemantics = false,
     this.accessibilityProperties,
     this.customAccessibilityActions,
     this.onAccessibilityAction,
-    this.respectReducedMotion,
-    this.enableHighContrast,
+    this.respectReducedMotion = true,
+    this.enableHighContrast = true,
     this.focusNode,
-    this.enableKeyboardNavigation,
+    this.enableKeyboardNavigation = true,
     this.focusOrder,
   });
 
@@ -457,6 +459,44 @@ class MPText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MPPerformanceProfilerWidget(
+      name: 'MPText',
+      metadata: {
+        'textLength': text.length,
+        'maxLines': maxLines,
+        'overflowBehavior': overflowBehavior?.name,
+        'enableResponsiveTruncation': enableResponsiveTruncation,
+        'hasCustomStyle': style != null,
+      },
+      child: MPErrorBoundary(
+        errorCategory: MPErrorCategory.component,
+        errorSeverity: MPErrorSeverity.medium,
+        onError: (error) {
+          // Log text-specific error
+          MPErrorHandler.instance.handleComponentError(
+            code: 'TEXT_RENDER_ERROR',
+            message: 'Text rendering failed: ${error.message}',
+            technicalDetails: error.technicalDetails,
+            context: {
+              'text': text,
+              'textType': style?.toString(),
+              'fontSize': fontSize?.toString(),
+              'fontWeight': fontWeight?.toString(),
+              'overflowBehavior': overflowBehavior?.name,
+              'maxLines': maxLines?.toString(),
+            },
+          );
+        },
+        child: Builder(
+          builder: (context) {
+            return _buildTextContentWithErrorHandling(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextContentWithErrorHandling(BuildContext context) {
     // Handle different overflow behaviors
     switch (overflowBehavior) {
       case MPTextOverflowBehavior.expandable:
@@ -495,6 +535,10 @@ class MPText extends StatelessWidget {
       label: semanticLabel ?? text,
       hint: semanticHint,
       textDirection: TextDirection.ltr,
+      // Add enhanced semantic properties for better accessibility
+      container: true,
+      // Add live region for dynamic content updates
+      liveRegion: false, // Text is typically static content
       child: enableKeyboardNavigation && focusNode != null
           ? Focus(
               focusNode: focusNode,
@@ -631,6 +675,11 @@ class MPText extends StatelessWidget {
     }
 
     return composedStyle;
+  }
+
+  /// Clear style cache (useful for testing or memory management)
+  static void clearStyleCache() {
+    _styleCache.clear();
   }
 }
 

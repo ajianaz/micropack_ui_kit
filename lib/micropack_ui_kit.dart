@@ -14,5 +14,7 @@ export 'src/core/responsive/mp_responsive.dart';
 export 'src/core/styles/styles.dart';
 // themes
 export 'src/core/theme/themes.dart';
+// error handling
+export 'src/core/error/mp_error_handler.dart';
 // utils
 export 'src/core/utils/utils.dart';
