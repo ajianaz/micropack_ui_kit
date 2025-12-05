@@ -286,7 +286,9 @@ class MPText extends StatelessWidget {
     }
 
     // Use theme-aware text color as default when no color is explicitly provided
-    Color? effectiveColor = color ?? baseStyle.color ?? context.mp.textColor;
+    // Ensure proper contrast by using adaptive text color based on theme
+    Color? effectiveColor =
+        color ?? baseStyle.color ?? context.mp.adaptiveTextColor(1.0);
 
     return baseStyle.copyWith(
       fontWeight: fontWeight,
@@ -317,7 +319,7 @@ class MPText extends StatelessWidget {
 
   // Performance optimization: Cache composed style to avoid recalculations
   static final Map<String, TextStyle> _styleCache = {};
-  
+
   TextStyle _getCachedStyle(BuildContext context) {
     // Create cache key from style parameters
     final params = [
@@ -329,19 +331,19 @@ class MPText extends StatelessWidget {
       letterSpacing?.hashCode ?? 0,
     ];
     final cacheKey = params.join('_');
-    
+
     if (_styleCache.containsKey(cacheKey)) {
       return _styleCache[cacheKey]!;
     }
-    
+
     final composedStyle = composeTextStyle(context);
     _styleCache[cacheKey] = composedStyle;
-    
+
     // Limit cache size to prevent memory leaks
     if (_styleCache.length > 50) {
       _styleCache.remove(_styleCache.keys.first);
     }
-    
+
     return composedStyle;
   }
 }

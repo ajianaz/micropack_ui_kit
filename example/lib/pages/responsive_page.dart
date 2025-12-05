@@ -13,33 +13,15 @@ class _ResponsivePageState extends State<ResponsivePage>
     with TickerProviderStateMixin {
   late AnimationController _themeAnimationController;
   late Animation<double> _themeAnimation;
-  bool _isInitialized = false;
-  String? _initializationError;
 
   @override
   void initState() {
     super.initState();
-    _initializeThemeManager();
     _setupAnimationController();
-  }
 
-  Future<void> _initializeThemeManager() async {
-    try {
-      if (!MPThemeManager.instance.isInitialized) {
-        await MPThemeManager.initialize();
-      }
-
-      // Add theme listener
+    // Add theme listener - MPThemeManager is already initialized by MPThemeWidget
+    if (MPThemeManager.instance.isInitialized) {
       MPThemeManager.instance.addListener(_onThemeChanged);
-
-      setState(() {
-        _isInitialized = true;
-      });
-    } catch (e) {
-      setState(() {
-        _initializationError = e.toString();
-        _isInitialized = true;
-      });
     }
   }
 
@@ -66,7 +48,7 @@ class _ResponsivePageState extends State<ResponsivePage>
   @override
   void dispose() {
     // Remove theme listener
-    if (_isInitialized) {
+    if (MPThemeManager.instance.isInitialized) {
       MPThemeManager.instance.removeListener(_onThemeChanged);
     }
     _themeAnimationController.dispose();
@@ -142,26 +124,6 @@ class _ResponsivePageState extends State<ResponsivePage>
 
   @override
   Widget build(BuildContext context) {
-    if (!_isInitialized) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              MPText(
-                _initializationError != null
-                    ? 'Error: $_initializationError'
-                    : 'Initializing theme manager...',
-                style: MPTextStyle.body1(),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
     final colorTheme = MPThemeManager.instance.getCurrentColorTheme(context);
 
     return Scaffold(
@@ -175,6 +137,18 @@ class _ResponsivePageState extends State<ResponsivePage>
         backgroundColor:
             colorTheme?.primarySurface ?? context.mp.backgroundColor,
         elevation: 0,
+        actions: [
+          // Add theme toggle to app bar
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: MPCompactThemeToggle(
+              onChanged: (ThemeMode mode) {
+                // Theme change is already handled by MPThemeManager
+                debugPrint('Theme changed to: $mode');
+              },
+            ),
+          ),
+        ],
       ),
       backgroundColor: colorTheme?.primarySurface ?? context.mp.backgroundColor,
       body: AnimatedBuilder(

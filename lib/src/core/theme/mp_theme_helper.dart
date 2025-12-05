@@ -49,48 +49,50 @@ class MPThemeUtilities {
   // ============ CRITICAL FIXES: ADAPTIVE COLORS ============
 
   /// Get adaptive text color based on theme brightness
-  /// FIXED: Dark mode now uses neutral10 (white text on dark background)
+  /// ENHANCED: Improved dark mode support with better contrast
+  /// Dark mode: uses neutral10 (white text on dark background)
   /// Light mode: uses neutral90 (dark text on light background)
   Color adaptiveTextColor(double opacity) {
     try {
       if (colorTheme != null) {
-        // Use neutral colors from theme with CORRECT dark mode logic
+        // Use neutral colors from theme with ENHANCED dark mode logic
         final baseColor = isDarkMode
             ? (colorTheme!.neutral10 ?? MPThemeConfig.getNeutral(10))
             : (colorTheme!.neutral90 ?? MPThemeConfig.getNeutral(90));
         return baseColor.withValues(alpha: opacity);
       } else {
-        // Fallback to MPThemeConfig helper with CORRECT logic
+        // Fallback to MPThemeConfig helper with ENHANCED logic
         final baseColor = isDarkMode
             ? MPThemeConfig.getNeutral(10)
             : MPThemeConfig.getNeutral(90);
         return baseColor.withValues(alpha: opacity);
       }
     } catch (e) {
-      // Robust fallback
-      return (isDarkMode ? Colors.white : Colors.black)
+      // Robust fallback with enhanced dark mode support
+      return (isDarkMode ? Colors.white : Colors.black87)
           .withValues(alpha: opacity);
     }
   }
 
   /// Get adaptive background color for better contrast
-  /// FIXED: Dark mode now uses neutral90 (dark background)
+  /// ENHANCED: Improved dark mode support with better contrast
+  /// Dark mode: uses neutral100 (dark background)
   /// Light mode: uses neutral10 (light background)
   Color get adaptiveBackgroundColor {
     try {
       if (colorTheme != null) {
-        // Use CORRECT dark mode logic
+        // Use ENHANCED dark mode logic
         return isDarkMode
             ? (colorTheme!.neutral100 ?? MPThemeConfig.getNeutral(100))
             : (colorTheme!.neutral10 ?? MPThemeConfig.getNeutral(10));
       }
-      // Fallback to MPThemeConfig helper with CORRECT logic
+      // Fallback to MPThemeConfig helper with ENHANCED logic
       return isDarkMode
           ? MPThemeConfig.getNeutral(100)
           : MPThemeConfig.getNeutral(10);
     } catch (e) {
-      // Robust fallback
-      return isDarkMode ? const Color(0xFF374151) : const Color(0xFFFFFFFF);
+      // Robust fallback with enhanced dark mode support
+      return isDarkMode ? const Color(0xFF1F2937) : const Color(0xFFFFFFFF);
     }
   }
 
@@ -352,30 +354,30 @@ class MPThemeUtilities {
 
   // ============ ENHANCED FEATURES: INTERACTIVE STATES ============
 
-  /// Get hover color for interactive elements
+  /// Get hover color for interactive elements with enhanced dark mode support
   Color getHoverColor(Color baseColor, {double factor = 0.1}) {
     try {
       if (isDarkMode) {
-        // In dark mode, hover should lighten the color
-        return Color.lerp(baseColor, Colors.white, factor) ?? baseColor;
+        // In dark mode, hover should lighten the color more for better visibility
+        return Color.lerp(baseColor, Colors.white, factor * 1.5) ?? baseColor;
       } else {
-        // In light mode, hover should darken the color
-        return Color.lerp(baseColor, Colors.black, factor) ?? baseColor;
+        // In light mode, hover should darken the color more for better visibility
+        return Color.lerp(baseColor, Colors.black, factor * 1.5) ?? baseColor;
       }
     } catch (e) {
       return baseColor;
     }
   }
 
-  /// Get pressed color for interactive elements
+  /// Get pressed color for interactive elements with enhanced dark mode support
   Color getPressedColor(Color baseColor, {double factor = 0.2}) {
     try {
       if (isDarkMode) {
-        // In dark mode, pressed should lighten more than hover
-        return Color.lerp(baseColor, Colors.white, factor) ?? baseColor;
+        // In dark mode, pressed should lighten more than hover for better feedback
+        return Color.lerp(baseColor, Colors.white, factor * 1.8) ?? baseColor;
       } else {
-        // In light mode, pressed should darken more than hover
-        return Color.lerp(baseColor, Colors.black, factor) ?? baseColor;
+        // In light mode, pressed should darken more than hover for better feedback
+        return Color.lerp(baseColor, Colors.black, factor * 1.8) ?? baseColor;
       }
     } catch (e) {
       return baseColor;

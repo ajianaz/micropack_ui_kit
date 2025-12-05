@@ -174,23 +174,23 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     // Initialize animation controllers
     _hoverController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    
+
     _pressController = AnimationController(
       duration: const Duration(milliseconds: 100),
       vsync: this,
     );
-    
+
     // Initialize animations
     _hoverAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
       CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
     );
-    
+
     _pressAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(
       CurvedAnimation(parent: _pressController, curve: Curves.easeInOut),
     );
@@ -315,11 +315,12 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       animation: Listenable.merge([_hoverAnimation, _pressAnimation]),
       builder: (context, child) {
         return Transform.scale(
-          scale: widget.enabled 
+          scale: widget.enabled
               ? _pressAnimation.value * _hoverAnimation.value
               : _hoverAnimation.value,
           child: AnimatedContainer(
-            duration: widget.animationDuration ?? const Duration(milliseconds: 200),
+            duration:
+                widget.animationDuration ?? const Duration(milliseconds: 200),
             curve: Curves.easeInOut,
             child: RepaintBoundary(child: buttonWithSemantics),
           ),
@@ -429,8 +430,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   /// Gets theme-aware text color based on button variant
   /// Uses appropriate theme colors for each variant:
-  /// - primary/danger/success/warning/info: uses neutral100 (light text on colored background)
-  /// - outlined/ghost/text: uses primary color for transparent buttons
+  /// - primary/danger/success/warning/info: uses neutral10 (light text on colored background)
+  /// - outlined/ghost/text: uses primary color for transparent buttons with proper contrast
   Color _getTextColor() {
     if (widget.textColor != null) return widget.textColor!;
 
@@ -440,16 +441,21 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       case MPButtonVariant.success:
       case MPButtonVariant.warning:
       case MPButtonVariant.info:
-        return context.mp.neutral100; // Light text on colored background
+        // Use neutral10 (white) for light text on colored backgrounds for better contrast
+        return context.mp.neutral10;
       case MPButtonVariant.outlined:
+        // For outlined buttons, ensure good contrast in both modes
         return context.mp.isDarkMode
-            ? context.mp.neutral10
-            : context.mp.primary; // Use same color as border for light mode
+            ? context.mp.neutral10 // White text on dark background
+            : context.mp
+                .neutral90; // Dark text on light background for better contrast
       case MPButtonVariant.ghost:
       case MPButtonVariant.text:
+        // For ghost/text buttons, ensure good contrast in both modes
         return context.mp.isDarkMode
-            ? context.mp.neutral10
-            : context.mp.primary; // Use same color as border for light mode
+            ? context.mp.neutral10 // White text on dark background
+            : context.mp
+                .neutral90; // Dark text on light background for better contrast
     }
   }
 
@@ -524,8 +530,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   /// Gets theme-aware icon color based on button variant
   /// Uses appropriate theme colors for each variant:
-  /// - primary/danger/success/warning/info: uses neutral100 (light icon on colored background)
-  /// - outlined/ghost/text: uses primary color for transparent buttons
+  /// - primary/danger/success/warning/info: uses neutral10 (light icon on colored background)
+  /// - outlined/ghost/text: uses primary color for transparent buttons with proper contrast
   Color _getIconColor() {
     if (widget.iconColor != null) return widget.iconColor!;
 
@@ -535,15 +541,17 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       case MPButtonVariant.success:
       case MPButtonVariant.warning:
       case MPButtonVariant.info:
-        return context.mp.neutral100; // Light icon on colored background
+        // Use neutral10 (white) for light icons on colored backgrounds for better contrast
+        return context.mp.neutral10;
       case MPButtonVariant.outlined:
       case MPButtonVariant.ghost:
       case MPButtonVariant.text:
+        // For outlined/ghost/text buttons, ensure good contrast in both modes
         return widget.textColor ??
             (context.mp.isDarkMode
-                ? context.mp.neutral10
-                : context
-                    .mp.neutral90); // Theme-aware text for transparent buttons
+                ? context.mp.neutral10 // White icon on dark background
+                : context.mp
+                    .neutral90); // Dark icon on light background for better contrast
     }
   }
 

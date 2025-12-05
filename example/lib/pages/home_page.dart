@@ -11,6 +11,7 @@ import 'package:micropack_ui_kit_example/pages/responsive_page.dart';
 import 'package:micropack_ui_kit_example/pages/tab_page.dart';
 import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_showcase_page.dart';
+import 'package:micropack_ui_kit_example/pages/theme_toggle_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -178,6 +179,24 @@ class _HomePageState extends State<HomePage> {
               title: 'Theme',
             ),
             const _Button(name: 'Theme Showcase', page: ThemeShowcasePage()),
+            _Button(
+              name: 'Theme Toggle Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ThemeToggleDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Theme Toggle Demo: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
             const _SectionTitle(
               title: 'Components',
             ),

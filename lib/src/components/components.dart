@@ -29,3 +29,4 @@ export 'tab/mp_tab_rounded_animated.dart';
 export 'tab/tab.dart';
 export 'text/mp_text.dart';
 export 'textfield/mp_textfield.dart';
+export 'theme/mp_theme_toggle.dart';
