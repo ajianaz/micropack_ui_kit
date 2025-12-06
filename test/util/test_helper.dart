@@ -15,6 +15,9 @@ class MPTestHelper {
       enableLogging: true,
       enableCrashReporting: false,
     );
+
+    // Initialize MPThemeManager for theme-dependent components
+    await MPThemeManager.initialize();
   }
 
   /// Creates a test widget with proper initialization

@@ -235,6 +235,8 @@ void main() {
 
       expect(find.text('Underlined Text'), findsOneWidget);
       final textWidget = tester.widget<Text>(find.byType(Text));
+      // Check if the decoration is applied - it might be null if not properly passed through
+      expect(textWidget.style?.decoration, isNotNull);
       expect(textWidget.style?.decoration, TextDecoration.underline);
     });
 
@@ -252,6 +254,7 @@ void main() {
 
       expect(find.text('Strikethrough Text'), findsOneWidget);
       final textWidget = tester.widget<Text>(find.byType(Text));
+      expect(textWidget.style?.decoration, isNotNull);
       expect(textWidget.style?.decoration, TextDecoration.lineThrough);
     });
 
@@ -270,6 +273,7 @@ void main() {
 
       expect(find.text('Dashed Text'), findsOneWidget);
       final textWidget = tester.widget<Text>(find.byType(Text));
+      expect(textWidget.style?.decoration, isNotNull);
       expect(textWidget.style?.decoration, TextDecoration.underline);
       expect(textWidget.style?.decorationStyle, TextDecorationStyle.dashed);
     });
@@ -289,6 +293,7 @@ void main() {
 
       expect(find.text('Colored Underline'), findsOneWidget);
       final textWidget = tester.widget<Text>(find.byType(Text));
+      expect(textWidget.style?.decoration, isNotNull);
       expect(textWidget.style?.decoration, TextDecoration.underline);
       expect(textWidget.style?.decorationColor, Colors.blue);
     });
@@ -308,6 +313,7 @@ void main() {
 
       expect(find.text('Thick Underline'), findsOneWidget);
       final textWidget = tester.widget<Text>(find.byType(Text));
+      expect(textWidget.style?.decoration, isNotNull);
       expect(textWidget.style?.decoration, TextDecoration.underline);
       expect(textWidget.style?.decorationThickness, 3.0);
     });

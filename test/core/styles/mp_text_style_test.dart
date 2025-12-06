@@ -5,7 +5,9 @@ import 'package:micropack_ui_kit/src/core/styles/mp_text_style.dart';
 
 void main() {
   // Initialize MPErrorHandler to avoid state errors
-  MPErrorHandler.initialize();
+  setUpAll(() async {
+    await MPErrorHandler.initialize();
+  });
 
   group('MPTextStyle Tests', () {
     // ============ CONSTRUCTOR TESTS ============
