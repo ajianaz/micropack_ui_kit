@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme_manager.dart';
-import 'package:micropack_ui_kit/src/core/theme/mp_theme_config.dart';
+
 import 'package:micropack_ui_kit/src/core/theme/mp_theme.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_color_theme.dart';
 import 'package:micropack_ui_kit/src/core/utils/component_init.dart';
@@ -250,80 +250,92 @@ class _MPThemeWidgetState extends State<MPThemeWidget> {
   // ============ WIDGET BUILDERS ============
 
   Widget _buildLoadingWidget() {
+    Widget child;
     if (widget.loadingBuilder != null) {
-      return widget.loadingBuilder!(context);
-    }
-
-    return Scaffold(
-      backgroundColor: MPThemeConfig.getBackgroundColor(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                MPThemeConfig.getPrimary(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Initializing theme...',
-              style: TextStyle(
-                color: MPThemeConfig.getPrimaryTextColor(),
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildErrorWidget() {
-    if (widget.errorBuilder != null) {
-      return widget.errorBuilder!(context, _initializationError);
-    }
-
-    return Scaffold(
-      backgroundColor: MPThemeConfig.getBackgroundColor(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+      child = widget.loadingBuilder!(context);
+    } else {
+      child = Scaffold(
+        backgroundColor: Colors.white, // Safe fallback
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                color: MPThemeConfig.getErrorColor(),
-                size: 64,
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.blue, // Safe fallback
+                ),
               ),
               const SizedBox(height: 16),
-              Text(
-                'Theme Initialization Error',
+              const Text(
+                'Initializing theme...',
                 style: TextStyle(
-                  color: MPThemeConfig.getPrimaryTextColor(),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.black, // Safe fallback
+                  fontSize: 16,
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                _initializationError ?? 'Unknown error occurred',
-                style: TextStyle(
-                  color: MPThemeConfig.getSecondaryTextColor(),
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _initializeThemeManager,
-                child: const Text('Retry'),
               ),
             ],
           ),
         ),
-      ),
+      );
+    }
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
+      home: child,
+    );
+  }
+
+  Widget _buildErrorWidget() {
+    Widget child;
+    if (widget.errorBuilder != null) {
+      child = widget.errorBuilder!(context, _initializationError);
+    } else {
+      child = Scaffold(
+        backgroundColor: Colors.white, // Safe fallback
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red, // Safe fallback
+                  size: 64,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Theme Initialization Error',
+                  style: TextStyle(
+                    color: Colors.black, // Safe fallback
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _initializationError ?? 'Unknown error occurred',
+                  style: const TextStyle(
+                    color: Colors.grey, // Safe fallback
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _initializeThemeManager,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
+      home: child,
     );
   }
 

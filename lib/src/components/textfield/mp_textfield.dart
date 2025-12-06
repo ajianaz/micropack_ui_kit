@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// MPTextField - Theme-aware text field component
 ///
@@ -752,6 +754,43 @@ class _MPTextFieldState extends State<MPTextField> {
 
   @override
   Widget build(BuildContext context) {
+    return MPPerformanceProfilerWidget(
+      name: 'MPTextField',
+      metadata: {
+        'type': widget.type?.name,
+        'hasLabel': widget.label != null,
+        'hasIcon': widget.icon != null,
+        'isRequired': widget.isRequired,
+        'maxLength': widget.maxLength,
+        'enabled': widget.enabled,
+      },
+      child: MPErrorBoundary(
+        errorCategory: MPErrorCategory.component,
+        errorSeverity: MPErrorSeverity.medium,
+        onError: (error) {
+          // Log textfield-specific error
+          MPErrorHandler.instance.handleComponentError(
+            code: 'TEXTFIELD_RENDER_ERROR',
+            message: 'Text field rendering failed: ${error.message}',
+            technicalDetails: error.technicalDetails,
+            context: {
+              'type': widget.type?.name,
+              'label': widget.label,
+              'hint': widget.hint,
+              'maxLength': widget.maxLength,
+            },
+          );
+        },
+        child: Builder(
+          builder: (context) {
+            return _buildTextFieldContentWithErrorHandling(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextFieldContentWithErrorHandling(BuildContext context) {
     settingSuffixIcon();
 
     // Build combined input formatters
@@ -942,9 +981,20 @@ class _MPTextFieldState extends State<MPTextField> {
       icons.add(
         GestureDetector(
           onTap: () {
-            widget.controller.clear();
-            widget.onClear?.call();
-            widget.onChange?.call('');
+            MPErrorHandler.instance.executeWithErrorHandling(
+              () {
+                widget.controller.clear();
+                widget.onClear?.call();
+                widget.onChange?.call('');
+              },
+              category: MPErrorCategory.component,
+              code: 'TEXTFIELD_CLEAR_ERROR',
+              message: 'Text field clear operation failed',
+              context: {
+                'type': widget.type?.name,
+                'hasLabel': widget.label != null,
+              },
+            );
           },
           child: widget.clearButtonIcon ??
               Icon(

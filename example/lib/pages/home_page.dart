@@ -13,6 +13,8 @@ import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_showcase_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_toggle_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
+import 'package:micropack_ui_kit_example/test_error_handling.dart';
+import 'package:micropack_ui_kit_example/test_accessibility.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -179,24 +181,8 @@ class _HomePageState extends State<HomePage> {
               title: 'Theme',
             ),
             const _Button(name: 'Theme Showcase', page: ThemeShowcasePage()),
-            _Button(
-              name: 'Theme Toggle Demo',
-              onPressed: () async {
-                try {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const ThemeToggleDemoPage()),
-                  );
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Failed to open Theme Toggle Demo: $e'),
-                      backgroundColor: context.mp.errorColor,
-                    ),
-                  );
-                }
-              },
-            ),
+            const _Button(
+                name: 'Theme Toggle Demo', page: ThemeToggleDemoPage()),
             const _SectionTitle(
               title: 'Components',
             ),
@@ -206,6 +192,13 @@ class _HomePageState extends State<HomePage> {
             const _Button(name: 'Article Card', page: ArticleCardPage()),
             const _Button(name: 'Card', page: MPCardPage()),
             const _Button(name: 'Tabs', page: TabPage()),
+            const _SectionTitle(
+              title: 'Testing',
+            ),
+            const _Button(
+                name: 'Error Handling Demo', page: ErrorHandlingDemoPage()),
+            const _Button(
+                name: 'Accessibility Demo', page: AccessibilityTestPage()),
           ],
         ),
       ),
@@ -288,7 +281,7 @@ class _ThemeInfoCard extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           MPText(
-            'Tap the theme icon in the app bar to switch between Light, Dark, and System themes.',
+            'Tap theme icon in the app bar to switch between Light, Dark, and System themes.',
             style: TextStyle(
               color: context.mp.captionColor,
             ),

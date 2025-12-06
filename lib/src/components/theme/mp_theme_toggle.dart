@@ -171,23 +171,31 @@ class _MPThemeToggleState extends State<MPThemeToggle>
     // Play animation before theme change
     await _animationController.reverse();
 
-    try {
-      switch (nextTheme) {
-        case ThemeMode.light:
-          await MPThemeManager.instance.setLightTheme();
-          break;
-        case ThemeMode.dark:
-          await MPThemeManager.instance.setDarkTheme();
-          break;
-        case ThemeMode.system:
-          await MPThemeManager.instance.setSystemTheme();
-          break;
-      }
+    MPErrorHandler.instance.executeWithErrorHandlingAsync(
+      () async {
+        switch (nextTheme) {
+          case ThemeMode.light:
+            await MPThemeManager.instance.setLightTheme();
+            break;
+          case ThemeMode.dark:
+            await MPThemeManager.instance.setDarkTheme();
+            break;
+          case ThemeMode.system:
+            await MPThemeManager.instance.setSystemTheme();
+            break;
+        }
 
-      widget.onChanged?.call(nextTheme);
-    } catch (e) {
-      debugPrint('Error switching theme: $e');
-    }
+        widget.onChanged?.call(nextTheme);
+      },
+      category: MPErrorCategory.theme,
+      code: 'THEME_TOGGLE_SWITCH_ERROR',
+      message: 'Theme toggle switch failed',
+      context: {
+        'fromTheme': _currentThemeMode?.toString(),
+        'toTheme': nextTheme.toString(),
+        'variant': widget.variant.name,
+      },
+    );
 
     // Complete animation after theme change
     _animationController.forward();

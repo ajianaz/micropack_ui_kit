@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:developer' as developer;
+import 'dart:io' show ProcessInfo;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -113,6 +114,10 @@ class MPPerformanceProfiler {
   final List<MPPerformanceWarning> _warnings = [];
   final Map<String, List<MPPerformanceMetrics>> _history = {};
 
+  // Component initialization tracking
+  final Map<String, DateTime> _initializationStartTimes = {};
+  final Map<String, double> _initializationTimes = {};
+
   // Performance thresholds (configurable)
   double _slowBuildThreshold = 16.0; // 60fps = 16.67ms per frame
   double _slowRenderThreshold = 16.0;
@@ -123,12 +128,27 @@ class MPPerformanceProfiler {
   bool _isMonitoring = false;
   Timer? _monitoringTimer;
 
+  // Frame rate monitoring
+  int _frameCount = 0;
+  DateTime? _lastFrameTime;
+  double _currentFPS = 0.0;
+  List<double> _fpsHistory = [];
+  int _jankCount = 0;
+  DateTime? _lastJankTime;
+
   /// Performance thresholds
   double get slowBuildThreshold => _slowBuildThreshold;
   double get slowRenderThreshold => _slowRenderThreshold;
   double get highMemoryThreshold => _highMemoryThreshold;
   int get excessiveRebuildThreshold => _excessiveRebuildThreshold;
   bool get isMonitoring => _isMonitoring;
+
+  /// Frame rate metrics
+  double get currentFPS => _currentFPS;
+  int get frameCount => _frameCount;
+  List<double> get fpsHistory => List.unmodifiable(_fpsHistory);
+  int get jankCount => _jankCount;
+  DateTime? get lastJankTime => _lastJankTime;
 
   /// Set performance thresholds
   void setThresholds({
@@ -151,9 +171,67 @@ class MPPerformanceProfiler {
     _isMonitoring = true;
     _monitoringTimer = Timer.periodic(interval, (_) => _checkPerformance());
 
+    // Start frame monitoring
+    WidgetsBinding.instance.addPostFrameCallback(_onFrame);
+
     if (kDebugMode) {
       developer.log('MPPerformanceProfiler: Monitoring started');
     }
+  }
+
+  /// Frame callback for FPS monitoring
+  void _onFrame(Duration timestamp) {
+    if (!_isMonitoring) return;
+
+    final now = DateTime.now();
+
+    if (_lastFrameTime == null) {
+      _lastFrameTime = now;
+      _frameCount = 1;
+    } else {
+      final timeDiff = now.difference(_lastFrameTime!).inMicroseconds;
+
+      // Calculate FPS
+      if (timeDiff > 0) {
+        final fps = 1000000 / timeDiff;
+        _currentFPS = fps;
+
+        // Track FPS history
+        _fpsHistory.add(fps);
+        if (_fpsHistory.length > 60) {
+          _fpsHistory.removeAt(0);
+        }
+
+        // Detect jank (frame time > 16.67ms for 60fps)
+        if (timeDiff > 16667) {
+          _jankCount++;
+          _lastJankTime = now;
+
+          // Add jank warning
+          _warnings.add(MPPerformanceWarning(
+            type: MPPerformanceWarningType.slowRenderTime,
+            componentName: 'Frame',
+            message:
+                'Jank detected: frame time ${(timeDiff / 1000).toStringAsFixed(2)}ms',
+            severity: timeDiff > 33333
+                ? MPPerformanceWarningSeverity.high
+                : MPPerformanceWarningSeverity.medium,
+            timestamp: now,
+            context: {
+              'frameTime': timeDiff / 1000,
+              'fps': fps,
+              'jankCount': _jankCount,
+            },
+          ));
+        }
+      }
+
+      _lastFrameTime = now;
+      _frameCount++;
+    }
+
+    // Continue monitoring
+    WidgetsBinding.instance.addPostFrameCallback(_onFrame);
   }
 
   /// Stop performance monitoring
@@ -163,6 +241,14 @@ class MPPerformanceProfiler {
     _isMonitoring = false;
     _monitoringTimer?.cancel();
     _monitoringTimer = null;
+
+    // Reset frame monitoring state
+    _frameCount = 0;
+    _lastFrameTime = null;
+    _currentFPS = 0.0;
+    _fpsHistory.clear();
+    _jankCount = 0;
+    _lastJankTime = null;
 
     if (kDebugMode) {
       developer.log('MPPerformanceProfiler: Monitoring stopped');
@@ -175,6 +261,41 @@ class MPPerformanceProfiler {
 
     _buildStartTimes[componentName] = DateTime.now();
     _rebuildCounts[componentName] = (_rebuildCounts[componentName] ?? 0) + 1;
+  }
+
+  /// Start tracking component initialization
+  void startInitialization(String componentName) {
+    if (!_isMonitoring) return;
+
+    _initializationStartTimes[componentName] = DateTime.now();
+  }
+
+  /// End tracking component initialization
+  void endInitialization(String componentName) {
+    if (!_isMonitoring) return;
+
+    final startTime = _initializationStartTimes[componentName];
+    if (startTime == null) return;
+
+    final initTime =
+        DateTime.now().difference(startTime).inMicroseconds / 1000.0;
+    _initializationTimes[componentName] = initTime;
+    _initializationStartTimes.remove(componentName);
+
+    if (kDebugMode) {
+      developer.log(
+          'Component $componentName initialized in ${initTime.toStringAsFixed(2)}ms');
+    }
+  }
+
+  /// Get initialization time for a component
+  double? getInitializationTime(String componentName) {
+    return _initializationTimes[componentName];
+  }
+
+  /// Get all initialization times
+  Map<String, double> getAllInitializationTimes() {
+    return Map.unmodifiable(_initializationTimes);
   }
 
   /// End tracking component build
@@ -240,10 +361,28 @@ class MPPerformanceProfiler {
     _checkRenderPerformance(componentName, renderTime);
   }
 
-  /// Get current memory usage (simplified)
+  /// Get current memory usage in MB
   double _getCurrentMemoryUsage() {
-    // In a real implementation, you might use more sophisticated memory tracking
-    // This is a simplified version for demonstration
+    try {
+      // Try to get actual memory usage from ProcessInfo
+      final info = ProcessInfo.currentRss;
+      if (info != null) {
+        return info! / (1024 * 1024); // Convert bytes to MB
+      }
+      // Fallback to platform-specific implementation
+      return _getPlatformMemoryUsage();
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log('Memory tracking failed: $e');
+      }
+      return 0.0;
+    }
+  }
+
+  /// Platform-specific memory usage implementation
+  double _getPlatformMemoryUsage() {
+    // This is a fallback implementation
+    // In a real app, you might use platform-specific methods
     return 0.0;
   }
 
@@ -414,6 +553,8 @@ class MPPerformanceProfiler {
     clearMetrics();
     clearWarnings();
     _history.clear();
+    _initializationStartTimes.clear();
+    _initializationTimes.clear();
   }
 
   /// Generate performance report
@@ -447,10 +588,21 @@ class MPPerformanceProfiler {
             'renderTime': metrics.renderTime,
             'rebuildCount': metrics.rebuildCount,
             'memoryUsage': metrics.memoryUsage,
+            'initializationTime': _initializationTimes[name],
             'lastUpdated': metrics.timestamp.toIso8601String(),
             'warnings': getWarningsForComponent(name).length,
           },
         ));
+
+    // Initialization times
+    report['initializationTimes'] =
+        _initializationTimes.map((name, time) => MapEntry(
+              name,
+              {
+                'time': time,
+                'formatted': '${time.toStringAsFixed(2)}ms',
+              },
+            ));
 
     // Warnings by type
     final warningsByType =

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// A skeleton widget for loading states with customizable appearance
 ///
@@ -134,6 +136,40 @@ class _MPSkeletonState extends State<MPSkeleton> {
 
   @override
   Widget build(BuildContext context) {
+    return MPPerformanceProfilerWidget(
+      name: 'MPSkeleton',
+      metadata: {
+        'isCircle': widget.isCircle,
+        'width': widget.width,
+        'height': widget.height,
+        'hasSemanticLabel': widget.semanticLabel != null,
+      },
+      child: MPErrorBoundary(
+        errorCategory: MPErrorCategory.component,
+        errorSeverity: MPErrorSeverity.low,
+        onError: (error) {
+          // Log skeleton-specific error
+          MPErrorHandler.instance.handleComponentError(
+            code: 'SKELETON_RENDER_ERROR',
+            message: 'Skeleton rendering failed: ${error.message}',
+            technicalDetails: error.technicalDetails,
+            context: {
+              'isCircle': widget.isCircle,
+              'width': widget.width,
+              'height': widget.height,
+            },
+          );
+        },
+        child: Builder(
+          builder: (context) {
+            return _buildSkeletonContentWithErrorHandling(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonContentWithErrorHandling(BuildContext context) {
     final theme = Theme.of(context);
 
     // Enhanced skeleton with theme-aware colors and shimmer effect
@@ -152,7 +188,16 @@ class _MPSkeletonState extends State<MPSkeleton> {
               focusNode: widget.focusNode,
               // Add keyboard navigation callbacks
               onKey: (node, event) {
-                return _handleKeyPress(event);
+                MPErrorHandler.instance.executeWithErrorHandling(
+                  () => _handleKeyPress(event),
+                  category: MPErrorCategory.component,
+                  code: 'SKELETON_KEY_PRESS_ERROR',
+                  message: 'Skeleton key press handling failed',
+                  context: {
+                    'key': event.logicalKey.keyLabel,
+                  },
+                );
+                return KeyEventResult.ignored;
               },
               child: skeletonContent,
             )
