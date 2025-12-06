@@ -127,6 +127,11 @@ class MPTheme {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
+
+      // Theme extensions
+      extensions: [
+        MPColorTheme.light,
+      ],
     );
   }
 
@@ -226,6 +231,11 @@ class MPTheme {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
+
+      // Theme extensions
+      extensions: [
+        MPColorTheme.dark,
+      ],
     );
   }
 }

@@ -29,11 +29,9 @@ class ColorPage extends StatelessWidget {
       );
     }
 
-    final names = mpColors
-        .toString()
-        .replaceAll('MPColorTheme(', '')
-        .replaceAll(')', '')
-        .split(', ');
+    final colorMap = _getColorMap(mpColors);
+    final colorKeys = colorMap.keys.toList();
+
     return Scaffold(
       backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
@@ -45,24 +43,22 @@ class ColorPage extends StatelessWidget {
         backgroundColor: context.mp.adaptiveBackgroundColor,
         elevation: 0,
       ),
-      body: ListView(
-        children: List.generate(
-          colorCollection(mpColors).length,
-          (index) {
-            final color = colorCollection(mpColors)[index];
-            final name = names[index].split(': ')[0];
+      body: ListView.builder(
+        itemCount: colorKeys.length,
+        itemBuilder: (context, index) {
+          final name = colorKeys[index];
+          final color = colorMap[name];
 
-            return ListTile(
-              tileColor: color,
-              title: SelectableText(
-                '$color - $name',
-                style: TextStyle(
-                  color: _getContrastColor(color ?? Colors.grey),
-                ),
+          return ListTile(
+            tileColor: color,
+            title: SelectableText(
+              '$color - $name',
+              style: TextStyle(
+                color: _getContrastColor(color ?? Colors.grey),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -73,22 +69,22 @@ class ColorPage extends StatelessWidget {
     return luminance > 0.5 ? Colors.black : Colors.white;
   }
 
-  List<Color?> colorCollection(MPColorTheme mpColors) => [
-        mpColors.primary,
-        mpColors.primarySurface,
-        mpColors.primaryFocus,
-        mpColors.primaryBorder,
-        mpColors.primaryHover,
-        mpColors.primaryPressed,
-        mpColors.neutral10,
-        mpColors.neutral20,
-        mpColors.neutral30,
-        mpColors.neutral40,
-        mpColors.neutral50,
-        mpColors.neutral60,
-        mpColors.neutral70,
-        mpColors.neutral80,
-        mpColors.neutral90,
-        mpColors.neutral100,
-      ];
+  Map<String, Color?> _getColorMap(MPColorTheme theme) => {
+        'primary': theme.primary,
+        'primarySurface': theme.primarySurface,
+        'primaryFocus': theme.primaryFocus,
+        'primaryBorder': theme.primaryBorder,
+        'primaryHover': theme.primaryHover,
+        'primaryPressed': theme.primaryPressed,
+        'neutral10': theme.neutral10,
+        'neutral20': theme.neutral20,
+        'neutral30': theme.neutral30,
+        'neutral40': theme.neutral40,
+        'neutral50': theme.neutral50,
+        'neutral60': theme.neutral60,
+        'neutral70': theme.neutral70,
+        'neutral80': theme.neutral80,
+        'neutral90': theme.neutral90,
+        'neutral100': theme.neutral100,
+      };
 }
