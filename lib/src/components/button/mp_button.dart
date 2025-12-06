@@ -323,6 +323,41 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
     }
   }
 
+  /// Handles accessibility actions for screen readers
+  void _handleAccessibilityAction(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+      case SemanticsAction.focus:
+        _handleActivation();
+        break;
+      case SemanticsAction.longPress:
+        if (widget.onLongPress != null) {
+          widget.onLongPress!();
+        }
+        break;
+      default:
+        if (widget.onAccessibilityAction != null) {
+          widget.onAccessibilityAction!(action);
+        }
+        break;
+    }
+  }
+
+  /// Gets default accessibility actions for buttons
+  List<SemanticsAction> _getDefaultAccessibilityActions() {
+    final actions = <SemanticsAction>[];
+
+    if (widget.enabled && !widget.loading && widget.onPressed != null) {
+      actions.add(SemanticsAction.tap);
+    }
+
+    if (widget.enabled && !widget.loading && widget.onLongPress != null) {
+      actions.add(SemanticsAction.longPress);
+    }
+
+    return actions;
+  }
+
   @override
   void dispose() {
     _hoverController.dispose();
@@ -528,6 +563,14 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       textDirection: Directionality.of(context),
       // Add live region for dynamic content updates
       liveRegion: widget.loading,
+      // Add custom accessibility actions
+      onIncrease: widget.enabled && !widget.loading && widget.onPressed != null
+          ? () => _handleAccessibilityAction(SemanticsAction.increase)
+          : null,
+      onDecrease: widget.enabled && !widget.loading && widget.onPressed != null
+          ? () => _handleAccessibilityAction(SemanticsAction.decrease)
+          : null,
+
       child: widget.enableKeyboardNavigation
           ? Focus(
               focusNode: widget.focusNode,

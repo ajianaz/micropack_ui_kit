@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme_manager.dart';
 
@@ -22,6 +24,12 @@ class MPThemeToggle extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 300),
     this.iconSize = 24.0,
     this.padding = const EdgeInsets.all(8.0),
+    this.semanticLabel,
+    this.semanticHint,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.focusNode,
+    this.enableKeyboardNavigation = true,
   });
 
   /// The visual variant of the theme toggle
@@ -47,6 +55,24 @@ class MPThemeToggle extends StatefulWidget {
 
   /// Padding around the toggle
   final EdgeInsets padding;
+
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Semantic hint for screen readers
+  final String? semanticHint;
+
+  /// Custom accessibility actions
+  final List<SemanticsAction>? customAccessibilityActions;
+
+  /// Callback for accessibility actions
+  final void Function(SemanticsAction)? onAccessibilityAction;
+
+  /// Focus node for keyboard navigation
+  final FocusNode? focusNode;
+
+  /// Whether to enable keyboard navigation
+  final bool enableKeyboardNavigation;
 
   @override
   State<MPThemeToggle> createState() => _MPThemeToggleState();
@@ -379,14 +405,41 @@ class _MPThemeToggleState extends State<MPThemeToggle>
 
   @override
   Widget build(BuildContext context) {
+    Widget toggleWidget;
+
     switch (widget.variant) {
       case MPThemeToggleVariant.iconButton:
-        return _buildIconButton();
+        toggleWidget = _buildIconButton();
+        break;
       case MPThemeToggleVariant.textButton:
-        return _buildTextButton();
+        toggleWidget = _buildTextButton();
+        break;
       case MPThemeToggleVariant.segmented:
-        return _buildSegmentedButton();
+        toggleWidget = _buildSegmentedButton();
+        break;
     }
+
+    // Wrap with Semantics widget for accessibility
+    return Semantics(
+      label: widget.semanticLabel ?? 'Theme toggle',
+      hint: widget.semanticHint ??
+          'Toggle between light, dark, and system themes',
+      button: true,
+      // Add enhanced semantic properties
+      toggled: _isDarkMode(context),
+      // Add custom accessibility actions if provided
+      customSemanticsActions: _getCustomSemanticsActions(),
+      child: widget.enableKeyboardNavigation && widget.focusNode != null
+          ? Focus(
+              focusNode: widget.focusNode,
+              // Add keyboard navigation callbacks
+              onKey: (node, event) {
+                return _handleKeyPress(event);
+              },
+              child: toggleWidget,
+            )
+          : toggleWidget,
+    );
   }
 
   @override
@@ -397,6 +450,119 @@ class _MPThemeToggleState extends State<MPThemeToggle>
     }
     _animationController.dispose();
     super.dispose();
+  }
+
+  /// Determines if current theme is dark mode
+  bool _isDarkMode(BuildContext context) {
+    final theme = Theme.of(context);
+    return theme.brightness == Brightness.dark;
+  }
+
+  /// Creates custom semantics actions for accessibility
+  Map<CustomSemanticsAction, VoidCallback>? _getCustomSemanticsActions() {
+    if (widget.customAccessibilityActions == null ||
+        widget.onAccessibilityAction == null) {
+      return null;
+    }
+
+    final Map<CustomSemanticsAction, VoidCallback> actions = {};
+
+    for (final action in widget.customAccessibilityActions!) {
+      actions[CustomSemanticsAction(
+        label: _getActionLabel(action),
+      )] = () => widget.onAccessibilityAction!(action);
+    }
+
+    return actions;
+  }
+
+  /// Gets a user-friendly label for a semantics action
+  String _getActionLabel(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+        return 'Toggle theme';
+      case SemanticsAction.longPress:
+        return 'Long press';
+      case SemanticsAction.showOnScreen:
+        return 'Show theme toggle';
+      default:
+        return 'Action';
+    }
+  }
+
+  /// Handles keyboard events for theme toggle
+  KeyEventResult _handleKeyPress(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      switch (event.logicalKey.keyLabel) {
+        case 'Enter':
+        case 'Space':
+          // Handle theme toggle
+          _switchToNextTheme();
+          return KeyEventResult.handled;
+        case 'Arrow Right':
+        case 'Arrow Down':
+          // Handle next theme
+          _switchToNextTheme();
+          return KeyEventResult.handled;
+        case 'Arrow Left':
+        case 'Arrow Up':
+          // Handle previous theme
+          _switchToPreviousTheme();
+          return KeyEventResult.handled;
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
+  /// Switch to previous theme (for keyboard navigation)
+  Future<void> _switchToPreviousTheme() async {
+    if (!MPThemeManager.instance.isInitialized) return;
+
+    final currentTheme = _currentThemeMode ?? ThemeMode.system;
+    ThemeMode previousTheme;
+
+    switch (currentTheme) {
+      case ThemeMode.light:
+        previousTheme = ThemeMode.system;
+        break;
+      case ThemeMode.dark:
+        previousTheme = ThemeMode.light;
+        break;
+      case ThemeMode.system:
+        previousTheme = ThemeMode.dark;
+        break;
+    }
+
+    await _switchToTheme(previousTheme);
+  }
+
+  /// Switch to specific theme with animation
+  Future<void> _switchToTheme(ThemeMode theme) async {
+    if (!MPThemeManager.instance.isInitialized) return;
+
+    // Play animation before theme change
+    await _animationController.reverse();
+
+    try {
+      switch (theme) {
+        case ThemeMode.light:
+          await MPThemeManager.instance.setLightTheme();
+          break;
+        case ThemeMode.dark:
+          await MPThemeManager.instance.setDarkTheme();
+          break;
+        case ThemeMode.system:
+          await MPThemeManager.instance.setSystemTheme();
+          break;
+      }
+
+      widget.onChanged?.call(theme);
+    } catch (e) {
+      debugPrint('Error switching theme: $e');
+    }
+
+    // Complete animation after theme change
+    _animationController.forward();
   }
 }
 

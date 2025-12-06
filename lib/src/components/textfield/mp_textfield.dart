@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 
@@ -234,6 +235,24 @@ class MPTextField extends StatefulWidget {
   /// Semantic label for accessibility
   final String? semanticLabel;
 
+  /// Semantic hint for accessibility
+  final String? semanticHint;
+
+  /// Whether field is required for form validation
+  final bool isRequired;
+
+  /// Error message for accessibility when validation fails
+  final String? accessibilityErrorMessage;
+
+  /// Helper text for accessibility
+  final String? accessibilityHelperText;
+
+  /// Custom accessibility actions
+  final List<SemanticsAction>? customAccessibilityActions;
+
+  /// Callback for accessibility actions
+  final void Function(SemanticsAction)? onAccessibilityAction;
+
   /// Menangani aksi ketika [MPTextField] di-Tap
   final void Function()? onTap;
 
@@ -414,6 +433,12 @@ class MPTextField extends StatefulWidget {
     this.validator,
     this.autoValidateMode,
     this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -482,6 +507,12 @@ class MPTextField extends StatefulWidget {
     this.validator,
     this.autoValidateMode,
     this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -551,6 +582,12 @@ class MPTextField extends StatefulWidget {
     this.validator,
     this.autoValidateMode,
     this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -620,6 +657,12 @@ class MPTextField extends StatefulWidget {
     this.validator,
     this.autoValidateMode,
     this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -864,13 +907,26 @@ class _MPTextFieldState extends State<MPTextField> {
       textDirection: widget.textDirection,
     );
 
-    // Add semantic label if provided
-    if (widget.semanticLabel != null) {
-      textField = Semantics(
-        label: widget.semanticLabel,
+    // Add enhanced semantic wrapper for accessibility
+    textField = Semantics(
+      label: _getSemanticLabel(),
+      hint: _getSemanticHint(),
+      value: widget.controller.text,
+      textField: true,
+      // Add enhanced semantic properties
+      readOnly: widget.readOnly,
+      enabled: widget.enabled,
+      // Add custom accessibility actions
+      customSemanticsActions: _getCustomSemanticsActions(),
+      child: Focus(
+        focusNode: widget.focusNode,
+        // Add keyboard navigation callbacks
+        onKey: (node, event) {
+          return _handleKeyPress(event);
+        },
         child: textField,
-      );
-    }
+      ),
+    );
 
     return textField;
   }
@@ -1067,5 +1123,122 @@ class _MPTextFieldState extends State<MPTextField> {
         width: borderWidth,
       ),
     );
+  }
+
+  /// Gets semantic label for screen readers
+  String _getSemanticLabel() {
+    String label =
+        widget.semanticLabel ?? widget.label ?? widget.hint ?? 'Text field';
+
+    if (widget.isRequired) {
+      label += ' (required)';
+    }
+
+    return label;
+  }
+
+  /// Gets semantic hint for screen readers
+  String? _getSemanticHint() {
+    if (widget.semanticHint != null) {
+      return widget.semanticHint!;
+    }
+
+    final hints = <String>[];
+
+    if (widget.accessibilityHelperText != null) {
+      hints.add(widget.accessibilityHelperText!);
+    }
+
+    if (widget.helperText != null) {
+      hints.add(widget.helperText!);
+    }
+
+    if (widget.maxLength != null) {
+      hints.add('Maximum ${widget.maxLength} characters');
+    }
+
+    if (widget.obscureText) {
+      hints.add('Password field');
+    }
+
+    if (widget.keyboardType != null) {
+      switch (widget.keyboardType) {
+        case TextInputType.emailAddress:
+          hints.add('Email address');
+          break;
+        case TextInputType.phone:
+          hints.add('Phone number');
+          break;
+        case TextInputType.number:
+          hints.add('Number input');
+          break;
+        case TextInputType.url:
+          hints.add('Website URL');
+          break;
+        default:
+          break;
+      }
+    }
+
+    return hints.isEmpty ? null : hints.join(', ');
+  }
+
+  /// Creates custom semantics actions for accessibility
+  Map<CustomSemanticsAction, VoidCallback>? _getCustomSemanticsActions() {
+    if (widget.customAccessibilityActions == null ||
+        widget.onAccessibilityAction == null) {
+      return null;
+    }
+
+    final Map<CustomSemanticsAction, VoidCallback> actions = {};
+
+    for (final action in widget.customAccessibilityActions!) {
+      actions[CustomSemanticsAction(
+        label: _getActionLabel(action),
+      )] = () => widget.onAccessibilityAction!(action);
+    }
+
+    return actions;
+  }
+
+  /// Gets a user-friendly label for a semantics action
+  String _getActionLabel(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+        return 'Tap to edit';
+      case SemanticsAction.longPress:
+        return 'Long press';
+      case SemanticsAction.cut:
+        return 'Cut text';
+      case SemanticsAction.copy:
+        return 'Copy text';
+      case SemanticsAction.paste:
+        return 'Paste text';
+      default:
+        return 'Action';
+    }
+  }
+
+  /// Handles keyboard events for text navigation
+  KeyEventResult _handleKeyPress(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      switch (event.logicalKey.keyLabel) {
+        case 'Enter':
+          // Handle submission
+          if (widget.onFieldSubmitted != null) {
+            widget.onFieldSubmitted!(widget.controller.text);
+            return KeyEventResult.handled;
+          }
+          break;
+        case 'Escape':
+          // Handle cancel
+          if (widget.focusNode != null && widget.focusNode!.hasFocus) {
+            widget.focusNode!.unfocus();
+            return KeyEventResult.handled;
+          }
+          break;
+      }
+    }
+    return KeyEventResult.ignored;
   }
 }

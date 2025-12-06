@@ -8,6 +8,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MPTextStyle.defaultFontFamily = kDefaultFontFamily;
 
+  // Initialize MPErrorHandler before running the app
+  await MPErrorHandler.initialize(
+    enableLogging: true,
+    customHandlers: [],
+  );
+
   // Initialize MPThemeManager before running the app
   try {
     await MPThemeManager.initialize();

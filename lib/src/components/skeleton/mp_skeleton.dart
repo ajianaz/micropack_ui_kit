@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 
 /// A skeleton widget for loading states with customizable appearance
 ///
@@ -15,6 +16,12 @@ class MPSkeleton extends StatefulWidget {
     this.baseColor,
     this.highlightColor,
     this.isCircle = false,
+    this.semanticLabel,
+    this.semanticHint,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.focusNode,
+    this.enableKeyboardNavigation = true,
   });
 
   /// Creates a skeleton for text content
@@ -25,6 +32,12 @@ class MPSkeleton extends StatefulWidget {
     this.borderRadius,
     this.baseColor,
     this.highlightColor,
+    this.semanticLabel,
+    this.semanticHint,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.focusNode,
+    this.enableKeyboardNavigation = true,
   }) : isCircle = false;
 
   /// Creates a skeleton for avatar or circular content
@@ -35,6 +48,12 @@ class MPSkeleton extends StatefulWidget {
     this.borderRadius,
     this.baseColor,
     this.highlightColor,
+    this.semanticLabel,
+    this.semanticHint,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.focusNode,
+    this.enableKeyboardNavigation = true,
   }) : isCircle = true;
 
   /// Creates a skeleton for button content
@@ -45,18 +64,24 @@ class MPSkeleton extends StatefulWidget {
     this.borderRadius,
     this.baseColor,
     this.highlightColor,
+    this.semanticLabel,
+    this.semanticHint,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
+    this.focusNode,
+    this.enableKeyboardNavigation = true,
   }) : isCircle = false;
 
-  /// Width of the skeleton
+  /// Width of skeleton
   final double? width;
 
-  /// Height of the skeleton
+  /// Height of skeleton
   final double? height;
 
-  /// Border radius of the skeleton
+  /// Border radius of skeleton
   final BorderRadius? borderRadius;
 
-  /// Base color of the skeleton
+  /// Base color of skeleton
   final Color? baseColor;
 
   /// Highlight color for shimmer effect
@@ -64,6 +89,24 @@ class MPSkeleton extends StatefulWidget {
 
   /// Whether to render as circular skeleton
   final bool isCircle;
+
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Semantic hint for screen readers
+  final String? semanticHint;
+
+  /// Custom accessibility actions
+  final List<SemanticsAction>? customAccessibilityActions;
+
+  /// Callback for accessibility actions
+  final void Function(SemanticsAction)? onAccessibilityAction;
+
+  /// Focus node for keyboard navigation
+  final FocusNode? focusNode;
+
+  /// Whether to enable keyboard navigation
+  final bool enableKeyboardNavigation;
 
   @override
   State<MPSkeleton> createState() => _MPSkeletonState();
@@ -94,7 +137,27 @@ class _MPSkeletonState extends State<MPSkeleton> {
     final theme = Theme.of(context);
 
     // Enhanced skeleton with theme-aware colors and shimmer effect
-    return _buildEnhancedSkeleton(theme);
+    Widget skeletonContent = _buildEnhancedSkeleton(theme);
+
+    // Wrap with Semantics widget for accessibility
+    return Semantics(
+      label: widget.semanticLabel ?? 'Loading content',
+      hint: widget.semanticHint ?? 'Content is currently loading',
+      // Mark as hidden for screen readers since it's just a loading indicator
+      hidden: true,
+      // Add custom accessibility actions if provided
+      customSemanticsActions: _getCustomSemanticsActions(),
+      child: widget.enableKeyboardNavigation && widget.focusNode != null
+          ? Focus(
+              focusNode: widget.focusNode,
+              // Add keyboard navigation callbacks
+              onKey: (node, event) {
+                return _handleKeyPress(event);
+              },
+              child: skeletonContent,
+            )
+          : skeletonContent,
+    );
   }
 
   Widget _buildEnhancedSkeleton(ThemeData theme) {
@@ -218,6 +281,55 @@ class _MPSkeletonState extends State<MPSkeleton> {
       ],
     );
   }
+
+  /// Creates custom semantics actions for accessibility
+  Map<CustomSemanticsAction, VoidCallback>? _getCustomSemanticsActions() {
+    if (widget.customAccessibilityActions == null ||
+        widget.onAccessibilityAction == null) {
+      return null;
+    }
+
+    final Map<CustomSemanticsAction, VoidCallback> actions = {};
+
+    for (final action in widget.customAccessibilityActions!) {
+      actions[CustomSemanticsAction(
+        label: _getActionLabel(action),
+      )] = () => widget.onAccessibilityAction!(action);
+    }
+
+    return actions;
+  }
+
+  /// Gets a user-friendly label for a semantics action
+  String _getActionLabel(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+        return 'Loading indicator';
+      case SemanticsAction.longPress:
+        return 'Long press';
+      case SemanticsAction.showOnScreen:
+        return 'Show loading indicator';
+      default:
+        return 'Action';
+    }
+  }
+
+  /// Handles keyboard events for skeleton
+  KeyEventResult _handleKeyPress(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      switch (event.logicalKey.keyLabel) {
+        case 'Enter':
+        case 'Space':
+          // Handle activation
+          if (widget.onAccessibilityAction != null) {
+            widget.onAccessibilityAction!(SemanticsAction.tap);
+            return KeyEventResult.handled;
+          }
+          break;
+      }
+    }
+    return KeyEventResult.ignored;
+  }
 }
 
 /// A skeleton loader for complex layouts with multiple elements
@@ -306,12 +418,11 @@ class MPSkeletonVariants {
                         height: isLandscape ? 14 : 16, width: double.infinity),
                     SizedBox(height: isLandscape ? 6 : 8),
                     MPSkeleton.text(
-                        height: isLandscape ? 10 : 12,
-                        width: isLandscape ? 150 : 200),
+                        height: isLandscape ? 10 : 12, width: double.infinity),
                     SizedBox(height: isLandscape ? 3 : 4),
                     MPSkeleton.text(
                         height: isLandscape ? 10 : 12,
-                        width: isLandscape ? 100 : 150),
+                        width: isLandscape ? 80 : 100),
                   ],
                 ),
               ),
@@ -357,6 +468,11 @@ class MPSkeletonVariants {
           SizedBox(height: isLandscape ? 6 : 8),
         ],
         MPSkeleton(height: isLandscape ? 36 : 48, width: double.infinity),
+        SizedBox(height: isLandscape ? 6 : 8),
+        MPSkeleton.text(height: isLandscape ? 10 : 12, width: double.infinity),
+        SizedBox(height: isLandscape ? 6 : 8),
+        MPSkeleton.text(
+            height: isLandscape ? 10 : 12, width: isLandscape ? 80 : 100),
       ],
     );
   }
@@ -383,6 +499,10 @@ class MPSkeletonVariants {
                 SizedBox(height: isLandscape ? 4 : 6),
                 MPSkeleton.text(
                     height: isLandscape ? 10 : 12, width: double.infinity),
+                SizedBox(height: isLandscape ? 3 : 4),
+                MPSkeleton.text(
+                    height: isLandscape ? 10 : 12,
+                    width: isLandscape ? 60 : 80),
               ],
             ),
           ),

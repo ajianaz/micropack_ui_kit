@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
 import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
 import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
@@ -539,10 +539,22 @@ class MPText extends StatelessWidget {
       container: true,
       // Add live region for dynamic content updates
       liveRegion: false, // Text is typically static content
+      // Add semantic properties for better screen reader support
+      readOnly: true,
+      // Add header properties for text type
+      header: _isHeaderType(),
+      // Add text style properties for screen readers
+      attributedValue: _getAttributedValue(),
+      // Add custom accessibility actions if provided
+      customSemanticsActions: _getCustomSemanticsActions(),
       child: enableKeyboardNavigation && focusNode != null
           ? Focus(
               focusNode: focusNode,
               autofocus: focusOrder == 0,
+              // Add keyboard navigation callbacks
+              onKey: (node, event) {
+                return _handleKeyPress(event);
+              },
               child: textWidget,
             )
           : textWidget,
@@ -680,6 +692,195 @@ class MPText extends StatelessWidget {
   /// Clear style cache (useful for testing or memory management)
   static void clearStyleCache() {
     _styleCache.clear();
+  }
+
+  /// Determines if this text should be treated as a header for screen readers
+  bool _isHeaderType() {
+    // Check if style indicates header type
+    final effectiveFontSize = fontSize ?? style?.fontSize;
+    final effectiveFontWeight = fontWeight ?? style?.fontWeight;
+
+    // Consider large text or bold text as headers
+    if (effectiveFontSize != null && effectiveFontSize >= 20) {
+      return true;
+    }
+
+    if (effectiveFontWeight != null &&
+        (effectiveFontWeight == FontWeight.bold ||
+            effectiveFontWeight == FontWeight.w600 ||
+            effectiveFontWeight == FontWeight.w700 ||
+            effectiveFontWeight == FontWeight.w800 ||
+            effectiveFontWeight == FontWeight.w900)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /// Creates attributed value for screen readers with text style information
+  AttributedString? _getAttributedValue() {
+    final effectiveFontSize = fontSize ?? style?.fontSize;
+    final effectiveFontWeight = fontWeight ?? style?.fontWeight;
+
+    String styleInfo = '';
+
+    if (effectiveFontSize != null && effectiveFontSize >= 20) {
+      styleInfo += 'Large text';
+    }
+
+    if (effectiveFontWeight != null &&
+        (effectiveFontWeight == FontWeight.bold ||
+            effectiveFontWeight == FontWeight.w600 ||
+            effectiveFontWeight == FontWeight.w700 ||
+            effectiveFontWeight == FontWeight.w800 ||
+            effectiveFontWeight == FontWeight.w900)) {
+      styleInfo += styleInfo.isEmpty ? 'Bold text' : ', bold';
+    }
+
+    if (styleInfo.isEmpty) {
+      return null;
+    }
+
+    // Create a simple AttributedString without complex attributes
+    return AttributedString(text);
+  }
+
+  /// Creates custom semantics actions for accessibility
+  Map<CustomSemanticsAction, VoidCallback>? _getCustomSemanticsActions() {
+    if (customAccessibilityActions == null || onAccessibilityAction == null) {
+      return null;
+    }
+
+    final Map<CustomSemanticsAction, VoidCallback> actions = {};
+
+    for (final action in customAccessibilityActions!) {
+      actions[CustomSemanticsAction(
+        label: _getActionLabel(action),
+      )] = () => onAccessibilityAction!(action);
+    }
+
+    return actions;
+  }
+
+  /// Gets a user-friendly label for a semantics action
+  String _getActionLabel(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+        return 'Tap';
+      case SemanticsAction.longPress:
+        return 'Long press';
+      case SemanticsAction.scrollLeft:
+        return 'Scroll left';
+      case SemanticsAction.scrollRight:
+        return 'Scroll right';
+      case SemanticsAction.scrollUp:
+        return 'Scroll up';
+      case SemanticsAction.scrollDown:
+        return 'Scroll down';
+      case SemanticsAction.increase:
+        return 'Increase';
+      case SemanticsAction.decrease:
+        return 'Decrease';
+      case SemanticsAction.showOnScreen:
+        return 'Show on screen';
+      case SemanticsAction.moveCursorForwardByCharacter:
+        return 'Move cursor forward';
+      case SemanticsAction.moveCursorBackwardByCharacter:
+        return 'Move cursor backward';
+      case SemanticsAction.setSelection:
+        return 'Set selection';
+      case SemanticsAction.copy:
+        return 'Copy';
+      case SemanticsAction.cut:
+        return 'Cut';
+      case SemanticsAction.paste:
+        return 'Paste';
+      case SemanticsAction.didGainAccessibilityFocus:
+        return 'Gained focus';
+      case SemanticsAction.didLoseAccessibilityFocus:
+        return 'Lost focus';
+      case SemanticsAction.focus:
+        return 'Focus';
+      default:
+        return 'Action';
+    }
+  }
+
+  /// Gets a hint for a semantics action
+  String _getActionHint(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+        return 'Activate this text';
+      case SemanticsAction.longPress:
+        return 'Long press this text';
+      case SemanticsAction.scrollLeft:
+        return 'Scroll content left';
+      case SemanticsAction.scrollRight:
+        return 'Scroll content right';
+      case SemanticsAction.scrollUp:
+        return 'Scroll content up';
+      case SemanticsAction.scrollDown:
+        return 'Scroll content down';
+      case SemanticsAction.increase:
+        return 'Increase value';
+      case SemanticsAction.decrease:
+        return 'Decrease value';
+      case SemanticsAction.showOnScreen:
+        return 'Show this text on screen';
+      case SemanticsAction.moveCursorForwardByCharacter:
+        return 'Move cursor forward by character';
+      case SemanticsAction.moveCursorBackwardByCharacter:
+        return 'Move cursor backward by character';
+      case SemanticsAction.setSelection:
+        return 'Set text selection';
+      case SemanticsAction.copy:
+        return 'Copy text';
+      case SemanticsAction.cut:
+        return 'Cut text';
+      case SemanticsAction.paste:
+        return 'Paste text';
+      case SemanticsAction.didGainAccessibilityFocus:
+        return 'Text gained focus';
+      case SemanticsAction.didLoseAccessibilityFocus:
+        return 'Text lost focus';
+      case SemanticsAction.focus:
+        return 'Focus this text';
+      default:
+        return 'Perform action';
+    }
+  }
+
+  /// Handles keyboard events for text navigation
+  KeyEventResult _handleKeyPress(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      switch (event.logicalKey.keyLabel) {
+        case 'Arrow Right':
+          // Handle right arrow key
+          if (onAccessibilityAction != null) {
+            onAccessibilityAction!(
+                SemanticsAction.moveCursorForwardByCharacter);
+            return KeyEventResult.handled;
+          }
+          break;
+        case 'Arrow Left':
+          // Handle left arrow key
+          if (onAccessibilityAction != null) {
+            onAccessibilityAction!(
+                SemanticsAction.moveCursorBackwardByCharacter);
+            return KeyEventResult.handled;
+          }
+          break;
+        case 'Enter':
+        case 'Space':
+          // Handle activation
+          if (onAccessibilityAction != null) {
+            onAccessibilityAction!(SemanticsAction.tap);
+            return KeyEventResult.handled;
+          }
+          break;
+      }
+    }
+    return KeyEventResult.ignored;
   }
 }
 
