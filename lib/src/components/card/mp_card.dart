@@ -3290,9 +3290,32 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   bool _isReducedMotion = false;
   bool _isScreenReaderActive = false;
 
+  // Performance optimization: Cache expensive calculations
+  bool _isInitialized = false;
+  late EdgeInsets _cachedPadding;
+  late BoxConstraints _cachedConstraints;
+  late double _cachedElevation;
+  late Color _cachedBackgroundColor;
+  late Color _cachedBorderColor;
+  late BorderRadius _cachedBorderRadius;
+
+  // Performance optimization: Cache theme values
+  static MPThemeUtilities? _lastTheme;
+  static Color? _cachedPrimaryColor;
+  static Color? _cachedTextColor;
+  static Color? _cachedThemeBackgroundColor;
+  static Color? _cachedThemeBorderColor;
+
   @override
   void initState() {
     super.initState();
+
+    // Performance optimization: Initialize with performance tracking
+    MPPerformanceProfiler.instance.startInitialization('card_init');
+
+    // Initialize cached values
+    _initializeCachedValues();
+
     _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(_handleFocusChange);
 
@@ -3357,11 +3380,40 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _responsiveCallback();
     });
+
+    MPPerformanceProfiler.instance.endInitialization('card_init');
+  }
+
+  /// Initialize cached values for performance optimization
+  void _initializeCachedValues() {
+    // Cache theme values
+    final currentTheme = context.mp;
+    if (_lastTheme != currentTheme) {
+      _lastTheme = currentTheme;
+      _cachedPrimaryColor = currentTheme.primary;
+      _cachedTextColor = currentTheme.textColor;
+      _cachedThemeBackgroundColor = currentTheme.adaptiveBackgroundColor;
+      _cachedThemeBorderColor = currentTheme.adaptiveBorderColor;
+    }
+
+    // Cache responsive calculations
+    _cachedPadding = _getResponsivePadding();
+    _cachedConstraints = _getResponsiveConstraints();
+    _cachedElevation = _getResponsiveElevation();
+    _cachedBackgroundColor = _getBackgroundColor(context);
+    _cachedBorderColor = widget.borderColor ?? context.mp.adaptiveBorderColor;
+    _cachedBorderRadius =
+        BorderRadius.circular(widget.borderRadius ?? _getDefaultBorderRadius());
+
+    _isInitialized = true;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    // Performance optimization: Update cached values when dependencies change
+    _updateCachedValues();
 
     // Initialize responsive state
     _updateResponsiveState();
@@ -3371,6 +3423,28 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
     // Check system accessibility settings when dependencies change
     _checkSystemAccessibilitySettings();
+  }
+
+  /// Update cached values when dependencies change
+  void _updateCachedValues() {
+    // Check if theme has changed
+    final currentTheme = context.mp;
+    if (_lastTheme != currentTheme) {
+      _lastTheme = currentTheme;
+      _cachedPrimaryColor = currentTheme.primary;
+      _cachedTextColor = currentTheme.textColor;
+      _cachedThemeBackgroundColor = currentTheme.adaptiveBackgroundColor;
+      _cachedThemeBorderColor = currentTheme.adaptiveBorderColor;
+    }
+
+    // Update responsive calculations
+    _cachedPadding = _getResponsivePadding();
+    _cachedConstraints = _getResponsiveConstraints();
+    _cachedElevation = _getResponsiveElevation();
+    _cachedBackgroundColor = _getBackgroundColor(context);
+    _cachedBorderColor = widget.borderColor ?? context.mp.adaptiveBorderColor;
+    _cachedBorderRadius =
+        BorderRadius.circular(widget.borderRadius ?? _getDefaultBorderRadius());
   }
 
   @override
@@ -3469,7 +3543,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   /// Gets current screen size category based on breakpoints
   MPCardScreenSize _getScreenSizeCategory() {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     if (screenWidth < MPCardBreakpoints.smallMobile) {
       return MPCardScreenSize.smallMobile;
@@ -3877,6 +3950,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // Performance optimization: Track build time and use RepaintBoundary
     return MPPerformanceProfilerWidget(
       name: 'MPCard',
       metadata: {
@@ -3888,30 +3962,33 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
         'hasFooter': widget.footer != null || widget.footerData != null,
         'isInteractive': widget.onTap != null,
         'hasResponsiveConfig': widget.responsive != null,
+        'isInitialized': _isInitialized,
       },
-      child: MPErrorBoundary(
-        errorCategory: MPErrorCategory.component,
-        errorSeverity: MPErrorSeverity.medium,
-        onError: (error) {
-          // Log card-specific error
-          MPErrorHandler.instance.handleComponentError(
-            code: 'CARD_RENDER_ERROR',
-            message: 'Card rendering failed: ${error.message}',
-            technicalDetails: error.technicalDetails,
-            context: {
-              'cardVariant': widget.variant.name,
-              'cardSize': widget.size.name,
-              'cardLayout': widget.layout.name,
-              'hasHeader': widget.header != null || widget.headerData != null,
-              'hasBody': widget.body != null || widget.child != null,
-              'hasFooter': widget.footer != null || widget.footerData != null,
-            },
-          );
-        },
-        child: Builder(
-          builder: (context) {
-            return _buildCardContentWithErrorHandling(context);
+      child: RepaintBoundary(
+        child: MPErrorBoundary(
+          errorCategory: MPErrorCategory.component,
+          errorSeverity: MPErrorSeverity.medium,
+          onError: (error) {
+            // Log card-specific error
+            MPErrorHandler.instance.handleComponentError(
+              code: 'CARD_RENDER_ERROR',
+              message: 'Card rendering failed: ${error.message}',
+              technicalDetails: error.technicalDetails,
+              context: {
+                'cardVariant': widget.variant.name,
+                'cardSize': widget.size.name,
+                'cardLayout': widget.layout.name,
+                'hasHeader': widget.header != null || widget.headerData != null,
+                'hasBody': widget.body != null || widget.child != null,
+                'hasFooter': widget.footer != null || widget.footerData != null,
+              },
+            );
           },
+          child: Builder(
+            builder: (context) {
+              return _buildCardContentWithErrorHandling(context);
+            },
+          ),
         ),
       ),
     );
@@ -4069,11 +4146,10 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
                       child: AnimatedContainer(
                         duration: duration,
                         curve: Curves.easeInOut,
-                        padding: _getResponsivePadding(),
+                        padding: _cachedPadding,
                         decoration: BoxDecoration(
                           color: _getInteractionColor(context),
-                          borderRadius: BorderRadius.circular(
-                              widget.borderRadius ?? _getDefaultBorderRadius()),
+                          borderRadius: _cachedBorderRadius,
                           border: _getBorder(),
                           boxShadow: _getBoxShadow(context),
                         ),

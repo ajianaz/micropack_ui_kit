@@ -15,6 +15,7 @@ import 'package:micropack_ui_kit_example/pages/theme_toggle_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 import 'package:micropack_ui_kit_example/test_error_handling.dart';
 import 'package:micropack_ui_kit_example/test_accessibility.dart';
+import 'package:micropack_ui_kit_example/test_performance.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -199,6 +200,8 @@ class _HomePageState extends State<HomePage> {
                 name: 'Error Handling Demo', page: ErrorHandlingDemoPage()),
             const _Button(
                 name: 'Accessibility Demo', page: AccessibilityTestPage()),
+            const _Button(
+                name: 'Performance Testing', page: TestPerformancePage()),
           ],
         ),
       ),

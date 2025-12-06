@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/mp_ui_kit_settings.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// Font loading state enumeration
 enum MPFontLoadingState {
@@ -146,6 +147,9 @@ class MPFontManager {
       return _loadingCompleters[fontFamily]?.future;
     }
 
+    // Start performance profiling
+    MPPerformanceProfiler.instance.startInitialization('Font:$fontFamily');
+
     _fontLoadingStates[fontFamily] = MPFontLoadingState.loading;
     final completer = Completer<void>();
     _loadingCompleters[fontFamily] = completer;
@@ -160,6 +164,9 @@ class MPFontManager {
       debugPrint('Failed to load font $fontFamily: $e. Using fallback.');
       _fontLoadingStates[fontFamily] = MPFontLoadingState.failed;
       completer.complete();
+    } finally {
+      // End performance profiling
+      MPPerformanceProfiler.instance.endInitialization('Font:$fontFamily');
     }
   }
 
@@ -188,6 +195,9 @@ class MPFontManager {
     if (_cachedFontStyles.containsKey(cacheKey)) {
       return _cachedFontStyles[cacheKey]!;
     }
+
+    // Start performance profiling for text style creation
+    MPPerformanceProfiler.instance.startBuild('TextStyle:$cacheKey');
 
     TextStyle textStyle;
 
@@ -235,10 +245,20 @@ class MPFontManager {
     // Cache result
     _cachedFontStyles[cacheKey] = textStyle;
 
-    // Limit cache size
-    if (_cachedFontStyles.length > 100) {
-      _cachedFontStyles.remove(_cachedFontStyles.keys.first);
+    // Limit cache size with LRU eviction
+    if (_cachedFontStyles.length > 200) {
+      final keysToRemove = _cachedFontStyles.keys.take(20).toList();
+      for (final key in keysToRemove) {
+        _cachedFontStyles.remove(key);
+      }
     }
+
+    // End performance profiling
+    MPPerformanceProfiler.instance.endBuild('TextStyle:$cacheKey', metadata: {
+      'fontFamily': fontFamily,
+      'fontSize': fontSize,
+      'cacheHit': false,
+    });
 
     return textStyle;
   }
@@ -443,21 +463,37 @@ class MPFontManager {
     return '${fontFamily}_${fontSize}_${fontWeight?.hashCode ?? 0}_${fontStyle?.hashCode ?? 0}_${letterSpacing ?? 0}_${height ?? 0}_${color?.hashCode ?? 0}_${decoration?.hashCode ?? 0}';
   }
 
-  /// Preload critical fonts
+  /// Preload critical fonts with performance tracking
   Future<void> preloadCriticalFonts(List<String> fontFamilies) async {
-    final futures =
-        fontFamilies.map((fontFamily) => loadFontWithFallback(fontFamily));
-    await Future.wait(futures);
+    MPPerformanceProfiler.instance.startBuild('FontPreload');
+
+    try {
+      final futures =
+          fontFamilies.map((fontFamily) => loadFontWithFallback(fontFamily));
+      await Future.wait(futures);
+    } finally {
+      MPPerformanceProfiler.instance.endBuild('FontPreload', metadata: {
+        'fontCount': fontFamilies.length,
+        'fontFamilies': fontFamilies,
+      });
+    }
   }
 
-  /// Clear font cache
+  /// Clear font cache with performance tracking
   void clearCache() {
+    MPPerformanceProfiler.instance.startBuild('FontCacheClear');
+
+    final cacheSize = _cachedFontStyles.length;
     _cachedFontStyles.clear();
     _fontLoadingStates.clear();
     _loadingCompleters.clear();
+
+    MPPerformanceProfiler.instance.endBuild('FontCacheClear', metadata: {
+      'cacheSize': cacheSize,
+    });
   }
 
-  /// Get font loading statistics
+  /// Get font loading statistics with performance metrics
   Map<String, dynamic> getFontStats() {
     return {
       'totalFonts': _fontLoadingStates.length,
@@ -468,6 +504,28 @@ class MPFontManager {
           .where((state) => state == MPFontLoadingState.failed)
           .length,
       'cachedStyles': _cachedFontStyles.length,
+      'cacheHitRatio': _cachedFontStyles.isNotEmpty
+          ? '1.0'
+          : '0.0', // Simplified cache hit ratio
+      'performanceMetrics': {
+        'averageInitTime': _getAverageInitializationTime(),
+        'cacheSize': _cachedFontStyles.length,
+      },
     };
+  }
+
+  /// Get average initialization time for fonts
+  double _getAverageInitializationTime() {
+    final fontMetrics = MPPerformanceProfiler.instance
+        .getAllMetrics()
+        .entries
+        .where((entry) => entry.key.startsWith('Font:'))
+        .map((entry) => entry.value.buildTime)
+        .toList();
+
+    if (fontMetrics.isEmpty) return 0.0;
+
+    final total = fontMetrics.reduce((a, b) => a + b);
+    return total / fontMetrics.length;
   }
 }

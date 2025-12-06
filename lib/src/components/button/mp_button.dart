@@ -585,6 +585,12 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
   late BorderSide _cachedBorderSide;
   bool _isInitialized = false;
 
+  // Performance optimization: Cache theme values
+  static Color? _cachedPrimaryColor;
+  static Color? _cachedThemeTextColor;
+  static Color? _cachedDisabledColor;
+  static MPThemeUtilities? _lastTheme;
+
   // Animation controllers for micro-interactions
   late AnimationController _hoverController;
   late AnimationController _pressController;
@@ -790,6 +796,15 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
   void _initializeCache(BuildContext context) {
     if (_isInitialized) return;
 
+    // Cache theme values for performance
+    final currentTheme = context.mp;
+    if (_lastTheme != currentTheme) {
+      _cachedPrimaryColor = currentTheme.primary;
+      _cachedThemeTextColor = currentTheme.textColor;
+      _cachedDisabledColor = currentTheme.disabledColor;
+      _lastTheme = currentTheme;
+    }
+
     _cachedBackgroundColor = _getBackgroundColor();
     _cachedTextColor = widget.textColor ?? _getTextColor();
     _cachedPadding = widget.padding ?? _getPadding();
@@ -799,38 +814,41 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MPPerformanceProfilerWidget(
-      name: 'MPButton',
-      metadata: {
-        'variant': widget.variant.name,
-        'size': widget.size.name,
-        'enabled': widget.enabled,
-        'loading': widget.loading,
-        'hasIcon': widget.icon != null,
-        'hasText': widget.text != null,
-      },
-      child: MPErrorBoundary(
-        errorCategory: MPErrorCategory.component,
-        errorSeverity: MPErrorSeverity.medium,
-        onError: (error) {
-          // Log button-specific error
-          MPErrorHandler.instance.handleComponentError(
-            code: 'BUTTON_RENDER_ERROR',
-            message: 'Button rendering failed: ${error.message}',
-            technicalDetails: error.technicalDetails,
-            context: {
-              'buttonText': widget.text,
-              'buttonVariant': widget.variant.name,
-              'buttonSize': widget.size.name,
-              'enabled': widget.enabled,
-              'loading': widget.loading,
-            },
-          );
+    // Performance optimization: Use RepaintBoundary to isolate repaints
+    return RepaintBoundary(
+      child: MPPerformanceProfilerWidget(
+        name: 'MPButton',
+        metadata: {
+          'variant': widget.variant.name,
+          'size': widget.size.name,
+          'enabled': widget.enabled,
+          'loading': widget.loading,
+          'hasIcon': widget.icon != null,
+          'hasText': widget.text != null,
         },
-        child: Builder(
-          builder: (context) {
-            return _buildButtonContentWithErrorHandling(context);
+        child: MPErrorBoundary(
+          errorCategory: MPErrorCategory.component,
+          errorSeverity: MPErrorSeverity.medium,
+          onError: (error) {
+            // Log button-specific error
+            MPErrorHandler.instance.handleComponentError(
+              code: 'BUTTON_RENDER_ERROR',
+              message: 'Button rendering failed: ${error.message}',
+              technicalDetails: error.technicalDetails,
+              context: {
+                'buttonText': widget.text,
+                'buttonVariant': widget.variant.name,
+                'buttonSize': widget.size.name,
+                'enabled': widget.enabled,
+                'loading': widget.loading,
+              },
+            );
           },
+          child: Builder(
+            builder: (context) {
+              return _buildButtonContentWithErrorHandling(context);
+            },
+          ),
         ),
       ),
     );

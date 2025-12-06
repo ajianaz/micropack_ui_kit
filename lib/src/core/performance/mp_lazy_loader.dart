@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 

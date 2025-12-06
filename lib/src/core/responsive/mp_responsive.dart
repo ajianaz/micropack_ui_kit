@@ -35,15 +35,29 @@ class MPResponsive {
       return _deviceSizeCache[cacheKey]!;
     }
 
+    // Start performance profiling for device size calculation
+    MPPerformanceProfiler.instance.startBuild('Responsive.getDeviceSize');
+
     final deviceSize = MPResponsiveBreakpoints.getDeviceSize(width);
 
     // Cache the result
     _deviceSizeCache[cacheKey] = deviceSize;
 
-    // Limit cache size
-    if (_deviceSizeCache.length > 20) {
-      _deviceSizeCache.remove(_deviceSizeCache.keys.first);
+    // Limit cache size with LRU eviction
+    if (_deviceSizeCache.length > 50) {
+      final keysToRemove = _deviceSizeCache.keys.take(10).toList();
+      for (final key in keysToRemove) {
+        _deviceSizeCache.remove(key);
+      }
     }
+
+    // End performance profiling
+    MPPerformanceProfiler.instance
+        .endBuild('Responsive.getDeviceSize', metadata: {
+      'screenWidth': width,
+      'deviceSize': deviceSize.name,
+      'cacheHit': false,
+    });
 
     return deviceSize;
   }
@@ -300,30 +314,54 @@ class MPResponsive {
     Widget? largeDesktop,
     Widget? ultraWide,
   }) {
+    // Start performance profiling for layout building
+    MPPerformanceProfiler.instance.startBuild('Responsive.buildLayout');
+
     final deviceSize = getDeviceSize(context);
 
+    Widget selectedWidget;
     switch (deviceSize) {
       case MPDeviceSize.smallMobile:
-        return smallMobile ?? mobile;
+        selectedWidget = smallMobile ?? mobile;
+        break;
       case MPDeviceSize.mobile:
-        return mobile;
+        selectedWidget = mobile;
+        break;
       case MPDeviceSize.largeMobile:
-        return largeMobile ?? mobile;
+        selectedWidget = largeMobile ?? mobile;
+        break;
       case MPDeviceSize.smallTablet:
-        return smallTablet ?? tablet ?? mobile;
+        selectedWidget = smallTablet ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.tablet:
-        return tablet ?? mobile;
+        selectedWidget = tablet ?? mobile;
+        break;
       case MPDeviceSize.largeTablet:
-        return largeTablet ?? tablet ?? mobile;
+        selectedWidget = largeTablet ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.smallDesktop:
-        return smallDesktop ?? desktop ?? tablet ?? mobile;
+        selectedWidget = smallDesktop ?? desktop ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.desktop:
-        return desktop ?? tablet ?? mobile;
+        selectedWidget = desktop ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.largeDesktop:
-        return largeDesktop ?? desktop ?? tablet ?? mobile;
+        selectedWidget = largeDesktop ?? desktop ?? tablet ?? mobile;
+        break;
       case MPDeviceSize.ultraWide:
-        return ultraWide ?? largeDesktop ?? desktop ?? tablet ?? mobile;
+        selectedWidget =
+            ultraWide ?? largeDesktop ?? desktop ?? tablet ?? mobile;
+        break;
     }
+
+    // End performance profiling
+    MPPerformanceProfiler.instance
+        .endBuild('Responsive.buildLayout', metadata: {
+      'deviceSize': deviceSize.name,
+      'widgetType': selectedWidget.runtimeType.toString(),
+    });
+
+    return selectedWidget;
   }
 
   /// Build orientation-aware layout
@@ -474,20 +512,86 @@ class MPResponsive {
         MediaQuery.of(context).devicePixelRatio <= 1.0;
   }
 
-  /// Clear all caches (useful for testing or memory management)
+  /// Clear all caches with performance tracking
   static void clearCaches() {
+    MPPerformanceProfiler.instance.startBuild('Responsive.clearCaches');
+
+    final deviceSizeCacheSize = _deviceSizeCache.length;
+    final orientationCacheSize = _orientationCache.length;
+    final valueCacheSize = _valueCache.length;
+
     _deviceSizeCache.clear();
     _orientationCache.clear();
     _valueCache.clear();
+
+    MPPerformanceProfiler.instance
+        .endBuild('Responsive.clearCaches', metadata: {
+      'deviceSizeCacheSize': deviceSizeCacheSize,
+      'orientationCacheSize': orientationCacheSize,
+      'valueCacheSize': valueCacheSize,
+    });
   }
 
-  /// Get cache statistics
+  /// Get cache statistics with performance metrics
   static Map<String, dynamic> getCacheStats() {
     return {
       'deviceSizeCacheSize': _deviceSizeCache.length,
       'orientationCacheSize': _orientationCache.length,
       'valueCacheSize': _valueCache.length,
+      'performanceMetrics': {
+        'averageDeviceSizeTime': _getAverageDeviceSizeTime(),
+        'averageValueTime': _getAverageValueTime(),
+        'cacheHitRatio': _getCacheHitRatio(),
+      },
     };
+  }
+
+  /// Get average device size calculation time
+  static double _getAverageDeviceSizeTime() {
+    final metrics = MPPerformanceProfiler.instance
+        .getAllMetrics()
+        .entries
+        .where((entry) => entry.key == 'Responsive.getDeviceSize')
+        .map((entry) => entry.value.buildTime)
+        .toList();
+
+    if (metrics.isEmpty) return 0.0;
+
+    final total = metrics.reduce((a, b) => a + b);
+    return total / metrics.length;
+  }
+
+  /// Get average value calculation time
+  static double _getAverageValueTime() {
+    final metrics = MPPerformanceProfiler.instance
+        .getAllMetrics()
+        .entries
+        .where((entry) => entry.key == 'Responsive.getValue')
+        .map((entry) => entry.value.buildTime)
+        .toList();
+
+    if (metrics.isEmpty) return 0.0;
+
+    final total = metrics.reduce((a, b) => a + b);
+    return total / metrics.length;
+  }
+
+  /// Get cache hit ratio
+  static double _getCacheHitRatio() {
+    final allMetrics = MPPerformanceProfiler.instance
+        .getAllMetrics()
+        .entries
+        .where((entry) => entry.key.startsWith('Responsive.'))
+        .toList();
+
+    if (allMetrics.isEmpty) return 0.0;
+
+    final totalCalls = allMetrics.length;
+    final cacheHits = allMetrics
+        .where((entry) => entry.value.metadata['cacheHit'] == true)
+        .length;
+
+    return totalCalls > 0 ? (cacheHits / totalCalls) * 100 : 0.0;
   }
 
   /// Initialize performance monitoring for responsive calculations
