@@ -7,7 +7,7 @@ import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 class MPTestHelper {
   /// Initialize all required components for testing
   static Future<void> initialize({Size? designSize}) async {
-    // Initialize ScreenUtil first
+    // Initialize Flutter binding
     TestWidgetsFlutterBinding.ensureInitialized();
 
     // Initialize MPErrorHandler first before any components use it
@@ -87,26 +87,28 @@ class MPTestHelper {
 /// Extension to make testWidgets with initialization easier
 extension TestWidgetsExtension on WidgetTester {
   /// Pump widget with MPErrorHandler initialization
-  Future<void> pumpWidgetWithInitialization(
+  static Future<void> pumpWidgetWithInitialization(
+    WidgetTester tester,
     Widget widget, {
     Size? designSize,
     Duration? duration,
   }) async {
     await MPTestHelper.initialize(designSize: designSize);
-    await pumpWidget(
+    await tester.pumpWidget(
       MPTestHelper.createTestWidget(child: widget),
       duration: duration,
     );
   }
 
   /// Pump widget with MPComponentInit wrapper
-  Future<void> pumpWidgetWithMPInit(
+  static Future<void> pumpWidgetWithMPInit(
+    WidgetTester tester,
     Widget widget, {
     Size? designSize,
     Duration? duration,
   }) async {
     await MPTestHelper.initialize(designSize: designSize);
-    await pumpWidget(
+    await tester.pumpWidget(
       MPTestHelper.createTestWidgetWithInit(
         child: widget,
         designSize: designSize,
