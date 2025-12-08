@@ -335,7 +335,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
   /// Builds category chip widget
   Widget _buildCategory(String category) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+      padding: EdgeInsets.symmetric(
+          horizontal: MPResponsivePadding.getXs(context),
+          vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         // Use theme-aware primary color with opacity for category background
         color: context.mp.primary.withValues(alpha: 0.1),
@@ -461,7 +463,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
   /// Builds individual tag widget
   Widget _buildTag(String tag) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+      padding: EdgeInsets.symmetric(
+          horizontal: MPResponsivePadding.getXs(context),
+          vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         // Use theme-aware neutral color for tag background
         // Enabled state: neutral20, Disabled state: neutral30 with opacity
@@ -504,7 +508,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
           onPressed: widget.enabled ? widget.onLike : null,
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
-          padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+          padding: EdgeInsets.symmetric(
+              horizontal: MPResponsivePadding.getXs(context),
+              vertical: MPResponsivePadding.getXs(context)),
           textSize: _getFontSize() - 4,
           // Use theme-aware subtitle color for like count text
           textColor: context.mp.subtitleColor,
@@ -525,7 +531,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
           onPressed: widget.enabled ? widget.onBookmark : null,
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
-          padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+          padding: EdgeInsets.symmetric(
+              horizontal: MPResponsivePadding.getXs(context),
+              vertical: MPResponsivePadding.getXs(context)),
         ),
       );
     }
@@ -543,7 +551,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
           onPressed: widget.enabled ? widget.onShare : null,
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
-          padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+          padding: EdgeInsets.symmetric(
+              horizontal: MPResponsivePadding.getXs(context),
+              vertical: MPResponsivePadding.getXs(context)),
         ),
       );
     }
@@ -617,7 +627,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
       case MPArticleCardSize.small:
         return EdgeInsets.all(MPResponsivePadding.getSm(context));
       case MPArticleCardSize.medium:
-        return EdgeInsets.all(MPResponsivePadding.get(context));
+        return EdgeInsets.all(MPResponsivePadding.getMd(context));
       case MPArticleCardSize.large:
         return EdgeInsets.all(MPResponsivePadding.getLg(context));
     }
@@ -627,11 +637,17 @@ class _MPArticleCardState extends State<MPArticleCard> {
   EdgeInsets _getDefaultMargin() {
     switch (widget.size) {
       case MPArticleCardSize.small:
-        return EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context));
+        return EdgeInsets.symmetric(
+            horizontal: MPResponsivePadding.getXs(context),
+            vertical: MPResponsivePadding.getXs(context));
       case MPArticleCardSize.medium:
-        return EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context));
+        return EdgeInsets.symmetric(
+            horizontal: MPResponsivePadding.getXs(context),
+            vertical: MPResponsivePadding.getXs(context));
       case MPArticleCardSize.large:
-        return EdgeInsets.symmetric(horizontal: MPResponsivePadding.getSm(context), vertical: MPResponsivePadding.getSm(context));
+        return EdgeInsets.symmetric(
+            horizontal: MPResponsivePadding.getSm(context),
+            vertical: MPResponsivePadding.getSm(context));
     }
   }
 
