@@ -19,7 +19,7 @@ void main() {
   group('MPThemeUtilities', () {
     testWidgets('adaptiveTextColor returns correct color for light mode',
         (WidgetTester tester) async {
-      // Test widget the widget
+      // Test widget
       await tester.pumpWidget(
         MaterialApp(
               theme: MPTheme.main(isDarkMode: false).copyWith(
@@ -39,7 +39,7 @@ void main() {
 
     testWidgets('adaptiveTextColor returns correct color for dark mode',
         (WidgetTester tester) async {
-      // Test widget the widget
+      // Test widget
       await tester.pumpWidget(
         MaterialApp(
               theme: MPTheme.main(isDarkMode: true).copyWith(
@@ -59,7 +59,7 @@ void main() {
 
     testWidgets('adaptiveBackgroundColor returns correct color for light mode',
         (WidgetTester tester) async {
-      // Test widget the widget
+      // Test widget
       await tester.pumpWidget(
         MaterialApp(
               theme: MPTheme.main(isDarkMode: false).copyWith(
@@ -79,7 +79,7 @@ void main() {
 
     testWidgets('adaptiveBackgroundColor returns correct color for dark mode',
         (WidgetTester tester) async {
-      // Test widget the widget
+      // Test widget
       await tester.pumpWidget(
         MaterialApp(
               theme: MPTheme.main(isDarkMode: true).copyWith(
