@@ -98,7 +98,7 @@ class _TestPerformancePageState extends State<TestPerformancePage> {
               right: 0,
               bottom: 0,
               child: Container(
-                color: Colors.black.withValues(alpha: 0.5),
+                color: Colors.black.withOpacity(0.5),
                 child: MPPerformanceDashboard(
                   showInDebugModeOnly: false,
                   onClose: () {
@@ -176,8 +176,8 @@ class _TestPerformancePageState extends State<TestPerformancePage> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: _enableProfiling
-                  ? Colors.green.withValues(alpha: 0.1)
-                  : Colors.red.withValues(alpha: 0.1),
+                  ? Colors.green.withOpacity(0.1)
+                  : Colors.red.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _enableProfiling ? Colors.green : Colors.red,
@@ -206,16 +206,16 @@ class _TestPerformancePageState extends State<TestPerformancePage> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MPText.small(
             title,
-            color: color.withValues(alpha: 0.7),
+            color: color.withOpacity(0.7),
           ),
           const SizedBox(height: 4),
           MPText.subhead(

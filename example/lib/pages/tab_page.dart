@@ -74,7 +74,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
           Column(
             children: [
               MPText.head('Standard Tabs'),
-              SizedBox(height: 16.h),
+              SizedBox(height: MPResponsivePadding.getSm(context)),
               Row(
                 children: [
                   Expanded(
@@ -109,7 +109,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 24.h),
+              SizedBox(height: MPResponsivePadding.getLg(context)),
               Row(
                 children: [
                   Expanded(
@@ -132,10 +132,10 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 24.h),
+              SizedBox(height: MPResponsivePadding.getLg(context)),
               // Disabled Tabs Demo
               MPText.head('Disabled Tabs'),
-              SizedBox(height: 16.h),
+              SizedBox(height: MPResponsivePadding.getSm(context)),
               Row(
                 children: [
                   Expanded(
@@ -174,7 +174,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
           Column(
             children: [
               MPText.head('Outlined Tabs'),
-              SizedBox(height: 16.h),
+              SizedBox(height: MPResponsivePadding.getSm(context)),
               Row(
                 children: [
                   Expanded(
@@ -216,7 +216,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
           Column(
             children: [
               MPText.head('Filled Tabs'),
-              SizedBox(height: 16.h),
+              SizedBox(height: MPResponsivePadding.getSm(context)),
               Row(
                 children: [
                   Expanded(
@@ -239,7 +239,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       onTab: () => _selectTab(1),
                       variant: MPTabRoundedVariant.filled,
                       tabColorActive: context.mp.successColor,
-                      tabColor: context.mp.successColor.withValues(alpha: 0.1),
+                      tabColor: context.mp.successColor.withOpacity(0.1),
                       size: MPTabRoundedSize.small,
                     ),
                   ),
@@ -251,7 +251,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                       onTab: () => _selectTab(2),
                       variant: MPTabRoundedVariant.filled,
                       tabColorActive: context.mp.warningColor,
-                      tabColor: context.mp.warningColor.withValues(alpha: 0.1),
+                      tabColor: context.mp.warningColor.withOpacity(0.1),
                       size: MPTabRoundedSize.small,
                     ),
                   ),
@@ -264,7 +264,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
           Column(
             children: [
               MPText.head('Tabs with Icons'),
-              SizedBox(height: 16.h),
+              SizedBox(height: MPResponsivePadding.getSm(context)),
               Row(
                 children: [
                   Expanded(
@@ -303,7 +303,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
           Column(
             children: [
               MPText.head('Tabs with Badges'),
-              SizedBox(height: 16.h),
+              SizedBox(height: MPResponsivePadding.getSm(context)),
               Row(
                 children: [
                   Expanded(
@@ -338,7 +338,7 @@ class _TabPageState extends State<TabPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 24.h),
+              SizedBox(height: MPResponsivePadding.getLg(context)),
               Row(
                 children: [
                   Expanded(

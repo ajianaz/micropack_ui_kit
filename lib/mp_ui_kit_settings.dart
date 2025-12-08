@@ -172,7 +172,5 @@ class MpUiKit {
     package: 'micropack_ui_kit',
   );
 
-  static void initScreen(BuildContext context) {
-    ScreenUtil.init(context, designSize: MediaQuery.of(context).size);
-  }
+
 }

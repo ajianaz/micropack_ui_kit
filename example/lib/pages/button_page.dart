@@ -27,19 +27,19 @@ class _ButtonPageState extends State<ButtonPage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MPText.head('Button Variants'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Primary Buttons
             MPText.label('Primary Buttons'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: 'Small',
@@ -74,14 +74,14 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             // Outlined Buttons
             MPText.label('Outlined Buttons'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: 'Outlined',
@@ -110,14 +110,14 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             // Ghost Buttons
             MPText.label('Ghost Buttons'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: 'Ghost',
@@ -146,17 +146,17 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             MPText.head('Loading States'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Loading Buttons
             MPText.label('Buttons with Loading States'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: _isLoading1 ? 'Loading...' : 'Click to Load',
@@ -183,17 +183,17 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             MPText.head('Buttons with Icons'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Icon Buttons
             MPText.label('Buttons with Icons'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: 'Save',
@@ -222,17 +222,17 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             MPText.head('New Button Variants'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // New Button Variants
             MPText.label('Text, Info, and Warning Buttons'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: 'Text Button',
@@ -262,14 +262,14 @@ class _ButtonPageState extends State<ButtonPage> {
             ),
 
             MPText.head('Custom Styled Buttons'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Custom Styled Buttons
             MPText.label('Buttons with Custom Colors and Styles'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
+              spacing: MPResponsivePadding.getXs(context),
+              runSpacing: MPResponsivePadding.getXs(context),
               children: [
                 MPButton(
                   text: 'Success',

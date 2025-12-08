@@ -115,7 +115,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
         margin: widget.margin ?? _getDefaultMargin(),
         child: Material(
           color: _getBackgroundColor(context),
-          borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.r),
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
           elevation: widget.elevation ?? _getElevation(),
           child: MouseRegion(
             onEnter: (_) {
@@ -140,7 +140,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
                 padding: widget.padding ?? _getDefaultPadding(),
                 decoration: BoxDecoration(
                   borderRadius:
-                      BorderRadius.circular(widget.borderRadius ?? 12.r),
+                      BorderRadius.circular(widget.borderRadius ?? 12),
                   border: widget.variant == MPArticleCardVariant.outlined
                       ? Border.all(color: context.mp.adaptiveBorderColor)
                       : null,
@@ -270,7 +270,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
   Widget _buildImage() {
     if (widget.imageWidget != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: _getImageHeight(),
@@ -282,7 +282,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
 
     if (widget.imageUrl != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         child: Image.network(
           widget.imageUrl!,
           width: double.infinity,
@@ -325,7 +325,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
       color: context.mp.neutral30,
       child: Icon(
         Icons.image_not_supported,
-        size: 40.r,
+        size: 40,
         // Use theme-aware caption color for placeholder icon
         color: context.mp.captionColor,
       ),
@@ -335,11 +335,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
   /// Builds category chip widget
   Widget _buildCategory(String category) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         // Use theme-aware primary color with opacity for category background
         color: context.mp.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: MPText(
         category,
@@ -385,18 +385,18 @@ class _MPArticleCardState extends State<MPArticleCard> {
   /// Builds metadata widget with author, date, and read time
   Widget _buildMetadata(BuildContext context) {
     return Wrap(
-      spacing: 8.w,
-      runSpacing: 4.h,
+      spacing: MPResponsivePadding.getXs(context),
+      runSpacing: MPResponsivePadding.getXs(context),
       children: [
         if (widget.author != null) ...[
           Icon(
             Icons.person,
-            size: 14.r,
+            size: 14,
             color: widget.enabled
                 ? context.mp.captionColor
                 : context.mp.captionColor.withValues(alpha: 0.4),
           ),
-          SizedBox(width: 4.w),
+          SizedBox(width: MPResponsivePadding.getXs(context)),
           MPText(
             widget.author!,
             style: MPTextStyle.caption(
@@ -410,12 +410,12 @@ class _MPArticleCardState extends State<MPArticleCard> {
         if (widget.date != null) ...[
           Icon(
             Icons.calendar_today,
-            size: 14.r,
+            size: 14,
             color: widget.enabled
                 ? context.mp.captionColor
                 : context.mp.captionColor.withValues(alpha: 0.4),
           ),
-          SizedBox(width: 4.w),
+          SizedBox(width: MPResponsivePadding.getXs(context)),
           MPText(
             widget.date!,
             style: MPTextStyle.caption(
@@ -429,12 +429,12 @@ class _MPArticleCardState extends State<MPArticleCard> {
         if (widget.readTime != null) ...[
           Icon(
             Icons.access_time,
-            size: 14.r,
+            size: 14,
             color: widget.enabled
                 ? context.mp.captionColor
                 : context.mp.captionColor.withValues(alpha: 0.4),
           ),
-          SizedBox(width: 4.w),
+          SizedBox(width: MPResponsivePadding.getXs(context)),
           MPText(
             widget.readTime!,
             style: MPTextStyle.caption(
@@ -452,8 +452,8 @@ class _MPArticleCardState extends State<MPArticleCard> {
   /// Builds tags widget
   Widget _buildTags() {
     return Wrap(
-      spacing: 6.w,
-      runSpacing: 4.h,
+      spacing: MPResponsivePadding.getXs(context),
+      runSpacing: MPResponsivePadding.getXs(context),
       children: widget.tags!.map((tag) => _buildTag(tag)).toList(),
     );
   }
@@ -461,14 +461,14 @@ class _MPArticleCardState extends State<MPArticleCard> {
   /// Builds individual tag widget
   Widget _buildTag(String tag) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         // Use theme-aware neutral color for tag background
         // Enabled state: neutral20, Disabled state: neutral30 with opacity
         color: widget.enabled
             ? context.mp.neutral20
             : context.mp.neutral30.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: MPText(
         tag,
@@ -494,7 +494,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
           text: '${widget.likeCount}',
           child: Icon(
             widget.isLiked ? Icons.favorite : Icons.favorite_border,
-            size: 18.r,
+            size: 18,
             // Use theme-aware colors for like icon
             // Liked state: errorColor (red), Default state: subtitleColor
             color: widget.isLiked
@@ -504,7 +504,7 @@ class _MPArticleCardState extends State<MPArticleCard> {
           onPressed: widget.enabled ? widget.onLike : null,
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
           textSize: _getFontSize() - 4,
           // Use theme-aware subtitle color for like count text
           textColor: context.mp.subtitleColor,
@@ -518,14 +518,14 @@ class _MPArticleCardState extends State<MPArticleCard> {
           text: '',
           child: Icon(
             widget.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-            size: 18.r,
+            size: 18,
             // Use theme-aware subtitle color for bookmark icon
             color: context.mp.subtitleColor,
           ),
           onPressed: widget.enabled ? widget.onBookmark : null,
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
         ),
       );
     }
@@ -536,14 +536,14 @@ class _MPArticleCardState extends State<MPArticleCard> {
           text: '',
           child: Icon(
             Icons.share,
-            size: 18.r,
+            size: 18,
             // Use theme-aware subtitle color for share icon
             color: context.mp.subtitleColor,
           ),
           onPressed: widget.enabled ? widget.onShare : null,
           // Use theme-aware transparent background
           background: context.mp.adaptiveBackgroundColor.withValues(alpha: 0),
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
         ),
       );
     }
@@ -591,11 +591,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
   double _getSpacing() {
     switch (widget.size) {
       case MPArticleCardSize.small:
-        return 8.h;
+        return MPResponsivePadding.getXs(context);
       case MPArticleCardSize.medium:
-        return 12.h;
+        return MPResponsivePadding.getSm(context);
       case MPArticleCardSize.large:
-        return 16.h;
+        return MPResponsivePadding.getLg(context);
     }
   }
 
@@ -603,11 +603,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
   double _getImageHeight() {
     switch (widget.size) {
       case MPArticleCardSize.small:
-        return 120.h;
+        return 120;
       case MPArticleCardSize.medium:
-        return 180.h;
+        return 180;
       case MPArticleCardSize.large:
-        return 240.h;
+        return 240;
     }
   }
 
@@ -615,11 +615,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
   EdgeInsets _getDefaultPadding() {
     switch (widget.size) {
       case MPArticleCardSize.small:
-        return EdgeInsets.all(12.r);
+        return EdgeInsets.all(MPResponsivePadding.getSm(context));
       case MPArticleCardSize.medium:
-        return EdgeInsets.all(16.r);
+        return EdgeInsets.all(MPResponsivePadding.get(context));
       case MPArticleCardSize.large:
-        return EdgeInsets.all(20.r);
+        return EdgeInsets.all(MPResponsivePadding.getLg(context));
     }
   }
 
@@ -627,11 +627,11 @@ class _MPArticleCardState extends State<MPArticleCard> {
   EdgeInsets _getDefaultMargin() {
     switch (widget.size) {
       case MPArticleCardSize.small:
-        return EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h);
+        return EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context));
       case MPArticleCardSize.medium:
-        return EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h);
+        return EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context));
       case MPArticleCardSize.large:
-        return EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h);
+        return EdgeInsets.symmetric(horizontal: MPResponsivePadding.getSm(context), vertical: MPResponsivePadding.getSm(context));
     }
   }
 

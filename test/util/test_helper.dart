@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Test helper class that initializes all required components for testing

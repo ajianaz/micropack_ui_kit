@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:micropack_ui_kit/mp_ui_kit_settings.dart';
 
 /// Responsive font helper utility
@@ -63,8 +62,8 @@ class ResponsiveFontHelper {
     // Get scale factor for current screen size
     final scaleFactor = getScaleFactor(context);
 
-    // Apply ScreenUtil scaling with breakpoint-based reduction
-    return (baseFontSize.sp * scaleFactor);
+    // Apply responsive scaling with breakpoint-based reduction
+    return (baseFontSize * scaleFactor);
   }
 
   /// Get responsive font size with explicit scale factor override
@@ -81,7 +80,7 @@ class ResponsiveFontHelper {
       return baseFontSize;
     }
 
-    return (baseFontSize.sp * scaleFactor);
+    return (baseFontSize * scaleFactor);
   }
 
   /// Check if current screen is mobile size

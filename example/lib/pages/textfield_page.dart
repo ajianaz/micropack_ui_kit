@@ -45,18 +45,18 @@ class _TextFieldPageState extends State<TextFieldPage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MPText.head('Basic Text Fields'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Default Text Field
             MPText.label('Default Text Field'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField(
                 _defaultController,
                 label: 'Username',
@@ -66,13 +66,13 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Border Text Field
             MPText.label('Border Text Field'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 _borderController,
                 label: 'Email',
@@ -84,16 +84,16 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             MPText.head('Password Fields'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Password Text Field
             MPText.label('Password Field'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.password(
                 _passwordController,
                 label: 'Password',
@@ -103,13 +103,13 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Border Password Text Field
             MPText.label('Border Password Field'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.borderPassword(
                 _borderPasswordController,
                 label: 'Confirm Password',
@@ -120,16 +120,16 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
 
             MPText.head('Validation & Advanced Features'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Validation Field
             MPText.label('Field with Validation'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField(
                 _validationController,
                 label: 'Phone Number',
@@ -152,13 +152,13 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Field with Icons and Custom Elements
             MPText.label('Field with Custom Icons'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 _iconController,
                 label: 'Search',
@@ -171,13 +171,13 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Field with Input Formatter
             MPText.label('Field with Input Formatter'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 _formatterController,
                 label: 'Credit Card',
@@ -194,13 +194,13 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Disabled Field
             MPText.label('Disabled Field'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 TextEditingController(text: 'This field is disabled'),
                 label: 'Disabled Field',
@@ -208,13 +208,13 @@ class _TextFieldPageState extends State<TextFieldPage> {
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Read Only Field
             MPText.label('Read Only Field'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 TextEditingController(text: 'This field is read only'),
                 label: 'Read Only Field',
@@ -224,9 +224,9 @@ class _TextFieldPageState extends State<TextFieldPage> {
 
             // Enhanced TextField with Clear Button and Counter
             MPText.label('Field with Clear Button and Counter'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 TextEditingController(
                     text: 'This field has clear button and counter'),
@@ -242,9 +242,9 @@ class _TextFieldPageState extends State<TextFieldPage> {
 
             // Phone Number Field with Built-in Formatter
             MPText.label('Phone Number with Built-in Formatter'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 TextEditingController(),
                 label: 'Phone Number',
@@ -259,9 +259,9 @@ class _TextFieldPageState extends State<TextFieldPage> {
 
             // Email Field with Built-in Validator
             MPText.label('Email Field with Built-in Validator'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 TextEditingController(),
                 label: 'Email Address',
@@ -275,9 +275,9 @@ class _TextFieldPageState extends State<TextFieldPage> {
 
             // Password Field with Built-in Validator
             MPText.label('Password Field with Built-in Validator'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.borderPassword(
                 TextEditingController(),
                 label: 'Password',
@@ -290,9 +290,9 @@ class _TextFieldPageState extends State<TextFieldPage> {
 
             // Currency Field with Built-in Formatter
             MPText.label('Currency Field with Built-in Formatter'),
-            SizedBox(height: 8.h),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
             Padding(
-              padding: EdgeInsets.all(8.r),
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
               child: MPTextField.border(
                 TextEditingController(),
                 label: 'Amount',

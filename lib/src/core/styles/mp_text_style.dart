@@ -111,9 +111,9 @@ class MPTextStyle {
     try {
       return fontManager.getTextStyle(
         fontFamily: effectiveFontFamily,
-        fontSize: fontSize * 1.sp,
+        fontSize: fontSize,
         fontWeight: fontWeight,
-        letterSpacing: letterSpacing * 1.sp,
+        letterSpacing: letterSpacing,
         height: height,
         color: color,
         decoration: decoration,
@@ -140,10 +140,10 @@ class MPTextStyle {
           'Font style error for $effectiveFontFamily: $e. Using fallback.');
       return TextStyle(
         fontFamily: MPFontManager.getPlatformFontFamily(effectiveFontFamily),
-        fontSize: fontSize * 1.sp,
+        fontSize: fontSize,
         fontWeight: fontWeight,
         fontStyle: FontStyle.normal, // Ensure consistent style on error
-        letterSpacing: letterSpacing * 1.sp,
+        letterSpacing: letterSpacing,
         height: height,
         color: color,
         decoration: decoration,

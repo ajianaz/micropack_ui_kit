@@ -22,7 +22,7 @@ class TypographyPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.all(20.r),
+            padding: MPResponsivePadding.card(context),
             child: MPText(
               MPTextStyle.defaultFontFamily,
               style: TextStyle(color: context.mp.textColor),
@@ -32,11 +32,11 @@ class TypographyPage extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               itemCount: _textStyles(context).length,
-              padding: EdgeInsets.all(20.r),
+              padding: MPResponsivePadding.card(context),
               itemBuilder: (context, index) => _textStyles(context)[index],
               separatorBuilder: (context, index) => Container(
                 height: 1,
-                margin: EdgeInsets.symmetric(vertical: 16.h),
+                margin: EdgeInsets.symmetric(vertical: MPResponsivePadding.getSm(context)),
                 color: context.mp.adaptiveBorderColor,
               ),
             ),

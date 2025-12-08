@@ -56,20 +56,20 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MPText.head('Theme System Overview'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Theme Info Card
             Container(
-              margin: EdgeInsets.only(bottom: 24.h),
-              padding: EdgeInsets.all(16.r),
+              margin: EdgeInsets.only(bottom: MPResponsivePadding.getLg(context)),
+              padding: MPResponsivePadding.card(context),
               decoration: BoxDecoration(
                 color: context.mp.primarySurface,
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: context.mp.primaryBorder),
               ),
               child: Column(
@@ -82,7 +82,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                         color: context.mp.primary,
                         size: 24,
                       ),
-                      SizedBox(width: 12.w),
+                      SizedBox(width: MPResponsivePadding.getSm(context)),
                       MPText(
                         'Current Theme: ${_getThemeName()}',
                         style: TextStyle(
@@ -93,7 +93,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: MPResponsivePadding.getSm(context)),
                   MPText(
                     'Brightness: ${context.mp.isDarkMode ? 'Dark' : 'Light'}',
                     style: TextStyle(
@@ -101,7 +101,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                     ),
                     fontSize: 14,
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: MPResponsivePadding.getXs(context)),
                   MPText(
                     'Theme persistence is ${_getThemeName() == 'System' ? 'following system settings' : 'manually selected'}',
                     style: TextStyle(
@@ -113,23 +113,23 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
               ),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
             MPText.head('Color Palette'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Color Palette Grid
             _buildColorPalette(context),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
             MPText.head('Theme Switching Demo'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Theme Switching Demo
             _buildThemeSwitchingDemo(context),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
             MPText.head('Component Examples'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Component Examples
             _buildComponentExamples(context),
@@ -161,10 +161,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
 
   Widget _buildColorPalette(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.r),
+      padding: MPResponsivePadding.card(context),
       decoration: BoxDecoration(
         color: context.mp.adaptiveBackgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
@@ -178,10 +178,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ),
             fontSize: 16,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
           Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
+            spacing: MPResponsivePadding.getXs(context),
+            runSpacing: MPResponsivePadding.getXs(context),
             children: [
               _buildColorSwatch(context, 'Primary', context.mp.primary),
               _buildColorSwatch(context, 'Surface', context.mp.primarySurface),
@@ -191,7 +191,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
               _buildColorSwatch(context, 'Pressed', context.mp.primaryPressed),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
           MPText(
             'Neutral Colors',
             style: TextStyle(
@@ -200,10 +200,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ),
             fontSize: 16,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
           Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
+            spacing: MPResponsivePadding.getXs(context),
+            runSpacing: MPResponsivePadding.getXs(context),
             children: [
               _buildColorSwatch(context, 'N10', context.mp.neutral10),
               _buildColorSwatch(context, 'N20', context.mp.neutral20),
@@ -224,25 +224,25 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
 
   Widget _buildColorSwatch(BuildContext context, String label, Color color) {
     return Container(
-      width: 60.w,
-      height: 60.w,
+      width: MPResponsivePadding.getLg(context),
+      height: MPResponsivePadding.getLg(context),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 24.w,
-            height: 24.w,
+            width: MPResponsivePadding.getSm(context),
+            height: MPResponsivePadding.getSm(context),
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(height: 4.h),
+          SizedBox(height: MPResponsivePadding.getXs(context)),
           MPText(
             label,
             style: TextStyle(
@@ -259,10 +259,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
     final currentThemeMode = _getCurrentThemeMode();
 
     return Container(
-      padding: EdgeInsets.all(16.r),
+      padding: MPResponsivePadding.card(context),
       decoration: BoxDecoration(
         color: context.mp.adaptiveBackgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
@@ -276,7 +276,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ),
             fontSize: 16,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
 
           // Theme Mode Buttons
           Row(
@@ -309,14 +309,14 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
 
           // Theme Preview
           Container(
-            height: 120.h,
+            height: MPResponsivePadding.getXxl(context),
             decoration: BoxDecoration(
               color: context.mp.adaptiveBackgroundColor,
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(8),
               border: Border.all(color: context.mp.adaptiveBorderColor),
             ),
             child: Row(
@@ -324,12 +324,12 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                 // Light Theme Preview
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.all(8.r),
-                    padding: EdgeInsets.all(12.r),
+                    margin: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+                    padding: EdgeInsets.all(MPResponsivePadding.getSm(context)),
                     decoration: BoxDecoration(
                       color: MPColorTheme.light.neutral100 ??
                           const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(6.r),
+                      borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                           color: MPColorTheme.light.neutral40 ??
                               const Color(0xFFC9C9C9)),
@@ -340,7 +340,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                         Icon(Icons.light_mode,
                             color: MPColorTheme.light.primary ??
                                 const Color(0xFF303F9F)),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: MPResponsivePadding.getXs(context)),
                         Text(
                           'Light',
                           style: TextStyle(
@@ -349,7 +349,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: MPResponsivePadding.getXs(context)),
                         MPButton(
                           text: 'Sample',
                           onPressed: () {},
@@ -360,17 +360,17 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                   ),
                 ),
 
-                SizedBox(width: 8.w),
+                SizedBox(width: MPResponsivePadding.getXs(context)),
 
                 // Dark Theme Preview
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.all(8.r),
-                    padding: EdgeInsets.all(12.r),
+                    margin: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+                    padding: EdgeInsets.all(MPResponsivePadding.getSm(context)),
                     decoration: BoxDecoration(
                       color: MPColorTheme.dark.neutral20 ??
                           const Color(0xFF1E1E1E),
-                      borderRadius: BorderRadius.circular(6.r),
+                      borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                           color: MPColorTheme.dark.neutral40 ??
                               const Color(0xFF404040)),
@@ -381,7 +381,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                         Icon(Icons.dark_mode,
                             color: MPColorTheme.dark.neutral80 ??
                                 const Color(0xFFB8B8B8)),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: MPResponsivePadding.getXs(context)),
                         Text(
                           'Dark',
                           style: TextStyle(
@@ -390,7 +390,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: MPResponsivePadding.getXs(context)),
                         MPButton(
                           text: 'Sample',
                           onPressed: () {},
@@ -439,7 +439,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? context.mp.primary : Colors.transparent,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color:
               isSelected ? context.mp.primary : context.mp.adaptiveBorderColor,
@@ -450,9 +450,11 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
         color: Colors.transparent,
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(
+                horizontal: MPResponsivePadding.getMd(context),
+                vertical: MPResponsivePadding.getSm(context)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -462,7 +464,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                       isSelected ? context.mp.neutral100 : context.mp.textColor,
                   size: 18,
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: MPResponsivePadding.getXs(context)),
                 Text(
                   label,
                   style: TextStyle(
@@ -483,10 +485,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
 
   Widget _buildComponentExamples(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.r),
+      padding: MPResponsivePadding.card(context),
       decoration: BoxDecoration(
         color: context.mp.adaptiveBackgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
@@ -500,7 +502,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ),
             fontSize: 16,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
 
           // Button Examples
           Row(
@@ -511,7 +513,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                   onPressed: () {},
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: MPResponsivePadding.getXs(context)),
               Expanded(
                 child: MPButton(
                   text: 'Outlined',
@@ -519,7 +521,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                   variant: MPButtonVariant.outlined,
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: MPResponsivePadding.getXs(context)),
               Expanded(
                 child: MPButton(
                   text: 'Ghost',
@@ -530,7 +532,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
 
           // Text Field Examples
           MPTextField(
@@ -539,7 +541,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
             hint: 'Enter text here...',
           ),
 
-          SizedBox(height: 16.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
 
           // Tab Examples
           Row(
@@ -551,7 +553,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                   onTab: () {},
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: MPResponsivePadding.getXs(context)),
               Expanded(
                 child: MPTabRounded(
                   title: 'Tab 2',
@@ -559,7 +561,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                   onTab: () {},
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: MPResponsivePadding.getXs(context)),
               Expanded(
                 child: MPTabRounded(
                   title: 'Tab 3',

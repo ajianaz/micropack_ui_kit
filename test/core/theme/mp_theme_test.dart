@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_color_theme.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme_helper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 void main() {
   setUpAll(() {
@@ -13,19 +13,15 @@ void main() {
   });
 
   setUp(() {
-    // Initialize ScreenUtil for tests - will be properly initialized in testWidgets
+    // Setup untuk tests
   });
 
   group('MPThemeUtilities', () {
     testWidgets('adaptiveTextColor returns correct color for light mode',
         (WidgetTester tester) async {
-      // Initialize ScreenUtil before building the widget
+      // Test widget the widget
       await tester.pumpWidget(
-        ScreenUtilInit(
-          designSize: const Size(375, 812),
-          minTextAdapt: true,
-          builder: (context, child) {
-            return MaterialApp(
+        MaterialApp(
               theme: MPTheme.main(isDarkMode: false).copyWith(
                 extensions: [MPColorTheme.light],
               ),
@@ -37,21 +33,15 @@ void main() {
                   return Container();
                 },
               ),
-            );
-          },
-        ),
+            ),
       );
     });
 
     testWidgets('adaptiveTextColor returns correct color for dark mode',
         (WidgetTester tester) async {
-      // Initialize ScreenUtil before building the widget
+      // Test widget the widget
       await tester.pumpWidget(
-        ScreenUtilInit(
-          designSize: const Size(375, 812),
-          minTextAdapt: true,
-          builder: (context, child) {
-            return MaterialApp(
+        MaterialApp(
               theme: MPTheme.main(isDarkMode: true).copyWith(
                 extensions: [MPColorTheme.dark],
               ),
@@ -63,21 +53,15 @@ void main() {
                   return Container();
                 },
               ),
-            );
-          },
-        ),
+            ),
       );
     });
 
     testWidgets('adaptiveBackgroundColor returns correct color for light mode',
         (WidgetTester tester) async {
-      // Initialize ScreenUtil before building the widget
+      // Test widget the widget
       await tester.pumpWidget(
-        ScreenUtilInit(
-          designSize: const Size(375, 812),
-          minTextAdapt: true,
-          builder: (context, child) {
-            return MaterialApp(
+        MaterialApp(
               theme: MPTheme.main(isDarkMode: false).copyWith(
                 extensions: [MPColorTheme.light],
               ),
@@ -89,21 +73,15 @@ void main() {
                   return Container();
                 },
               ),
-            );
-          },
-        ),
+            ),
       );
     });
 
     testWidgets('adaptiveBackgroundColor returns correct color for dark mode',
         (WidgetTester tester) async {
-      // Initialize ScreenUtil before building the widget
+      // Test widget the widget
       await tester.pumpWidget(
-        ScreenUtilInit(
-          designSize: const Size(375, 812),
-          minTextAdapt: true,
-          builder: (context, child) {
-            return MaterialApp(
+        MaterialApp(
               theme: MPTheme.main(isDarkMode: true).copyWith(
                 extensions: [MPColorTheme.dark],
               ),
@@ -115,9 +93,7 @@ void main() {
                   return Container();
                 },
               ),
-            );
-          },
-        ),
+            ),
       );
     });
   });

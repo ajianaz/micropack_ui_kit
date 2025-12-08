@@ -66,18 +66,18 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildFontStatsSection(context),
-            SizedBox(height: 32.h),
+            SizedBox(height: MPResponsivePadding.getXl(context)),
             _buildResponsiveTypographySection(context),
-            SizedBox(height: 32.h),
+            SizedBox(height: MPResponsivePadding.getXl(context)),
             _buildPlatformOptimizationSection(context),
-            SizedBox(height: 32.h),
+            SizedBox(height: MPResponsivePadding.getXl(context)),
             _buildFontFallbackSection(context),
-            SizedBox(height: 32.h),
+            SizedBox(height: MPResponsivePadding.getXl(context)),
             _buildInteractiveDemo(context),
           ],
         ),
@@ -89,7 +89,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     return Card(
       color: context.mp.cardColor,
       child: Padding(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -97,10 +97,10 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               'Font Loading Statistics',
               style: TextStyle(color: context.mp.primary),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             ..._fontLoadingStats
                 .map((stat) => Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4.h),
+                      padding: EdgeInsets.symmetric(vertical: MPResponsivePadding.getXs(context)),
                       child: Row(
                         children: [
                           Icon(
@@ -108,7 +108,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
                             size: 16,
                             color: context.mp.primary,
                           ),
-                          SizedBox(width: 12.w),
+                          SizedBox(width: MPResponsivePadding.getSm(context)),
                           Expanded(
                             child: MPText.body(
                               stat,
@@ -131,7 +131,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     return Card(
       color: context.mp.cardColor,
       child: Padding(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -139,7 +139,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               'Responsive Typography ($screenCategory)',
               style: TextStyle(color: context.mp.primary),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             _buildResponsiveText(context, 'Small Mobile', 12, isMobile: true),
             _buildResponsiveText(context, 'Mobile', 14, isMobile: true),
             _buildResponsiveText(context, 'Tablet', 16, isTablet: true),
@@ -164,11 +164,11 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(12.r),
-      margin: EdgeInsets.only(bottom: 16.h),
+      padding: MPResponsivePadding.card(context),
+      margin: EdgeInsets.only(bottom: MPResponsivePadding.getSm(context)),
       decoration: BoxDecoration(
         color: context.mp.cardColor,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
@@ -187,7 +187,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: MPResponsivePadding.getXs(context)),
           MPText.body(
             'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.',
             style: TextStyle(
@@ -199,7 +199,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
             ),
             maxLines: 3,
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: MPResponsivePadding.getXs(context)),
           Row(
             children: [
               _buildInfoChip('Mobile', isMobile),
@@ -214,10 +214,10 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
 
   Widget _buildInfoChip(String label, bool isActive) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 4.r),
+      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         color: isActive ? context.mp.primary : context.mp.neutral90,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: MPText.small(
         label,
@@ -233,7 +233,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     return Card(
       color: context.mp.cardColor,
       child: Padding(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -241,11 +241,11 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               'Platform-Specific Optimizations',
               style: TextStyle(color: context.mp.primary),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             _buildPlatformOptimizedText(context, 'Poppins'),
             _buildPlatformOptimizedText(context, 'Roboto'),
             _buildPlatformOptimizedText(context, 'Inter'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             MPText.body(
               'Platform optimizations include:\n• Font size adjustments per platform\n• Letter spacing optimization\n• Line height tuning\n• Font weight enhancement\n• Leading distribution optimization',
               style: TextStyle(color: context.mp.subtitleColor),
@@ -262,11 +262,11 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(12.r),
-      margin: EdgeInsets.only(bottom: 12.h),
+      padding: MPResponsivePadding.card(context),
+      margin: EdgeInsets.only(bottom: MPResponsivePadding.getSm(context)),
       decoration: BoxDecoration(
         color: context.mp.cardColor,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
@@ -285,7 +285,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: MPResponsivePadding.getXs(context)),
           MPText.body(
             'Sample text demonstrating platform-optimized rendering for $fontFamily font family.',
             style: TextStyle(
@@ -303,7 +303,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     return Card(
       color: context.mp.cardColor,
       child: Padding(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -311,11 +311,11 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               'Font Fallback System',
               style: TextStyle(color: context.mp.primary),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             _buildFallbackDemo(context, 'Poppins'),
             _buildFallbackDemo(context, 'Invalid Font'),
             _buildFallbackDemo(context, 'Custom Font'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             MPText.body(
               'The fallback system ensures text remains readable even when:\n• Google Fonts fail to load\n• Network issues occur\n• Custom fonts are unavailable\n• Platform-specific rendering issues arise',
               style: TextStyle(color: context.mp.subtitleColor),
@@ -332,11 +332,11 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(12.r),
-      margin: EdgeInsets.only(bottom: 12.h),
+      padding: MPResponsivePadding.card(context),
+      margin: EdgeInsets.only(bottom: MPResponsivePadding.getSm(context)),
       decoration: BoxDecoration(
         color: context.mp.cardColor,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: loadingState == MPFontLoadingState.failed
               ? context.mp.errorColor
@@ -356,7 +356,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               _buildLoadingStateChip(loadingState),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: MPResponsivePadding.getXs(context)),
           MPText.body(
             'This text uses enhanced font fallback system with graceful error handling.',
             style: TextStyle(
@@ -399,10 +399,10 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 4.r),
+      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         color: chipColor,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -412,7 +412,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
             size: 14,
             color: Colors.white,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: MPResponsivePadding.getXs(context)),
           MPText.small(
             chipText,
             style: TextStyle(
@@ -429,7 +429,7 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     return Card(
       color: context.mp.cardColor,
       child: Padding(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -437,13 +437,13 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
               'Interactive Typography Demo',
               style: TextStyle(color: context.mp.primary),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Type custom text',
                 hintText: 'Try different fonts and sizes',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: context.mp.adaptiveBorderColor),
                 ),
                 filled: true,
@@ -460,12 +460,12 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
                 });
               },
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             MPText.body(
               'Current Font: $_currentFont',
               style: TextStyle(color: context.mp.subtitleColor),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
             Row(
               children: [
                 MPButton(
@@ -473,13 +473,13 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
                   onPressed: () => _testFont('Poppins'),
                   variant: MPButtonVariant.outlined,
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: MPResponsivePadding.getXs(context)),
                 MPButton(
                   text: 'Test Roboto',
                   onPressed: () => _testFont('Roboto'),
                   variant: MPButtonVariant.outlined,
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: MPResponsivePadding.getXs(context)),
                 MPButton(
                   text: 'Test Invalid',
                   onPressed: () => _testFont('InvalidFontName'),

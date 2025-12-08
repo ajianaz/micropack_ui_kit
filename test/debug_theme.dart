@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:micropack_ui_kit/src/core/theme/mp_theme.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 void main() {
   setUpAll(() {
@@ -10,26 +10,19 @@ void main() {
 
   testWidgets('Debug MPTheme.main', (WidgetTester tester) async {
     try {
-      // Initialize ScreenUtil before creating the theme
-      await tester.pumpWidget(
-        ScreenUtilInit(
-          designSize: const Size(375, 812),
-          minTextAdapt: true,
-          builder: (context, child) {
-            // Create the theme inside the builder after ScreenUtil is initialized
-            final theme = MPTheme.main(isDarkMode: true);
-            print('Theme created successfully: ${theme.brightness}');
+      // Create theme without ScreenUtil
+      final theme = MPTheme.main(isDarkMode: true);
+      print('Theme created successfully: ${theme.brightness}');
 
-            return MaterialApp(
-              theme: theme,
-              home: Builder(
-                builder: (context) {
-                  // Just return a container since we're just testing theme creation
-                  return Container();
-                },
-              ),
-            );
-          },
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Builder(
+            builder: (context) {
+              // Just return a container since we're just testing theme creation
+              return Container();
+            },
+          ),
         ),
       );
 

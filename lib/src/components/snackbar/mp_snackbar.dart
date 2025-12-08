@@ -43,7 +43,7 @@ class MPSnackbar {
         action: action,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
         ),
         elevation: 4,
       ),
@@ -66,9 +66,9 @@ class MPSnackbar {
             Icon(
               Icons.check_circle,
               color: themeColors.neutral100,
-              size: 20.r,
+              size: 20,
             ),
-            SizedBox(width: 8.w),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
             Expanded(
               child: Text(
                 message,
@@ -85,7 +85,7 @@ class MPSnackbar {
         duration: duration ?? const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
         ),
         elevation: 4,
       ),
@@ -108,9 +108,9 @@ class MPSnackbar {
             Icon(
               Icons.error,
               color: themeColors.neutral100,
-              size: 20.r,
+              size: 20,
             ),
-            SizedBox(width: 8.w),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
             Expanded(
               child: Text(
                 message,
@@ -127,7 +127,7 @@ class MPSnackbar {
         duration: duration ?? const Duration(seconds: 4),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
         ),
         elevation: 4,
       ),
@@ -150,9 +150,9 @@ class MPSnackbar {
             Icon(
               Icons.warning,
               color: themeColors.neutral100,
-              size: 20.r,
+              size: 20,
             ),
-            SizedBox(width: 8.w),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
             Expanded(
               child: Text(
                 message,
@@ -169,7 +169,7 @@ class MPSnackbar {
         duration: duration ?? const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
         ),
         elevation: 4,
       ),
@@ -192,9 +192,9 @@ class MPSnackbar {
             Icon(
               Icons.info,
               color: themeColors.neutral100,
-              size: 20.r,
+              size: 20,
             ),
-            SizedBox(width: 8.w),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
             Expanded(
               child: Text(
                 message,
@@ -211,7 +211,7 @@ class MPSnackbar {
         duration: duration ?? const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
         ),
         elevation: 4,
       ),

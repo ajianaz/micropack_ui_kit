@@ -5,6 +5,7 @@ export '../core/loading/mp_loading_overlay.dart';
 export '../core/loading/mp_progressive_image.dart';
 export '../core/performance/mp_performance_monitor.dart';
 export '../core/performance/mp_performance_overlay.dart';
+// Performance utilities exported in main micropack_ui_kit.dart
 // export '../core/responsive/mp_responsive_constraints.dart'; // Already exported in mp_responsive.dart
 export '../core/responsive/mp_orientation_aware.dart';
 // Responsive System
@@ -15,6 +16,7 @@ export '../core/responsive/mp_responsive_grid.dart';
 export '../core/responsive/mp_responsive_padding.dart';
 export '../core/state/mp_reactive_builder.dart';
 export '../core/theme/mp_skeleton_theme.dart';
+// Font manager exported in main micropack_ui_kit.dart
 export 'article_card/article_card.dart';
 export 'button/enums/mp_button_enums.dart';
 export 'button/mp_button.dart';

@@ -125,12 +125,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         color: context.mp.adaptiveBackgroundColor,
         child: ListView(
-          padding: EdgeInsets.only(
-            top: 16.h,
-            left: 20.w,
-            right: 20.w,
-            bottom: 32.h,
-          ),
+          padding: MPResponsivePadding.page(context),
           shrinkWrap: true,
           children: [
             // Theme info card
@@ -238,11 +233,11 @@ class _ThemeInfoCard extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 24.h),
-      padding: EdgeInsets.all(16.w),
+      margin: EdgeInsets.only(bottom: MPResponsivePadding.getLg(context)),
+      padding: MPResponsivePadding.card(context),
       decoration: BoxDecoration(
         color: context.mp.adaptiveBackgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
       child: Column(
@@ -255,7 +250,7 @@ class _ThemeInfoCard extends StatelessWidget {
                 color: context.mp.textColor,
                 size: 24,
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: MPResponsivePadding.getSm(context)),
               MPText(
                 'Theme Information',
                 style: TextStyle(
@@ -266,7 +261,7 @@ class _ThemeInfoCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
           MPText(
             'Current Theme: $themeName',
             style: TextStyle(
@@ -274,7 +269,7 @@ class _ThemeInfoCard extends StatelessWidget {
             ),
             fontSize: 14,
           ),
-          SizedBox(height: 4.h),
+          SizedBox(height: MPResponsivePadding.getXs(context)),
           MPText(
             'Brightness: $brightnessName',
             style: TextStyle(
@@ -282,7 +277,7 @@ class _ThemeInfoCard extends StatelessWidget {
             ),
             fontSize: 14,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: MPResponsivePadding.getSm(context)),
           MPText(
             'Tap theme icon in the app bar to switch between Light, Dark, and System themes.',
             style: TextStyle(
@@ -303,7 +298,7 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.only(
-          top: 30.h,
+          top: MPResponsivePadding.getLg(context),
         ),
         child: MPText.head(
           title,
@@ -327,7 +322,7 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.only(
-          top: 16.h,
+          top: MPResponsivePadding.getSm(context),
         ),
         child: MPButton(
           text: name,

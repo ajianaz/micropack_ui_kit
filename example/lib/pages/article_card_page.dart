@@ -84,12 +84,12 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.r),
+        padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MPText.head('Article Card Variants'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Small Card
             MPArticleCard(
@@ -118,7 +118,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onHover: (hovered) => setState(() => isHovered = hovered),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Medium Card with Outlined Variant
             MPArticleCard(
@@ -146,7 +146,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Large Elevated Card
             MPArticleCard(
@@ -179,9 +179,9 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
             MPText.head('Interaction States'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Disabled Card
             MPArticleCard(
@@ -202,7 +202,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               likeCount: 999,
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Card with custom colors
             MPArticleCard(
@@ -217,8 +217,8 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               tags: ['colors', 'brand', 'custom'],
               size: MPArticleCardSize.medium,
               variant: MPArticleCardVariant.elevated,
-              hoverColor: context.mp.primary.withValues(alpha: 0.15),
-              highlightColor: context.mp.primary.withValues(alpha: 0.25),
+              hoverColor: context.mp.primary.withOpacity(0.15),
+              highlightColor: context.mp.primary.withOpacity(0.25),
               isLiked: false,
               isBookmarked: false,
               likeCount: 777,
@@ -228,9 +228,9 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onShare: () => _showSnackBar(context, 'Custom share action!'),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
             MPText.head('Special Cases'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Card without image
             MPArticleCard(
@@ -252,7 +252,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onShare: () => _showSnackBar(context, 'Article shared!'),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Card with custom widget image
             MPArticleCard(
@@ -260,12 +260,12 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               description:
                   'This card uses a custom widget instead of a network image. Perfect for placeholders or custom graphics.',
               imageWidget: Container(
-                height: 180.h,
+                height: MPResponsivePadding.getXl(context),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
                       context.mp.primary,
-                      context.mp.primary.withValues(alpha: 0.7),
+                      context.mp.primary.withOpacity(0.7),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -274,7 +274,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                 child: Center(
                   child: Icon(
                     Icons.image,
-                    size: 60.r,
+                    size: 60,
                     color: context.mp.neutral100,
                   ),
                 ),
@@ -295,7 +295,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
               onShare: () => _showSnackBar(context, 'Custom widget shared!'),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Card with custom action buttons
             MPArticleCard(
@@ -320,7 +320,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   onPressed: () => _showSnackBar(context, 'Opening article...'),
                   textSize: 12,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      EdgeInsets.symmetric(horizontal: MPResponsivePadding.getSm(context), vertical: MPResponsivePadding.getXs(context)),
                 ),
                 MPButton(
                   text: 'Save',
@@ -328,14 +328,14 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   onPressed: () => _showSnackBar(context, 'Article saved!'),
                   textSize: 12,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      EdgeInsets.symmetric(horizontal: MPResponsivePadding.getSm(context), vertical: MPResponsivePadding.getXs(context)),
                 ),
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
             MPText.head('Accessibility Features'),
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Card with semantic label
             MPArticleCard(
@@ -363,23 +363,23 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   _showSnackBar(context, 'Accessibility article shared!'),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
 
             // Status indicator
             // Container(
-            //   padding: EdgeInsets.all(16.r),
+            //   padding: EdgeInsets.all(16),
             //   decoration: BoxDecoration(
             //     color: context.mp.neutral20,
-            //     borderRadius: BorderRadius.circular(12.r),
+            //     borderRadius: BorderRadius.circular(12),
             //   ),
             //   child: Column(
             //     crossAxisAlignment: CrossAxisAlignment.start,
             //     children: [
             //       MPText.subhead('Interactive Status'),
-            //       SizedBox(height: 8.h),
+            //       SizedBox(height: 8),
             //       MPText.body(
             //           'Hovering over card: ${isHovered ? "Yes" : "No"}'),
-            //       SizedBox(height: 4.h),
+            //       SizedBox(height: 4),
             //       MPText.small(
             //           'Try hovering over the first card to see the interaction state change.'),
             //     ],

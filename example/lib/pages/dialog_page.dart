@@ -20,7 +20,7 @@ class DialogPage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(20.r),
+            padding: MPResponsivePadding.card(context),
             child: MPButton(
               text: 'Alert Dialog',
               onPressed: () async {
@@ -33,7 +33,7 @@ class DialogPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(20.r),
+            padding: MPResponsivePadding.card(context),
             child: MPButton(
               text: 'Dialog Message',
               onPressed: () async {
