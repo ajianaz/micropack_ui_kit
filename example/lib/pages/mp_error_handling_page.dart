@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Demo page showcasing error handling capabilities
-class ErrorHandlingDemoPage extends StatefulWidget {
-  const ErrorHandlingDemoPage({Key? key}) : super(key: key);
+class MPErrorHandlingPage extends StatefulWidget {
+  const MPErrorHandlingPage({Key? key}) : super(key: key);
 
   @override
-  State<ErrorHandlingDemoPage> createState() => _ErrorHandlingDemoPageState();
+  State<MPErrorHandlingPage> createState() => _MPErrorHandlingPageState();
 }
 
-class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
+class _MPErrorHandlingPageState extends State<MPErrorHandlingPage> {
   final List<String> _errorLogs = [];
-  bool _isLoading = false;
 
   void _logError(String message) {
     setState(() {
@@ -21,7 +20,6 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
   }
 
   Future<void> _testThemeError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing theme initialization error...');
 
@@ -50,13 +48,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('Theme recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _testFontError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing font loading error...');
 
@@ -85,13 +80,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('Font recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _testComponentError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing component initialization error...');
 
@@ -123,13 +115,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('Component recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _testValidationError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing validation error...');
 
@@ -156,13 +145,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('Validation recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _testNetworkError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing network error...');
 
@@ -189,13 +175,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('Network recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _testSystemError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing system error...');
 
@@ -222,13 +205,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('System recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _testUnknownError() async {
-    setState(() => _isLoading = true);
     try {
       _logError('Testing unknown error...');
 
@@ -255,8 +235,6 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
       );
 
       _logError('Unknown recovery attempted');
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
@@ -268,24 +246,23 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
 
   void _showErrorStats() {
     final stats = MPErrorRecovery.getRetryStats();
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Error Recovery Statistics'),
+        backgroundColor: context.mp.cardColor,
+        title: MPText.head('Error Recovery Statistics'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Max Retries: ${stats['config']['maxRetries']}'),
-            Text('Retry Delay: ${stats['config']['retryDelay']}ms'),
-            Text(
+            MPText('Max Retries: ${stats['config']['maxRetries']}'),
+            MPText('Retry Delay: ${stats['config']['retryDelay']}ms'),
+            MPText(
                 'Exponential Backoff: ${stats['config']['useExponentialBackoff']}'),
             const SizedBox(height: 16),
-            const Text('Retry Counters:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            ...(stats['retryCounters'] as Map)
-                .entries
-                .map((entry) => Text('${entry.key}: ${entry.value} attempts')),
+            MPText.subhead('Retry Counters:'),
+            ...(stats['retryCounters'] as Map).entries.map(
+                (entry) => MPText('${entry.key}: ${entry.value} attempts')),
           ],
         ),
         actions: [
@@ -301,8 +278,10 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Error Handling Demo'),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        title: MPText.head('Error Handling Demo'),
         actions: [
           IconButton(
             onPressed: _showErrorStats,
@@ -322,12 +301,8 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const MPText(
+              MPText.head(
                 'Test Error Scenarios',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
               const SizedBox(height: 16),
 
@@ -370,12 +345,8 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
               const SizedBox(height: 24),
 
               // Error logs
-              const MPText(
+              MPText.subhead(
                 'Error Logs:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
               const SizedBox(height: 8),
 
@@ -383,16 +354,16 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                    color: context.mp.cardColor,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey[300]!),
+                    border: Border.all(color: context.mp.adaptiveBorderColor),
                   ),
                   child: _errorLogs.isEmpty
-                      ? const Center(
+                      ? Center(
                           child: MPText(
                             'No errors logged yet. Tap buttons above to test error scenarios.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
+                            color: context.mp.subtitleColor,
                           ),
                         )
                       : ListView.builder(
@@ -407,15 +378,16 @@ class _ErrorHandlingDemoPageState extends State<ErrorHandlingDemoPage> {
                                   Icon(
                                     Icons.error_outline,
                                     size: 16,
-                                    color: Colors.red[400],
+                                    color: context.mp.errorColor,
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: MPText(
                                       log,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'monospace',
                                         fontSize: 12,
+                                        color: context.mp.textColor,
                                       ),
                                     ),
                                   ),

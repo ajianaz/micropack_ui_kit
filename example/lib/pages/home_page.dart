@@ -13,7 +13,7 @@ import 'package:micropack_ui_kit_example/pages/textfield_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_showcase_page.dart';
 import 'package:micropack_ui_kit_example/pages/theme_toggle_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
-import 'package:micropack_ui_kit_example/test_error_handling.dart';
+import 'package:micropack_ui_kit_example/pages/mp_error_handling_page.dart';
 import 'package:micropack_ui_kit_example/test_accessibility.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
 
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
               title: 'Testing',
             ),
             const _Button(
-                name: 'Error Handling Demo', page: ErrorHandlingDemoPage()),
+                name: 'Error Handling Demo', page: MPErrorHandlingPage()),
             const _Button(
                 name: 'Accessibility Demo', page: AccessibilityTestPage()),
             const _Button(
