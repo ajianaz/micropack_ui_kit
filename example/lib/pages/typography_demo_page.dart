@@ -100,7 +100,8 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
             SizedBox(height: MPResponsivePadding.getSm(context)),
             ..._fontLoadingStats
                 .map((stat) => Padding(
-                      padding: EdgeInsets.symmetric(vertical: MPResponsivePadding.getXs(context)),
+                      padding: EdgeInsets.symmetric(
+                          vertical: MPResponsivePadding.getXs(context)),
                       child: Row(
                         children: [
                           Icon(
@@ -214,15 +215,18 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
 
   Widget _buildInfoChip(String label, bool isActive) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+      padding: EdgeInsets.symmetric(
+          horizontal: MPResponsivePadding.getXs(context),
+          vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
-        color: isActive ? context.mp.primary : context.mp.neutral90,
+        color:
+            isActive ? context.mp.primary : context.mp.cardColor, // ✅ Adaptive
         borderRadius: BorderRadius.circular(12),
       ),
       child: MPText.small(
         label,
         style: TextStyle(
-          color: isActive ? context.mp.neutral10 : context.mp.neutral90,
+          color: isActive ? Colors.white : context.mp.textColor, // ✅ Adaptive
           fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
@@ -399,7 +403,9 @@ class _TypographyDemoPageState extends State<TypographyDemoPage> {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: MPResponsivePadding.getXs(context), vertical: MPResponsivePadding.getXs(context)),
+      padding: EdgeInsets.symmetric(
+          horizontal: MPResponsivePadding.getXs(context),
+          vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         color: chipColor,
         borderRadius: BorderRadius.circular(12),

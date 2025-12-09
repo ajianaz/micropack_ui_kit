@@ -275,7 +275,7 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   child: Icon(
                     Icons.image,
                     size: 60,
-                    color: context.mp.neutral100,
+                    color: Colors.white, // White on primary gradient
                   ),
                 ),
               ),
@@ -319,16 +319,18 @@ class _ArticleCardPageState extends State<ArticleCardPage> {
                   text: 'Read More',
                   onPressed: () => _showSnackBar(context, 'Opening article...'),
                   textSize: 12,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: MPResponsivePadding.getSm(context), vertical: MPResponsivePadding.getXs(context)),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MPResponsivePadding.getSm(context),
+                      vertical: MPResponsivePadding.getXs(context)),
                 ),
                 MPButton(
                   text: 'Save',
                   variant: MPButtonVariant.outlined,
                   onPressed: () => _showSnackBar(context, 'Article saved!'),
                   textSize: 12,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: MPResponsivePadding.getSm(context), vertical: MPResponsivePadding.getXs(context)),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MPResponsivePadding.getSm(context),
+                      vertical: MPResponsivePadding.getXs(context)),
                 ),
               ],
             ),
