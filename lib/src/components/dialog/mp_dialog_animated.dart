@@ -199,7 +199,12 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
               // Animated barrier
               GestureDetector(
                 onTap: widget.barrierDismissible && widget.isDismissible
-                    ? _startHideAnimation
+                    ? () async {
+                        await _startHideAnimation();
+                        if (mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      }
                     : null,
                 child: FadeTransition(
                   opacity: _barrierAnimation,
@@ -365,7 +370,8 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
   Widget _buildContentSection() {
     final content = widget.content ?? widget.child;
 
-    return Expanded(
+    return Flexible(
+      fit: FlexFit.loose, // ✅ Allow natural sizing instead of forcing expansion
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(

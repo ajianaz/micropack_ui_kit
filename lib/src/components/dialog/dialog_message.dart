@@ -11,7 +11,7 @@ Future<void> showMPDialog(
   required Widget child,
 
   /// Close dialog when tapping outside dialog area. Default is true
-  bool barrierDismissable = true,
+  bool barrierDismissible = true,
 
   /// Background color of dialog
   Color? background,
@@ -40,7 +40,7 @@ Future<void> showMPDialog(
         child: child,
       );
     },
-    barrierDismissible: barrierDismissable,
+    barrierDismissible: barrierDismissible,
   );
 }
 
@@ -66,7 +66,7 @@ Future<void> showMPAlertDialog(
   MPTextStyle? titleStyle,
 
   /// Close dialog when tapping outside dialog area. Default is true
-  bool barrierDismissable = true,
+  bool barrierDismissible = true,
 
   /// Primary button text
   String? textPrimary,
@@ -119,7 +119,7 @@ Future<void> showMPAlertDialog(
           final themeColors = context.mp;
 
           return MPDialogAnimated(
-            background: Colors.transparent,
+            // background: Colors.transparent,
             elevation: 0.0,
             child: SizedBox(
               width: width,
@@ -240,7 +240,7 @@ Future<void> showMPAlertDialog(
         },
       );
     },
-    barrierDismissible: barrierDismissable,
+    barrierDismissible: barrierDismissible,
   );
 }
 
