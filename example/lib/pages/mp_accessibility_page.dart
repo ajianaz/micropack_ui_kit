@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:flutter/services.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 /// Accessibility test page for micropack_ui_kit components
 ///
 /// This page demonstrates and tests the accessibility features
 /// implemented in all components to ensure WCAG 2.1 AA compliance.
-class AccessibilityTestPage extends StatefulWidget {
-  const AccessibilityTestPage({super.key});
+class MPAccessibilityPage extends StatefulWidget {
+  const MPAccessibilityPage({super.key});
 
   @override
-  State<AccessibilityTestPage> createState() => _AccessibilityTestPageState();
+  State<MPAccessibilityPage> createState() => _MPAccessibilityPageState();
 }
 
-class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
-  bool _isDarkMode = false;
-  final FocusNode _buttonFocusNode = FocusNode();
-  final FocusNode _textFieldFocusNode = FocusNode();
-  final FocusNode _themeToggleFocusNode = FocusNode();
-
+class _MPAccessibilityPageState extends State<MPAccessibilityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Accessibility Tests'),
-        backgroundColor: context.mp.backgroundColor,
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        title: MPText.head('Accessibility Tests'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -51,25 +45,22 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: Text(
+      child: MPText.head(
         title,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
       ),
     );
   }
 
   Widget _buildButtonTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('MPButton Accessibility:'),
+            MPText.subhead('MPButton Accessibility:'),
             const SizedBox(height: 8),
             MPButton(
               text: 'Test Button',
@@ -77,7 +68,15 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
               semanticHint: 'Double tap to activate',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Button activated!')),
+                  SnackBar(
+                    content: Text(
+                      'Button activated!',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                    backgroundColor: context.mp.primary,
+                  ),
                 );
               },
             ),
@@ -96,26 +95,20 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
               onPressed: null,
             ),
             const SizedBox(height: 8),
-            Text(
+            MPText(
               '✅ Semantic labels',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Screen reader announcements',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Keyboard navigation support',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -125,17 +118,17 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
 
   Widget _buildTextFieldTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('MPTextField Accessibility:'),
+            MPText.subhead('MPTextField Accessibility:'),
             const SizedBox(height: 8),
             MPTextField(
               TextEditingController(),
-              focusNode: _textFieldFocusNode,
               semanticLabel: 'Test text field',
               semanticHint: 'Enter your text here',
               hint: 'Accessibility test field',
@@ -155,26 +148,20 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
               errorText: 'Field validation error',
             ),
             const SizedBox(height: 8),
-            Text(
+            MPText(
               '✅ Semantic labels and hints',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Error state announcements',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Keyboard navigation support',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -184,13 +171,14 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
 
   Widget _buildTextTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('MPText Accessibility:'),
+            MPText.subhead('MPText Accessibility:'),
             const SizedBox(height: 8),
             MPText.head(
               'This is a heading',
@@ -204,19 +192,15 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
               'This is small text',
             ),
             const SizedBox(height: 8),
-            Text(
+            MPText(
               '✅ Semantic labels for all text types',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Header detection for screen readers',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -226,44 +210,37 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
 
   Widget _buildThemeToggleTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('MPThemeToggle Accessibility:'),
+            MPText.subhead('MPThemeToggle Accessibility:'),
             const SizedBox(height: 8),
             MPThemeToggle(
               semanticLabel: 'Theme toggle button',
               semanticHint: 'Switch between light and dark themes',
               onChanged: (theme) {
-                setState(() {
-                  _isDarkMode = theme == ThemeMode.dark;
-                });
+                // Theme changed
               },
             ),
             const SizedBox(height: 8),
-            Text(
+            MPText(
               '✅ Semantic labels for theme states',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Keyboard navigation support',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ High contrast mode support',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -273,13 +250,14 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
 
   Widget _buildSkeletonTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('MPSkeleton Accessibility:'),
+            MPText.subhead('MPSkeleton Accessibility:'),
             const SizedBox(height: 8),
             MPSkeleton(
               semanticLabel: 'Loading skeleton',
@@ -300,19 +278,15 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
               height: 40,
             ),
             const SizedBox(height: 8),
-            Text(
+            MPText(
               '✅ Hidden from screen readers',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
+            MPText(
               '✅ Keyboard navigation support',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -322,30 +296,29 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
 
   Widget _buildKeyboardNavigationTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Keyboard Navigation Tests:'),
+            MPText.subhead('Keyboard Navigation Tests:'),
             const SizedBox(height: 8),
-            const Text('Tab: Navigate to next element'),
-            const Text('Shift+Tab: Navigate to previous element'),
-            const Text('Enter/Space: Activate focused element'),
-            const Text('Arrow Keys: Navigate directionally'),
+            MPText('Tab: Navigate to next element'),
+            MPText('Shift+Tab: Navigate to previous element'),
+            MPText('Enter/Space: Activate focused element'),
+            MPText('Arrow Keys: Navigate directionally'),
             const SizedBox(height: 16),
-            ElevatedButton(
+            MPButton(
+              text: 'Test Keyboard Navigation',
               onPressed: () => _testKeyboardNavigation(context),
-              child: const Text('Test Keyboard Navigation'),
             ),
             const SizedBox(height: 8),
-            Text(
+            MPText(
               '✅ All components support keyboard navigation',
-              style: TextStyle(
-                color: context.mp.successColor,
-                fontWeight: FontWeight.w500,
-              ),
+              color: context.mp.successColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -355,13 +328,14 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
 
   Widget _buildColorContrastTests(BuildContext context) {
     return Card(
+      color: context.mp.cardColor,
       margin: const EdgeInsets.only(bottom: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Color Contrast Tests:'),
+            MPText.subhead('Color Contrast Tests:'),
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.all(16.0),
@@ -377,14 +351,20 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           color: Colors.white,
-                          child: const Text('White on Primary'),
+                          child: MPText(
+                            'White on Primary',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           color: Colors.black,
-                          child: const Text('Black on White'),
+                          child: MPText(
+                            'Black on White',
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -396,25 +376,29 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           color: Colors.black,
-                          child: const Text('Black on Black'),
+                          child: MPText(
+                            'White on Black',
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           color: Colors.white,
-                          child: const Text('White on Black'),
+                          child: MPText(
+                            'Black on White',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(
+                  MPText(
                     '✅ High contrast ratios throughout theme system',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
                   ),
                 ],
               ),
@@ -429,41 +413,37 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: context.mp.cardColor,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          MPText.head(
             'Accessibility Test Summary:',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          MPText(
             '✅ All components support semantic labels for screen readers',
-            style: TextStyle(color: Colors.green),
+            color: context.mp.successColor,
           ),
-          const Text(
+          MPText(
             '✅ All components support keyboard navigation',
-            style: TextStyle(color: Colors.green),
+            color: context.mp.successColor,
           ),
-          const Text(
+          MPText(
             '✅ All components have proper color contrast ratios',
-            style: TextStyle(color: Colors.green),
+            color: context.mp.successColor,
           ),
-          const Text(
+          MPText(
             '✅ All components follow WCAG 2.1 AA guidelines',
-            style: TextStyle(color: Colors.green),
+            color: context.mp.successColor,
           ),
           const SizedBox(height: 8),
-          const Text(
+          MPText.small(
             'Test with TalkBack (Android) or VoiceOver (iOS) for complete accessibility validation',
-            style: TextStyle(
-              fontSize: 14,
+            style: const TextStyle(
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -473,13 +453,18 @@ class _AccessibilityTestPageState extends State<AccessibilityTestPage> {
   }
 
   void _testKeyboardNavigation(BuildContext context) {
-    // Simple focus cycling for testing
-    if (FocusScope.of(context).focusedChild == _buttonFocusNode) {
-      _textFieldFocusNode.requestFocus();
-    } else if (FocusScope.of(context).focusedChild == _textFieldFocusNode) {
-      _themeToggleFocusNode.requestFocus();
-    } else {
-      _buttonFocusNode.requestFocus();
-    }
+    // Show info about keyboard navigation
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Use Tab/Shift+Tab to navigate between elements. Press Enter/Space to activate.',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+        backgroundColor: context.mp.primary,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 }
