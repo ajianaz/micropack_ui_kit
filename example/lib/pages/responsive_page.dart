@@ -73,7 +73,7 @@ class _ResponsivePageState extends State<ResponsivePage>
           width: double.infinity,
           height: 120,
           decoration: BoxDecoration(
-            color: colorTheme?.primarySurface ?? context.mp.primarySurface,
+            color: context.mp.cardColor, // ✅ Adaptive card background
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -88,7 +88,7 @@ class _ResponsivePageState extends State<ResponsivePage>
             child: MPText(
               'Responsive Content',
               style: MPTextStyle.heading3(
-                color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                color: context.mp.textColor, // ✅ Adaptive text
               ),
             ),
           ),
@@ -98,7 +98,7 @@ class _ResponsivePageState extends State<ResponsivePage>
           width: double.infinity,
           height: 120,
           decoration: BoxDecoration(
-            color: colorTheme?.primarySurface ?? context.mp.primarySurface,
+            color: context.mp.cardColor, // ✅ Adaptive card background
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -113,7 +113,7 @@ class _ResponsivePageState extends State<ResponsivePage>
             child: MPText(
               'Responsive Content',
               style: MPTextStyle.heading3(
-                color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                color: context.mp.textColor, // ✅ Adaptive text
               ),
             ),
           ),
@@ -131,11 +131,10 @@ class _ResponsivePageState extends State<ResponsivePage>
         title: MPText(
           'Responsive Design Showcase',
           style: MPTextStyle.heading2(
-            color: colorTheme?.neutral90 ?? context.mp.neutral90,
+            color: context.mp.textColor, // ✅ Adaptive text
           ),
         ),
-        backgroundColor:
-            colorTheme?.primarySurface ?? context.mp.backgroundColor,
+        backgroundColor: context.mp.backgroundColor, // ✅ Adaptive background
         elevation: 0,
         actions: [
           // Add theme toggle to app bar
@@ -150,7 +149,7 @@ class _ResponsivePageState extends State<ResponsivePage>
           ),
         ],
       ),
-      backgroundColor: colorTheme?.primarySurface ?? context.mp.backgroundColor,
+      backgroundColor: context.mp.backgroundColor, // ✅ Adaptive background
       body: AnimatedBuilder(
         animation: _themeAnimation,
         builder: (context, child) {
@@ -189,8 +188,7 @@ class _ResponsivePageState extends State<ResponsivePage>
                         child: MPText(
                           _getBreakpointText(context),
                           style: MPTextStyle.heading3(
-                            color:
-                                colorTheme?.neutral10 ?? context.mp.neutral10,
+                            color: Colors.white, // White on primary background
                           ),
                         ),
                       ),
@@ -248,7 +246,7 @@ class _ResponsivePageState extends State<ResponsivePage>
                         context,
                         title: 'Notification Card',
                         subtitle: 'Alert system',
-                        color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                        color: context.mp.subtitleColor, // ✅ Adaptive subtitle
                         colorTheme: colorTheme,
                       ),
                     ],
@@ -297,7 +295,7 @@ class _ResponsivePageState extends State<ResponsivePage>
     return MPText(
       title,
       style: MPTextStyle.heading2(
-        color: colorTheme?.neutral90 ?? context.mp.neutral90,
+        color: context.mp.textColor, // ✅ Adaptive text
         fontWeight: FontWeight.w700,
       ),
     );
@@ -385,14 +383,14 @@ class _ResponsivePageState extends State<ResponsivePage>
             MPText(
               title,
               style: MPTextStyle.heading3(
-                color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                color: context.mp.textColor, // ✅ Adaptive text
               ),
             ),
             const SizedBox(height: 4),
             MPText(
               subtitle,
               style: MPTextStyle.body1(
-                color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                color: context.mp.subtitleColor, // ✅ Adaptive subtitle
               ),
             ),
           ],
@@ -404,7 +402,7 @@ class _ResponsivePageState extends State<ResponsivePage>
   Widget _buildSpacingDemo(BuildContext context, MPColorTheme? colorTheme) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      color: colorTheme?.neutral20 ?? context.mp.neutral20,
+      color: context.mp.cardColor, // ✅ Adaptive card background
       padding: MPResponsivePadding.standard(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -412,13 +410,13 @@ class _ResponsivePageState extends State<ResponsivePage>
           MPText(
             'Responsive Spacing Demo',
             style: MPTextStyle.heading3(
-              color: colorTheme?.neutral90 ?? context.mp.neutral90,
+              color: context.mp.textColor, // ✅ Adaptive text
             ),
           ),
           SizedBox(height: MPResponsivePadding.getSm(context)),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            color: colorTheme?.primarySurface ?? context.mp.primarySurface,
+            color: context.mp.backgroundColor, // ✅ Adaptive background
             padding: MPResponsivePadding.card(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,7 +424,7 @@ class _ResponsivePageState extends State<ResponsivePage>
                 MPText(
                   'Extra Small: ${MPResponsivePadding.getXs(context).toStringAsFixed(1)}px',
                   style: MPTextStyle.body1(
-                    color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                    color: context.mp.textColor, // ✅ Adaptive text
                   ),
                 ),
                 SizedBox(height: MPResponsivePadding.getXs(context)),
@@ -440,7 +438,7 @@ class _ResponsivePageState extends State<ResponsivePage>
                 MPText(
                   'Small: ${MPResponsivePadding.getSm(context).toStringAsFixed(1)}px',
                   style: MPTextStyle.body1(
-                    color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                    color: context.mp.textColor, // ✅ Adaptive text
                   ),
                 ),
                 SizedBox(height: MPResponsivePadding.getSm(context)),
@@ -454,7 +452,7 @@ class _ResponsivePageState extends State<ResponsivePage>
                 MPText(
                   'Medium: ${MPResponsivePadding.getMd(context).toStringAsFixed(1)}px',
                   style: MPTextStyle.body1(
-                    color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                    color: context.mp.textColor, // ✅ Adaptive text
                   ),
                 ),
                 SizedBox(height: MPResponsivePadding.getMd(context)),
@@ -479,7 +477,7 @@ class _ResponsivePageState extends State<ResponsivePage>
       desktopConstraints: const BoxConstraints(maxWidth: 700),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        color: colorTheme?.primarySurface ?? context.mp.primarySurface,
+        color: context.mp.cardColor, // ✅ Adaptive card background
         padding: MPResponsivePadding.card(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -487,21 +485,21 @@ class _ResponsivePageState extends State<ResponsivePage>
             MPText(
               'Responsive Constraints Demo',
               style: MPTextStyle.heading3(
-                color: colorTheme?.neutral90 ?? context.mp.neutral90,
+                color: context.mp.textColor, // ✅ Adaptive text
               ),
             ),
             const SizedBox(height: 12),
             MPText(
               'This container adapts its maximum width based on screen size:',
               style: MPTextStyle.body1(
-                color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                color: context.mp.subtitleColor, // ✅ Adaptive subtitle
               ),
             ),
             const SizedBox(height: 8),
             MPText(
               '• Mobile: Max 300px\n• Tablet: Max 500px\n• Desktop: Max 700px',
               style: MPTextStyle.body1(
-                color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                color: context.mp.subtitleColor, // ✅ Adaptive subtitle
               ),
             ),
             const SizedBox(height: 12),
@@ -514,7 +512,7 @@ class _ResponsivePageState extends State<ResponsivePage>
                 child: MPText(
                   'Width-constrained container',
                   style: MPTextStyle.body1(
-                    color: colorTheme?.neutral10 ?? context.mp.neutral10,
+                    color: Colors.white, // White on primary background
                   ),
                 ),
               ),
@@ -528,7 +526,7 @@ class _ResponsivePageState extends State<ResponsivePage>
   Widget _buildTypographyDemo(BuildContext context, MPColorTheme? colorTheme) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      color: colorTheme?.neutral20 ?? context.mp.neutral20,
+      color: context.mp.cardColor, // ✅ Adaptive card background
       padding: MPResponsivePadding.standard(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -536,7 +534,7 @@ class _ResponsivePageState extends State<ResponsivePage>
           MPText(
             'Responsive Typography Demo',
             style: MPTextStyle.heading3(
-              color: colorTheme?.neutral90 ?? context.mp.neutral90,
+              color: context.mp.textColor, // ✅ Adaptive text
             ),
           ),
           SizedBox(height: MPResponsivePadding.getMd(context)),
@@ -583,7 +581,7 @@ class _ResponsivePageState extends State<ResponsivePage>
         style: MPTextStyle(
           fontSize: responsiveSize,
           fontWeight: weight,
-          color: colorTheme?.neutral90 ?? context.mp.neutral90,
+          color: context.mp.textColor, // ✅ Adaptive text
           fontFamily: MpUiKit.fontName ?? MPTextStyle.defaultFontFamily,
         ).toTextStyle(context),
       ),
