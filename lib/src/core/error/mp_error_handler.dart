@@ -615,17 +615,31 @@ class MPErrorHandler {
   void _setupGlobalErrorHandlers() {
     // Handle uncaught Flutter errors
     FlutterError.onError = (FlutterErrorDetails details) {
+      String? location;
+      if (details.stack != null) {
+        final lines = details.stack.toString().split('\n');
+        for (final line in lines) {
+          if (line.contains('package:micropack_ui_kit') &&
+              !line.contains('mp_error_handler.dart')) {
+            location = line.trim();
+            break;
+          }
+        }
+      }
+
       handleException(
         exception: details.exception,
         stackTrace: details.stack,
         category: MPErrorCategory.system,
         severity: MPErrorSeverity.critical,
         code: 'FLUTTER_ERROR',
-        message: details.exceptionAsString(),
+        message:
+            '${details.exceptionAsString()}${location != null ? '\nLocation: $location' : ''}',
         context: {
           'library': details.library,
           'context': details.context?.toString(),
           'silent': details.silent,
+          'location': location,
         },
       );
     };

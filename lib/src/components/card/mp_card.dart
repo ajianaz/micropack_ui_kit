@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
 /// MPCard variant enum for different visual styles
 enum MPCardVariant {
@@ -3596,15 +3595,14 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   /// Checks system accessibility settings and updates state accordingly
   void _checkSystemAccessibilitySettings() {
     // Check for high contrast mode
-    _isHighContrastMode = MediaQuery.of(context).highContrast ?? false;
+    _isHighContrastMode = MediaQuery.of(context).highContrast;
 
     // Check for reduced motion preference
-    _isReducedMotion = MediaQuery.of(context).accessibleNavigation ?? false;
+    _isReducedMotion = MediaQuery.of(context).accessibleNavigation;
 
     // Check for screen reader (this is a simplified check)
     // In a real implementation, you might want to use more sophisticated detection
-    _isScreenReaderActive =
-        MediaQuery.of(context).accessibleNavigation ?? false;
+    _isScreenReaderActive = MediaQuery.of(context).accessibleNavigation;
 
     // Update accessibility state
     _updateAccessibilityState();
@@ -3635,7 +3633,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
         headerData: widget.headerData,
         footerData: widget.footerData,
       );
-      return label is String ? label : '';
+      return label;
     }
 
     // Generate default semantic label
@@ -3670,7 +3668,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     if (_accessibilityConfig.onSemanticHint != null) {
       final hint =
           _accessibilityConfig.onSemanticHint!(context, widget.variant);
-      return hint is String ? hint : '';
+      return hint;
     }
 
     // Generate default semantic hint
@@ -3747,30 +3745,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
     // Fall back to default padding based on size
     return _getDefaultPadding();
-  }
-
-  /// Gets responsive image height based on screen size and configuration
-  double _getResponsiveImageHeight() {
-    final config = widget.responsive;
-    if (config == null || !config.enableResponsiveImages) return 200.0;
-
-    final screenSize = _currentScreenSize;
-
-    // Check for custom image height configuration
-    switch (screenSize) {
-      case MPCardScreenSize.smallMobile:
-      case MPCardScreenSize.mobile:
-        return config.mobileImageHeight ?? 160.0;
-      case MPCardScreenSize.largeMobile:
-      case MPCardScreenSize.smallTablet:
-      case MPCardScreenSize.tablet:
-        return config.tabletImageHeight ?? 200.0;
-      case MPCardScreenSize.largeTablet:
-      case MPCardScreenSize.smallDesktop:
-      case MPCardScreenSize.desktop:
-      case MPCardScreenSize.largeDesktop:
-        return config.desktopImageHeight ?? 240.0;
-    }
   }
 
   /// Gets responsive constraints based on screen size and configuration
@@ -4030,9 +4004,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
 
   /// Builds card with comprehensive accessibility support
   Widget _buildAccessibleCard(BuildContext context) {
-    // Get focus configuration
-    final focusConfig = _accessibilityConfig.focusNavigation;
-
     // Get screen reader configuration
     final screenReaderConfig = _accessibilityConfig.screenReader;
 
@@ -4077,39 +4048,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  /// Builds semantic properties map based on accessibility configuration
-  Map<String, String> _buildSemanticProperties() {
-    final properties = <String, String>{};
-
-    // Add reading order information
-    if (_accessibilityConfig.screenReader?.readingOrder != null) {
-      properties['readingOrder'] = _accessibilityState.readingOrder.name;
-    }
-
-    // Add state information
-    if (_accessibilityConfig.screenReader?.announceStateChanges == true) {
-      properties['currentState'] = _currentState.name;
-    }
-
-    // Add variant information
-    properties['cardVariant'] = widget.variant.name;
-
-    // Add accessibility state information
-    if (_isHighContrastMode) {
-      properties['highContrast'] = 'enabled';
-    }
-
-    if (_isReducedMotion) {
-      properties['reducedMotion'] = 'enabled';
-    }
-
-    if (_isScreenReaderActive) {
-      properties['screenReader'] = 'active';
-    }
-
-    return properties;
   }
 
   Widget _buildCard(BuildContext context) {
@@ -4273,7 +4211,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   }
 
   Widget _buildGridLayout() {
-    final config = widget.responsive;
     final screenSize = _currentScreenSize;
 
     // Determine grid columns based on screen size
@@ -4300,8 +4237,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
         break;
     }
 
-    // Build grid content
-    final children = _buildContentChildren();
+    // Build grid content without Flexible wrappers
+    final children = _buildContentChildren(enableFlex: false);
 
     return GridView.builder(
       shrinkWrap: true,
@@ -4469,7 +4406,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     return children;
   }
 
-  List<Widget> _buildContentChildren() {
+  List<Widget> _buildContentChildren({bool enableFlex = true}) {
     final children = <Widget>[];
 
     // Build header section
@@ -4484,8 +4421,13 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     // Build body section
     final bodyWidget = _buildBodySection();
     if (bodyWidget != null) {
-      // Use Flexible instead of Expanded to avoid unbounded height constraints
-      children.add(Flexible(child: bodyWidget));
+      // Use Flexible only if enabled and not expanded (standard usage)
+      if (enableFlex) {
+        children.add(Flexible(child: bodyWidget));
+      } else {
+        children.add(bodyWidget);
+      }
+
       if (_hasFooterContent()) {
         children.add(SizedBox(height: _getContentSpacing()));
       }
@@ -4632,30 +4574,18 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     }
 
     // Default vertical scrolling with enhanced overflow handling
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Determine if content might overflow based on screen size
-        final maxContentHeight = _getMaxContentHeight(screenSize, orientation);
+    final maxContentHeight = _getMaxContentHeight(screenSize, orientation);
 
-        // Ensure constraints are normalized (minHeight <= maxHeight)
-        final minHeight =
-            constraints.hasBoundedHeight ? constraints.maxHeight : 0.0;
-        final maxHeight =
-            minHeight > maxContentHeight ? minHeight : maxContentHeight;
-
-        return SingleChildScrollView(
-          clipBehavior: widget.clipBehavior,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: minHeight,
-              maxHeight: maxHeight,
-            ),
-            child: IntrinsicHeight(
-              child: content,
-            ),
-          ),
-        );
-      },
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: maxContentHeight,
+      ),
+      child: SingleChildScrollView(
+        clipBehavior: widget.clipBehavior,
+        child: IntrinsicHeight(
+          child: content,
+        ),
+      ),
     );
   }
 
@@ -4788,7 +4718,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
         // Use card color for proper contrast in both themes
         return context.mp.cardColor;
       case MPCardVariant.interactive:
-        return context.mp.primarySurface;
+        return context.mp.cardColor;
       case MPCardVariant.display:
         return context.mp.adaptiveBackgroundColor;
       case MPCardVariant.glass:
@@ -4883,7 +4813,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.primary:
         return context.mp.primaryHover.withValues(alpha: 0.1);
       case MPCardVariant.interactive:
-        return context.mp.primaryHover.withValues(alpha: 0.1);
+        return Color.alphaBlend(context.mp.primaryHover.withValues(alpha: 0.1),
+            context.mp.cardColor);
       default:
         // Use adaptive hover: slightly lighter/darker than card color
         return context.mp.isDarkMode
@@ -4900,7 +4831,9 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.primary:
         return context.mp.primaryPressed.withValues(alpha: 0.1);
       case MPCardVariant.interactive:
-        return context.mp.primaryPressed.withValues(alpha: 0.1);
+        return Color.alphaBlend(
+            context.mp.primaryPressed.withValues(alpha: 0.1),
+            context.mp.cardColor);
       default:
         // Use adaptive pressed: slightly more pronounced than hover
         return context.mp.isDarkMode
@@ -4917,7 +4850,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.primary:
         return context.mp.primaryFocus.withValues(alpha: 0.1);
       case MPCardVariant.interactive:
-        return context.mp.primaryFocus.withValues(alpha: 0.1);
+        return Color.alphaBlend(context.mp.primaryFocus.withValues(alpha: 0.1),
+            context.mp.cardColor);
       default:
         return context.mp.cardColor;
     }
@@ -4930,7 +4864,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     switch (widget.variant) {
       case MPCardVariant.primary:
       case MPCardVariant.interactive:
-        return context.mp.primary.withValues(alpha: 0.2);
+        return Color.alphaBlend(
+            context.mp.primary.withValues(alpha: 0.2), context.mp.cardColor);
       default:
         return context.mp.cardColor;
     }
@@ -5220,38 +5155,14 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     return SizedBox(
       height: 100, // Fixed height when collapsed
       child: ClipRect(
-        child: fullContent,
+        child: OverflowBox(
+          alignment: Alignment.topCenter,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: fullContent,
+        ),
       ),
     );
-  }
-
-  /// Handles swipe gesture updates
-  void _handleSwipeUpdate(DragUpdateDetails details) {
-    final config = widget.interactiveConfig;
-    if (config == null || !config.enableSwipeToDismiss) return;
-
-    setState(() {
-      _isSwiped =
-          details.primaryDelta != null && details.primaryDelta!.abs() > 50;
-    });
-  }
-
-  /// Handles swipe gesture end
-  void _handleSwipeEnd(DragEndDetails details) {
-    final config = widget.interactiveConfig;
-    if (config == null || !config.enableSwipeToDismiss) return;
-
-    if (_isSwiped) {
-      if (details.primaryVelocity! > 0) {
-        config.onSwipeRight?.call();
-      } else {
-        config.onSwipeLeft?.call();
-      }
-    }
-
-    setState(() {
-      _isSwiped = false;
-    });
   }
 
   /// Toggles expanded state
