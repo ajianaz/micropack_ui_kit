@@ -75,6 +75,8 @@ class _HomePageState extends State<HomePage> {
               _getThemeIcon(),
               color: context.mp.textColor,
             ),
+            surfaceTintColor: Colors.transparent,
+            color: context.mp.cardColor,
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<ThemeMode>(
                 value: ThemeMode.light,
@@ -233,60 +235,136 @@ class _ThemeInfoCard extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: MPResponsivePadding.getLg(context)),
+      margin: EdgeInsets.only(
+        bottom: MPResponsivePadding.getLg(context),
+        left: MPResponsivePadding.getXs(context),
+        right: MPResponsivePadding.getXs(context),
+      ),
       padding: MPResponsivePadding.card(context),
       decoration: BoxDecoration(
-        color: context.mp.adaptiveBackgroundColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.mp.adaptiveBorderColor),
+        color: context.mp.cardColor,
+        borderRadius: BorderRadius.circular(
+          MPResponsive.isMobile(context) ? 12 : 16,
+        ),
+        border: Border.all(
+          color: context.mp.borderColor,
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: context.mp.adaptiveShadowColor,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                themeIcon,
-                color: context.mp.textColor,
-                size: 24,
-              ),
-              SizedBox(width: MPResponsivePadding.getSm(context)),
-              MPText(
-                'Theme Information',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: context.mp.textColor,
+              Container(
+                padding: EdgeInsets.all(MPResponsivePadding.getSm(context)),
+                decoration: BoxDecoration(
+                  color: context.mp.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                fontSize: 18,
+                child: Icon(
+                  themeIcon,
+                  color: context.mp.primary,
+                  size: MPResponsive.isMobile(context) ? 20 : 24,
+                ),
+              ),
+              SizedBox(width: MPResponsivePadding.getMd(context)),
+              Expanded(
+                child: MPText(
+                  'Theme Information',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: context.mp.textColor,
+                  ),
+                  fontSize: MPResponsive.isMobile(context) ? 16 : 18,
+                ),
               ),
             ],
           ),
-          SizedBox(height: MPResponsivePadding.getSm(context)),
-          MPText(
-            'Current Theme: $themeName',
-            style: TextStyle(
-              color: context.mp.subtitleColor,
-            ),
-            fontSize: 14,
-          ),
-          SizedBox(height: MPResponsivePadding.getXs(context)),
-          MPText(
-            'Brightness: $brightnessName',
-            style: TextStyle(
-              color: context.mp.subtitleColor,
-            ),
-            fontSize: 14,
+          SizedBox(height: MPResponsivePadding.getMd(context)),
+          _buildInfoRow(
+            context,
+            'Current Theme',
+            themeName,
+            Icons.palette_outlined,
           ),
           SizedBox(height: MPResponsivePadding.getSm(context)),
-          MPText(
-            'Tap theme icon in the app bar to switch between Light, Dark, and System themes.',
-            style: TextStyle(
-              color: context.mp.captionColor,
+          _buildInfoRow(
+            context,
+            'Brightness',
+            brightnessName,
+            Icons.brightness_6_outlined,
+          ),
+          SizedBox(height: MPResponsivePadding.getMd(context)),
+          Container(
+            padding: EdgeInsets.all(MPResponsivePadding.getSm(context)),
+            decoration: BoxDecoration(
+              color: context.mp.adaptiveBackgroundColor.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(8),
             ),
-            fontSize: 12,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 16,
+                  color: context.mp.captionColor,
+                ),
+                SizedBox(width: MPResponsivePadding.getSm(context)),
+                Expanded(
+                  child: MPText(
+                    'Tap the theme icon in the app bar to switch between Light, Dark, and System themes.',
+                    style: TextStyle(
+                      color: context.mp.captionColor,
+                    ),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildInfoRow(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 16,
+          color: context.mp.subtitleColor,
+        ),
+        SizedBox(width: MPResponsivePadding.getSm(context)),
+        MPText(
+          '$label: ',
+          style: TextStyle(
+            color: context.mp.subtitleColor,
+            fontWeight: FontWeight.w500,
+          ),
+          fontSize: 14,
+        ),
+        MPText(
+          value,
+          style: TextStyle(
+            color: context.mp.textColor,
+            fontWeight: FontWeight.w600,
+          ),
+          fontSize: 14,
+        ),
+      ],
     );
   }
 }
@@ -299,15 +377,31 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.only(
           top: MPResponsivePadding.getLg(context),
+          bottom: MPResponsivePadding.getSm(context),
+          left: MPResponsivePadding.getXs(context),
+          right: MPResponsivePadding.getXs(context),
         ),
-        child: MPText.head(
-          title,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: context.mp.textColor,
-          ),
-          textAlign: TextAlign.start,
-          fontSize: 24,
+        child: Row(
+          children: [
+            Container(
+              width: 4,
+              height: MPResponsive.isMobile(context) ? 20 : 24,
+              decoration: BoxDecoration(
+                color: context.mp.primary,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: MPResponsivePadding.getSm(context)),
+            MPText.head(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: context.mp.textColor,
+              ),
+              textAlign: TextAlign.start,
+              fontSize: MPResponsive.isMobile(context) ? 20 : 24,
+            ),
+          ],
         ),
       );
 }
@@ -323,9 +417,12 @@ class _Button extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.only(
           top: MPResponsivePadding.getSm(context),
+          left: MPResponsivePadding.getXs(context),
+          right: MPResponsivePadding.getXs(context),
         ),
         child: MPButton(
           text: name,
+          variant: MPButtonVariant.outlined,
           onPressed: onPressed ??
               () async {
                 if (page != null) {
@@ -334,12 +431,14 @@ class _Button extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => page!),
                     );
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Failed to open $name Page: $e'),
-                        backgroundColor: context.mp.errorColor,
-                      ),
-                    );
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to open $name Page: $e'),
+                          backgroundColor: context.mp.errorColor,
+                        ),
+                      );
+                    }
                   }
                 }
               },

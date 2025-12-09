@@ -2523,7 +2523,7 @@ class _MPCardContentBuilders {
           return Container(
             height: data.imageHeight ?? 200,
             width: data.imageWidth,
-            color: context.mp.neutral20,
+            color: context.mp.cardColor,
             child: Icon(
               Icons.broken_image,
               color: context.mp.neutral60,
@@ -2625,7 +2625,7 @@ class _MPCardContentBuilders {
 
         // Divider
         if (data.showDivider) ...[
-          Divider(color: context.mp.neutral20),
+          Divider(color: context.mp.cardColor),
           const SizedBox(height: 8),
         ],
 
@@ -2775,7 +2775,7 @@ class _MPCardContentBuilders {
               decoration: BoxDecoration(
                 color: data.isAvailable
                     ? context.mp.primary
-                    : context.mp.neutral20,
+                    : context.mp.cardColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: MPText.small(
@@ -2825,7 +2825,7 @@ class _MPCardContentBuilders {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             height: responsiveHeight,
-            color: context.mp.neutral20,
+            color: context.mp.cardColor,
             child: Icon(
               Icons.shopping_bag_outlined,
               color: context.mp.neutral60,
@@ -2974,7 +2974,7 @@ class _MPCardContentBuilders {
       avatarWidget = CircleAvatar(
         radius: 40,
         backgroundImage: NetworkImage(data.avatarUrl!),
-        backgroundColor: context.mp.neutral20,
+        backgroundColor: context.mp.cardColor,
         child: data.avatarUrl == null
             ? Icon(
                 Icons.person,
@@ -3313,8 +3313,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
     // Performance optimization: Initialize with performance tracking
     MPPerformanceProfiler.instance.startInitialization('card_init');
 
-    // Initialize cached values
-    _initializeCachedValues();
+    // Note: _initializeCachedValues() moved to didChangeDependencies
+    // because it accesses inherited widgets (context.mp)
 
     _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(_handleFocusChange);
@@ -3376,11 +3376,6 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       _updateResponsiveState();
     };
 
-    // Add responsive listener
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _responsiveCallback();
-    });
-
     MPPerformanceProfiler.instance.endInitialization('card_init');
   }
 
@@ -3411,6 +3406,11 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    // Initialize cached values on first run (moved from initState)
+    if (!_isInitialized) {
+      _initializeCachedValues();
+    }
 
     // Performance optimization: Update cached values when dependencies change
     _updateCachedValues();
@@ -4777,7 +4777,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.primary:
         return context.mp.primary.withValues(alpha: 0.1);
       case MPCardVariant.secondary:
-        return context.mp.neutral20;
+        return context.mp.cardColor;
       case MPCardVariant.surface:
         return context.mp.adaptiveBackgroundColor;
       case MPCardVariant.elevated:
@@ -4785,7 +4785,8 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.outlined:
         return context.mp.adaptiveBackgroundColor;
       case MPCardVariant.filled:
-        return context.mp.neutral20;
+        // Use card color for proper contrast in both themes
+        return context.mp.cardColor;
       case MPCardVariant.interactive:
         return context.mp.primarySurface;
       case MPCardVariant.display:
@@ -4884,7 +4885,10 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.interactive:
         return context.mp.primaryHover.withValues(alpha: 0.1);
       default:
-        return context.mp.neutral30;
+        // Use adaptive hover: slightly lighter/darker than card color
+        return context.mp.isDarkMode
+            ? context.mp.cardColor.withValues(alpha: 0.8)
+            : context.mp.neutral30;
     }
   }
 
@@ -4898,7 +4902,10 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.interactive:
         return context.mp.primaryPressed.withValues(alpha: 0.1);
       default:
-        return context.mp.neutral40;
+        // Use adaptive pressed: slightly more pronounced than hover
+        return context.mp.isDarkMode
+            ? context.mp.cardColor.withValues(alpha: 0.6)
+            : context.mp.neutral40;
     }
   }
 
@@ -4912,7 +4919,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.interactive:
         return context.mp.primaryFocus.withValues(alpha: 0.1);
       default:
-        return context.mp.neutral20;
+        return context.mp.cardColor;
     }
   }
 
@@ -4925,7 +4932,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
       case MPCardVariant.interactive:
         return context.mp.primary.withValues(alpha: 0.2);
       default:
-        return context.mp.neutral20;
+        return context.mp.cardColor;
     }
   }
 
@@ -5138,7 +5145,7 @@ class _MPCardState extends State<MPCard> with TickerProviderStateMixin {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: context.mp.neutral20,
+                  color: context.mp.cardColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(

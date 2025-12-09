@@ -513,7 +513,7 @@ class MPCardBuilder {
       case MPCardVariant.primary:
         return context.mp.primary.withValues(alpha: 0.1);
       case MPCardVariant.secondary:
-        return context.mp.neutral20;
+        return context.mp.cardColor;
       case MPCardVariant.surface:
         return context.mp.adaptiveBackgroundColor;
       case MPCardVariant.elevated:
@@ -521,7 +521,7 @@ class MPCardBuilder {
       case MPCardVariant.outlined:
         return context.mp.adaptiveBackgroundColor;
       case MPCardVariant.filled:
-        return context.mp.neutral20;
+        return context.mp.cardColor;
       case MPCardVariant.interactive:
         return context.mp.primarySurface;
       case MPCardVariant.display:

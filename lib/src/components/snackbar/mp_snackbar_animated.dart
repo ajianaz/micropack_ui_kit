@@ -308,8 +308,8 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
   }
 
   Color _getTextColor() {
-    // For all snackbar types, use white text for consistency
-    return context.mp.neutral100;
+    // For all snackbar types, use adaptive text color for consistency
+    return context.mp.textColor;
   }
 
   IconData? _getDefaultIcon() {

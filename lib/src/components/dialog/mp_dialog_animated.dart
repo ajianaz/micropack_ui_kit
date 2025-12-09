@@ -346,7 +346,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: context.mp.neutral20,
+            color: context.mp.cardColor,
             width: 1.0,
           ),
         ),
@@ -392,7 +392,7 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: context.mp.neutral20,
+            color: context.mp.cardColor,
             width: 1.0,
           ),
         ),

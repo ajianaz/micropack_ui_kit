@@ -30,10 +30,7 @@ class MPSnackbar {
         content: Text(
           message,
           style: TextStyle(
-            color: textColor ??
-                (themeColors.isDarkMode
-                    ? themeColors.neutral10
-                    : themeColors.neutral90),
+            color: textColor ?? context.mp.textColor,
             fontSize: ResponsiveFontHelper.getResponsiveFontSize(
                 fontSize ?? 14.0, context),
           ),
@@ -65,7 +62,7 @@ class MPSnackbar {
           children: [
             Icon(
               Icons.check_circle,
-              color: themeColors.neutral100,
+              color: context.mp.textColor,
               size: 20,
             ),
             SizedBox(width: MPResponsivePadding.getXs(context)),
@@ -73,7 +70,7 @@ class MPSnackbar {
               child: Text(
                 message,
                 style: TextStyle(
-                  color: themeColors.neutral100,
+                  color: context.mp.textColor,
                   fontSize: ResponsiveFontHelper.getResponsiveFontSize(
                       fontSize ?? 14.0, context),
                 ),
@@ -107,7 +104,7 @@ class MPSnackbar {
           children: [
             Icon(
               Icons.error,
-              color: themeColors.neutral100,
+              color: context.mp.textColor,
               size: 20,
             ),
             SizedBox(width: MPResponsivePadding.getXs(context)),
@@ -115,7 +112,7 @@ class MPSnackbar {
               child: Text(
                 message,
                 style: TextStyle(
-                  color: themeColors.neutral100,
+                  color: context.mp.textColor,
                   fontSize: ResponsiveFontHelper.getResponsiveFontSize(
                       fontSize ?? 14.0, context),
                 ),
@@ -149,7 +146,7 @@ class MPSnackbar {
           children: [
             Icon(
               Icons.warning,
-              color: themeColors.neutral100,
+              color: context.mp.textColor,
               size: 20,
             ),
             SizedBox(width: MPResponsivePadding.getXs(context)),
@@ -157,7 +154,7 @@ class MPSnackbar {
               child: Text(
                 message,
                 style: TextStyle(
-                  color: themeColors.neutral100,
+                  color: context.mp.textColor,
                   fontSize: ResponsiveFontHelper.getResponsiveFontSize(
                       fontSize ?? 14.0, context),
                 ),
@@ -191,7 +188,7 @@ class MPSnackbar {
           children: [
             Icon(
               Icons.info,
-              color: themeColors.neutral100,
+              color: context.mp.textColor,
               size: 20,
             ),
             SizedBox(width: MPResponsivePadding.getXs(context)),
@@ -199,7 +196,7 @@ class MPSnackbar {
               child: Text(
                 message,
                 style: TextStyle(
-                  color: themeColors.neutral100,
+                  color: context.mp.textColor,
                   fontSize: ResponsiveFontHelper.getResponsiveFontSize(
                       fontSize ?? 14.0, context),
                 ),

@@ -214,10 +214,10 @@ class _MPArticleCardState extends State<MPArticleCard> {
     if (!widget.enabled) {
       // Use muted background for disabled state
       // Dark mode: neutral80 (dark) with reduced opacity
-      // Light mode: neutral20 (light) with reduced opacity
+      // Light mode: cardColor (light) with reduced opacity
       return context.mp.isDarkMode
           ? context.mp.neutral80.withValues(alpha: 0.5)
-          : context.mp.neutral20.withValues(alpha: 0.5);
+          : context.mp.cardColor.withValues(alpha: 0.5);
     }
 
     if (_isPressed) {
@@ -468,9 +468,9 @@ class _MPArticleCardState extends State<MPArticleCard> {
           vertical: MPResponsivePadding.getXs(context)),
       decoration: BoxDecoration(
         // Use theme-aware neutral color for tag background
-        // Enabled state: neutral20, Disabled state: neutral30 with opacity
+        // Enabled state: cardColor, Disabled state: neutral30 with opacity
         color: widget.enabled
-            ? context.mp.neutral20
+            ? context.mp.cardColor
             : context.mp.neutral30.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),

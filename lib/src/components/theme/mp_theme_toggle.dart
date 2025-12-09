@@ -239,8 +239,8 @@ class _MPThemeToggleState extends State<MPThemeToggle>
   }
 
   Color _getIconColor(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return isDark ? Colors.white : Colors.black87;
+    // Use adaptive text color for proper contrast
+    return context.mp.textColor;
   }
 
   double _getOrientationAwareIconSize() {
@@ -324,15 +324,16 @@ class _MPThemeToggleState extends State<MPThemeToggle>
       animation: _animationController,
       builder: (context, child) {
         return Container(
+          width: double.infinity, // ✅ Full width
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: context.mp.cardColor, // ✅ Adaptive card background
             borderRadius: BorderRadius.circular(_isLandscape ? 6 : 8),
             border: Border.all(
-              color: Theme.of(context).colorScheme.outline,
+              color: context.mp.borderColor, // ✅ Adaptive border
             ),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max, // ✅ Use max width
             children: ThemeMode.values.map((mode) {
               final isSelected = _currentThemeMode == mode;
               return Expanded(
@@ -370,7 +371,7 @@ class _MPThemeToggleState extends State<MPThemeToggle>
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primary
+                          ? context.mp.primary // ✅ Primary for selected
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(_isLandscape ? 4 : 6),
                     ),
@@ -381,8 +382,9 @@ class _MPThemeToggleState extends State<MPThemeToggle>
                           _getThemeIcon(mode),
                           size: _getOrientationAwareIconSize() * 0.8,
                           color: isSelected
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : _getIconColor(context),
+                              ? Colors.white // White on primary background
+                              : _getIconColor(
+                                  context), // Adaptive for unselected
                         ),
                         if (widget.showLabel && !_isLandscape) ...[
                           const SizedBox(width: 6),
@@ -390,8 +392,9 @@ class _MPThemeToggleState extends State<MPThemeToggle>
                             _getThemeLabel(mode),
                             style: TextStyle(
                               color: isSelected
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : _getIconColor(context),
+                                  ? Colors.white // White on primary background
+                                  : _getIconColor(
+                                      context), // Adaptive for unselected
                               fontSize: _isLandscape ? 10 : 12,
                               fontWeight: isSelected
                                   ? FontWeight.w600

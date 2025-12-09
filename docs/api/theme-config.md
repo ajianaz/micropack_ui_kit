@@ -24,6 +24,10 @@
 
 ## Basic Usage
 
+> **⚠️ IMPORTANT:** For UI components, always use adaptive color methods (`getPrimaryTextColor`, `getBackgroundColor`, etc.) or use `context.mp.textColor`, `context.mp.cardColor` instead of direct neutral colors. Direct neutral colors like `getNeutral(90)` are the same in both light and dark modes and will cause visibility issues.
+>
+> **📖 See [Theme Colors Quick Reference](../guides/theme-colors-quick-reference.md) for best practices**
+
 ### Getting Primary Colors
 
 ```dart
@@ -40,14 +44,16 @@ final surfaceColor = MPThemeConfig.getPrimarySurface();
 
 ### Getting Neutral Colors
 
-```dart
-// Get neutral color with specific shade
-final neutral10 = MPThemeConfig.getNeutral(10); // White
-final neutral50 = MPThemeConfig.getNeutral(50); // Medium gray
-final neutral100 = MPThemeConfig.getNeutral(100); // Dark gray
+> **⚠️ WARNING:** Only use direct neutral colors for internal theme configuration. For UI components, use adaptive colors instead!
 
-// Safe access with fallback
-final safeColor = MPThemeConfig.getNeutralSafe(15, fallback: 50);
+```dart
+// ❌ DON'T USE IN UI COMPONENTS
+final neutral10 = MPThemeConfig.getNeutral(10); // Always white
+final neutral90 = MPThemeConfig.getNeutral(90); // Always dark gray
+
+// ✅ USE ADAPTIVE COLORS INSTEAD
+final textColor = MPThemeConfig.getPrimaryTextColor(isDarkMode: isDarkMode);
+final bgColor = MPThemeConfig.getBackgroundColor(isDarkMode: isDarkMode);
 ```
 
 ### Context-Aware Colors

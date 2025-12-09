@@ -26,7 +26,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor = Colors.white,
+    this.textColor,
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -214,7 +214,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor = Colors.white,
+    this.textColor,
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -402,7 +402,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor = Colors.white,
+    this.textColor, // ✅ Let adaptive colors work
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -449,7 +449,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor = Colors.white,
+    this.textColor, // ✅ Let adaptive colors work
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -496,7 +496,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor = Colors.white,
+    this.textColor,
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -543,7 +543,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor = Colors.white,
+    this.textColor,
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -752,6 +752,12 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    // CRITICAL: Reset cache when theme changes (e.g., light/dark mode toggle)
+    // This ensures button colors update when theme mode switches
+    if (_lastTheme != null && _lastTheme != context.mp) {
+      _isInitialized = false;
+    }
 
     // Update accessibility state based on system preferences
     _updateAccessibilityState();
@@ -1124,8 +1130,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   /// Gets theme-aware text color based on button variant
   /// Uses appropriate theme colors for each variant:
-  /// - primary/danger/success/warning/info: uses neutral10 (light text on colored background)
-  /// - outlined/ghost/text: uses primary color for transparent buttons with proper contrast
+  /// - primary/danger/success/warning/info: uses white text on colored background
+  /// - outlined/ghost/text: uses adaptive text color for proper contrast
   Color _getTextColor() {
     if (widget.textColor != null) return widget.textColor!;
 
@@ -1135,21 +1141,13 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       case MPButtonVariant.success:
       case MPButtonVariant.warning:
       case MPButtonVariant.info:
-        // Use neutral10 (white) for light text on colored backgrounds for better contrast
-        return context.mp.neutral10;
+        // Use white text for colored backgrounds
+        return Colors.white;
       case MPButtonVariant.outlined:
-        // For outlined buttons, ensure good contrast in both modes
-        return context.mp.isDarkMode
-            ? context.mp.neutral10 // White text on dark background
-            : context.mp
-                .neutral90; // Dark text on light background for better contrast
       case MPButtonVariant.ghost:
       case MPButtonVariant.text:
-        // For ghost/text buttons, ensure good contrast in both modes
-        return context.mp.isDarkMode
-            ? context.mp.neutral10 // White text on dark background
-            : context.mp
-                .neutral90; // Dark text on light background for better contrast
+        // Use adaptive text color for proper contrast in both modes
+        return context.mp.textColor;
     }
   }
 
@@ -1170,7 +1168,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       final text = MPText(
         widget.text ?? '',
         style: widget.textStyle,
-        color: widget.textColor,
+        color:
+            _cachedTextColor, // Use cached color which includes adaptive fallback
         fontSize: widget.textSize,
         fontWeight: widget.fontWeight,
       );
@@ -1203,7 +1202,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
     return MPText(
       widget.text ?? '',
       style: widget.textStyle,
-      color: widget.textColor,
+      color:
+          _cachedTextColor, // Use cached color which includes adaptive fallback
       fontSize: widget.textSize,
       fontWeight: widget.fontWeight,
     );
@@ -1224,8 +1224,8 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
 
   /// Gets theme-aware icon color based on button variant
   /// Uses appropriate theme colors for each variant:
-  /// - primary/danger/success/warning/info: uses neutral10 (light icon on colored background)
-  /// - outlined/ghost/text: uses primary color for transparent buttons with proper contrast
+  /// - primary/danger/success/warning/info: uses white icon on colored background
+  /// - outlined/ghost/text: uses adaptive text color for proper contrast
   Color _getIconColor() {
     if (widget.iconColor != null) return widget.iconColor!;
 
@@ -1235,17 +1235,13 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       case MPButtonVariant.success:
       case MPButtonVariant.warning:
       case MPButtonVariant.info:
-        // Use neutral10 (white) for light icons on colored backgrounds for better contrast
-        return context.mp.neutral10;
+        // Use white for icons on colored backgrounds
+        return Colors.white;
       case MPButtonVariant.outlined:
       case MPButtonVariant.ghost:
       case MPButtonVariant.text:
-        // For outlined/ghost/text buttons, ensure good contrast in both modes
-        return widget.textColor ??
-            (context.mp.isDarkMode
-                ? context.mp.neutral10 // White icon on dark background
-                : context.mp
-                    .neutral90); // Dark icon on light background for better contrast
+        // Use adaptive text color for proper contrast in both modes
+        return context.mp.textColor;
     }
   }
 

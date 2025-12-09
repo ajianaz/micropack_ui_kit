@@ -520,12 +520,50 @@ class _ThemeBuilderState extends State<ThemeBuilder> {
 
 ## Dark/Light Mode Best Practices
 
-### 1. Color Contrast
+### 1. Always Use Adaptive Colors
+
+**⚠️ IMPORTANT:** Always use adaptive color properties instead of fixed neutral colors.
+
+```dart
+// ❌ WRONG - Fixed colors don't adapt to theme
+Text(
+  'Important text',
+  style: TextStyle(color: context.mp.neutral90), // Always dark gray!
+)
+
+Container(
+  color: context.mp.neutral20, // Always light gray!
+  child: Text('Content'),
+)
+
+// ✅ CORRECT - Adaptive colors
+Text(
+  'Important text',
+  style: TextStyle(color: context.mp.textColor), // Black in light, white in dark
+)
+
+Container(
+  color: context.mp.cardColor, // White in light, dark gray in dark
+  child: Text('Content'),
+)
+```
+
+**Quick Reference:**
+- `context.mp.textColor` - Primary text (black/white)
+- `context.mp.subtitleColor` - Secondary text (gray/light gray)
+- `context.mp.captionColor` - Tertiary text (light gray/medium gray)
+- `context.mp.cardColor` - Card backgrounds
+- `context.mp.backgroundColor` - Page backgrounds
+- `context.mp.borderColor` - Borders and dividers
+
+**📖 See [Theme Colors Quick Reference](./theme-colors-quick-reference.md) for complete guide**
+
+### 2. Color Contrast
 
 Ensure sufficient contrast ratios for accessibility:
 
 ```dart
-// ✅ Good - Using semantic colors
+// ✅ Good - Using semantic colors with automatic contrast
 Text(
   'Important text',
   style: TextStyle(color: context.mp.textColor),
@@ -552,7 +590,7 @@ Container(
 )
 ```
 
-### 2. Adaptive Shadows
+### 3. Adaptive Shadows
 
 Adjust shadows based on theme:
 

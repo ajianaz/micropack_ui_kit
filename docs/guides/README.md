@@ -5,6 +5,9 @@ Advanced guides and best practices for developing with Micropack UI Kit.
 ## 📚 Table of Contents
 
 - [Theme System](./theming.md) - Complete theming guide
+- [Theme Colors Quick Reference](./theme-colors-quick-reference.md) - Quick color guide for developers
+- [Theme Color Fix Report](./theme-color-fix-report.md) - Recent theme color improvements
+- [Component Theme Audit](./component-theme-audit.md) - Component color audit & recommendations
 - [Component Development](./component-development.md) - Building custom components
 - [Migration Guide](./migration.md) - Moving from other UI libraries
 - [Best Practices](./best-practices.md) - Development patterns
@@ -72,11 +75,11 @@ Build inclusive applications for all users:
 ```dart
 class CustomThemeExtension extends ThemeExtension<CustomThemeExtension> {
   final Color? accentColor;
-  
+
   const CustomThemeExtension({
     this.accentColor,
   });
-  
+
   @override
   CustomThemeExtension copyWith({
     Color? accentColor,
@@ -85,7 +88,7 @@ class CustomThemeExtension extends ThemeExtension<CustomThemeExtension> {
       accentColor: accentColor ?? this.accentColor,
     );
   }
-  
+
   @override
   CustomThemeExtension lerp(
     ThemeExtension<CustomThemeExtension>? other,
@@ -94,9 +97,9 @@ class CustomThemeExtension extends ThemeExtension<CustomThemeExtension> {
     if (other is! CustomThemeExtension) {
       return this;
     }
-    
+
     final CustomThemeExtension typedOther = other as CustomThemeExtension;
-    
+
     return CustomThemeExtension(
       accentColor: Color.lerp(
         accentColor,
@@ -157,9 +160,9 @@ class ResponsiveBuilder extends StatelessWidget {
 // With Provider
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
-  
+
   ThemeMode get themeMode => _themeMode;
-  
+
   void setTheme(ThemeMode mode) {
     _themeMode = mode;
     notifyListeners();

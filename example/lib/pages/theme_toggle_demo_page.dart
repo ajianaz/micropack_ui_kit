@@ -78,11 +78,10 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
         title: MPText(
           'Theme Toggle Demo',
           style: MPTextStyle.heading2(
-            color: colorTheme?.neutral90 ?? context.mp.neutral90,
+            color: context.mp.textColor,
           ),
         ),
-        backgroundColor:
-            colorTheme?.primarySurface ?? context.mp.backgroundColor,
+        backgroundColor: context.mp.backgroundColor, // ✅ Adaptive background
         elevation: 0,
         actions: [
           Padding(
@@ -93,118 +92,115 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
           ),
         ],
       ),
-      backgroundColor: colorTheme?.primarySurface ?? context.mp.backgroundColor,
-      body: SingleChildScrollView(
+      backgroundColor: context.mp.backgroundColor, // ✅ Adaptive background
+      body: ListView(
         padding: MPResponsivePadding.page(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
+        children: [
+          const SizedBox(height: 24),
 
-            // Theme Information Card
-            _buildThemeInfoCard(colorTheme),
+          // Theme Information Card
+          _buildThemeInfoCard(colorTheme),
 
-            const SizedBox(height: 32),
+          const SizedBox(height: 32),
 
-            // Theme Toggle Variants Section
-            _buildSectionHeader('Theme Toggle Variants', colorTheme),
-            const SizedBox(height: 16),
+          // Theme Toggle Variants Section
+          _buildSectionHeader('Theme Toggle Variants', colorTheme),
+          const SizedBox(height: 16),
 
-            // Icon Button Toggle
-            _buildToggleCard(
-              'Icon Button Toggle',
-              'Compact icon button with rotation animation',
-              MPThemeToggle(
-                variant: MPThemeToggleVariant.iconButton,
-                onChanged: _onThemeChangedExternally,
-              ),
-              colorTheme,
+          // Icon Button Toggle
+          _buildToggleCard(
+            'Icon Button Toggle',
+            'Compact icon button with rotation animation',
+            MPThemeToggle(
+              variant: MPThemeToggleVariant.iconButton,
+              onChanged: _onThemeChangedExternally,
             ),
+            colorTheme,
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            // Text Button Toggle
-            _buildToggleCard(
-              'Text Button Toggle',
-              'Button with icon and label',
-              MPThemeToggle(
-                variant: MPThemeToggleVariant.textButton,
-                showLabel: true,
-                onChanged: _onThemeChangedExternally,
-              ),
-              colorTheme,
+          // Text Button Toggle
+          _buildToggleCard(
+            'Text Button Toggle',
+            'Button with icon and label',
+            MPThemeToggle(
+              variant: MPThemeToggleVariant.textButton,
+              showLabel: true,
+              onChanged: _onThemeChangedExternally,
             ),
+            colorTheme,
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            // Segmented Toggle
-            _buildToggleCard(
-              'Segmented Toggle',
-              'Show all theme options in a segmented control',
-              MPThemeToggle(
-                variant: MPThemeToggleVariant.segmented,
-                showLabel: true,
-                onChanged: _onThemeChangedExternally,
-              ),
-              colorTheme,
+          // Segmented Toggle
+          _buildToggleCard(
+            'Segmented Toggle',
+            'Show all theme options in a segmented control',
+            MPThemeToggle(
+              variant: MPThemeToggleVariant.segmented,
+              showLabel: true,
+              onChanged: _onThemeChangedExternally,
             ),
+            colorTheme,
+          ),
 
-            const SizedBox(height: 32),
+          const SizedBox(height: 32),
 
-            // Custom Theme Toggles Section
-            _buildSectionHeader('Custom Theme Toggles', colorTheme),
-            const SizedBox(height: 16),
+          // Custom Theme Toggles Section
+          _buildSectionHeader('Custom Theme Toggles', colorTheme),
+          const SizedBox(height: 16),
 
-            // Custom Labels Toggle
-            _buildToggleCard(
-              'Custom Labels',
-              'Toggle with custom theme labels',
-              MPThemeToggle(
-                variant: MPThemeToggleVariant.segmented,
-                showLabel: true,
-                customLabels: {
-                  ThemeMode.light: '☀️ Light',
-                  ThemeMode.dark: '🌙 Dark',
-                  ThemeMode.system: '🔄 Auto',
-                },
-                onChanged: _onThemeChangedExternally,
-              ),
-              colorTheme,
+          // Custom Labels Toggle
+          _buildToggleCard(
+            'Custom Labels',
+            'Toggle with custom theme labels',
+            MPThemeToggle(
+              variant: MPThemeToggleVariant.segmented,
+              showLabel: true,
+              customLabels: {
+                ThemeMode.light: '☀️ Light',
+                ThemeMode.dark: '🌙 Dark',
+                ThemeMode.system: '🔄 Auto',
+              },
+              onChanged: _onThemeChangedExternally,
             ),
+            colorTheme,
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            // Custom Animation Toggle
-            _buildToggleCard(
-              'Slow Animation',
-              'Toggle with slower animation for testing',
-              MPThemeToggle(
-                variant: MPThemeToggleVariant.iconButton,
-                animationDuration: const Duration(milliseconds: 800),
-                onChanged: _onThemeChangedExternally,
-              ),
-              colorTheme,
+          // Custom Animation Toggle
+          _buildToggleCard(
+            'Slow Animation',
+            'Toggle with slower animation for testing',
+            MPThemeToggle(
+              variant: MPThemeToggleVariant.iconButton,
+              animationDuration: const Duration(milliseconds: 800),
+              onChanged: _onThemeChangedExternally,
             ),
+            colorTheme,
+          ),
 
-            const SizedBox(height: 32),
+          const SizedBox(height: 32),
 
-            // Theme Persistence Section
-            _buildSectionHeader('Theme Persistence', colorTheme),
-            const SizedBox(height: 16),
+          // Theme Persistence Section
+          _buildSectionHeader('Theme Persistence', colorTheme),
+          const SizedBox(height: 16),
 
-            _buildPersistenceCard(colorTheme),
+          _buildPersistenceCard(colorTheme),
 
-            const SizedBox(height: 32),
+          const SizedBox(height: 32),
 
-            // Theme Validation Section
-            _buildSectionHeader('Theme Validation', colorTheme),
-            const SizedBox(height: 16),
+          // Theme Validation Section
+          _buildSectionHeader('Theme Validation', colorTheme),
+          const SizedBox(height: 16),
 
-            _buildValidationCard(colorTheme),
+          _buildValidationCard(colorTheme),
 
-            const SizedBox(height: 32),
-          ],
-        ),
+          const SizedBox(height: 32),
+        ],
       ),
     );
   }
@@ -213,7 +209,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
     return MPText(
       title,
       style: MPTextStyle.heading2(
-        color: colorTheme?.neutral90 ?? context.mp.neutral90,
+        color: context.mp.textColor,
         fontWeight: FontWeight.w700,
       ),
     );
@@ -228,7 +224,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
           MPText(
             'Current Theme Information',
             style: MPTextStyle.heading3(
-              color: colorTheme?.neutral90 ?? context.mp.neutral90,
+              color: context.mp.textColor,
             ),
           ),
           const SizedBox(height: 12),
@@ -253,14 +249,14 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
               Icon(
                 MPThemeManager.instance.getThemeIcon(),
                 size: 20,
-                color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                color: context.mp.subtitleColor,
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: MPText(
                   'Theme Mode: ${MPThemeManager.instance.getThemeName()}',
                   style: MPTextStyle.body1(
-                    color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                    color: context.mp.subtitleColor,
                   ),
                   textOverflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -287,14 +283,14 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
           MPText(
             title,
             style: MPTextStyle.heading3(
-              color: colorTheme?.neutral90 ?? context.mp.neutral90,
+              color: context.mp.textColor,
             ),
           ),
           const SizedBox(height: 4),
           MPText(
             description,
             style: MPTextStyle.body1(
-              color: colorTheme?.neutral70 ?? context.mp.neutral70,
+              color: context.mp.subtitleColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -313,7 +309,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
           MPText(
             'Theme Persistence Status',
             style: MPTextStyle.heading3(
-              color: colorTheme?.neutral90 ?? context.mp.neutral90,
+              color: context.mp.textColor,
             ),
           ),
           const SizedBox(height: 12),
@@ -329,7 +325,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
                 child: MPText(
                   'MPThemeManager is initialized',
                   style: MPTextStyle.body1(
-                    color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                    color: context.mp.subtitleColor,
                   ),
                   textOverflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -383,7 +379,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
           MPText(
             'Theme preferences are automatically saved to SharedPreferences and restored when the app restarts.',
             style: MPTextStyle.body2(
-              color: colorTheme?.neutral60 ?? context.mp.neutral60,
+              color: context.mp.captionColor,
             ),
           ),
         ],
@@ -404,7 +400,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
           MPText(
             'Color Contrast Validation',
             style: MPTextStyle.heading3(
-              color: colorTheme?.neutral90 ?? context.mp.neutral90,
+              color: context.mp.textColor,
             ),
           ),
           const SizedBox(height: 12),
@@ -426,7 +422,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
                     child: MPText(
                       entry.key.replaceAll('_', ' ').toUpperCase(),
                       style: MPTextStyle.body2(
-                        color: colorTheme?.neutral70 ?? context.mp.neutral70,
+                        color: context.mp.subtitleColor,
                       ),
                     ),
                   ),
@@ -434,7 +430,7 @@ class _ThemeToggleDemoPageState extends State<ThemeToggleDemoPage> {
               ),
             );
           }),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8), // Reduced from 16 to 8
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),

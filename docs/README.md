@@ -261,12 +261,27 @@ class ThemeProvider extends ChangeNotifier {
 
 ### Theme Management Best Practices
 
-1. **Always use theme utilities**: Access colors through `context.mp` instead of hardcoding values
+> **⚠️ CRITICAL:** Always use adaptive colors (`context.mp.textColor`, `context.mp.cardColor`, etc.) instead of fixed neutral colors (`context.mp.neutral90`, `context.mp.neutral20`). Fixed colors don't adapt to theme changes and will cause visibility issues.
+>
+> **📖 See [Theme Colors Quick Reference](./guides/theme-colors-quick-reference.md) for complete guide**
+
+1. **Always use adaptive color utilities**: Access colors through `context.mp.textColor`, `context.mp.cardColor`, etc.
+   ```dart
+   // ✅ CORRECT
+   Text('Hello', style: TextStyle(color: context.mp.textColor))
+   Container(color: context.mp.cardColor)
+
+   // ❌ WRONG
+   Text('Hello', style: TextStyle(color: context.mp.neutral90))
+   Container(color: context.mp.neutral20)
+   ```
+
 2. **Test both themes**: Ensure your UI looks good in both light and dark modes
 3. **Respect system preferences**: Use `ThemeMode.system` as the default
 4. **Provide smooth transitions**: Add animation when switching themes
-5. **Consider accessibility**: Ensure sufficient contrast ratios in both themes
+5. **Consider accessibility**: Ensure sufficient contrast ratios in both themes (WCAG AA: 4.5:1)
 6. **Test with different content**: Verify text readability with various content types
+7. **Use PopupMenu properly**: Always set `surfaceTintColor: Colors.transparent` and `color: context.mp.cardColor`
 
 ## 🎯 Key Features
 

@@ -467,7 +467,7 @@ class _MPTabRoundedAnimatedState extends State<MPTabRoundedAnimated>
     if (widget.isSelected) {
       return widget.textColorActive ??
           (widget.variant == MPTabRoundedVariant.standard
-              ? context.mp.neutral100
+              ? context.mp.textColor
               : context.mp.primary);
     }
 

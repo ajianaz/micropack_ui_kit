@@ -278,8 +278,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
           child: MPText.label(
             widget.badge!,
             style: MPTextStyle.caption(
-              // Badge text: use neutral100 for high contrast against error color background
-              color: widget.badgeTextColor ?? context.mp.neutral100,
+              // Badge text: use textColor for high contrast against error color background
+              color: widget.badgeTextColor ?? context.mp.textColor,
               fontWeight: FontWeight.w500,
             ),
             fontSize: 10,
@@ -372,8 +372,8 @@ class _MPTabRoundedState extends State<MPTabRounded>
     }
 
     if (widget.isActiveTab == true) {
-      // Active tab: use neutral100 (white/light) for contrast against primary background
-      return widget.textColorActive ?? context.mp.neutral100;
+      // Active tab: use textColor for contrast against primary background
+      return widget.textColorActive ?? context.mp.textColor;
     } else {
       // Inactive tab: use subtitle color for secondary visual hierarchy
       return widget.textColor ?? context.mp.subtitleColor;
