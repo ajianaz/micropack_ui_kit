@@ -65,10 +65,11 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
 
             // Theme Info Card
             Container(
-              margin: EdgeInsets.only(bottom: MPResponsivePadding.getLg(context)),
+              margin:
+                  EdgeInsets.only(bottom: MPResponsivePadding.getLg(context)),
               padding: MPResponsivePadding.card(context),
               decoration: BoxDecoration(
-                color: context.mp.primarySurface,
+                color: context.mp.cardColor, // ✅ Adaptive card background
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: context.mp.primaryBorder),
               ),
@@ -224,33 +225,23 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
 
   Widget _buildColorSwatch(BuildContext context, String label, Color color) {
     return Container(
-      width: MPResponsivePadding.getLg(context),
-      height: MPResponsivePadding.getLg(context),
+      width: 80, // Fixed width for consistency
+      padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.mp.adaptiveBorderColor),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: MPResponsivePadding.getSm(context),
-            height: MPResponsivePadding.getSm(context),
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+      child: Center(
+        child: MPText(
+          label,
+          style: TextStyle(
+            color: _getContrastColor(color),
+            fontWeight: FontWeight.w600,
           ),
-          SizedBox(height: MPResponsivePadding.getXs(context)),
-          MPText(
-            label,
-            style: TextStyle(
-              color: _getContrastColor(color),
-            ),
-            fontSize: 10,
-          ),
-        ],
+          fontSize: 10,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -279,8 +270,10 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
           SizedBox(height: MPResponsivePadding.getSm(context)),
 
           // Theme Mode Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Wrap(
+            spacing: MPResponsivePadding.getXs(context),
+            runSpacing: MPResponsivePadding.getXs(context),
+            alignment: WrapAlignment.spaceEvenly,
             children: [
               _buildThemeButton(
                 context,
@@ -313,95 +306,106 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
 
           // Theme Preview
           Container(
-            height: MPResponsivePadding.getXxl(context),
             decoration: BoxDecoration(
               color: context.mp.adaptiveBackgroundColor,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: context.mp.adaptiveBorderColor),
             ),
-            child: Row(
-              children: [
-                // Light Theme Preview
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(MPResponsivePadding.getXs(context)),
-                    padding: EdgeInsets.all(MPResponsivePadding.getSm(context)),
-                    decoration: BoxDecoration(
-                      color: MPColorTheme.light.neutral100 ??
-                          const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          color: MPColorTheme.light.neutral40 ??
-                              const Color(0xFFC9C9C9)),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.light_mode,
-                            color: MPColorTheme.light.primary ??
-                                const Color(0xFF303F9F)),
-                        SizedBox(height: MPResponsivePadding.getXs(context)),
-                        Text(
-                          'Light',
-                          style: TextStyle(
-                            color: MPColorTheme.light.neutral20 ??
-                                const Color(0xFF303F9F),
-                            fontWeight: FontWeight.w500,
+            child: IntrinsicHeight(
+              // Use IntrinsicHeight for equal height
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Light Theme Preview
+                  Expanded(
+                    child: Container(
+                      margin:
+                          EdgeInsets.all(MPResponsivePadding.getXs(context)),
+                      padding:
+                          EdgeInsets.all(MPResponsivePadding.getSm(context)),
+                      decoration: BoxDecoration(
+                        color: MPColorTheme.light.neutral100 ??
+                            const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                            color: MPColorTheme.light.neutral40 ??
+                                const Color(0xFFC9C9C9)),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.light_mode,
+                              color: MPColorTheme.light.primary ??
+                                  const Color(0xFF303F9F)),
+                          SizedBox(height: MPResponsivePadding.getXs(context)),
+                          Text(
+                            'Light',
+                            style: TextStyle(
+                              color: MPColorTheme.light
+                                      .neutral10 ?? // Dark text on light background
+                                  const Color(0xFF111827),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: MPResponsivePadding.getXs(context)),
-                        MPButton(
-                          text: 'Sample',
-                          onPressed: () {},
-                          size: MPButtonSize.small,
-                        ),
-                      ],
+                          SizedBox(height: MPResponsivePadding.getXs(context)),
+                          MPButton(
+                            text: 'Sample',
+                            onPressed: () {},
+                            size: MPButtonSize.small,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                SizedBox(width: MPResponsivePadding.getXs(context)),
+                  SizedBox(width: MPResponsivePadding.getXs(context)),
 
-                // Dark Theme Preview
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(MPResponsivePadding.getXs(context)),
-                    padding: EdgeInsets.all(MPResponsivePadding.getSm(context)),
-                    decoration: BoxDecoration(
-                      color: MPColorTheme.dark.neutral20 ??
-                          const Color(0xFF1E1E1E),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          color: MPColorTheme.dark.neutral40 ??
-                              const Color(0xFF404040)),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.dark_mode,
-                            color: MPColorTheme.dark.neutral80 ??
-                                const Color(0xFFB8B8B8)),
-                        SizedBox(height: MPResponsivePadding.getXs(context)),
-                        Text(
-                          'Dark',
-                          style: TextStyle(
-                            color: MPColorTheme.dark.neutral80 ??
-                                const Color(0xFFB8B8B8),
-                            fontWeight: FontWeight.w500,
+                  // Dark Theme Preview
+                  Expanded(
+                    child: Container(
+                      margin:
+                          EdgeInsets.all(MPResponsivePadding.getXs(context)),
+                      padding:
+                          EdgeInsets.all(MPResponsivePadding.getSm(context)),
+                      decoration: BoxDecoration(
+                        color: MPColorTheme.dark.neutral20 ??
+                            const Color(0xFF1E1E1E),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                            color: MPColorTheme.dark.neutral40 ??
+                                const Color(0xFF404040)),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.dark_mode,
+                              color: MPColorTheme.dark.neutral80 ??
+                                  const Color(0xFFB8B8B8)),
+                          SizedBox(height: MPResponsivePadding.getXs(context)),
+                          Text(
+                            'Dark',
+                            style: TextStyle(
+                              color: MPColorTheme.dark.neutral80 ??
+                                  const Color(0xFFB8B8B8),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: MPResponsivePadding.getXs(context)),
-                        MPButton(
-                          text: 'Sample',
-                          onPressed: () {},
-                          size: MPButtonSize.small,
-                          variant: MPButtonVariant.outlined,
-                        ),
-                      ],
+                          SizedBox(height: MPResponsivePadding.getXs(context)),
+                          MPButton(
+                            text: 'Sample',
+                            onPressed: () {},
+                            size: MPButtonSize.small,
+                            variant: MPButtonVariant.outlined,
+                            textColor: MPColorTheme.dark.neutral90 ??
+                                const Color(
+                                    0xFFE5E5E5), // Explicit color for static preview
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -460,8 +464,9 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
               children: [
                 Icon(
                   icon,
-                  color:
-                      isSelected ? context.mp.neutral100 : context.mp.textColor,
+                  color: isSelected
+                      ? Colors.white // ✅ White on primary
+                      : context.mp.textColor,
                   size: 18,
                 ),
                 SizedBox(width: MPResponsivePadding.getXs(context)),
@@ -469,7 +474,7 @@ class _ThemeShowcasePageState extends State<ThemeShowcasePage> {
                   label,
                   style: TextStyle(
                     color: isSelected
-                        ? context.mp.neutral100
+                        ? Colors.white // ✅ White on primary
                         : context.mp.textColor,
                     fontWeight:
                         isSelected ? FontWeight.w600 : FontWeight.normal,
