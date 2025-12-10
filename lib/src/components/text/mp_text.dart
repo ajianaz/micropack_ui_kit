@@ -202,7 +202,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style ?? MPTextStyle.heading3(fontWeight: FontWeight.w500),
+      style: style,
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -252,7 +252,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style ?? MPTextStyle.body1(fontWeight: FontWeight.w500),
+      style: style,
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -302,7 +302,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style ?? MPTextStyle.body2(),
+      style: style,
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -352,7 +352,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style ?? MPTextStyle.body2(fontWeight: FontWeight.w500),
+      style: style,
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,
@@ -402,7 +402,7 @@ class MPText extends StatelessWidget {
     return MPText._internal(
       text,
       key: key,
-      style: style ?? MPTextStyle.caption(),
+      style: style,
       maxLines: maxLines,
       textOverflow: textOverflow,
       softWrap: softWrap,

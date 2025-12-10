@@ -61,7 +61,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 _defaultController,
                 label: 'Username',
                 hint: 'Enter your username',
-                icon: Icon(Icons.person, color: context.mp.subtitleColor),
+                icon: Icon(Icons.person, color: context.mp.textColor),
                 onChange: (value) => print('Default field changed: $value'),
               ),
             ),
@@ -77,7 +77,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 _borderController,
                 label: 'Email',
                 hint: 'Enter your email address',
-                prefixIcon: Icon(Icons.email, color: context.mp.subtitleColor),
+                prefixIcon: Icon(Icons.email, color: context.mp.textColor),
                 suffixText: '@example.com',
                 helperText: 'Please enter a valid email address',
                 onChange: (value) => print('Border field changed: $value'),
@@ -135,7 +135,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 label: 'Phone Number',
                 hint: 'Enter your phone number',
                 keyboardType: TextInputType.phone,
-                prefixIcon: Icon(Icons.phone, color: context.mp.subtitleColor),
+                prefixIcon: Icon(Icons.phone, color: context.mp.textColor),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Phone number is required';
@@ -163,8 +163,8 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 _iconController,
                 label: 'Search',
                 hint: 'Search for items...',
-                prefixIcon: Icon(Icons.search, color: context.mp.subtitleColor),
-                suffixIcon: Icon(Icons.mic, color: context.mp.subtitleColor),
+                prefixIcon: Icon(Icons.search, color: context.mp.textColor),
+                suffixIcon: Icon(Icons.mic, color: context.mp.textColor),
                 filled: true,
                 fillColor: context.mp.cardColor,
                 onChange: (value) => print('Icon field changed: $value'),
@@ -183,7 +183,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 label: 'Credit Card',
                 hint: 'XXXX-XXXX-XXXX-XXXX',
                 prefixIcon:
-                    Icon(Icons.credit_card, color: context.mp.subtitleColor),
+                    Icon(Icons.credit_card, color: context.mp.textColor),
                 keyboardType: TextInputType.number,
                 inputFormatter: [
                   // Credit card formatter (XXXX-XXXX-XXXX-XXXX)
@@ -249,7 +249,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 TextEditingController(),
                 label: 'Phone Number',
                 hint: '(123) 456-7890',
-                prefixIcon: Icon(Icons.phone, color: context.mp.subtitleColor),
+                prefixIcon: Icon(Icons.phone, color: context.mp.textColor),
                 keyboardType: TextInputType.phone,
                 inputFormatter: [MPInputFormatters.phoneNumber],
                 validator: MPValidators.phoneNumber,
@@ -266,7 +266,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 TextEditingController(),
                 label: 'Email Address',
                 hint: 'Enter your email',
-                prefixIcon: Icon(Icons.email, color: context.mp.subtitleColor),
+                prefixIcon: Icon(Icons.email, color: context.mp.textColor),
                 keyboardType: TextInputType.emailAddress,
                 validator: MPValidators.email,
                 onChange: (value) => print('Email field changed: $value'),
@@ -282,7 +282,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 TextEditingController(),
                 label: 'Password',
                 hint: 'Enter your password',
-                prefixIcon: Icon(Icons.lock, color: context.mp.subtitleColor),
+                prefixIcon: Icon(Icons.lock, color: context.mp.textColor),
                 validator: MPValidators.password,
                 onChange: (value) => print('Password field changed: $value'),
               ),
@@ -298,7 +298,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 label: 'Amount',
                 hint: '\$0.00',
                 prefixIcon:
-                    Icon(Icons.attach_money, color: context.mp.subtitleColor),
+                    Icon(Icons.attach_money, color: context.mp.textColor),
                 keyboardType: TextInputType.number,
                 inputFormatter: [MPInputFormatters.currency],
                 onChange: (value) => print('Currency field changed: $value'),
