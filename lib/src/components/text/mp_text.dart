@@ -439,9 +439,8 @@ class MPText extends StatelessWidget {
     }
 
     // Use theme-aware text color as default when no color is explicitly provided
-    // Ensure proper contrast by using adaptive text color based on theme
-    Color? effectiveColor =
-        color ?? baseStyle.color ?? context.mp.adaptiveTextColor(1.0);
+    // Priority: color parameter > baseStyle.color > theme textColor
+    Color effectiveColor = color ?? baseStyle.color ?? context.mp.textColor;
 
     return baseStyle.copyWith(
       fontWeight: fontWeight,

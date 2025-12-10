@@ -859,7 +859,7 @@ class _MPTextFieldState extends State<MPTextField> {
 
         // Suffix elements with theme-aware colors
         suffixIcon: finalSuffixIcon,
-        suffixIconColor: widget.suffixIconColor ?? themeColors.neutral80,
+        suffixIconColor: widget.suffixIconColor ?? themeColors.textColor,
         suffix: widget.suffix,
         suffixText: widget.suffixText,
         suffixStyle:
@@ -1007,14 +1007,9 @@ class _MPTextFieldState extends State<MPTextField> {
       );
     }
 
-    // Add password toggle or custom suffix icon
-    if (widget.type == MPTextFieldType.DEFAULT) {
-      if (widget.suffixIcon != null) {
-        icons.add(widget.suffixIcon!);
-      }
-    } else {
-      // Password field - add toggle icon
-      // Default icons will use theme-aware colors through InputDecoration
+    // Add password toggle icon ONLY for password field types
+    if (widget.type == MPTextFieldType.PASSWORD ||
+        widget.type == MPTextFieldType.BORDER_PASSWORD) {
       icons.add(
         GestureDetector(
           onTap: _togglePasswordView,
@@ -1024,6 +1019,11 @@ class _MPTextFieldState extends State<MPTextField> {
                   : _defaultSuffixIconEyeOpen),
         ),
       );
+    } else {
+      // For DEFAULT and BORDER types, add custom suffix icon if provided
+      if (widget.suffixIcon != null) {
+        icons.add(widget.suffixIcon!);
+      }
     }
 
     if (icons.isEmpty) return null;
@@ -1127,15 +1127,8 @@ class _MPTextFieldState extends State<MPTextField> {
     MPThemeUtilities themeColors,
     String borderType,
   ) {
-    // Only show borders for BORDER and BORDER_PASSWORD types
-    // DEFAULT and PASSWORD types use underline style by default
-    if (widget.type != MPTextFieldType.BORDER &&
-        widget.type != MPTextFieldType.BORDER_PASSWORD) {
-      return InputBorder.none;
-    }
-
     Color borderColor;
-    double borderWidth = 1.0;
+    double borderWidth = 1.5; // Increased from 1.0 for better visibility
 
     // Determine border color based on state
     switch (borderType) {
@@ -1166,8 +1159,20 @@ class _MPTextFieldState extends State<MPTextField> {
         borderColor = themeColors.adaptiveBorderColor;
     }
 
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(_isLandscape ? 6 : 8),
+    // BORDER and BORDER_PASSWORD types use outline border
+    if (widget.type == MPTextFieldType.BORDER ||
+        widget.type == MPTextFieldType.BORDER_PASSWORD) {
+      return OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_isLandscape ? 6 : 8),
+        borderSide: BorderSide(
+          color: borderColor,
+          width: borderWidth,
+        ),
+      );
+    }
+
+    // DEFAULT and PASSWORD types use underline border for better visibility
+    return UnderlineInputBorder(
       borderSide: BorderSide(
         color: borderColor,
         width: borderWidth,

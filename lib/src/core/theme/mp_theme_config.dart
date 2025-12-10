@@ -156,10 +156,10 @@ class MPThemeConfig {
   }
 
   /// Get border color based on theme mode
-  /// Light mode: uses neutral40 (light gray)
+  /// Light mode: uses neutral50 (medium-light gray) for better visibility
   /// Dark mode: uses neutral70 (medium gray)
   static Color getBorderColor({bool isDarkMode = false}) {
-    return isDarkMode ? getNeutral(70) : getNeutral(40);
+    return isDarkMode ? getNeutral(70) : getNeutral(50);
   }
 
   /// Get divider color based on theme mode
@@ -198,9 +198,12 @@ class MPThemeConfig {
   // ============ SHADOW COLORS ============
 
   /// Get shadow color based on theme mode
-  /// Light mode: transparent black shadow
+  /// Light mode: slightly more visible shadow for better form separation
   /// Dark mode: more opaque shadow for visibility
-  static Color getShadowColor({bool isDarkMode = false, double opacity = 0.1}) {
+  static Color getShadowColor(
+      {bool isDarkMode = false, double opacity = 0.15}) {
+    // Light mode: use base opacity (0.15 default for better visibility)
+    // Dark mode: double the opacity for better visibility on dark backgrounds
     final adjustedOpacity = isDarkMode ? opacity * 2 : opacity;
     return Colors.black.withValues(alpha: adjustedOpacity.clamp(0.0, 1.0));
   }
