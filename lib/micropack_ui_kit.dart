@@ -1,28 +1,55 @@
-// 3rd party packages
+/// MicroPack UI Kit - A comprehensive Flutter UI component library
+///
+/// This library provides a complete set of reusable UI components, utilities,
+/// and tools for building beautiful Flutter applications with consistent design.
+///
+/// Main exports include:
+/// - UI Components (buttons, cards, dialogs, etc.)
+/// - Core utilities (animations, loading, state management)
+/// - Responsive design system
+/// - Theme management and styling
+/// - Performance optimization tools
+/// - Error handling utilities
+
+// Third party packages
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:gap/gap.dart';
 export 'package:nil/nil.dart';
 
-// setting
+// Configuration and settings
 export 'mp_ui_kit_settings.dart';
-// components
+
+// UI Components
 export 'src/components/components.dart';
-// responsive
+
+// Core utilities
+export 'src/core/animations/mp_interaction_animations.dart';
+export 'src/core/loading/mp_loading_overlay.dart';
+export 'src/core/loading/mp_progressive_image.dart';
+export 'src/core/state/mp_reactive_builder.dart';
+
+// Responsive design system
 export 'src/core/responsive/mp_responsive.dart';
-// styles
+
+// Styling and theming
 export 'src/core/styles/styles.dart';
-// themes
 export 'src/core/theme/themes.dart';
-// error handling
+
+// Error handling
 export 'src/core/error/mp_error_handler.dart';
 export 'src/core/error/mp_error_recovery.dart';
-// utils
+
+// Utilities
 export 'src/core/utils/utils.dart';
-// performance
+
+// Performance optimization
 export 'src/core/performance/mp_performance_dashboard.dart';
 export 'src/core/performance/mp_lazy_loader.dart';
 export 'src/core/performance/mp_animation_optimizer.dart';
 export 'src/core/performance/mp_image_cache.dart';
+export 'src/core/performance/mp_performance_monitor.dart';
+export 'src/core/performance/mp_performance_overlay.dart';
 export 'src/core/performance/mp_performance_profiler.dart';
-// fonts
+
+// Font management
 export 'src/core/fonts/mp_font_manager.dart';

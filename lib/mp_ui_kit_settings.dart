@@ -2,7 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
 
 class MpUiKit {
   static void init({
