@@ -723,9 +723,8 @@ class MPTextField extends StatefulWidget {
 }
 
 class _MPTextFieldState extends State<MPTextField> {
-  final Widget _defaultSuffixIconEyeOpen = const Icon(FontAwesomeIcons.eye);
-  final Widget _defaultSuffixIconEyeClose =
-      const Icon(FontAwesomeIcons.eyeSlash);
+  final Widget _defaultSuffixIconEyeOpen = const Icon(Icons.visibility);
+  final Widget _defaultSuffixIconEyeClose = const Icon(Icons.visibility_off);
   bool _isLandscape = false;
 
   @override

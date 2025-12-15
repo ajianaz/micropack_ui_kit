@@ -12,7 +12,6 @@
 /// - Error handling utilities
 
 // Third party packages
-export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:gap/gap.dart';
 export 'package:nil/nil.dart';
 
