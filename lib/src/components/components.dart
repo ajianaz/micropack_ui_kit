@@ -5,6 +5,7 @@ export 'button/button.dart';
 export 'card/mp_card.dart';
 export 'card/mp_card_builder.dart';
 export 'checkbox/checkbox.dart';
+export 'chip/chip.dart';
 export 'dialog/dialog.dart';
 export 'dialog/mp_dialog_animated.dart';
 export 'skeleton/mp_skeleton.dart';
