@@ -1168,6 +1168,7 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
       final text = MPText(
         widget.text ?? '',
         style: widget.textStyle,
+        textAlign: TextAlign.center, // ✅ Add textAlign for centering
         color:
             _cachedTextColor, // Use cached color which includes adaptive fallback
         fontSize: widget.textSize,
@@ -1178,34 +1179,45 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
         case MPButtonIconPosition.left:
           return Row(
             mainAxisSize: MainAxisSize.min,
-            children: [icon, const SizedBox(width: 8), text],
+            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
+            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center vertically
+            children: [icon, const SizedBox(width: 8), Flexible(child: text)], // ✅ Wrap text in Flexible
           );
         case MPButtonIconPosition.right:
           return Row(
             mainAxisSize: MainAxisSize.min,
-            children: [text, const SizedBox(width: 8), icon],
+            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
+            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center vertically
+            children: [Flexible(child: text), const SizedBox(width: 8), icon], // ✅ Wrap text in Flexible
           );
         case MPButtonIconPosition.top:
           return Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
+            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center horizontally
             children: [icon, const SizedBox(height: 4), text],
           );
         case MPButtonIconPosition.bottom:
           return Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
+            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center horizontally
             children: [text, const SizedBox(height: 4), icon],
           );
       }
     }
 
-    // Default text only
-    return MPText(
-      widget.text ?? '',
-      style: widget.textStyle,
-      color:
-          _cachedTextColor, // Use cached color which includes adaptive fallback
-      fontSize: widget.textSize,
-      fontWeight: widget.fontWeight,
+    // Default text only - ensure it's centered
+    return Center(
+      child: MPText(
+        widget.text ?? '',
+        style: widget.textStyle,
+        textAlign: TextAlign.center, // ✅ Add textAlign
+        color:
+            _cachedTextColor, // Use cached color which includes adaptive fallback
+        fontSize: widget.textSize,
+        fontWeight: widget.fontWeight,
+      ),
     );
   }
 

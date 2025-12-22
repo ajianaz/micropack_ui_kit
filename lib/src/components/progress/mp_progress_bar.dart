@@ -27,7 +27,8 @@ class MPProgressBar extends StatelessWidget {
     this.semanticsLabel,
     this.semanticsValue,
     this.borderRadius,
-  }) : type = MPProgressBarType.linear;
+  })  : type = MPProgressBarType.linear,
+        strokeWidth = null;
 
   /// Creates a new circular [MPProgressBar] widget.
   const MPProgressBar.circular({
