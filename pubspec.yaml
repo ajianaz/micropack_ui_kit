@@ -8,7 +8,7 @@ environment:
   flutter: '>=1.17.0'
 
 dependencies:
-  extended_image: '>=8.1.1 <10.0.0'
+  extended_image: ^10.0.1
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
@@ -17,11 +17,11 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_switch: ^0.3.2
   gap: ^3.0.1
-  get_it: ^7.6.7
+  get_it: ^9.2.0
   google_fonts: ^6.1.0
   nil: ^1.1.1
   shared_preferences: ^2.5.3
-  skeletonizer: ^0.8.0
+  skeletonizer: ^1.4.3
   # lottie: ^2.7.0
   # tap_debouncer: ^2.2.0
 
@@ -31,7 +31,7 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.4.4
   build_runner: ^2.4.8
-  very_good_analysis: ^5.1.0
+  very_good_analysis: ^8.0.0
 
 flutter:
   uses-material-design: true
