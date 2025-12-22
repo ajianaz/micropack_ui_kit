@@ -1,5 +1,6 @@
 // UI Components
 export 'article_card/article_card.dart';
+export 'badge/badge.dart';
 export 'button/button.dart';
 export 'card/mp_card.dart';
 export 'card/mp_card_builder.dart';

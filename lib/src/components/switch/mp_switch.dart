@@ -138,7 +138,7 @@ class _MPSwitchState extends State<MPSwitch> {
 
   Color _getInactiveColor() {
     if (_disabled) return context.mp.disabledColor.withOpacity(0.3);
-    return widget.inactiveColor ?? context.mp.neutral70;
+    return widget.inactiveColor ?? context.mp.subtitleColor;
   }
 
   Color _getToggleColor() {
