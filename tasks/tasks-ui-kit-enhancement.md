@@ -68,15 +68,17 @@
   - [x] 1.4 Create widget testing utilities in `test/helpers/widget_test_utils.dart`
   - [x] 1.5 Create mock factories for theme and responsive systems in `test/mocks/`
 
-- [ ] 2.0 Implement Core Form Components (Tier 1: Mobile Priority)
-  - [ ] 2.1 Create MPCheckbox component with animation support
-  - [ ] 2.2 Create MPSwitch component (flutter_switch wrapper)
-  - [ ] 2.3 Create MPBadge component for status indicators
-  - [ ] 2.4 Create MPChip component for tags/labels
-  - [ ] 2.5 Create MPTooltip component for contextual help
-  - [ ] 2.6 Create MPProgressBar component for progress indication
-  - [ ] 2.7 Create MPDropdown component for selection inputs
+- [x] 2.0 Implement Core Form Components (Tier 1: Mobile Priority)
+  - [x] 2.1 Create MPCheckbox component with animation support
+  - [x] 2.2 Create MPSwitch component (flutter_switch wrapper)
+  - [x] 2.3 Create MPBadge component for status indicators
+  - [x] 2.4 Create MPChip component for tags/labels
+  - [x] 2.5 Create MPTooltip component for contextual help
+  - [x] 2.6 Create MPProgressBar component for progress indication
+  - [x] 2.7 Create MPDropdown component for selection inputs
   - [ ] 2.8 Add tests for all form components
+  - [ ] 2.9 Create example pages for all form components
+  - [ ] 2.10 Update example app home page with navigation
 
 - [ ] 3.0 Implement Feedback & Display Components (Tier 1: Mobile Priority)
   - [ ] 3.1 Create MPToast component for quick notifications
