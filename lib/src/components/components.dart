@@ -8,6 +8,7 @@ export 'checkbox/checkbox.dart';
 export 'chip/chip.dart';
 export 'dialog/dialog.dart';
 export 'dialog/mp_dialog_animated.dart';
+export 'dropdown/dropdown.dart';
 export 'progress/progress.dart';
 export 'skeleton/mp_skeleton.dart';
 export 'snackbar/snackbar.dart';
