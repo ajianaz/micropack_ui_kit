@@ -45,7 +45,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: MPResponsivePadding.getMd(context)),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Standard Badge',
           description: 'Number badge for notifications',
           child: Row(
@@ -58,7 +58,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Dot Badge',
           description: 'Simple dot indicator',
           child: Row(
@@ -75,7 +75,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Notification Badge',
           description: 'Styled notification indicator',
           child: Row(
@@ -103,7 +103,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: MPResponsivePadding.getMd(context)),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Small',
           description: 'Compact size',
           child: Row(
@@ -116,7 +116,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Medium',
           description: 'Default medium size',
           child: Row(
@@ -129,7 +129,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Large',
           description: 'Prominent large size',
           child: Row(
@@ -154,7 +154,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: MPResponsivePadding.getMd(context)),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Warning',
           description: 'Warning icon badge',
           child: MPBadge(
@@ -164,7 +164,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Success',
           description: 'Success icon badge',
           child: MPBadge(
@@ -174,7 +174,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _BadgeCard(
-          context,
+          context: context,
           title: 'Error',
           description: 'Error icon badge',
           child: MPBadge(
@@ -196,7 +196,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: MPResponsivePadding.getMd(context)),
         _ExampleCard(
-          context,
+          context: context,
           title: 'App Icon with Notification',
           description: 'Mobile app icon style with badge',
           child: Container(
@@ -243,7 +243,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _ExampleCard(
-          context,
+          context: context,
           title: 'Menu Item',
           description: 'Badge in menu/list item',
           child: Container(
@@ -270,7 +270,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         _ExampleCard(
-          context,
+          context: context,
           title: 'Button with Badge',
           description: 'Action button with notification count',
           child: Container(
@@ -309,8 +309,8 @@ class BadgeDemoPage extends StatelessWidget {
     );
   }
 
-  Widget _BadgeCard(
-    BuildContext context, {
+  Widget _BadgeCard({
+    required BuildContext context,
     required String title,
     required String description,
     required Widget child,
@@ -347,8 +347,8 @@ class BadgeDemoPage extends StatelessWidget {
     );
   }
 
-  Widget _ExampleCard(
-    BuildContext context, {
+  Widget _ExampleCard({
+    required BuildContext context,
     required String title,
     required String description,
     required Widget child,

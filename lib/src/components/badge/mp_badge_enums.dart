@@ -1,41 +1,40 @@
-/// Enum definitions for MPBadge component
-part of 'mp_badge.dart';
+library micropack_ui_kit.src.components.badge.mp_badge_enums;
 
-/// Size variants for MPBadge
-enum MPBadgeSize {
-  /// Small badge (11px font)
-  small,
-
-  /// Medium badge (12px font)
-  medium,
-
-  /// Large badge (14px font)
-  large,
-}
-
-/// Visual style variants for MPBadge
+/// The visual style variant of a badge.
 enum MPBadgeVariant {
-  /// Primary color badge (brand color)
+  /// Primary brand color
   primary,
 
-  /// Secondary color badge (gray/light)
+  /// Secondary/dark color
   secondary,
 
-  /// Success color badge (green)
+  /// Success color (green)
   success,
 
-  /// Warning color badge (orange/amber)
+  /// Warning color (orange/amber)
   warning,
 
-  /// Error color badge (red)
+  /// Error color (red)
   error,
 
-  /// Info color badge (blue/light blue)
+  /// Info color (blue)
   info,
 
-  /// Outlined badge (transparent background with border)
+  /// Outlined style with transparent background
   outlined,
 
-  /// Filled badge (dark background)
+  /// Filled style with solid background
   filled,
+}
+
+/// The size of a badge.
+enum MPBadgeSize {
+  /// Small size badge
+  small,
+
+  /// Medium size badge (default)
+  medium,
+
+  /// Large size badge
+  large,
 }

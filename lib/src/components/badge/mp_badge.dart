@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
-
-part 'mp_badge_enums.dart';
+import 'mp_badge_enums.dart';
 
 /// A badge component for displaying status indicators, counts, or labels.
 ///
