@@ -24,6 +24,15 @@ import 'package:micropack_ui_kit_example/pages/bottom_sheet_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/navigation_rail_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/app_bar_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/platform_adaptive_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/badge_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/switch_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/chip_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/progress_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/dropdown_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/tooltip_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/checkbox_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/snackbar_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/skeleton_demo_page.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
 
 class HomePage extends StatefulWidget {
@@ -272,6 +281,171 @@ class _HomePageState extends State<HomePage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Failed to open Empty State Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            const _SectionTitle(
+              title: 'Form Components',
+            ),
+            _Button(
+              name: 'Badge Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const BadgeDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Badge Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Switch Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const SwitchDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Switch Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Chip Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ChipDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Chip Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Progress Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ProgressDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Progress Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Dropdown Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const DropdownDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Dropdown Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Tooltip Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const TooltipDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Tooltip Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Checkbox Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const CheckboxDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Checkbox Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Snackbar Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const SnackbarDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Snackbar Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Skeleton Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const SkeletonDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Skeleton Page: $e'),
                       backgroundColor: context.mp.errorColor,
                     ),
                   );
