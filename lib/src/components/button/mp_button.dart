@@ -57,6 +57,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   });
 
   /// The text to display on the button.
@@ -187,6 +190,22 @@ class MPButton extends StatefulWidget {
   /// Focus order for keyboard navigation.
   final int? focusOrder;
 
+  /// Content alignment within the button.
+  ///
+  /// If null, defaults to Alignment.center.
+  /// Allows flexible positioning of text and icon.
+  final Alignment? alignment;
+
+  /// Main axis alignment for button content.
+  ///
+  /// If null, defaults to MainAxisAlignment.center.
+  final MainAxisAlignment? mainAxisAlignment;
+
+  /// Cross axis alignment for button content.
+  ///
+  /// If null, defaults to CrossAxisAlignment.center.
+  final CrossAxisAlignment? crossAxisAlignment;
+
   /// Border radius for the button.
   final BorderRadius? borderRadius;
 
@@ -245,6 +264,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.primary;
 
   const MPButton.outlined({
@@ -292,6 +314,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.outlined;
 
   const MPButton.ghost({
@@ -339,6 +364,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.ghost;
 
   const MPButton.text({
@@ -386,6 +414,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.text;
 
   const MPButton.danger({
@@ -402,7 +433,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor, // ✅ Let adaptive colors work
+    this.textColor,
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -433,6 +464,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.danger;
 
   const MPButton.success({
@@ -449,7 +483,7 @@ class MPButton extends StatefulWidget {
     this.widthInfinity = false,
     this.child,
     this.textStyle,
-    this.textColor, // ✅ Let adaptive colors work
+    this.textColor,
     this.textSize,
     this.fontWeight,
     this.loading = false,
@@ -480,6 +514,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.success;
 
   const MPButton.warning({
@@ -527,6 +564,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.warning;
 
   const MPButton.info({
@@ -574,6 +614,9 @@ class MPButton extends StatefulWidget {
     this.keyboardShortcut,
     this.enableKeyboardNavigation = true,
     this.focusOrder,
+    this.alignment,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : variant = MPButtonVariant.info;
 }
 
@@ -1179,40 +1222,42 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
         case MPButtonIconPosition.left:
           return Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center vertically
-            children: [icon, const SizedBox(width: 8), Flexible(child: text)], // ✅ Wrap text in Flexible
+            mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.center,
+            crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+            children: [icon, const SizedBox(width: 8), Flexible(child: text)],
           );
         case MPButtonIconPosition.right:
           return Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center vertically
-            children: [Flexible(child: text), const SizedBox(width: 8), icon], // ✅ Wrap text in Flexible
+            mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.center,
+            crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+            children: [Flexible(child: text), const SizedBox(width: 8), icon],
           );
         case MPButtonIconPosition.top:
           return Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center horizontally
+            mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.center,
+            crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
             children: [icon, const SizedBox(height: 4), text],
           );
         case MPButtonIconPosition.bottom:
           return Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center, // ✅ Center content
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Center horizontally
+            mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.center,
+            crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
             children: [text, const SizedBox(height: 4), icon],
           );
       }
     }
 
-    // Default text only - ensure it's centered
-    return Center(
+    // Default text only - use alignment if provided
+    final alignment = widget.alignment ?? Alignment.center;
+    return Align(
+      alignment: alignment,
       child: MPText(
         widget.text ?? '',
         style: widget.textStyle,
-        textAlign: TextAlign.center, // ✅ Add textAlign
+        textAlign: alignment.x < 0 ? TextAlign.left : (alignment.x > 0 ? TextAlign.right : TextAlign.center),
         color:
             _cachedTextColor, // Use cached color which includes adaptive fallback
         fontSize: widget.textSize,

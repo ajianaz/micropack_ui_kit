@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit_example/pages/article_card_page.dart';
 import 'package:micropack_ui_kit_example/pages/button_page.dart';
-
 import 'package:micropack_ui_kit_example/pages/color_page.dart';
 import 'package:micropack_ui_kit_example/pages/dialog_page.dart';
 import 'package:micropack_ui_kit_example/pages/mp_card_page.dart';
@@ -16,6 +15,10 @@ import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 import 'package:micropack_ui_kit_example/pages/mp_error_handling_page.dart';
 import 'package:micropack_ui_kit_example/pages/mp_accessibility_page.dart';
 import 'package:micropack_ui_kit_example/pages/form_components_page.dart';
+import 'package:micropack_ui_kit_example/pages/toast_page.dart';
+import 'package:micropack_ui_kit_example/pages/avatar_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/divider_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/empty_state_demo_page.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
 
 class HomePage extends StatefulWidget {
@@ -194,6 +197,64 @@ class _HomePageState extends State<HomePage> {
             const _Button(
                 name: 'Form Components',
                 page: FormComponentsPage()),
+            const _Button(name: 'Toast', page: ToastPage()),
+            const _SectionTitle(
+              title: 'Feedback & Display',
+            ),
+            _Button(
+              name: 'Avatar Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const AvatarDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Avatar Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Divider Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const DividerDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Divider Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Empty State Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const EmptyStateDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Empty State Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
             const _SectionTitle(
               title: 'Testing',
             ),
@@ -427,25 +488,24 @@ class _Button extends StatelessWidget {
         child: MPButton(
           text: name,
           variant: MPButtonVariant.outlined,
-          onPressed: onPressed ??
-              () async {
-                if (page != null) {
-                  try {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => page!),
-                    );
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Failed to open $name Page: $e'),
-                          backgroundColor: context.mp.errorColor,
-                        ),
-                      );
-                    }
-                  }
+          onPressed: onPressed ?? () async {
+            if (page != null) {
+              try {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => page!),
+                );
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open $name Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
                 }
-              },
+              }
+            }
+          },
         ),
       );
 }

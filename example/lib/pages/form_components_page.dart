@@ -60,6 +60,8 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
             _buildProgressSection(),
             SizedBox(height: MPResponsivePadding.getLg(context)),
             _buildDropdownSection(),
+            SizedBox(height: MPResponsivePadding.getLg(context)),
+            _buildListTileSection(),
           ],
         ),
       ),
@@ -71,9 +73,9 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Checkbox'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Basic Checkboxes'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getSm(context),
           runSpacing: MPResponsivePadding.getXs(context),
@@ -81,21 +83,24 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
             MPCheckbox(
               value: _checkbox1,
               onChanged: (value) => setState(() => _checkbox1 = value ?? false),
+              semanticLabel: 'Checkbox 1',
             ),
             MPCheckbox(
               value: _checkbox2,
               onChanged: (value) => setState(() => _checkbox2 = value ?? false),
+              semanticLabel: 'Checkbox 2',
             ),
             MPCheckbox(
               value: false,
               onChanged: null,
               enabled: false,
+              semanticLabel: 'Disabled checkbox',
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Checkbox Sizes'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getSm(context),
           children: [
@@ -103,28 +108,32 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
               value: true,
               size: MPCheckboxSize.small,
               onChanged: (value) {},
+              semanticLabel: 'Small checkbox',
             ),
             MPCheckbox(
               value: true,
               size: MPCheckboxSize.medium,
               onChanged: (value) {},
+              semanticLabel: 'Medium checkbox',
             ),
             MPCheckbox(
               value: true,
               size: MPCheckboxSize.large,
               onChanged: (value) {},
+              semanticLabel: 'Large checkbox',
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Indeterminate Checkbox'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         MPCheckbox(
           checkState: MPCheckboxCheckState.indeterminate,
           value: false,
           onChanged: (value) => setState(() {
                 _checkboxIndeterminate = value ?? false;
               }),
+          semanticLabel: 'Indeterminate checkbox',
         ),
       ],
     );
@@ -135,30 +144,33 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Switch'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Basic Switches'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getSm(context),
           children: [
             MPSwitch(
               value: _switch1,
               onToggle: (value) => setState(() => _switch1 = value),
+              semanticLabel: 'Switch 1',
             ),
             MPSwitch(
               value: _switch2,
               onToggle: (value) => setState(() => _switch2 = value),
+              semanticLabel: 'Switch 2',
             ),
             MPSwitch(
               value: _switchDisabled,
               onToggle: null,
               disabled: true,
+              semanticLabel: 'Disabled switch',
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Switch Sizes'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getSm(context),
           children: [
@@ -167,28 +179,32 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
               width: 36,
               height: 20,
               onToggle: (value) {},
+              semanticLabel: 'Small switch',
             ),
             MPSwitch(
               value: true,
               width: 44,
               height: 24,
               onToggle: (value) {},
+              semanticLabel: 'Medium switch',
             ),
             MPSwitch(
               value: true,
               width: 52,
               height: 28,
               onToggle: (value) {},
+              semanticLabel: 'Large switch',
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Switch with ON/OFF Labels'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         MPSwitch(
           value: _switch1,
           onToggle: (value) => setState(() => _switch1 = value),
           showOnOff: true,
+          semanticLabel: 'Switch with ON/OFF labels',
         ),
       ],
     );
@@ -199,13 +215,13 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Badge'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Badge Variants'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
-          children: [
+          children: const [
             MPBadge(label: 'Primary', variant: MPBadgeVariant.primary),
             MPBadge(label: 'Secondary', variant: MPBadgeVariant.secondary),
             MPBadge(label: 'Success', variant: MPBadgeVariant.success),
@@ -214,25 +230,25 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
             MPBadge(label: 'Info', variant: MPBadgeVariant.info),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Badge Sizes'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
-          children: [
+          children: const [
             MPBadge(label: 'Small', size: MPBadgeSize.small),
             MPBadge(label: 'Medium', size: MPBadgeSize.medium),
             MPBadge(label: 'Large', size: MPBadgeSize.large),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Badges with Icons'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
-          children: [
+          children: const [
             MPBadge(
               label: 'New',
               leading: Icon(Icons.star, size: 12),
@@ -259,13 +275,13 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Chip'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Basic Chips'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
-          children: [
+          children: const [
             MPChip(label: 'Primary', variant: MPChipVariant.primary),
             MPChip(label: 'Secondary', variant: MPChipVariant.secondary),
             MPChip(label: 'Success', variant: MPChipVariant.success),
@@ -274,9 +290,9 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
             MPChip(label: 'Info', variant: MPChipVariant.info),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Selectable Chips'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
@@ -286,12 +302,13 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
               selected: _selectedChip == value,
               onPressed: () => setState(() => _selectedChip = value),
               variant: MPChipVariant.primary,
+              semanticLabel: 'Option $value chip',
             );
           }).toList(),
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Dismissible Chips'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
@@ -310,13 +327,13 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Chips with Avatars'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getXs(context),
           runSpacing: MPResponsivePadding.getXs(context),
-          children: [
+          children: const [
             MPChip(
               label: 'User 1',
               avatar: FlutterLogo(size: 24),
@@ -338,9 +355,9 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Tooltip'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Tooltips with Different Variants'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getSm(context),
           children: [
@@ -371,9 +388,9 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Long Press to See Tooltips'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Row(
           children: [
             MPTooltip(
@@ -395,64 +412,72 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Progress Bar'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Linear Progress'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Column(
           children: [
             MPProgressBar.linear(
               value: _linearProgress,
               variant: MPProgressBarVariant.primary,
+              semanticsLabel: 'Linear progress bar',
             ),
-            SizedBox(height: MPResponsivePadding.getXs(context)),
+            const SizedBox(height: 4),
             Slider(
               value: _linearProgress,
               onChanged: (value) => setState(() => _linearProgress = value),
               activeColor: context.mp.primary,
+              label: '${(_linearProgress * 100).round()}%',
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Circular Progress'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Wrap(
           spacing: MPResponsivePadding.getSm(context),
           children: [
             MPProgressBar.circular(
               value: _circularProgress,
               variant: MPProgressBarVariant.primary,
+              semanticsLabel: 'Primary circular progress',
             ),
             MPProgressBar.circular(
               value: _circularProgress,
               variant: MPProgressBarVariant.success,
+              semanticsLabel: 'Success circular progress',
             ),
             MPProgressBar.circular(
               value: _circularProgress,
               variant: MPProgressBarVariant.warning,
+              semanticsLabel: 'Warning circular progress',
             ),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Progress Bar Sizes'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Column(
           children: [
             MPProgressBar.linear(
               value: 0.5,
               size: MPProgressBarSize.small,
               variant: MPProgressBarVariant.primary,
+              semanticsLabel: 'Small progress bar',
             ),
-            SizedBox(height: MPResponsivePadding.getXs(context)),
+            const SizedBox(height: 4),
             MPProgressBar.linear(
               value: 0.5,
               size: MPProgressBarSize.medium,
               variant: MPProgressBarVariant.primary,
+              semanticsLabel: 'Medium progress bar',
             ),
-            SizedBox(height: MPResponsivePadding.getXs(context)),
+            const SizedBox(height: 4),
             MPProgressBar.linear(
               value: 0.5,
               size: MPProgressBarSize.large,
               variant: MPProgressBarVariant.primary,
+              semanticsLabel: 'Large progress bar',
             ),
           ],
         ),
@@ -465,9 +490,9 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MPText.head('Dropdown'),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Basic Dropdowns'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -482,14 +507,14 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
               onChanged: (value) => setState(() => _selectedDropdown = value),
               size: MPDropdownSize.medium,
             ),
-            SizedBox(height: MPResponsivePadding.getSm(context)),
+            const SizedBox(height: 8),
             if (_selectedDropdown != null)
               MPText.label('Selected: Option $_selectedDropdown'),
           ],
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Dropdown with Icons'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         MPDropdown<int>(
           hint: 'Select with icon',
           items: const [
@@ -511,9 +536,9 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
           ],
           onChanged: (value) {},
         ),
-        SizedBox(height: MPResponsivePadding.getSm(context)),
+        const SizedBox(height: 8),
         MPText.label('Dropdown Sizes'),
-        SizedBox(height: MPResponsivePadding.getXs(context)),
+        const SizedBox(height: 4),
         Column(
           children: [
             MPDropdown<int>(
@@ -525,7 +550,7 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
               ],
               onChanged: (value) {},
             ),
-            SizedBox(height: MPResponsivePadding.getXs(context)),
+            const SizedBox(height: 4),
             MPDropdown<int>(
               hint: 'Large dropdown',
               size: MPDropdownSize.large,
@@ -534,6 +559,40 @@ class _FormComponentsPageState extends State<FormComponentsPage> {
                 MPDropdownItem(value: 2, label: 'B'),
               ],
               onChanged: (value) {},
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildListTileSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MPText.head('List Tile'),
+        const SizedBox(height: 8),
+        MPText.label('Basic List Tiles'),
+        const SizedBox(height: 4),
+        Column(
+          children: [
+            MPListTile(
+              title: 'John Doe',
+              subtitle: 'Software Engineer',
+              leading: const CircleAvatar(
+                child: Text('JD'),
+              ),
+              semanticLabel: 'John Doe - Software Engineer',
+            ),
+            const SizedBox(height: 4),
+            MPListTile(
+              title: 'Jane Smith',
+              subtitle: 'Product Manager',
+              leading: const CircleAvatar(
+                child: Text('JS'),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              semanticLabel: 'Jane Smith - Product Manager',
             ),
           ],
         ),
