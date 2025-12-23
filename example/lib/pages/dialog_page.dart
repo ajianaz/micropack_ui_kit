@@ -42,7 +42,7 @@ class DialogPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Icon(
-                        FontAwesomeIcons.accessibleIcon,
+                        Icons.accessibility,
                         color: context.mp.textColor,
                       ),
                       MPText.subhead(
