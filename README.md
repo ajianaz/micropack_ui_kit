@@ -5,17 +5,18 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter Analysis](https://img.shields.io/badge/analysis-passing-brightgreen)](https://pub.dev/packages/micropack_ui_kit)
 
-A comprehensive, customizable, and theme-aware UI kit for Flutter applications. Micropack UI Kit provides a collection of beautifully designed components that automatically adapt to light and dark themes, ensuring a consistent user experience across your app.
+A comprehensive, customizable, and theme-aware UI kit for Flutter applications. Micropack UI Kit provides **26 beautifully designed components** that automatically adapt to light and dark themes, ensuring a consistent user experience across your app.
 
 ## ✨ Features
 
 - 🎨 **Theme-Aware Components**: All components automatically adapt to light and dark themes
-- 🎯 **Consistent Design System**: Unified design language across all components
+- 🎯 **Consistent Design System**: Unified design language across 26 components
 - 📱 **Responsive Design**: Built-in responsive utilities for different screen sizes
 - 🎭 **Customizable**: Extensive customization options for colors, fonts, and styles
 - 🌐 **Cross-Platform**: Works seamlessly across Android, iOS, Web, Desktop
 - ♿ **Accessibility**: Built with accessibility best practices in mind
 - 🔧 **Developer Friendly**: Clean API with comprehensive documentation
+- 🧪 **Well Tested**: Comprehensive test coverage for all components
 
 ## 🚀 Installation
 
@@ -23,7 +24,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  micropack_ui_kit: ^0.0.1
+  micropack_ui_kit: ^0.3.0
 ```
 
 Then install the package:
@@ -117,7 +118,74 @@ Widget build(BuildContext context) {
 
 ## 🧩 Available Components
 
-### 🔘 MPButton
+| Component | Category | Description | Demo |
+|-----------|-----------|-------------|-------|
+| **MPButton** | Basic | Customizable button with multiple variants | ✅ |
+| **MPCard** | Basic | Content container with styling | ✅ |
+| **MPText** | Basic | Enhanced text component | ✅ |
+| **MPTextField** | Form | Input field with validation | ✅ |
+| **MPCheckbox** | Form | Checkbox component | ✅ |
+| **MPSwitch** | Form | Toggle switch component | ✅ |
+| **MPBadge** | Feedback | Status indicator badge | ✅ |
+| **MPChip** | Feedback | Tag/label chip | ✅ |
+| **MPTooltip** | Feedback | Contextual help tooltip | ✅ |
+| **MPProgress** | Feedback | Progress indicators (linear/circular) | ✅ |
+| **MPDropdown** | Form | Select dropdown with search | ✅ |
+| **MPToast** | Feedback | Quick notification toast | ✅ |
+| **MPSnackbar** | Feedback | Snackbar notifications | ✅ |
+| **MPDialog** | Navigation | Modal dialog | ✅ |
+| **MPBottomSheet** | Navigation | Bottom sheet modal | ✅ |
+| **MPAppBar** | Navigation | Theme-aware app bar | ✅ |
+| **MPNavigationRail** | Navigation | Desktop sidebar navigation | ✅ |
+| **MPPlatformAdaptive** | Utility | Platform-specific widget selector | ✅ |
+| **MPListTile** | Display | Standard list item | ✅ |
+| **MPAvatar** | Display | User profile avatar | ✅ |
+| **MPDivider** | Display | Divider with theme support | ✅ |
+| **MPEmptyState** | Display | Empty state placeholder | ✅ |
+| **MPTab** | Navigation | Tab navigation | ✅ |
+| **MPSkeleton** | Display | Loading skeleton | ✅ |
+| **MPArticleCard** | Display | Article card with features | ✅ |
+
+### 📦 Component Categories
+
+#### 🔘 Basic Components
+- **MPButton** - Multiple variants (primary, outlined, ghost, etc.)
+- **MPCard** - Content containers with elevation
+- **MPText** - Typography system with built-in styles
+- **MPTextField** - Form inputs with validation
+
+#### 📝 Form Components
+- **MPCheckbox** - Checkboxes with states
+- **MPSwitch** - Toggle switches
+- **MPDropdown** - Select inputs with search
+- **MPBadge** - Status indicators
+
+#### 💬 Feedback Components
+- **MPChip** - Tag and label chips
+- **MPTooltip** - Contextual tooltips
+- **MPProgress** - Linear and circular progress
+- **MPToast** - Quick notifications
+- **MPSnackbar** - Snackbar with actions
+
+#### 🧭 Navigation Components
+- **MPDialog** - Modal dialogs
+- **MPBottomSheet** - Bottom sheet modals
+- **MPAppBar** - Theme-aware app bars
+- **MPNavigationRail** - Desktop sidebar
+- **MPPlatformAdaptive** - Platform widget selector
+- **MPTab** - Tab navigation
+
+#### 📰 Display Components
+- **MPListTile** - Standard list items
+- **MPAvatar** - User profile images
+- **MPDivider** - Dividers with styling
+- **MPEmptyState** - Empty state placeholders
+- **MPSkeleton** - Loading skeletons
+- **MPArticleCard** - Article cards
+
+---
+
+## 🔘 MPButton
 
 Customizable button with multiple variants and states.
 
@@ -148,9 +216,278 @@ MPButton(
 **Variants**: `primary`, `outlined`, `ghost`, `text`, `danger`, `success`, `warning`, `info`
 **Sizes**: `small`, `regular`, `medium`, `large`
 
-### 📰 MPArticleCard
+### 📝 MPCheckbox
 
-Feature-rich article card with multiple variants and interactive elements.
+Checkbox component with multiple sizes and states.
+
+```dart
+// Basic checkbox
+MPCheckbox(
+  value: _isChecked,
+  onToggle: (value) => setState(() => _isChecked = value ?? false),
+)
+
+// With label
+Row(
+  children: [
+    MPCheckbox(
+      value: _isChecked,
+      onToggle: (value) => setState(() => _isChecked = value ?? false),
+    ),
+    SizedBox(width: 12),
+    MPText('I agree to the terms'),
+  ],
+)
+
+// Different sizes
+MPCheckbox(
+  value: true,
+  size: MPCheckboxSize.small,
+  onToggle: (value) {},
+)
+
+// Indeterminate state
+MPCheckbox(
+  value: _isIndeterminate,
+  tristate: true,
+  onToggle: (value) => setState(() => _isIndeterminate = value ?? false),
+)
+```
+
+**Sizes**: `small`, `medium`, `large`
+**States**: `checked`, `unchecked`, `indeterminate`
+
+### 🔄 MPSwitch
+
+Toggle switch component with multiple variants.
+
+```dart
+// Basic switch
+MPSwitch(
+  value: _isOn,
+  onToggle: (value) => setState(() => _isOn = value),
+)
+
+// With label
+Row(
+  children: [
+    Expanded(child: MPText('Dark Mode')),
+    MPSwitch(
+      value: _isDarkMode,
+      onToggle: (value) => setState(() => _isDarkMode = value),
+    ),
+  ],
+)
+
+// Different sizes
+MPSwitch(
+  value: true,
+  size: MPSwitchSize.small,
+  onToggle: (value) {},
+)
+
+// Disabled
+MPSwitch(
+  value: true,
+  disabled: true,
+  onToggle: (value) {},
+)
+```
+
+**Sizes**: `small`, `medium`, `large`
+
+### 🏷️ MPChip
+
+Tag and label chip component with variants.
+
+```dart
+// Basic chip
+MPChip(
+  label: 'Flutter',
+  onTap: () => print('Chip tapped'),
+)
+
+// With avatar
+MPChip(
+  label: 'John Doe',
+  avatar: CircleAvatar(child: Text('JD')),
+  onTap: () {},
+)
+
+// Closable chip
+MPChip(
+  label: 'Tag',
+  onDeleted: () => print('Chip deleted'),
+)
+
+// Filter chip
+MPChip(
+  label: 'All',
+  selected: _isSelected,
+  variant: MPChipVariant.filter,
+  onTap: () => setState(() => _isSelected = !_isSelected),
+)
+```
+
+**Variants**: `default`, `primary`, `outlined`, `filter`
+
+### 📊 MPProgress
+
+Progress indicators for loading and completion states.
+
+```dart
+// Linear progress bar
+MPProgressBar(
+  value: 0.7, // 0.0 to 1.0
+)
+
+// Indeterminate progress
+const MPProgressBar()
+
+// Circular progress
+MPCircularProgress(
+  value: 0.5,
+)
+
+// Indeterminate circular
+const MPCircularProgress()
+```
+
+### 📋 MPDropdown
+
+Select dropdown component with search support.
+
+```dart
+// Basic dropdown
+MPDropdown<String>(
+  hint: 'Select country',
+  value: _selectedCountry,
+  items: const [
+    DropdownItem(value: 'US', label: 'United States'),
+    DropdownItem(value: 'UK', label: 'United Kingdom'),
+  ],
+  onChanged: (value) => setState(() => _selectedCountry = value),
+)
+
+// Searchable dropdown
+MPDropdown<String>(
+  hint: 'Search and select',
+  searchable: true,
+  items: _allItems,
+  onChanged: (value) => setState(() => _selectedValue = value),
+)
+
+// Multi-select
+MPDropdown<String>(
+  hint: 'Select categories',
+  multiSelect: true,
+  items: _categories,
+  onChanged: (values) => setState(() => _selectedCategories = values),
+)
+```
+
+### 💡 MPTooltip
+
+Contextual tooltip component for additional information.
+
+```dart
+// Basic tooltip
+MPTooltip(
+  message: 'This is a tooltip',
+  child: Icon(Icons.help),
+)
+
+// Rich tooltip with icon
+MPTooltip(
+  message: 'Feature available in Pro',
+  icon: Icons.star,
+  child: Icon(Icons.lock),
+)
+
+// Positioned tooltip
+MPTooltip(
+  message: 'Positioned at top',
+  position: MPTooltipPosition.top,
+  child: MPButton(text: 'Hover Me'),
+)
+```
+
+**Positions**: `top`, `bottom`, `left`, `right`
+
+### 💬 MPSnackbar
+
+Snackbar notification component with variants and actions.
+
+```dart
+// Basic snackbar
+MPSnackbar.show(
+  context: context,
+  message: 'Operation completed successfully',
+  variant: MPSnackbarVariant.success,
+)
+
+// With action
+MPSnackbar.show(
+  context: context,
+  message: 'Item deleted',
+  action: MPSnackbarAction(
+    label: 'UNDO',
+    onPressed: () => _undoDeletion(),
+  ),
+)
+
+// Custom duration
+MPSnackbar.show(
+  context: context,
+  message: 'This message will stay for 5 seconds',
+  duration: Duration(seconds: 5),
+)
+
+// Custom position
+MPSnackbar.show(
+  context: context,
+  message: 'Top positioned snackbar',
+  position: MPSnackbarPosition.top,
+)
+```
+
+**Variants**: `success`, `error`, `info`, `warning`
+**Positions**: `top`, `bottom`
+
+### 💀 MPSkeleton
+
+Loading skeleton component for placeholder content.
+
+```dart
+// Text skeleton
+MPSkeleton(type: MPSkeletonType.line, width: double.infinity)
+
+// Avatar skeleton
+MPSkeleton(type: MPSkeletonType.circle, size: 64)
+
+// Image skeleton
+MPSkeleton(
+  type: MPSkeletonType.rect,
+  width: double.infinity,
+  height: 200,
+)
+
+// Card skeleton
+Container(
+  child: Column(
+    children: [
+      MPSkeleton(type: MPSkeletonType.rect, width: 100, height: 100),
+      SizedBox(height: 12),
+      MPSkeleton(type: MPSkeletonType.line, width: 200),
+      MPSkeleton(type: MPSkeletonType.line, width: 150),
+    ],
+  ),
+)
+```
+
+**Types**: `line`, `circle`, `rect`
+
+### 📰 MPArticleCard
 
 ```dart
 MPArticleCard(
@@ -346,6 +683,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📋 Changelog
 
 ### ✅ Recent Updates
+
+#### [0.3.0] - 2025-12-23
+- ✨ **New Demo Pages**: Added 9 new demo pages for all form components
+  - Badge, Switch, Chip, Progress, Dropdown, Tooltip, Checkbox, Snackbar, Skeleton
+- 📊 **Complete Demo Coverage**: 100% demo coverage for all 26 components
+- 🎨 **Enhanced App Bar Demo**: Improved UX with proper full-screen examples
+- 🧭 **Navigation Improvements**: Added Form Components section in home page
+- 📝 **Documentation**: Updated README with component table and examples
+
+#### [0.2.0] - 2025-12-23
+- 🧭 **Navigation Components**: MPBottomSheet, MPNavigationRail, MPAppBar, MPPlatformAdaptive
+- 📊 **Feedback Components**: MPListTile, MPAvatar, MPDivider, MPEmptyState
+- 🧪 **Complete Test Suite**: Tests for all new components
+- 📱 **Platform Support**: Enhanced macOS and web optimization
 
 #### [0.1.1] - 2025-12-06
 - 🔧 **Code Quality**: Final cleanup of flutter_screenutil remnants

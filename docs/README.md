@@ -4,10 +4,88 @@ Welcome to Micropack UI Kit documentation! This comprehensive UI library provide
 
 ## 📚 Table of Contents
 
+- [Documentation Overview](./overview.md) - **START HERE**
 - [Getting Started](./getting-started/README.md)
-- [API Reference](./api/README.md)
+- [Component API Reference](./api/README.md)
+- [Component Quick Reference](./component-quick-reference.md)
 - [Examples](./examples/README.md)
 - [Guides](./guides/README.md)
+
+---
+
+## 🚀 New to Micropack UI Kit?
+
+Start with the [Documentation Overview](./overview.md) to understand the structure and find what you need!
+
+### Recommended Learning Path
+
+1. **[Getting Started Guide](./getting-started/README.md)** (15 min)
+   - Installation
+   - Basic setup
+   - Your first component
+   - Theme initialization
+
+2. **[Common Use Cases](./examples/common-use-cases.md)** (30 min)
+   - Authentication forms
+   - User profiles
+   - Settings pages
+   - Real-world examples
+
+3. **[Component Quick Reference](./component-quick-reference.md)** (Keep open!)
+   - Fast component lookup
+   - Quick props reference
+   - Common patterns
+
+---
+
+## 📖 Available Documentation
+
+### 📖 Core Documentation
+
+| Document | Description | Reading Time |
+|-----------|-------------|---------------|
+| **[Overview](./overview.md)** | Documentation structure and learning paths | 5 min |
+| **[Getting Started](./getting-started/README.md)** | Installation and basic setup | 15 min |
+| **[Component API](./api/README.md)** | Complete API documentation for all 26 components | 30 min |
+| **[Quick Reference](./component-quick-reference.md)** | Fast lookup card | 5 min |
+
+### 🎨 Examples & Guides
+
+| Document | Description | Reading Time |
+|-----------|-------------|---------------|
+| **[Common Use Cases](./examples/common-use-cases.md)** | Real-world usage examples | 20 min |
+| **[Best Practices](./guides/best-practices.md)** | Best practices and patterns | 15 min |
+| **[Theme System Guide](./guides/theming.md)** | Complete theme system guide | 20 min |
+| **[Theme Colors Quick Reference](./guides/theme-colors-quick-reference.md)** | All theme colors reference | 10 min |
+| **[Troubleshooting Guide](./guides/troubleshooting.md)** | Common issues and solutions | 15 min |
+
+---
+
+## 🔗 Quick Links
+
+### Quick Start
+
+- [Installation](./getting-started/README.md#-installation)
+- [Initialize UI Kit](./getting-started/README.md#-initialization)
+- [Your First Component](./getting-started/README.md#-using-your-first-component)
+- [Theme Setup](./getting-started/README.md#-theme-system)
+
+### Components
+
+- [Basic Components](./api/README.md#basic-components) - Button, Card, Text, TextField
+- [Form Components](./api/README.md#form-components) - Checkbox, Switch, Badge, Chip, Progress, Dropdown, Tooltip
+- [Feedback Components](./api/README.md#feedback-components) - Toast, Snackbar
+- [Navigation Components](./api/README.md#navigation-components) - Dialog, BottomSheet, AppBar, NavigationRail, Tab, PlatformAdaptive
+- [Display Components](./api/README.md#display-components) - ListTile, Avatar, Divider, EmptyState, Skeleton, ArticleCard
+
+### References
+
+- [Component Quick Reference](./component-quick-reference.md) - Fast lookup
+- [Theme Properties](./api/README.md#available-theme-properties) - All theme colors
+- [Component Variants](./component-quick-reference.md#component-variants) - All variants
+- [Component Sizes](./component-quick-reference.md#component-sizes) - All sizes
+
+---
 
 ## 🚀 Quick Start
 
@@ -295,20 +373,37 @@ class ThemeProvider extends ChangeNotifier {
 
 ```
 docs/
-├── api/           # API reference documentation
-├── getting-started/ # Setup and basic usage
-├── examples/       # Code examples and demos
-├── guides/         # Advanced guides and patterns
-└── assets/         # Images and resources
+├── README.md                          # This file
+├── overview.md                        # Documentation overview and navigation
+├── getting-started/
+│   └── README.md                      # Installation and setup
+├── api/
+│   └── README.md                      # Complete component API reference
+├── guides/
+│   └── best-practices.md             # Best practices and patterns
+├── examples/
+│   └── common-use-cases.md         # Real-world usage examples
+├── component-quick-reference.md      # Quick reference card
+└── assets/                         # Images and resources
 ```
 
-## 🔗 Links
+## 🔗 Quick Links
 
-- [Installation Guide](./getting-started/installation.md)
-- [Component API](./api/components.md)
-- [Theme System](./guides/theming.md)
-- [Testing Summary](./testing-summary.md)
-- [Examples Repository](https://github.com/your-repo/micropack_ui_kit_example)
+### 📚 Core Documentation
+- [Documentation Overview](./overview.md) - **START HERE**
+- [Getting Started Guide](./getting-started/README.md) - Installation and setup
+- [Component API Reference](./api/README.md) - Complete API documentation
+- [Component Quick Reference](./component-quick-reference.md) - Fast lookup
+
+### 🎨 Examples & Guides
+- [Common Use Cases](./examples/common-use-cases.md) - Real-world examples
+- [Best Practices Guide](./guides/best-practices.md) - Best practices
+
+### 🔗 External Links
+- [Package README](../README.md) - Main package documentation
+- [CHANGELOG](../CHANGELOG.md) - Version history and changes
+- [Example App](../example/) - Full working example
+- [GitHub Repository](https://github.com/ajianaz/micropack-ui-kit.git)
 
 ## 🤝 Contributing
 

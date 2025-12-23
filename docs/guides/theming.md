@@ -1,64 +1,254 @@
-# Comprehensive Theming Guide
+# Theme System Guide
 
-This guide covers everything you need to know about implementing and customizing themes in Micropack UI Kit, including dark/light mode support, theme switching, and best practices.
+Complete guide to the Micropack UI Kit theme system, including color utilities, theming patterns, and best practices.
 
-## 📚 Table of Contents
+## 📋 Table of Contents
 
-- [Theme System Architecture](#theme-system-architecture)
-- [Basic Theme Setup](#basic-theme-setup)
-- [Theme Switching Implementation](#theme-switching-implementation)
-- [Theme Customization](#theme-customization)
-- [Dark/Light Mode Best Practices](#darklight-mode-best-practices)
-- [Advanced Theme Features](#advanced-theme-features)
-- [Theme Migration](#theme-migration)
-- [Troubleshooting](#troubleshooting)
+- [Theme System Overview](#theme-system-overview)
+- [Core Concepts](#core-concepts)
+- [Color Utilities](#color-utilities)
+- [Theme Initialization](#theme-initialization)
+- [Custom Theming](#custom-theming)
+- [Dark/Light Mode](#darklight-mode)
+- [Theme Best Practices](#theme-best-practices)
 
-## Theme System Architecture
+---
 
-Micropack UI Kit's theme system is built on top of Flutter's ThemeData with custom extensions:
+## 🎨 Theme System Overview
 
-```
-MaterialApp
-├── theme (Light theme)
-│   ├── ThemeData
-│   └── MPColorTheme (Extension)
-├── darkTheme (Dark theme)
-│   ├── ThemeData
-│   └── MPColorTheme (Extension)
-└── themeMode (Current selection)
-```
+Micropack UI Kit includes a powerful theme system built on Flutter's ThemeData with custom extensions. The theme system provides:
 
-### Core Components
+- ✅ **Adaptive Colors** - Colors that automatically adapt to light and dark themes
+- ✅ **Semantic Colors** - Pre-defined colors for common use cases (error, success, warning, info)
+- ✅ **Brand Colors** - Easy brand customization
+- ✅ **Extension-based** - Uses Flutter's theme extension system
+- ✅ **Type Safe** - All theme properties are compile-time checked
 
-1. **MPColorTheme**: Custom theme extension defining color schemes
-2. **MPThemeHelper**: Utility class for theme-related operations
-3. **MPContextExtension**: Extension on BuildContext for easy theme access
-
-### Color System
-
-The theme system uses a structured color palette:
-
-- **Primary Colors**: Brand colors (primary, primarySurface, primaryFocus, etc.)
-- **Neutral Colors**: 10-step neutral scale (neutral10 to neutral100)
-- **Semantic Colors**: Purpose-specific colors (textColor, subtitleColor, etc.)
-- **Status Colors**: State-specific colors (successColor, errorColor, etc.)
-
-## Basic Theme Setup
-
-### 1. Initialize Theme System
+### Key Benefits
 
 ```dart
+// Before: Hard-coded colors - doesn't adapt
+Container(color: Color(0xFF000000))
+
+// After: Adaptive colors - responds to theme
+Container(color: context.mp.adaptiveBackgroundColor)
+```
+
+---
+
+## 🔑 Core Concepts
+
+### 1. Theme Extension
+
+The theme system uses Flutter's `ThemeExtension` pattern:
+
+```dart
+// Light theme
+MaterialApp(
+  theme: MPTheme.main().copyWith(
+    extensions: [MPColorTheme.light],
+  ),
+)
+
+// Dark theme
+MaterialApp(
+  darkTheme: MPTheme.main().copyWith(
+    extensions: [MPColorTheme.dark],
+  ),
+)
+```
+
+### 2. MP Extension
+
+Access theme properties through the `mp` extension on `BuildContext`:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Container(
+    color: context.mp.primary,  // Access theme via context.mp
+  );
+}
+```
+
+### 3. Adaptive vs Fixed Colors
+
+> **⚠️ CRITICAL**: Always use adaptive colors (`context.mp.textColor`) instead of fixed neutral colors (`context.mp.neutral90`). Fixed colors don't adapt to theme changes and will cause visibility issues.
+
+```dart
+// ✅ CORRECT: Adaptive colors
+Container(
+  color: context.mp.adaptiveBackgroundColor,
+  child: Text(
+    'Hello',
+    style: TextStyle(color: context.mp.textColor),
+  ),
+)
+
+// ❌ WRONG: Fixed colors - don't adapt
+Container(
+  color: context.mp.neutral90,
+  child: Text(
+    'Hello',
+    style: TextStyle(color: context.mp.neutral20),
+  ),
+)
+```
+
+---
+
+## 🎨 Color Utilities
+
+### Brand Colors
+
+Primary colors for your brand identity:
+
+```dart
+context.mp.primary              // Primary brand color
+context.mp.primaryBorder        // Primary border color
+```
+
+**Usage**: Primary buttons, active states, brand accents
+
+```dart
+MPButton(
+  text: 'Primary Action',
+  variant: MPButtonVariant.primary,
+  onPressed: _onTap,
+)
+
+Container(
+  color: context.mp.primary,
+  padding: EdgeInsets.all(16),
+  child: Text('Brand Accent'),
+)
+```
+
+---
+
+### Adaptive Colors
+
+Colors that automatically adapt to theme:
+
+```dart
+context.mp.adaptiveBackgroundColor  // Background color (light/dark)
+context.mp.cardColor               // Card background color
+context.mp.borderColor             // Border color
+context.mp.dividerColor            // Divider color
+context.mp.textColor               // Text color
+context.mp.subtitleColor          // Subtitle text color
+context.mp.captionColor           // Caption text color
+```
+
+**Usage**: All backgrounds, text, borders, dividers
+
+```dart
+Scaffold(
+  backgroundColor: context.mp.adaptiveBackgroundColor,
+  body: Padding(
+    padding: EdgeInsets.all(16),
+    child: MPCard(
+      child: Column(
+        children: [
+          MPText.head('Main Heading'),
+          MPText.subhead('Subheading'),
+          MPText.body('Body text'),
+          MPText.label('Label text'),
+          MPText.small('Caption text'),
+          Divider(color: context.mp.dividerColor),
+        ],
+      ),
+    ),
+  ),
+)
+```
+
+---
+
+### Semantic Colors
+
+Pre-defined colors for specific meanings:
+
+```dart
+context.mp.errorColor     // Error (red)
+context.mp.successColor   // Success (green)
+context.mp.warningColor   // Warning (orange/yellow)
+context.mp.infoColor      // Info (blue)
+```
+
+**Usage**: Feedback messages, validation, status indicators
+
+```dart
+// Error message
+Text(
+  'Something went wrong',
+  style: TextStyle(color: context.mp.errorColor),
+)
+
+// Success message
+MPToast.show(
+  context: context,
+  message: 'Saved successfully!',
+  type: MPToastType.success,
+)
+
+// Warning badge
+MPBadge(
+  label: 'Warning',
+  variant: MPBadgeVariant.notification,
+  backgroundColor: context.mp.warningColor,
+)
+
+// Info icon
+Icon(Icons.info, color: context.mp.infoColor)
+```
+
+---
+
+### Neutral Colors (For Reference Only)
+
+> **⚠️ WARNING**: These colors are for reference only. Use adaptive colors in your app.
+
+```dart
+context.mp.neutral90   // Very light gray
+context.mp.neutral80
+context.mp.neutral70
+context.mp.neutral60
+context.mp.neutral50
+context.mp.neutral40
+context.mp.neutral30
+context.mp.neutral20
+context.mp.neutral10   // Very dark gray
+```
+
+**DO NOT USE**: These colors in your app code. They're provided for debugging and reference only.
+
+---
+
+## ⚙️ Theme Initialization
+
+### Basic Setup
+
+```dart
+import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MPTextStyle.defaultFontFamily = 'YourFont'; // Optional
 
-  runApp(MyApp());
+  // Initialize UI Kit
+  MpUiKit.init(
+    colorBrand: Color(0xFF4086EF),      // Primary brand color
+    colorBrand2: Color(0xFFFFFFFF),     // Secondary brand color
+    colorText: Color(0xFF2F2F2F),      // Text color for light theme
+    fontName: 'Inter',                 // Optional: custom font
+  );
+
+  runApp(const MyApp());
 }
 ```
 
-### 2. Configure MaterialApp
+### With Light and Dark Themes
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -69,113 +259,102 @@ class MyApp extends StatelessWidget {
     return MPComponentInit(
       builder: (_) => MaterialApp(
         title: 'My App',
-        themeMode: ThemeMode.system, // Follow system preference
+        themeMode: ThemeMode.system,  // Use system preference
+
+        // Light theme
         theme: MPTheme.main().copyWith(
           extensions: [MPColorTheme.light],
         ),
+
+        // Dark theme
         darkTheme: MPTheme.main().copyWith(
           extensions: [MPColorTheme.dark],
         ),
-        home: HomePage(),
+
+        home: const HomePage(),
       ),
     );
   }
 }
 ```
 
-### 3. Access Theme in Components
+---
+
+## 🎭 Custom Theming
+
+### 1. Customize Brand Colors
 
 ```dart
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: context.mp.adaptiveBackgroundColor,
-      child: Text(
-        'Hello World',
-        style: TextStyle(
-          color: context.mp.textColor,
-        ),
-      ),
-    );
-  }
-}
+MpUiKit.init(
+  colorBrand: Color(0xFF6366F1),      // Your primary color
+  colorBrand2: Color(0xFFF472B6),     // Your secondary color
+  colorText: Color(0xFF1F2937),       // Your text color
+  colorError: Color(0xFFEF4444),       // Your error color
+  colorSuccess: Color(0xFF10B981),     // Your success color
+  colorWarning: Color(0xFFF59E0B),     // Your warning color
+  colorInfo: Color(0xFF3B82F6),        // Your info color
+)
 ```
 
-## Theme Switching Implementation
-
-### Basic Theme Toggle
+### 2. Customize Font
 
 ```dart
-class ThemeToggle extends StatefulWidget {
-  const ThemeToggle({super.key});
+// During initialization
+MpUiKit.init(
+  fontName: 'YourCustomFont',
+  useScreenUtil: true,  // Enable responsive font sizing
+)
 
-  @override
-  State<ThemeToggle> createState() => _ThemeToggleState();
-}
-
-class _ThemeToggleState extends State<ThemeToggle> {
-  ThemeMode _themeMode = ThemeMode.system;
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<ThemeMode>(
-      icon: Icon(_getThemeIcon(_themeMode)),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: ThemeMode.light,
-          child: Row(
-            children: [
-              Icon(Icons.light_mode),
-              SizedBox(width: 8),
-              Text('Light'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: ThemeMode.dark,
-          child: Row(
-            children: [
-              Icon(Icons.dark_mode),
-              SizedBox(width: 8),
-              Text('Dark'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: ThemeMode.system,
-          child: Row(
-            children: [
-              Icon(Icons.settings_brightness),
-              SizedBox(width: 8),
-              Text('System'),
-            ],
-          ),
-        ),
-      ],
-      onSelected: (mode) => setState(() => _themeMode = mode),
-    );
-  }
-
-  IconData _getThemeIcon(ThemeMode mode) {
-    switch (mode) {
-      case ThemeMode.light:
-        return Icons.light_mode;
-      case ThemeMode.dark:
-        return Icons.dark_mode;
-      case ThemeMode.system:
-        return Icons.settings_brightness;
-    }
-  }
-}
+// Or globally
+MPTextStyle.defaultFontFamily = 'YourCustomFont';
 ```
 
-### State Management Integration (Provider)
+### 3. Customize Button Border Radius
 
 ```dart
-// 1. Create theme provider
+MpUiKit.init(
+  buttonBorderRadius: 12.0,  // Rounded corners
+)
+```
+
+### 4. Customize Theme Colors
+
+```dart
+MaterialApp(
+  theme: MPTheme.main().copyWith(
+    extensions: [MPColorTheme.light].map((theme) {
+      return theme.copyWith(
+        primary: Color(0xFF6366F1),  // Override primary
+        cardColor: Color(0xFFFAFAFA), // Override card color
+      );
+    }).first,
+  ),
+  home: const HomePage(),
+)
+```
+
+---
+
+## 🌓 Dark/Light Mode
+
+### 1. System Theme
+
+Follow user's system preference:
+
+```dart
+MaterialApp(
+  themeMode: ThemeMode.system,  // ✅ Uses system preference
+  theme: MPTheme.main().copyWith(extensions: [MPColorTheme.light]),
+  darkTheme: MPTheme.main().copyWith(extensions: [MPColorTheme.dark]),
+  home: const HomePage(),
+)
+```
+
+### 2. Manual Theme Toggle
+
+Let users manually select theme:
+
+```dart
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 
@@ -187,7 +366,6 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
-// 2. Integrate with MaterialApp
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -200,13 +378,9 @@ class MyApp extends StatelessWidget {
           return MPComponentInit(
             builder: (_) => MaterialApp(
               themeMode: themeProvider.themeMode,
-              theme: MPTheme.main().copyWith(
-                extensions: [MPColorTheme.light],
-              ),
-              darkTheme: MPTheme.main().copyWith(
-                extensions: [MPColorTheme.dark],
-              ),
-              home: HomePage(),
+              theme: MPTheme.main().copyWith(extensions: [MPColorTheme.light]),
+              darkTheme: MPTheme.main().copyWith(extensions: [MPColorTheme.dark]),
+              home: const HomePage(),
             ),
           );
         },
@@ -215,7 +389,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// 3. Use theme in components
+// Theme toggle button
 class ThemeToggle extends StatelessWidget {
   const ThemeToggle({super.key});
 
@@ -225,31 +399,60 @@ class ThemeToggle extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return PopupMenuButton<ThemeMode>(
           icon: Icon(_getThemeIcon(themeProvider.themeMode)),
-          onSelected: (mode) => themeProvider.setTheme(mode),
           itemBuilder: (context) => [
-            PopupMenuItem(value: ThemeMode.light, child: Text('Light')),
-            PopupMenuItem(value: ThemeMode.dark, child: Text('Dark')),
-            PopupMenuItem(value: ThemeMode.system, child: Text('System')),
+            PopupMenuItem(
+              value: ThemeMode.light,
+              child: Row(
+                children: [
+                  Icon(Icons.light_mode),
+                  SizedBox(width: 8),
+                  Text('Light'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: ThemeMode.dark,
+              child: Row(
+                children: [
+                  Icon(Icons.dark_mode),
+                  SizedBox(width: 8),
+                  Text('Dark'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: ThemeMode.system,
+              child: Row(
+                children: [
+                  Icon(Icons.settings_brightness),
+                  SizedBox(width: 8),
+                  Text('System'),
+                ],
+              ),
+            ),
           ],
+          onSelected: (mode) => themeProvider.setTheme(mode),
         );
       },
     );
-  }
 
-  IconData _getThemeIcon(ThemeMode mode) {
-    switch (mode) {
-      case ThemeMode.light:
-        return Icons.light_mode;
-      case ThemeMode.dark:
-        return Icons.dark_mode;
-      case ThemeMode.system:
-        return Icons.settings_brightness;
+    IconData _getThemeIcon(ThemeMode mode) {
+      switch (mode) {
+        case ThemeMode.light:
+          return Icons.light_mode;
+        case ThemeMode.dark:
+          return Icons.dark_mode;
+        case ThemeMode.system:
+          return Icons.settings_brightness;
+      }
     }
   }
 }
 ```
 
-### Theme Persistence
+### 3. Persist Theme Preference
+
+Save user's theme choice:
 
 ```dart
 import 'package:shared_preferences/shared_preferences.dart';
@@ -260,7 +463,6 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
-  // Load saved theme preference
   Future<void> loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     final savedTheme = prefs.getString(_themeKey);
@@ -271,7 +473,6 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
-  // Save theme preference
   Future<void> setTheme(ThemeMode mode) async {
     _themeMode = mode;
     final prefs = await SharedPreferences.getInstance();
@@ -291,7 +492,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
-// Initialize in main.dart
+// Load theme on app start
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -301,614 +502,166 @@ void main() async {
   runApp(
     ChangeNotifierProvider.value(
       value: themeProvider,
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 ```
 
-## Theme Customization
+---
 
-### Custom Color Scheme
-
-```dart
-MaterialApp(
-  theme: MPTheme.main().copyWith(
-    extensions: [
-      MPColorTheme.light.copyWith(
-        primary: Colors.deepPurple,
-        primarySurface: Colors.deepPurple.shade50,
-        primaryFocus: Colors.deepPurple.shade200,
-        primaryBorder: Colors.deepPurple.shade300,
-        primaryHover: Colors.deepPurple.shade400,
-        primaryPressed: Colors.deepPurple.shade600,
-        neutral10: Colors.grey.shade50,
-        neutral20: Colors.grey.shade100,
-        neutral30: Colors.grey.shade200,
-        neutral40: Colors.grey.shade300,
-        neutral50: Colors.grey.shade400,
-        neutral60: Colors.grey.shade500,
-        neutral70: Colors.grey.shade600,
-        neutral80: Colors.grey.shade700,
-        neutral90: Colors.grey.shade800,
-        neutral100: Colors.grey.shade900,
-      ),
-    ],
-  ),
-  darkTheme: MPTheme.main().copyWith(
-    extensions: [
-      MPColorTheme.dark.copyWith(
-        primary: Colors.deepPurple,
-        primarySurface: Colors.deepPurple.shade900,
-        primaryFocus: Colors.deepPurple.shade700,
-        primaryBorder: Colors.deepPurple.shade600,
-        primaryHover: Colors.deepPurple.shade500,
-        primaryPressed: Colors.deepPurple.shade800,
-        neutral10: Colors.grey.shade900,
-        neutral20: Colors.grey.shade800,
-        neutral30: Colors.grey.shade700,
-        neutral40: Colors.grey.shade600,
-        neutral50: Colors.grey.shade500,
-        neutral60: Colors.grey.shade400,
-        neutral70: Colors.grey.shade300,
-        neutral80: Colors.grey.shade200,
-        neutral90: Colors.grey.shade100,
-        neutral100: Colors.grey.shade50,
-      ),
-    ],
-  ),
-  home: YourApp(),
-)
-```
-
-### Custom Theme Extension
-
-```dart
-class CustomThemeExtension extends ThemeExtension<CustomThemeExtension> {
-  final Color? accentColor;
-  final Color? surfaceColor;
-  final Color? overlayColor;
-
-  const CustomThemeExtension({
-    this.accentColor,
-    this.surfaceColor,
-    this.overlayColor,
-  });
-
-  @override
-  CustomThemeExtension copyWith({
-    Color? accentColor,
-    Color? surfaceColor,
-    Color? overlayColor,
-  }) {
-    return CustomThemeExtension(
-      accentColor: accentColor ?? this.accentColor,
-      surfaceColor: surfaceColor ?? this.surfaceColor,
-      overlayColor: overlayColor ?? this.overlayColor,
-    );
-  }
-
-  @override
-  CustomThemeExtension lerp(
-    ThemeExtension<CustomThemeExtension>? other,
-    double t,
-  ) {
-    if (other is! CustomThemeExtension) {
-      return this;
-    }
-
-    return CustomThemeExtension(
-      accentColor: Color.lerp(accentColor, other.accentColor, t),
-      surfaceColor: Color.lerp(surfaceColor, other.surfaceColor, t),
-      overlayColor: Color.lerp(overlayColor, other.overlayColor, t),
-    );
-  }
-}
-
-// Light theme
-static final light = CustomThemeExtension(
-  accentColor: Colors.orange,
-  surfaceColor: Colors.white,
-  overlayColor: Colors.black.withValues(alpha: 0.05),
-);
-
-// Dark theme
-static final dark = CustomThemeExtension(
-  accentColor: Colors.orange.shade300,
-  surfaceColor: Colors.grey.shade900,
-  overlayColor: Colors.white.withValues(alpha: 0.05),
-);
-
-// Usage in MaterialApp
-MaterialApp(
-  theme: MPTheme.main().copyWith(
-    extensions: [
-      MPColorTheme.light,
-      CustomThemeExtension.light,
-    ],
-  ),
-  darkTheme: MPTheme.main().copyWith(
-    extensions: [
-      MPColorTheme.dark,
-      CustomThemeExtension.dark,
-    ],
-  ),
-  home: YourApp(),
-)
-
-// Access in components
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final customTheme = Theme.of(context).extension<CustomThemeExtension>();
-
-    return Container(
-      color: customTheme?.surfaceColor,
-      child: Icon(
-        Icons.star,
-        color: customTheme?.accentColor,
-      ),
-    );
-  }
-}
-```
-
-### Theme Builder for Dynamic Customization
-
-```dart
-class ThemeBuilder extends StatefulWidget {
-  const ThemeBuilder({
-    super.key,
-    required this.builder,
-    this.lightTheme,
-    this.darkTheme,
-  });
-
-  final Widget Function(BuildContext context, ThemeData lightTheme, ThemeData darkTheme) builder;
-  final MPColorTheme? lightTheme;
-  final MPColorTheme? darkTheme;
-
-  @override
-  State<ThemeBuilder> createState() => _ThemeBuilderState();
-}
-
-class _ThemeBuilderState extends State<ThemeBuilder> {
-  late MPColorTheme _lightTheme;
-  late MPColorTheme _darkTheme;
-
-  @override
-  void initState() {
-    super.initState();
-    _lightTheme = widget.lightTheme ?? MPColorTheme.light;
-    _darkTheme = widget.darkTheme ?? MPColorTheme.dark;
-  }
-
-  void updatePrimaryColor(Color color) {
-    setState(() {
-      _lightTheme = _lightTheme.copyWith(
-        primary: color,
-        primarySurface: color.withValues(alpha: 0.1),
-        primaryFocus: color.withValues(alpha: 0.2),
-        primaryBorder: color.withValues(alpha: 0.3),
-        primaryHover: color.withValues(alpha: 0.4),
-        primaryPressed: color.withValues(alpha: 0.6),
-      );
-
-      _darkTheme = _darkTheme.copyWith(
-        primary: color,
-        primarySurface: color.withValues(alpha: 0.2),
-        primaryFocus: color.withValues(alpha: 0.3),
-        primaryBorder: color.withValues(alpha: 0.4),
-        primaryHover: color.withValues(alpha: 0.5),
-        primaryPressed: color.withValues(alpha: 0.7),
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.builder(
-      context,
-      MPTheme.main().copyWith(extensions: [_lightTheme]),
-      MPTheme.main().copyWith(extensions: [_darkTheme]),
-    );
-  }
-}
-```
-
-## Dark/Light Mode Best Practices
+## ✅ Theme Best Practices
 
 ### 1. Always Use Adaptive Colors
 
-**⚠️ IMPORTANT:** Always use adaptive color properties instead of fixed neutral colors.
+> **⚠️ CRITICAL**: Never use fixed colors for backgrounds, text, or borders.
 
 ```dart
-// ❌ WRONG - Fixed colors don't adapt to theme
-Text(
-  'Important text',
-  style: TextStyle(color: context.mp.neutral90), // Always dark gray!
-)
-
-Container(
-  color: context.mp.neutral20, // Always light gray!
-  child: Text('Content'),
-)
-
-// ✅ CORRECT - Adaptive colors
-Text(
-  'Important text',
-  style: TextStyle(color: context.mp.textColor), // Black in light, white in dark
-)
-
-Container(
-  color: context.mp.cardColor, // White in light, dark gray in dark
-  child: Text('Content'),
-)
-```
-
-**Quick Reference:**
-- `context.mp.textColor` - Primary text (black/white)
-- `context.mp.subtitleColor` - Secondary text (gray/light gray)
-- `context.mp.captionColor` - Tertiary text (light gray/medium gray)
-- `context.mp.cardColor` - Card backgrounds
-- `context.mp.backgroundColor` - Page backgrounds
-- `context.mp.borderColor` - Borders and dividers
-
-**📖 See [Theme Colors Quick Reference](./theme-colors-quick-reference.md) for complete guide**
-
-### 2. Color Contrast
-
-Ensure sufficient contrast ratios for accessibility:
-
-```dart
-// ✅ Good - Using semantic colors with automatic contrast
-Text(
-  'Important text',
-  style: TextStyle(color: context.mp.textColor),
-)
-
-// ✅ Also good - Manual contrast check
-Container(
-  color: context.mp.isDarkMode ? Colors.black : Colors.white,
-  child: Text(
-    'Contrast text',
-    style: TextStyle(
-      color: context.mp.isDarkMode ? Colors.white : Colors.black,
-    ),
-  ),
-)
-
-// ❌ Bad - Poor contrast
-Container(
-  color: Colors.grey.shade200,
-  child: Text(
-    'Low contrast text',
-    style: TextStyle(color: Colors.grey.shade300),
-  ),
-)
-```
-
-### 3. Adaptive Shadows
-
-Adjust shadows based on theme:
-
-```dart
-Container(
-  decoration: BoxDecoration(
-    boxShadow: [
-      BoxShadow(
-        color: context.mp.adaptiveShadowColor,
-        blurRadius: 4,
-        offset: Offset(0, 2),
-      ),
-    ],
-  ),
-)
-```
-
-### 3. Image Handling
-
-Handle images appropriately for different themes:
-
-```dart
-class ThemeAwareImage extends StatelessWidget {
-  const ThemeAwareImage({
-    super.key,
-    required this.lightAsset,
-    required this.darkAsset,
-  });
-
-  final String lightAsset;
-  final String darkAsset;
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.asset(
-      context.mp.isDarkMode ? darkAsset : lightAsset,
-    );
-  }
-}
-```
-
-### 4. Icon Adaptation
-
-Ensure icons are visible in both themes:
-
-```dart
-Icon(
-  Icons.info,
-  color: context.mp.isDarkMode
-    ? context.mp.neutral70
-    : context.mp.neutral40,
-)
-```
-
-### 5. Animation Considerations
-
-Add smooth transitions when switching themes:
-
-```dart
-class AnimatedThemeSwitch extends StatelessWidget {
-  const AnimatedThemeSwitch({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedTheme(
-      data: Theme.of(context),
-      duration: Duration(milliseconds: 300),
-      child: YourContent(),
-    );
-  }
-}
-```
-
-## Advanced Theme Features
-
-### Theme Preview
-
-```dart
-class ThemePreview extends StatelessWidget {
-  const ThemePreview({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Light theme preview
-        Expanded(
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              brightness: Brightness.light,
-              extensions: [MPColorTheme.light],
-            ),
-            child: Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Column(
-                children: [
-                  MPButton(
-                    text: 'Light Button',
-                    onPressed: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Text('Light theme text'),
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        // Dark theme preview
-        Expanded(
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              brightness: Brightness.dark,
-              extensions: [MPColorTheme.dark],
-            ),
-            child: Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade900,
-                border: Border.all(color: Colors.grey.shade700),
-              ),
-              child: Column(
-                children: [
-                  MPButton(
-                    text: 'Dark Button',
-                    onPressed: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Text('Dark theme text'),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-```
-
-### Theme Export/Import
-
-```dart
-class ThemeManager {
-  static Map<String, dynamic> exportTheme(MPColorTheme theme) {
-    return {
-      'primary': theme.primary?.value,
-      'primarySurface': theme.primarySurface?.value,
-      'primaryFocus': theme.primaryFocus?.value,
-      'primaryBorder': theme.primaryBorder?.value,
-      'primaryHover': theme.primaryHover?.value,
-      'primaryPressed': theme.primaryPressed?.value,
-      'neutral10': theme.neutral10?.value,
-      'neutral20': theme.neutral20?.value,
-      'neutral30': theme.neutral30?.value,
-      'neutral40': theme.neutral40?.value,
-      'neutral50': theme.neutral50?.value,
-      'neutral60': theme.neutral60?.value,
-      'neutral70': theme.neutral70?.value,
-      'neutral80': theme.neutral80?.value,
-      'neutral90': theme.neutral90?.value,
-      'neutral100': theme.neutral100?.value,
-    };
-  }
-
-  static MPColorTheme importTheme(Map<String, dynamic> data) {
-    return MPColorTheme(
-      primary: data['primary'] != null ? Color(data['primary']) : null,
-      primarySurface: data['primarySurface'] != null ? Color(data['primarySurface']) : null,
-      primaryFocus: data['primaryFocus'] != null ? Color(data['primaryFocus']) : null,
-      primaryBorder: data['primaryBorder'] != null ? Color(data['primaryBorder']) : null,
-      primaryHover: data['primaryHover'] != null ? Color(data['primaryHover']) : null,
-      primaryPressed: data['primaryPressed'] != null ? Color(data['primaryPressed']) : null,
-      neutral10: data['neutral10'] != null ? Color(data['neutral10']) : null,
-      neutral20: data['neutral20'] != null ? Color(data['neutral20']) : null,
-      neutral30: data['neutral30'] != null ? Color(data['neutral30']) : null,
-      neutral40: data['neutral40'] != null ? Color(data['neutral40']) : null,
-      neutral50: data['neutral50'] != null ? Color(data['neutral50']) : null,
-      neutral60: data['neutral60'] != null ? Color(data['neutral60']) : null,
-      neutral70: data['neutral70'] != null ? Color(data['neutral70']) : null,
-      neutral80: data['neutral80'] != null ? Color(data['neutral80']) : null,
-      neutral90: data['neutral90'] != null ? Color(data['neutral90']) : null,
-      neutral100: data['neutral100'] != null ? Color(data['neutral100']) : null,
-    );
-  }
-}
-```
-
-## Theme Migration
-
-### From Material Components
-
-```dart
-// Before - Material Components
-MaterialApp(
-  theme: ThemeData(
-    primarySwatch: Colors.blue,
-    brightness: Brightness.light,
-  ),
-  darkTheme: ThemeData(
-    primarySwatch: Colors.blue,
-    brightness: Brightness.dark,
-  ),
-)
-
-// After - Micropack UI Kit
-MaterialApp(
-  theme: MPTheme.main().copyWith(
-    extensions: [MPColorTheme.light],
-  ),
-  darkTheme: MPTheme.main().copyWith(
-    extensions: [MPColorTheme.dark],
-  ),
-)
-```
-
-### From Other UI Libraries
-
-```dart
-// Before - Other UI library
-Container(
-  color: Colors.white,
-  child: Text(
-    'Hello',
-    style: TextStyle(
-      color: Colors.black,
-      fontSize: 16,
-    ),
-  ),
-)
-
-// After - Micropack UI Kit
+// ✅ CORRECT
 Container(
   color: context.mp.adaptiveBackgroundColor,
   child: Text(
     'Hello',
-    style: TextStyle(
-      color: context.mp.textColor,
-      fontSize: 16,
-    ),
+    style: TextStyle(color: context.mp.textColor),
+  ),
+)
+
+// ❌ WRONG
+Container(
+  color: context.mp.neutral90,  // Won't adapt
+  child: Text(
+    'Hello',
+    style: TextStyle(color: context.mp.neutral20),  // Won't adapt
   ),
 )
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Theme not applying**
-   - Ensure `MPComponentInit` wraps your MaterialApp
-   - Check that theme extensions are properly configured
-
-2. **Colors not adapting**
-   - Use `context.mp` utilities instead of hardcoded colors
-   - Verify `isDarkMode` check is working correctly
-
-3. **Theme persistence not working**
-   - Ensure SharedPreferences is properly initialized
-   - Check that theme is loaded before building UI
-
-### Debug Theme Issues
+### 2. Use Semantic Colors Appropriately
 
 ```dart
-class ThemeDebugger extends StatelessWidget {
-  const ThemeDebugger({super.key});
+// Error state
+Text('Invalid email', style: TextStyle(color: context.mp.errorColor))
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Brightness: ${Theme.of(context).brightness}'),
-        Text('Is Dark Mode: ${context.mp.isDarkMode}'),
-        Text('Primary Color: ${context.mp.primary}'),
-        Text('Background Color: ${context.mp.adaptiveBackgroundColor}'),
-        Text('Text Color: ${context.mp.textColor}'),
-      ],
-    );
-  }
-}
+// Success state
+Text('Success!', style: TextStyle(color: context.mp.successColor))
+
+// Warning state
+Text('Warning!', style: TextStyle(color: context.mp.warningColor))
+
+// Info state
+Text('Note:', style: TextStyle(color: context.mp.infoColor))
 ```
 
-### Performance Considerations
+### 3. Test Both Themes
 
-1. **Avoid rebuilding entire widget tree** when switching themes
-2. **Use const constructors** where possible
-3. **Cache theme calculations** in complex widgets
+Always verify your UI looks good in both light and dark themes:
 
 ```dart
-class OptimizedThemedWidget extends StatelessWidget {
-  const OptimizedThemedWidget({super.key});
+// Use ThemeMode.system during development
+MaterialApp(
+  themeMode: ThemeMode.system,  // Test both by changing system theme
+  theme: MPTheme.main().copyWith(extensions: [MPColorTheme.light]),
+  darkTheme: MPTheme.main().copyWith(extensions: [MPColorTheme.dark]),
+  home: const HomePage(),
+)
 
-  @override
-  Widget build(BuildContext context) {
-    // Cache theme values
-    final bgColor = context.mp.adaptiveBackgroundColor;
-    final textColor = context.mp.textColor;
-
-    return Container(
-      color: bgColor,
-      child: Text(
-        'Optimized',
-        style: TextStyle(color: textColor),
-      ),
-    );
-  }
-}
+// Provide theme toggle for easy testing
+PopupMenuButton<ThemeMode>(
+  icon: Icon(Icons.brightness_6),
+  onSelected: (mode) => setState(() => _themeMode = mode),
+  itemBuilder: (context) => [
+    PopupMenuItem(value: ThemeMode.light, child: Text('Light')),
+    PopupMenuItem(value: ThemeMode.dark, child: Text('Dark')),
+  ],
+)
 ```
 
-## Conclusion
+### 4. Ensure Color Contrast
 
-Micropack UI Kit's theme system provides a comprehensive solution for implementing dark/light mode support in your Flutter applications. By following the best practices and examples in this guide, you can create beautiful, accessible themes that adapt seamlessly to user preferences.
+Follow WCAG AA contrast ratio (4.5:1 for normal text):
 
-For more information, check out:
-- [API Reference](../api/theme-utilities.md)
-- [Component Documentation](../api/components.md)
-- [Examples](../examples/README.md)
+```dart
+// Good contrast
+Text(
+  'Important Message',
+  style: TextStyle(
+    color: context.mp.textColor,  // Adapts for good contrast
+    fontSize: 16,  // Minimum 16px for readability
+  ),
+)
+
+// Poor contrast - avoid
+Text(
+  'Important Message',
+  style: TextStyle(
+    color: context.mp.textColor.withValues(alpha: 0.3),  // Too faint
+  ),
+)
+```
+
+### 5. Respect System Preferences
+
+Use `ThemeMode.system` as the default:
+
+```dart
+MaterialApp(
+  themeMode: ThemeMode.system,  // ✅ Respects user's system preference
+  // ...
+)
+
+// ❌ Don't force theme unless necessary
+MaterialApp(
+  themeMode: ThemeMode.light,  // Ignores user preference
+  // ...
+)
+```
+
+### 6. Use PopupMenu Properly
+
+Always set proper colors forPopupMenuButton:
+
+```dart
+PopupMenuButton<ThemeMode>(
+  surfaceTintColor: Colors.transparent,  // ✅ Remove default tint
+  color: context.mp.cardColor,          // ✅ Use card color
+  itemBuilder: (context) => [
+    PopupMenuItem(value: ThemeMode.light, child: Text('Light')),
+    PopupMenuItem(value: ThemeMode.dark, child: Text('Dark')),
+  ],
+)
+```
+
+---
+
+## 📊 Complete Color Reference
+
+| Color | Light | Dark | Usage |
+|--------|--------|--------|--------|
+| **Primary** | Brand color | Brand color (darker) | Primary actions, brand accents |
+| **Primary Border** | Brand border | Brand border (darker) | Input borders, button borders |
+| **Background** | `#FAFAFA` | `#121212` | App background |
+| **Card** | `#FFFFFF` | `#1E1E1E` | Card background |
+| **Text** | `#1F2937` | `#F3F4F6` | Primary text |
+| **Subtitle** | `#6B7280` | `#9CA3AF` | Secondary text |
+| **Caption** | `#9CA3AF` | `#6B7280` | Caption, hints |
+| **Border** | `#E5E7EB` | `#374151` | Borders, dividers |
+| **Divider** | `#E5E7EB` | `#374151` | Dividers, separators |
+| **Error** | `#EF4444` | `#F87171` | Error messages |
+| **Success** | `#10B981` | `#34D399` | Success messages |
+| **Warning** | `#F59E0B` | `#FBBF24` | Warnings |
+| **Info** | `#3B82F6` | `#60A5FA` | Information |
+
+---
+
+## 🔗 Related Documentation
+
+- [Getting Started](../getting-started/README.md)
+- [Component API Reference](../api/README.md)
+- [Best Practices Guide](./best-practices.md)
+- [Theme Colors Quick Reference](./theme-colors-quick-reference.md)
+
+## 🆘 Need Help?
+
+- Check [Best Practices Guide](./best-practices.md) for theme usage patterns
+- Review [Component API Reference](../api/README.md) for component theming
+- Search [GitHub Issues](https://github.com/ajianaz/micropack-ui-kit/issues)
