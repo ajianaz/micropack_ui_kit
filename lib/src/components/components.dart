@@ -23,3 +23,7 @@ export 'list_tile/list_tile.dart';
 export 'avatar/avatar.dart';
 export 'divider/divider.dart';
 export 'empty_state/empty_state.dart';
+export 'bottom_sheet/bottom_sheet.dart';
+export 'navigation_rail/navigation_rail.dart';
+export 'app_bar/app_bar.dart';
+export 'platform_adaptive/platform_adaptive.dart';

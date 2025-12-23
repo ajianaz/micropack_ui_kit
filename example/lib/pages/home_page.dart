@@ -19,6 +19,11 @@ import 'package:micropack_ui_kit_example/pages/toast_page.dart';
 import 'package:micropack_ui_kit_example/pages/avatar_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/divider_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/empty_state_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/list_tile_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/bottom_sheet_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/navigation_rail_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/app_bar_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/platform_adaptive_demo_page.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
 
 class HomePage extends StatefulWidget {
@@ -220,6 +225,24 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             _Button(
+              name: 'List Tile Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ListTileDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open List Tile Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
               name: 'Divider Demo',
               onPressed: () async {
                 try {
@@ -249,6 +272,84 @@ class _HomePageState extends State<HomePage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Failed to open Empty State Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            const _SectionTitle(
+              title: 'Navigation',
+            ),
+            _Button(
+              name: 'Bottom Sheet Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const BottomSheetDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Bottom Sheet Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            const _SectionTitle(
+              title: 'Navigation',
+            ),
+            _Button(
+              name: 'Navigation Rail Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const NavigationRailDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Navigation Rail Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'App Bar Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const AppBarDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open App Bar Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Platform Adaptive Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const PlatformAdaptiveDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Platform Adaptive Page: $e'),
                       backgroundColor: context.mp.errorColor,
                     ),
                   );
