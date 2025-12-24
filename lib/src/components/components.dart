@@ -8,6 +8,8 @@ export 'card/mp_card_builder.dart';
 export 'checkbox/checkbox.dart';
 export 'chip/chip.dart';
 export 'dialog/dialog.dart';
+export 'slider/mp_slider.dart';
+export 'rating/mp_rating_bar.dart';
 export 'dialog/mp_dialog_animated.dart';
 export 'dropdown/dropdown.dart';
 export 'progress/progress.dart';
