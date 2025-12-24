@@ -33,6 +33,10 @@ import 'package:micropack_ui_kit_example/pages/tooltip_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/checkbox_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/snackbar_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/skeleton_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/slider_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/rating_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/datepicker_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/timepicker_demo_page.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
 
 class HomePage extends StatefulWidget {
@@ -446,6 +450,78 @@ class _HomePageState extends State<HomePage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Failed to open Skeleton Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Slider Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const SliderDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Slider Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Rating Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const RatingDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Rating Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'DatePicker Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const DatePickerDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open DatePicker Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'TimePicker Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const TimePickerDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open TimePicker Page: $e'),
                       backgroundColor: context.mp.errorColor,
                     ),
                   );
