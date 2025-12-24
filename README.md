@@ -5,12 +5,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter Analysis](https://img.shields.io/badge/analysis-passing-brightgreen)](https://pub.dev/packages/micropack_ui_kit)
 
-A comprehensive, customizable, and theme-aware UI kit for Flutter applications. Micropack UI Kit provides **26 beautifully designed components** that automatically adapt to light and dark themes, ensuring a consistent user experience across your app.
+A comprehensive, customizable, and theme-aware UI kit for Flutter applications. Micropack UI Kit provides **31 beautifully designed components** that automatically adapt to light and dark themes, ensuring a consistent user experience across your app.
 
 ## ✨ Features
 
 - 🎨 **Theme-Aware Components**: All components automatically adapt to light and dark themes
-- 🎯 **Consistent Design System**: Unified design language across 26 components
+- 🎯 **Consistent Design System**: Unified design language across 31 components
 - 📱 **Responsive Design**: Built-in responsive utilities for different screen sizes
 - 🎭 **Customizable**: Extensive customization options for colors, fonts, and styles
 - 🌐 **Cross-Platform**: Works seamlessly across Android, iOS, Web, Desktop

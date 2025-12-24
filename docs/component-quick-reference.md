@@ -56,6 +56,7 @@ MPTextField(
 | **MPProgress** | Loading bars | Same | [Demo](../../example/lib/pages/progress_demo_page.dart) |
 | **MPSnackbar** | Notifications | Same | [Demo](../../example/lib/pages/snackbar_demo_page.dart) |
 | **MPSkeleton** | Loading placeholders | Same | [Demo](../../example/lib/pages/skeleton_demo_page.dart) |
+| **MPStepper** | Multi-step forms | Same | [Demo](../../example/lib/pages/new_components_demo_page.dart) |
 
 ### MPCheckbox - Quick Props
 ```dart
@@ -181,6 +182,27 @@ MPSkeleton(type: MPSkeletonType.circle, size: 64)
 MPSkeleton(type: MPSkeletonType.rect, width: 200, height: 150)
 ```
 
+### MPStepper - Quick Props
+```dart
+MPStepper(
+  steps: [
+    MPStep(
+      title: Text('Step 1'),
+      subtitle: Text('Description'),
+      content: _step1Content,
+    ),
+    MPStep(
+      title: Text('Step 2'),
+      content: _step2Content,
+    ),
+  ],
+  currentStep: _currentStep,
+  type: StepperType.vertical,  // vertical, horizontal
+  onContinue: () => setState(() => _currentStep++),
+  onCancel: () => setState(() => _currentStep--),
+)
+```
+
 ---
 
 ## 💬 Feedback Components
@@ -238,6 +260,74 @@ MPDialog.show(
 | **MPEmptyState** | Empty states | Same | [Demo](../../example/lib/pages/empty_state_demo_page.dart) |
 | **MPSkeleton** | Loading placeholders | Same | [Demo](../../example/lib/pages/skeleton_demo_page.dart) |
 | **MPArticleCard** | Article cards | Same | [Demo](../../example/lib/pages/article_card_page.dart) |
+| **MPCarousel** | Image/content slider | Same | [Demo](../../example/lib/pages/new_components_demo_page.dart) |
+| **MPSlidable** | Swipeable list items | Same | [Demo](../../example/lib/pages/new_components_demo_page.dart) |
+| **MPExpansionTile** | Expandable cards | Same | [Demo](../../example/lib/pages/new_components_demo_page.dart) |
+| **MPDataTable** | Data tables | Same | [Demo](../../example/lib/pages/new_components_demo_page.dart) |
+
+### MPCarousel - Quick Props
+```dart
+MPCarousel(
+  items: _items,
+  variant: MPCarouselVariant.standard,  // standard, fullWidth, compact, hero
+  autoPlay: true,                       // Auto-scroll
+  infiniteScroll: true,                 // Infinite loop
+  onPageChanged: (index, reason) {},    // Page change callback
+)
+```
+
+### MPSlidable - Quick Props
+```dart
+MPSlidable(
+  child: _listItemWidget,
+  startActions: [
+    MPSlidableAction(
+      icon: Icons.archive,
+      label: 'Archive',
+      isDestructive: false,
+      onPressed: (context) {},
+    ),
+  ],
+  endActions: [
+    MPSlidableAction(
+      icon: Icons.delete,
+      label: 'Delete',
+      isDestructive: true,
+      onPressed: (context) {},
+    ),
+  ],
+)
+```
+
+### MPExpansionTile - Quick Props
+```dart
+MPExpansionTile(
+  title: Text('Title'),
+  subtitle: Text('Subtitle'),
+  leading: Icon(Icons.info),
+  initiallyExpanded: false,
+  children: [
+    Padding(
+      padding: EdgeInsets.all(16),
+      child: Text('Expanded content'),
+    ),
+  ],
+)
+```
+
+### MPDataTable - Quick Props
+```dart
+MPDataTable(
+  columns: [
+    MPDataColumn(label: 'Name'),
+    MPDataColumn(label: 'Age', numeric: true),
+  ],
+  rows: [
+    ['John', '30'],
+    ['Jane', '25'],
+  ],
+)
+```
 
 ### MPAvatar - Quick Props
 ```dart

@@ -5,6 +5,45 @@ All notable changes to the Micropack UI Kit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-12-24
+
+### Added
+- **5 New Components**:
+  - `MPCarousel` - Image/content slider with 4 variants (standard, fullWidth, compact, hero)
+  - `MPSlidable` - Swipeable list items with actions (via flutter_slidable)
+  - `MPExpansionTile` - Expandable cards with adaptive theming
+  - `MPDataTable` - Data tables with alternating row colors and sorting
+  - `MPStepper` - Multi-step workflow component for forms
+- **New Dependencies**:
+  - `carousel_slider: ^5.0.0` - Image carousel functionality
+  - `flutter_slidable: ^4.0.0` - Swipe-to-action functionality
+- **Demo Page**:
+  - `new_components_demo_page.dart` - Showcases all 5 new components
+  - Added "New Components (v0.3.0)" section to home page
+
+### Documentation
+- Updated `docs/component-quick-reference.md`:
+  - Added MPCarousel, MPSlidable, MPExpansionTile, MPDataTable to Display Components
+  - Added MPStepper to Form Components
+  - Added quick usage examples for all 5 new components
+- Updated `README.md`:
+  - Component count updated from 26 to 31
+
+### Testing
+- Created test files for all new components:
+  - `test/components/carousel/mp_carousel_test.dart`
+  - `test/components/slidable/mp_slidable_test.dart`
+  - `test/components/expansion_tile/mp_expansion_tile_test.dart`
+  - `test/components/data_table/mp_data_table_test.dart`
+  - `test/components/stepper/mp_stepper_test.dart`
+
+### Theme Compliance
+- All new components follow strict theme rules:
+  - Use `context.mp.*` API for all colors
+  - Semantic color names (textColor, subtitleColor, cardColor, etc.)
+  - No hardcoded colors
+  - Adaptive shadow colors for dark mode
+
 ## [0.3.0] - 2025-12-23
 
 ### Added
