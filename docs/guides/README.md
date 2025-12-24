@@ -4,42 +4,27 @@ Advanced guides and best practices for developing with Micropack UI Kit.
 
 ## 📚 Table of Contents
 
+### Theme System
+- [Theme Rules & Guidelines](./theme-rules.md) - **CRITICAL: Theme rules and best practices**
 - [Theme System](./theming.md) - Complete theming guide
 - [Theme Colors Quick Reference](./theme-colors-quick-reference.md) - Quick color guide for developers
-- [Theme Color Fix Report](./theme-color-fix-report.md) - Recent theme color improvements
-- [Component Theme Audit](./component-theme-audit.md) - Component color audit & recommendations
-- [Component Development](./component-development.md) - Building custom components
-- [Migration Guide](./migration.md) - Moving from other UI libraries
 - [Best Practices](./best-practices.md) - Development patterns
-- [Performance Optimization](./performance.md) - Optimization techniques
-- [Accessibility](./accessibility.md) - A11y compliance
+- [Troubleshooting](./troubleshooting.md) - Common issues and solutions
 
 ## 🎨 Theming
 
 Learn how to create beautiful, consistent themes:
 
-- [Complete Theme Guide](./theming.md)
+- [Theme Rules & Guidelines](./theme-rules.md) - **START HERE: Critical theme rules**
+- [Complete Theme Guide](./theming.md) - Full theming system documentation
+- [Theme Colors Quick Reference](./theme-colors-quick-reference.md) - All theme colors at a glance
+
+### Theme Topics
 - Custom color schemes
 - Dark mode implementation
 - Theme transitions
-
-## 🧩 Component Development
-
-Build your own components that integrate seamlessly:
-
-- [Component Development Guide](./component-development.md)
-- Using theme utilities
-- Extending existing components
-- Publishing guidelines
-
-## 📦 Migration
-
-Coming from other UI libraries? We've got you covered:
-
-- [Migration Guide](./migration.md)
-- Flutter Material Design migration
-- Popular UI library comparisons
-- Step-by-step migration
+- Adaptive colors vs fixed colors
+- Shadow and border colors
 
 ## 🎯 Best Practices
 
@@ -50,23 +35,14 @@ Write better, more maintainable code:
 - Code organization
 - Testing strategies
 
-## ⚡ Performance
+## 🔧 Troubleshooting
 
-Create fast, smooth user experiences:
+Common issues and solutions:
 
-- [Performance Optimization](./performance.md)
-- Rendering optimization
-- Memory management
-- Build optimizations
-
-## ♿ Accessibility
-
-Build inclusive applications for all users:
-
-- [Accessibility Guide](./accessibility.md)
-- Screen reader support
-- Color contrast
-- Navigation patterns
+- [Troubleshooting Guide](./troubleshooting.md)
+- Theme switching issues
+- Color visibility problems
+- Component integration
 
 ## 🔧 Advanced Topics
 

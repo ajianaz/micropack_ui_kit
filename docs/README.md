@@ -55,6 +55,7 @@ Start with the [Documentation Overview](./overview.md) to understand the structu
 |-----------|-------------|---------------|
 | **[Common Use Cases](./examples/common-use-cases.md)** | Real-world usage examples | 20 min |
 | **[Best Practices](./guides/best-practices.md)** | Best practices and patterns | 15 min |
+| **[Theme Rules & Guidelines](./guides/theme-rules.md)** | **CRITICAL: Theme rules and best practices** | 15 min |
 | **[Theme System Guide](./guides/theming.md)** | Complete theme system guide | 20 min |
 | **[Theme Colors Quick Reference](./guides/theme-colors-quick-reference.md)** | All theme colors reference | 10 min |
 | **[Troubleshooting Guide](./guides/troubleshooting.md)** | Common issues and solutions | 15 min |
