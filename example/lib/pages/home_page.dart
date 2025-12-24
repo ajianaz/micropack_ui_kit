@@ -36,6 +36,7 @@ import 'package:micropack_ui_kit_example/pages/slider_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/rating_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/datepicker_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/timepicker_demo_page.dart';
+import 'package:micropack_ui_kit_example/pages/new_components_demo_page.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
 // Animation demos
 import 'package:micropack_ui_kit_example/page_transitions_demo_page.dart';
@@ -523,6 +524,27 @@ class _HomePageState extends State<HomePage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Failed to open TimePicker Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            const _SectionTitle(
+              title: 'New Components (v0.3.0)',
+            ),
+            _Button(
+              name: 'New Components Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const NewComponentsDemoPage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open New Components Page: $e'),
                       backgroundColor: context.mp.errorColor,
                     ),
                   );
