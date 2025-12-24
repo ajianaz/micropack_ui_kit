@@ -2,11 +2,12 @@
 export 'article_card/article_card.dart';
 export 'badge/badge.dart';
 export 'badge/mp_badge_enums.dart';
+export 'button/button.dart';
 export 'carousel/mp_carousel.dart';
 export 'carousel/mp_carousel_variant.dart';
+export 'expansion_tile/mp_expansion_tile.dart';
 export 'slidable/mp_slidable.dart';
 export 'slidable/mp_slidable_action.dart';
-export 'button/button.dart';
 export 'card/mp_card.dart';
 export 'card/mp_card_builder.dart';
 export 'checkbox/checkbox.dart';
