@@ -10,6 +10,8 @@ export 'data_table/mp_data_column.dart';
 export 'expansion_tile/mp_expansion_tile.dart';
 export 'slidable/mp_slidable.dart';
 export 'slidable/mp_slidable_action.dart';
+export 'stepper/mp_stepper.dart';
+export 'stepper/mp_step.dart';
 export 'card/mp_card.dart';
 export 'card/mp_card_builder.dart';
 export 'checkbox/checkbox.dart';
