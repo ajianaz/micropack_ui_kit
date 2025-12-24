@@ -559,7 +559,8 @@ class MPCardBuilder {
     if (elevation > 0) {
       return [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.1),
+          // Theme-aware shadow color for proper elevation in both modes
+          color: context.mp.adaptiveShadowColor.withValues(alpha: 0.1),
           blurRadius: elevation,
           offset: Offset(0, elevation * 0.25),
         ),

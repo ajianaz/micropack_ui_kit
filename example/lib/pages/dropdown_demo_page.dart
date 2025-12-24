@@ -280,17 +280,17 @@ class _DropdownDemoPageState extends State<DropdownDemoPage> {
                   MPDropdownItem(
                     value: 'john',
                     label: 'John Doe',
-                    leading: Icon(Icons.person),
+                    leading: Icon(Icons.person, color: Color(0xFF6B7280)),
                   ),
                   MPDropdownItem(
                     value: 'jane',
                     label: 'Jane Smith',
-                    leading: Icon(Icons.person),
+                    leading: Icon(Icons.person, color: Color(0xFF6B7280)),
                   ),
                   MPDropdownItem(
                     value: 'bob',
                     label: 'Bob Wilson',
-                    leading: Icon(Icons.person),
+                    leading: Icon(Icons.person, color: Color(0xFF6B7280)),
                   ),
                 ],
                 onChanged: (value) {},
@@ -354,7 +354,8 @@ class _DropdownDemoPageState extends State<DropdownDemoPage> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            // Theme-aware shadow for proper visibility in both modes
+            color: context.mp.adaptiveShadowColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

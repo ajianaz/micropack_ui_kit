@@ -50,7 +50,7 @@ class BadgeDemoPage extends StatelessWidget {
           description: 'Number badge for notifications',
           child: Row(
             children: [
-              Icon(Icons.notifications),
+              Icon(Icons.notifications, color: context.mp.subtitleColor),
               const SizedBox(width: 12),
               MPBadge(label: '5'),
             ],
@@ -63,7 +63,7 @@ class BadgeDemoPage extends StatelessWidget {
           description: 'Simple dot indicator',
           child: Row(
             children: [
-              Icon(Icons.notifications),
+              Icon(Icons.notifications, color: context.mp.subtitleColor),
               const SizedBox(width: 12),
               MPBadge(
                 label: '',
@@ -80,7 +80,7 @@ class BadgeDemoPage extends StatelessWidget {
           description: 'Styled notification indicator',
           child: Row(
             children: [
-              Icon(Icons.mail),
+              Icon(Icons.mail, color: context.mp.subtitleColor),
               const SizedBox(width: 12),
               MPBadge(
                 variant: MPBadgeVariant.primary,
@@ -108,7 +108,7 @@ class BadgeDemoPage extends StatelessWidget {
           description: 'Compact size',
           child: Row(
             children: [
-              Icon(Icons.message),
+              Icon(Icons.message, color: context.mp.subtitleColor),
               const SizedBox(width: 12),
               MPBadge(label: '99+', size: MPBadgeSize.small),
             ],
@@ -121,7 +121,7 @@ class BadgeDemoPage extends StatelessWidget {
           description: 'Default medium size',
           child: Row(
             children: [
-              Icon(Icons.message),
+              Icon(Icons.message, color: context.mp.subtitleColor),
               const SizedBox(width: 12),
               MPBadge(label: '5', size: MPBadgeSize.medium),
             ],
@@ -134,7 +134,7 @@ class BadgeDemoPage extends StatelessWidget {
           description: 'Prominent large size',
           child: Row(
             children: [
-              Icon(Icons.message),
+              Icon(Icons.message, color: context.mp.subtitleColor),
               const SizedBox(width: 12),
               MPBadge(label: '3', size: MPBadgeSize.large),
             ],
@@ -363,7 +363,7 @@ class BadgeDemoPage extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.mp.adaptiveShadowColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

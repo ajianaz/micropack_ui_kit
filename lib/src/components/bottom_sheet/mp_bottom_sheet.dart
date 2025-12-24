@@ -210,7 +210,8 @@ class _MPBottomSheetState extends State<MPBottomSheet> {
         borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            // Theme-aware shadow for proper elevation in both modes
+            color: context.mp.adaptiveShadowColor.withValues(alpha: 0.2),
             blurRadius: elevation,
             offset: const Offset(0, -4),
           ),

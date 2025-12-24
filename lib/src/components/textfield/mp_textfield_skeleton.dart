@@ -271,7 +271,10 @@ class _MPTextFieldSkeletonState extends State<MPTextFieldSkeleton>
                           colors: [
                             Colors.transparent,
                             widget.highlightColor ??
-                                Colors.white.withValues(alpha: 0.4),
+                                // Theme-aware shimmer for proper visibility in both modes
+                                (context.mp.isDarkMode
+                                    ? context.mp.neutral10.withValues(alpha: 0.25)
+                                    : context.mp.neutral100.withValues(alpha: 0.15)),
                             Colors.transparent,
                           ],
                         ),

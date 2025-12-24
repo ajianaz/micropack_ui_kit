@@ -662,7 +662,8 @@ class MPText extends StatelessWidget {
   static final Map<String, TextStyle> _styleCache = {};
 
   TextStyle _getCachedStyle(BuildContext context) {
-    // Create cache key from style parameters
+    // Create cache key from style parameters INCLUDING THEME MODE
+    // This is critical to prevent wrong colors when switching themes
     final params = [
       style?.hashCode ?? 0,
       fontSize?.hashCode ?? 0,
@@ -670,6 +671,7 @@ class MPText extends StatelessWidget {
       color?.hashCode ?? 0,
       fontStyle?.hashCode ?? 0,
       letterSpacing?.hashCode ?? 0,
+      context.mp.isDarkMode, // CRITICAL: Include theme mode in cache key
     ];
     final cacheKey = params.join('_');
 

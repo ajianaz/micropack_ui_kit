@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
+import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
 import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
 
@@ -216,6 +217,9 @@ class _MPSkeletonState extends State<MPSkeleton> {
     final orientationAwareHeight = _getOrientationAwareHeight();
     final orientationAwareBorderRadius = _getOrientationAwareBorderRadius();
 
+    // Theme-aware shadow color - uses adaptive shadow for proper visibility in both themes
+    final shadowColor = context.mp.adaptiveShadowColor.withValues(alpha: 0.05);
+
     if (widget.isCircle) {
       return Container(
         width: orientationAwareWidth,
@@ -225,7 +229,7 @@ class _MPSkeletonState extends State<MPSkeleton> {
           color: effectiveBaseColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: shadowColor,
               blurRadius: _isLandscape ? 2 : 4,
               offset: Offset(0, _isLandscape ? 1 : 2),
             ),
@@ -243,7 +247,7 @@ class _MPSkeletonState extends State<MPSkeleton> {
         color: effectiveBaseColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: shadowColor,
             blurRadius: _isLandscape ? 2 : 4,
             offset: Offset(0, _isLandscape ? 1 : 2),
           ),
@@ -286,19 +290,30 @@ class _MPSkeletonState extends State<MPSkeleton> {
   Widget _buildShimmerEffect() {
     final orientationAwareBorderRadius = _getOrientationAwareBorderRadius();
 
+    // Theme-aware shimmer colors for proper visibility in both light and dark modes
+    // In dark mode: uses lighter shimmer for visibility on dark background
+    // In light mode: uses darker shimmer for subtle effect on light background
+    final isDark = context.mp.isDarkMode;
+    final shimmerBaseColor = isDark
+        ? context.mp.neutral10.withValues(alpha: 0.15)
+        : context.mp.neutral100.withValues(alpha: 0.08);
+    final shimmerHighlightColor = isDark
+        ? context.mp.neutral10.withValues(alpha: 0.25)
+        : context.mp.neutral100.withValues(alpha: 0.15);
+
     return Stack(
       children: [
-        // Base skeleton
+        // Base skeleton with theme-aware shimmer base
         Container(
           decoration: BoxDecoration(
             borderRadius: widget.isCircle
                 ? null
                 : (orientationAwareBorderRadius ??
                     BorderRadius.circular(_isLandscape ? 6 : 8)),
-            color: Colors.white.withValues(alpha: 0.3),
+            color: shimmerBaseColor,
           ),
         ),
-        // Shimmer overlay
+        // Shimmer overlay with theme-aware highlight
         ClipRRect(
           borderRadius: widget.isCircle
               ? BorderRadius.circular((widget.width ?? 48) / 2)
@@ -315,7 +330,7 @@ class _MPSkeletonState extends State<MPSkeleton> {
                 end: Alignment.bottomRight,
                 colors: [
                   Colors.transparent,
-                  Colors.white.withValues(alpha: _isLandscape ? 0.3 : 0.4),
+                  shimmerHighlightColor,
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.5, 1.0],

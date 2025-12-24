@@ -14,7 +14,6 @@ import 'package:micropack_ui_kit_example/pages/theme_toggle_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/typography_page.dart';
 import 'package:micropack_ui_kit_example/pages/mp_error_handling_page.dart';
 import 'package:micropack_ui_kit_example/pages/mp_accessibility_page.dart';
-import 'package:micropack_ui_kit_example/pages/form_components_page.dart';
 import 'package:micropack_ui_kit_example/pages/toast_page.dart';
 import 'package:micropack_ui_kit_example/pages/avatar_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/divider_demo_page.dart';
@@ -212,9 +211,6 @@ class _HomePageState extends State<HomePage> {
             const _Button(name: 'Article Card', page: ArticleCardPage()),
             const _Button(name: 'Card', page: MPCardPage()),
             const _Button(name: 'Tabs', page: TabPage()),
-            const _Button(
-                name: 'Form Components',
-                page: FormComponentsPage()),
             const _Button(name: 'Toast', page: ToastPage()),
             const _SectionTitle(
               title: 'Feedback & Display',

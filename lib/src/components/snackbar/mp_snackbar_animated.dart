@@ -211,7 +211,8 @@ class _MPSnackbarAnimatedState extends State<MPSnackbarAnimated>
         borderRadius: BorderRadius.circular(widget.borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            // Theme-aware shadow for proper elevation in both modes
+            color: context.mp.adaptiveShadowColor.withValues(alpha: 0.2),
             blurRadius: widget.elevation,
             offset: Offset(0, widget.elevation * 0.5),
           ),

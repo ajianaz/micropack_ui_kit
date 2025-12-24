@@ -107,7 +107,8 @@ class MPAppBar extends StatelessWidget {
         boxShadow: variant == MPAppBarVariant.elevated
             ? [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  // Theme-aware shadow color for proper visibility in both modes
+                  color: context.mp.adaptiveShadowColor.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),

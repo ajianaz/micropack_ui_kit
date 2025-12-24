@@ -209,8 +209,9 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
                 child: FadeTransition(
                   opacity: _barrierAnimation,
                   child: Container(
+                    // Theme-aware barrier color for proper overlay effect in both modes
                     color: widget.barrierColor ??
-                        Colors.black.withValues(alpha: 0.5),
+                        context.mp.adaptiveShadowColor.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -320,7 +321,8 @@ class _MPDialogAnimatedState extends State<MPDialogAnimated>
             borderRadius: BorderRadius.circular(widget.cornerRadius),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.2),
+                // Theme-aware shadow for proper elevation in both modes
+                color: context.mp.adaptiveShadowColor.withValues(alpha: 0.2),
                 blurRadius: widget.elevation * 2,
                 offset: Offset(0, widget.elevation * 0.5),
               ),

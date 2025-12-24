@@ -1585,7 +1585,9 @@ class _MPButtonState extends State<MPButton> with TickerProviderStateMixin {
     if (widget.elevation != null && widget.elevation! > 0 && widget.enabled) {
       return [
         BoxShadow(
-          color: widget.shadowColor ?? Colors.black.withValues(alpha: 0.2),
+          // Theme-aware shadow color for proper elevation in both modes
+          color: widget.shadowColor ??
+              context.mp.adaptiveShadowColor.withValues(alpha: 0.2),
           blurRadius: widget.elevation!,
           offset: Offset(0, widget.elevation! / 2),
         ),
