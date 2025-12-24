@@ -5,6 +5,8 @@ export 'badge/mp_badge_enums.dart';
 export 'button/button.dart';
 export 'carousel/mp_carousel.dart';
 export 'carousel/mp_carousel_variant.dart';
+export 'data_table/mp_data_table.dart';
+export 'data_table/mp_data_column.dart';
 export 'expansion_tile/mp_expansion_tile.dart';
 export 'slidable/mp_slidable.dart';
 export 'slidable/mp_slidable_action.dart';
