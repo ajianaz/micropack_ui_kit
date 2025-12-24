@@ -1,6 +1,8 @@
 // UI Components
 export 'article_card/article_card.dart';
 export 'badge/badge.dart';
+export 'carousel/mp_carousel.dart';
+export 'carousel/mp_carousel_variant.dart';
 export 'badge/mp_badge_enums.dart';
 export 'button/button.dart';
 export 'card/mp_card.dart';
