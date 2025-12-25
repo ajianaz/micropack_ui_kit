@@ -23,6 +23,10 @@ export 'src/components/components.dart';
 
 // Core utilities
 export 'src/core/animations/mp_interaction_animations.dart';
+export 'src/core/animations/mp_page_transition.dart';
+export 'src/core/animations/mp_list_animator.dart';
+export 'src/core/animations/mp_stagger_animation.dart';
+export 'src/core/animations/mp_hero_animator.dart';
 export 'src/core/loading/mp_loading_overlay.dart';
 export 'src/core/loading/mp_progressive_image.dart';
 export 'src/core/state/mp_reactive_builder.dart';
@@ -50,5 +54,7 @@ export 'src/core/performance/mp_performance_monitor.dart';
 export 'src/core/performance/mp_performance_overlay.dart';
 export 'src/core/performance/mp_performance_profiler.dart';
 
-// Font management
-export 'src/core/fonts/mp_font_manager.dart';
+// Platform-specific utilities
+export 'src/core/platform/mp_platform_interaction.dart' hide MPPlatform;
+export 'src/core/platform/mp_platform_spacing.dart';
+export 'src/core/platform/mp_accessibility_extensions.dart';

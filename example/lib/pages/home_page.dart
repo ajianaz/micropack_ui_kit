@@ -37,6 +37,11 @@ import 'package:micropack_ui_kit_example/pages/rating_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/datepicker_demo_page.dart';
 import 'package:micropack_ui_kit_example/pages/timepicker_demo_page.dart';
 import 'package:micropack_ui_kit_example/test_performance.dart';
+// Animation demos
+import 'package:micropack_ui_kit_example/page_transitions_demo_page.dart';
+import 'package:micropack_ui_kit_example/list_animator_demo_page.dart';
+import 'package:micropack_ui_kit_example/stagger_animation_demo_page.dart';
+import 'package:micropack_ui_kit_example/hero_animator_demo_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -596,6 +601,85 @@ class _HomePageState extends State<HomePage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Failed to open Platform Adaptive Page: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            const _SectionTitle(
+              title: 'Animations',
+            ),
+            _Button(
+              name: 'Page Transitions Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PageTransitionDemoPage(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Page Transitions: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'List Animator Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ListAnimatorDemoPage(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open List Animator: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Stagger Animation Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const StaggerAnimationDemoPage(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Stagger Animation: $e'),
+                      backgroundColor: context.mp.errorColor,
+                    ),
+                  );
+                }
+              },
+            ),
+            _Button(
+              name: 'Hero Animator Demo',
+              onPressed: () async {
+                try {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const HeroAnimatorDemoPage(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open Hero Animator: $e'),
                       backgroundColor: context.mp.errorColor,
                     ),
                   );
