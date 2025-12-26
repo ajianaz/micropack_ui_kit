@@ -6,54 +6,85 @@ class ColorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mpColors = Theme.of(context).extension<MPColorTheme>()!;
-    final names = mpColors
-        .toString()
-        .replaceAll('MPColorTheme(', '')
-        .replaceAll(')', '')
-        .split(', ');
+    // Get color theme from context.mp instead of Theme.of(context)
+    final mpColors = context.mp.colorTheme;
+    if (mpColors == null) {
+      return Scaffold(
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        appBar: AppBar(
+          title: MPText.head(
+            'Colors',
+            style: TextStyle(color: context.mp.textColor),
+            fontSize: 20,
+          ),
+          backgroundColor: context.mp.adaptiveBackgroundColor,
+          elevation: 0,
+        ),
+        body: Center(
+          child: Text(
+            'Color theme not available',
+            style: TextStyle(color: context.mp.textColor),
+          ),
+        ),
+      );
+    }
+
+    final colorMap = _getColorMap(mpColors);
+    final colorKeys = colorMap.keys.toList();
+
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Colors'),
+        title: MPText.head(
+          'Colors',
+          style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
       ),
-      body: ListView(
-        children: List.generate(colorCollection(mpColors).length, 
-        (index) {
-          final color = colorCollection(mpColors)[index];
-          final name = names[index].split(': ')[0];
+      body: ListView.builder(
+        itemCount: colorKeys.length,
+        itemBuilder: (context, index) {
+          final name = colorKeys[index];
+          final color = colorMap[name];
 
           return ListTile(
             tileColor: color,
             title: SelectableText(
               '$color - $name',
+              style: TextStyle(
+                color: _getContrastColor(color ?? Colors.grey),
+              ),
             ),
           );
         },
-        ),
       ),
     );
   }
 
+  Color _getContrastColor(Color backgroundColor) {
+    // Calculate luminance to determine if we should use black or white text
+    final luminance = backgroundColor.computeLuminance();
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
 
-  List<Color?> colorCollection(MPColorTheme mpColors) => [
-    
-    mpColors.primary,
-    mpColors.primarySurface,
-    mpColors.primaryFocus,
-    mpColors.primaryBorder,
-    mpColors.primaryHover,
-    mpColors.primaryPressed,
-    mpColors.neutral10,
-    mpColors.neutral20,
-    mpColors.neutral30,
-    mpColors.neutral40,
-    mpColors.neutral50,
-    mpColors.neutral60,
-    mpColors.neutral70,
-    mpColors.neutral80,
-    mpColors.neutral90,
-    mpColors.neutral100,
-    
-    
-  ];
+  Map<String, Color?> _getColorMap(MPColorTheme theme) => {
+        'primary': theme.primary,
+        'primarySurface': theme.primarySurface,
+        'primaryFocus': theme.primaryFocus,
+        'primaryBorder': theme.primaryBorder,
+        'primaryHover': theme.primaryHover,
+        'primaryPressed': theme.primaryPressed,
+        'neutral10': theme.neutral10,
+        'neutral20': theme.neutral20,
+        'neutral30': theme.neutral30,
+        'neutral40': theme.neutral40,
+        'neutral50': theme.neutral50,
+        'neutral60': theme.neutral60,
+        'neutral70': theme.neutral70,
+        'neutral80': theme.neutral80,
+        'neutral90': theme.neutral90,
+        'neutral100': theme.neutral100,
+      };
 }

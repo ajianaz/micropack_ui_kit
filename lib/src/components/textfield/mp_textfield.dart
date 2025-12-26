@@ -2,10 +2,190 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/semantics.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 import 'package:micropack_ui_kit/src/core/styles/mp_text_field_border.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
+import 'package:micropack_ui_kit/src/core/performance/mp_performance_profiler.dart';
+
+/// MPTextField - Theme-aware text field component
+///
+/// This component has been updated to use the new theme system with context.mp
+/// for consistent theming across light and dark modes.
+///
+/// Theme Implementation:
+/// - Background: uses context.mp.adaptiveBackgroundColor
+/// - Cursor color: uses context.mp.primary
+/// - Icon colors: uses context.mp.neutral80 for consistent visibility
+/// - Clear button icon: uses context.mp.neutral80
+/// - Loading indicator: uses context.mp.primary
+/// - Image placeholder: uses context.mp.neutral30 and context.mp.captionColor
+///
+/// State Colors:
+/// - Enabled: uses context.mp.textColor
+/// - Disabled: uses context.mp.disabledColor
+/// - Hint text: uses context.mp.neutral60
+/// - Label text: uses context.mp.textColor
+/// - Helper text: uses context.mp.subtitleColor
+/// - Error text: uses context.mp.errorColor
+/// - Counter text: uses context.mp.captionColor
+///
+/// Border Colors:
+/// - Default border: uses context.mp.adaptiveBorderColor
+/// - Focus border: uses context.mp.primaryFocus
+/// - Error border: uses context.mp.errorColor
+///
+/// All variants (DEFAULT, PASSWORD, BORDER, BORDER_PASSWORD) now use the theme system correctly.
 
 enum MPTextFieldType { DEFAULT, PASSWORD, BORDER, BORDER_PASSWORD }
+
+/// Input formatter for common patterns
+class MPInputFormatters {
+  /// Phone number formatter (XXX-XXX-XXXX)
+  static final TextInputFormatter phoneNumber = TextInputFormatter.withFunction(
+    (oldValue, newValue) {
+      final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (text.length > 10) return oldValue;
+
+      String formatted = '';
+      for (int i = 0; i < text.length; i++) {
+        if (i == 3 || i == 6) formatted += '-';
+        formatted += text[i];
+      }
+
+      return TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    },
+  );
+
+  /// Credit card formatter (XXXX-XXXX-XXXX-XXXX)
+  static final TextInputFormatter creditCard = TextInputFormatter.withFunction(
+    (oldValue, newValue) {
+      final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (text.length > 16) return oldValue;
+
+      String formatted = '';
+      for (int i = 0; i < text.length; i++) {
+        if (i > 0 && i % 4 == 0) formatted += '-';
+        formatted += text[i];
+      }
+
+      return TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    },
+  );
+
+  /// Currency formatter
+  static final TextInputFormatter currency = TextInputFormatter.withFunction(
+    (oldValue, newValue) {
+      final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (text.isEmpty) return const TextEditingValue(text: '');
+
+      final number = int.tryParse(text) ?? 0;
+      final formatted = '\$${number.toString().replaceAllMapped(
+            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+            (Match m) => '${m[1]},',
+          )}';
+
+      return TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    },
+  );
+}
+
+/// Common validators for text fields
+class MPValidators {
+  /// Required field validator
+  static String? required(String? value, [String? message]) {
+    if (value == null || value.trim().isEmpty) {
+      return message ?? 'This field is required';
+    }
+    return null;
+  }
+
+  /// Email validator
+  static String? email(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Email is required';
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  /// Phone number validator
+  static String? phoneNumber(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Phone number is required';
+    }
+    final digitsOnly = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.length != 10) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
+  }
+
+  /// Password validator
+  static String? password(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Password is required';
+    }
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!RegExp(r'(?=.*[a-z])').hasMatch(value)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!RegExp(r'(?=.*\d)').hasMatch(value)) {
+      return 'Password must contain at least one number';
+    }
+    return null;
+  }
+
+  /// Minimum length validator
+  static String? minLength(int length, String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'This field is required';
+    }
+    if (value.length < length) {
+      return 'Must be at least $length characters';
+    }
+    return null;
+  }
+
+  /// Maximum length validator
+  static String? maxLength(int length, String? value) {
+    if (value != null && value.length > length) {
+      return 'Must be no more than $length characters';
+    }
+    return null;
+  }
+
+  /// Number range validator
+  static String? numberRange(int min, int max, String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'This field is required';
+    }
+    final number = int.tryParse(value);
+    if (number == null) {
+      return 'Please enter a valid number';
+    }
+    if (number < min || number > max) {
+      return 'Must be between $min and $max';
+    }
+    return null;
+  }
+}
 
 class MPTextField extends StatefulWidget {
   /// Tipe yang tersedia pada Widget MPTextField
@@ -53,6 +233,27 @@ class MPTextField extends StatefulWidget {
 
   /// Menangani aksi validasi akan dilakukan kapan
   final AutovalidateMode? autoValidateMode;
+
+  /// Semantic label for accessibility
+  final String? semanticLabel;
+
+  /// Semantic hint for accessibility
+  final String? semanticHint;
+
+  /// Whether field is required for form validation
+  final bool isRequired;
+
+  /// Error message for accessibility when validation fails
+  final String? accessibilityErrorMessage;
+
+  /// Helper text for accessibility
+  final String? accessibilityHelperText;
+
+  /// Custom accessibility actions
+  final List<SemanticsAction>? customAccessibilityActions;
+
+  /// Callback for accessibility actions
+  final void Function(SemanticsAction)? onAccessibilityAction;
 
   /// Menangani aksi ketika [MPTextField] di-Tap
   final void Function()? onTap;
@@ -181,6 +382,43 @@ class MPTextField extends StatefulWidget {
   /// Input Formatter
   final List<TextInputFormatter>? inputFormatter;
 
+  /// Character limit for the field
+  final int? maxLength;
+
+  /// Show character counter
+  final bool showCounter;
+
+  /// Show clear button when field is not empty
+  final bool showClearButton;
+
+  /// Clear button icon
+  final Widget? clearButtonIcon;
+
+  /// Callback when clear button is pressed
+  final VoidCallback? onClear;
+
+  /// Auto focus when field is built
+  final bool autofocus;
+
+  /// Text alignment
+  final TextAlign textAlign;
+
+  /// Enable suggestions
+  final bool enableSuggestions;
+
+  /// Enable autocorrect
+  final bool autocorrect;
+
+  /// Enable interactive selection
+  final bool enableInteractiveSelection;
+
+  /// Scroll padding for keyboard
+  final EdgeInsets? scrollPadding;
+
+  /// Text direction
+  final TextDirection? textDirection;
+
+  /// Creates a default MPTextField
   MPTextField(
     this.controller, {
     super.key,
@@ -196,6 +434,13 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -231,10 +476,23 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.DEFAULT;
   }
 
+  /// Creates a password MPTextField
   MPTextField.password(
     this.controller, {
     super.key,
@@ -250,6 +508,13 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -286,10 +551,23 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.PASSWORD;
   }
 
+  /// Creates a bordered MPTextField
   MPTextField.border(
     this.controller, {
     super.key,
@@ -305,6 +583,13 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -340,11 +625,24 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
-    type = MPTextFieldType.DEFAULT;
-    border = border ?? MpUiKit.border;
+    type = MPTextFieldType.BORDER;
+    // Note: border will be set in build method using theme-aware colors
   }
 
+  /// Creates a bordered password MPTextField
   MPTextField.borderPassword(
     this.controller, {
     super.key,
@@ -360,6 +658,13 @@ class MPTextField extends StatefulWidget {
     this.onTap,
     this.validator,
     this.autoValidateMode,
+    this.semanticLabel,
+    this.semanticHint,
+    this.isRequired = false,
+    this.accessibilityErrorMessage,
+    this.accessibilityHelperText,
+    this.customAccessibilityActions,
+    this.onAccessibilityAction,
     this.enabled,
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
@@ -396,9 +701,21 @@ class MPTextField extends StatefulWidget {
     this.padding,
     this.constraints,
     this.inputFormatter,
+    this.maxLength,
+    this.showCounter = false,
+    this.showClearButton = false,
+    this.clearButtonIcon,
+    this.onClear,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
+    this.enableInteractiveSelection = true,
+    this.scrollPadding,
+    this.textDirection,
   }) {
     type = MPTextFieldType.BORDER_PASSWORD;
-    border = border ?? MpUiKit.border;
+    // Note: border will be set in build method using theme-aware colors
   }
 
   @override
@@ -406,9 +723,26 @@ class MPTextField extends StatefulWidget {
 }
 
 class _MPTextFieldState extends State<MPTextField> {
-  final Widget _defaultSuffixIconEyeOpen = const Icon(FontAwesomeIcons.eye);
-  final Widget _defaultSuffixIconEyeClose =
-      const Icon(FontAwesomeIcons.eyeSlash);
+  final Widget _defaultSuffixIconEyeOpen = const Icon(Icons.visibility);
+  final Widget _defaultSuffixIconEyeClose = const Icon(Icons.visibility_off);
+  bool _isLandscape = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateOrientation();
+  }
+
+  void _updateOrientation() {
+    final newOrientation = MediaQuery.of(context).orientation;
+    final newIsLandscape = newOrientation == Orientation.landscape;
+
+    if (_isLandscape != newIsLandscape) {
+      setState(() {
+        _isLandscape = newIsLandscape;
+      });
+    }
+  }
 
   void _togglePasswordView() {
     setState(() {
@@ -419,70 +753,180 @@ class _MPTextFieldState extends State<MPTextField> {
 
   @override
   Widget build(BuildContext context) {
+    return MPPerformanceProfilerWidget(
+      name: 'MPTextField',
+      metadata: {
+        'type': widget.type?.name,
+        'hasLabel': widget.label != null,
+        'hasIcon': widget.icon != null,
+        'isRequired': widget.isRequired,
+        'maxLength': widget.maxLength,
+        'enabled': widget.enabled,
+      },
+      child: MPErrorBoundary(
+        errorCategory: MPErrorCategory.component,
+        errorSeverity: MPErrorSeverity.medium,
+        onError: (error) {
+          // Log textfield-specific error
+          MPErrorHandler.instance.handleComponentError(
+            code: 'TEXTFIELD_RENDER_ERROR',
+            message: 'Text field rendering failed: ${error.message}',
+            technicalDetails: error.technicalDetails,
+            context: {
+              'type': widget.type?.name,
+              'label': widget.label,
+              'hint': widget.hint,
+              'maxLength': widget.maxLength,
+            },
+          );
+        },
+        child: Builder(
+          builder: (context) {
+            return _buildTextFieldContentWithErrorHandling(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextFieldContentWithErrorHandling(BuildContext context) {
     settingSuffixIcon();
-    return TextFormField(
+
+    // Build combined input formatters
+    final List<TextInputFormatter> formatters = [];
+
+    // Add maxLength formatter if specified
+    if (widget.maxLength != null) {
+      formatters.add(LengthLimitingTextInputFormatter(widget.maxLength));
+    }
+
+    // Add custom formatters
+    if (widget.inputFormatter != null) {
+      formatters.addAll(widget.inputFormatter!);
+    }
+
+    // Build suffix icon with clear button
+    Widget? finalSuffixIcon = _buildSuffixIcon();
+
+    // Get theme-aware colors for consistent theming across light and dark modes
+    final themeColors = context.mp;
+
+    // Get orientation-aware padding
+    final orientationAwarePadding = _getOrientationAwarePadding();
+
+    // Wrap with Semantics widget if semanticLabel is provided
+    Widget textField = TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
+        // Hint text with theme-aware subtitle color for better visibility
         hintText: widget.hint,
-        hintStyle: widget.hintStyle.toTextStyle(),
+        hintStyle:
+            (widget.hintStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
+          color: widget.hintStyle?.color ?? themeColors.subtitleColor,
+        ),
         hintMaxLines: widget.hintStyle?.maxLines,
+
+        // Label text with theme-aware text color for consistency
         labelText: widget.label,
-        labelStyle: widget.labelStyle?.toTextStyle(),
+        labelStyle:
+            (widget.labelStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
+          color: widget.labelStyle?.color ?? themeColors.textColor,
+        ),
         label: widget.labelCustom,
         floatingLabelAlignment: widget.floatingLabelAlignment,
         floatingLabelBehavior: widget.floatingLabelBehavior,
-        floatingLabelStyle: widget.floatingLabelStyle?.toTextStyle(),
+        floatingLabelStyle:
+            (widget.floatingLabelStyle?.toTextStyle(context) ?? TextStyle())
+                .copyWith(
+          color: widget.floatingLabelStyle?.color ?? themeColors.textColor,
+        ),
+
+        // Icon with theme-aware primary color for visual hierarchy
         icon: widget.icon,
-        iconColor: widget.iconColor,
+        iconColor: widget.iconColor ?? themeColors.primary,
+
+        // Prefix icon with theme-aware neutral80 color for consistency
         prefixIcon: widget.prefixIcon,
-        prefixIconColor: widget.prefixIconColor,
+        prefixIconColor: widget.prefixIconColor ?? themeColors.neutral80,
         prefix: widget.prefix,
         prefixText: widget.prefixText,
-        prefixStyle: widget.prefixTextStyle?.toTextStyle(),
-        suffixIcon: widget.type == MPTextFieldType.DEFAULT
-            ? widget.suffixIcon
-            : InkWell(
-                onTap: _togglePasswordView,
-                child: widget.suffixIcon,
-              ),
-        suffixIconColor: widget.suffixIconColor,
+        prefixStyle:
+            (widget.prefixTextStyle?.toTextStyle(context) ?? TextStyle())
+                .copyWith(
+          color: widget.prefixTextStyle?.color ?? themeColors.subtitleColor,
+        ),
+
+        // Suffix elements with theme-aware colors
+        suffixIcon: finalSuffixIcon,
+        suffixIconColor: widget.suffixIconColor ?? themeColors.textColor,
         suffix: widget.suffix,
         suffixText: widget.suffixText,
-        suffixStyle: widget.suffixTextStyle?.toTextStyle(),
-        counterText: widget.counterText,
-        counterStyle: widget.counterStyle?.toTextStyle(),
+        suffixStyle:
+            (widget.suffixTextStyle?.toTextStyle(context) ?? TextStyle())
+                .copyWith(
+          color: widget.suffixTextStyle?.color ?? themeColors.subtitleColor,
+        ),
+
+        // Counter text with theme-aware caption color for subtle appearance
+        counterText:
+            widget.showCounter ? _buildCounterText() : widget.counterText,
+        counterStyle:
+            (widget.counterStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
+          color: widget.counterStyle?.color ?? themeColors.captionColor,
+        ),
+
+        // Helper text with theme-aware subtitle color
         helperText: widget.helperText,
-        helperStyle: widget.helperStyle?.toTextStyle(),
+        helperStyle:
+            (widget.helperStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
+          color: widget.helperStyle?.color ?? themeColors.subtitleColor,
+        ),
+
+        // Error text with theme-aware error color for clear indication
         errorText: widget.errorText,
-        errorStyle: widget.errorStyle?.toTextStyle(),
-        fillColor: widget.fillColor,
-        filled: widget.filled,
-        border: widget.border?.border?.toBorder() ?? InputBorder.none,
-        enabledBorder:
-            widget.border?.enableBorder?.toBorder() ?? InputBorder.none,
-        errorBorder: widget.border?.errorBorder?.toBorder() ?? InputBorder.none,
-        focusedErrorBorder:
-            widget.border?.focusedErrorBorder?.toBorder() ?? InputBorder.none,
-        focusedBorder:
-            widget.border?.focusedBorder?.toBorder() ?? InputBorder.none,
-        disabledBorder:
-            widget.border?.disableBorder?.toBorder() ?? InputBorder.none,
-        contentPadding: widget.padding,
-        constraints: widget.constraints,
+        errorStyle:
+            (widget.errorStyle?.toTextStyle(context) ?? TextStyle()).copyWith(
+          color: widget.errorStyle?.color ?? themeColors.errorColor,
+        ),
+
+        // Fill color using cardColor for proper dark mode contrast and visual separation
+        // In dark mode: uses neutral80 (medium-dark) for contrast against neutral90 background
+        // In light mode: uses neutral10 (white)
+        fillColor: widget.fillColor ?? themeColors.cardColor,
+        filled: widget.filled ?? true,
+        border: widget.border?.border?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'default'),
+        enabledBorder: widget.border?.enableBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'enabled'),
+        errorBorder: widget.border?.errorBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'error'),
+        focusedErrorBorder: widget.border?.focusedErrorBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'focusedError'),
+        focusedBorder: widget.border?.focusedBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'focused'),
+        disabledBorder: widget.border?.disableBorder?.toBorder() ??
+            _getThemeAwareBorder(themeColors, 'disabled'),
+        contentPadding: widget.padding ?? orientationAwarePadding,
+        constraints: widget.constraints ?? _getOrientationAwareConstraints(),
         focusColor: Colors.transparent,
       ),
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
-      style: widget.textStyle?.toTextStyle() ?? MpUiKit.textStyle.toTextStyle(),
-      textAlign: widget.textStyle?.textAlign ?? TextAlign.start,
+      // Text style with theme-aware text color for readability
+      // Always use theme-aware color unless explicitly overridden
+      style: (widget.textStyle?.toTextStyle(context) ??
+              MpUiKit.textStyle.toTextStyle(context))
+          .copyWith(
+        color: widget.textStyle?.color ?? themeColors.textColor,
+        fontSize: _getOrientationAwareFontSize(),
+      ),
+      textAlign: widget.textAlign,
       readOnly: widget.readOnly,
       obscureText: widget.obscureText,
-      maxLines: widget.type == MPTextFieldType.PASSWORD ||
-              widget.type == MPTextFieldType.BORDER_PASSWORD
-          ? 1
-          : widget.textStyle?.maxLines,
-      minLines: widget.textStyle?.minLines ?? MpUiKit.textStyle?.minLines,
-      cursorColor: widget.cursorColor ?? MpUiKit.colorBrand,
+      maxLines: _getOrientationAwareMaxLines(),
+      minLines: _getOrientationAwareMinLines(),
+      // Theme-aware cursor color using primary color for visibility
+      cursorColor: widget.cursorColor ?? themeColors.primary,
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       validator: widget.validator,
@@ -492,8 +936,175 @@ class _MPTextFieldState extends State<MPTextField> {
       onTap: widget.onTap,
       onChanged: widget.onChange,
       textCapitalization: widget.textCapitalization,
-      inputFormatters: widget.inputFormatter ?? [],
+      inputFormatters: formatters,
+      autofocus: widget.autofocus,
+      enableSuggestions: widget.enableSuggestions,
+      autocorrect: widget.autocorrect,
+      enableInteractiveSelection: widget.enableInteractiveSelection,
+      scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20),
+      textDirection: widget.textDirection,
     );
+
+    // Add enhanced semantic wrapper for accessibility
+    textField = Semantics(
+      label: _getSemanticLabel(),
+      hint: _getSemanticHint(),
+      value: widget.controller.text,
+      textField: true,
+      // Add enhanced semantic properties
+      readOnly: widget.readOnly,
+      enabled: widget.enabled,
+      // Add custom accessibility actions
+      customSemanticsActions: _getCustomSemanticsActions(),
+      child: Focus(
+        focusNode: widget.focusNode,
+        // Add keyboard navigation callbacks
+        onKey: (node, event) {
+          return _handleKeyPress(event);
+        },
+        child: textField,
+      ),
+    );
+
+    return textField;
+  }
+
+  /// Build suffix icon with clear button and password toggle
+  Widget? _buildSuffixIcon() {
+    final List<Widget> icons = [];
+    final themeColors = context.mp;
+
+    // Add clear button if enabled and field is not empty
+    // Uses theme-aware subtitle color for subtle appearance
+    if (widget.showClearButton && widget.controller.text.isNotEmpty) {
+      icons.add(
+        GestureDetector(
+          onTap: () {
+            MPErrorHandler.instance.executeWithErrorHandling(
+              () {
+                widget.controller.clear();
+                widget.onClear?.call();
+                widget.onChange?.call('');
+              },
+              category: MPErrorCategory.component,
+              code: 'TEXTFIELD_CLEAR_ERROR',
+              message: 'Text field clear operation failed',
+              context: {
+                'type': widget.type?.name,
+                'hasLabel': widget.label != null,
+              },
+            );
+          },
+          child: widget.clearButtonIcon ??
+              Icon(
+                Icons.clear,
+                // Theme-aware clear button color using subtitle color
+                color: widget.suffixIconColor ?? themeColors.subtitleColor,
+                size: 20,
+              ),
+        ),
+      );
+    }
+
+    // Add password toggle icon ONLY for password field types
+    if (widget.type == MPTextFieldType.PASSWORD ||
+        widget.type == MPTextFieldType.BORDER_PASSWORD) {
+      icons.add(
+        GestureDetector(
+          onTap: _togglePasswordView,
+          child: widget.suffixIcon ??
+              (widget.obscureText
+                  ? _defaultSuffixIconEyeClose
+                  : _defaultSuffixIconEyeOpen),
+        ),
+      );
+    } else {
+      // For DEFAULT and BORDER types, add custom suffix icon if provided
+      if (widget.suffixIcon != null) {
+        icons.add(widget.suffixIcon!);
+      }
+    }
+
+    if (icons.isEmpty) return null;
+    if (icons.length == 1) return icons.first;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(
+        icons.length,
+        (index) => Padding(
+          padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
+          child: icons[index],
+        ),
+      ),
+    );
+  }
+
+  /// Get orientation-aware padding
+  EdgeInsets _getOrientationAwarePadding() {
+    if (_isLandscape) {
+      // More compact padding in landscape mode
+      return const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
+    }
+    return const EdgeInsets.symmetric(horizontal: 16, vertical: 12);
+  }
+
+  /// Get orientation-aware constraints
+  BoxConstraints _getOrientationAwareConstraints() {
+    if (_isLandscape) {
+      // Reduce height in landscape mode
+      return const BoxConstraints(minHeight: 40);
+    }
+    return const BoxConstraints(minHeight: 48);
+  }
+
+  /// Get orientation-aware font size
+  double _getOrientationAwareFontSize() {
+    final baseFontSize =
+        widget.textStyle?.fontSize ?? MpUiKit.textStyle?.fontSize ?? 16;
+    if (_isLandscape) {
+      // Slightly smaller font in landscape mode
+      return baseFontSize * 0.95;
+    }
+    return baseFontSize;
+  }
+
+  /// Get orientation-aware max lines
+  int? _getOrientationAwareMaxLines() {
+    if (widget.type == MPTextFieldType.PASSWORD ||
+        widget.type == MPTextFieldType.BORDER_PASSWORD) {
+      return 1; // Password fields always single line
+    }
+
+    final baseMaxLines = widget.textStyle?.maxLines;
+    if (_isLandscape && baseMaxLines != null && baseMaxLines > 1) {
+      // Reduce max lines in landscape mode for multi-line fields
+      return (baseMaxLines * 0.7).ceil().clamp(1, baseMaxLines);
+    }
+    return baseMaxLines;
+  }
+
+  /// Get orientation-aware min lines
+  int? _getOrientationAwareMinLines() {
+    final baseMinLines =
+        widget.textStyle?.minLines ?? MpUiKit.textStyle?.minLines;
+    if (_isLandscape && baseMinLines != null && baseMinLines > 1) {
+      // Reduce min lines in landscape mode for multi-line fields
+      return (baseMinLines * 0.7).ceil().clamp(1, baseMinLines);
+    }
+    return baseMinLines;
+  }
+
+  /// Build counter text
+  String? _buildCounterText() {
+    final currentLength = widget.controller.text.length;
+    final maxLength = widget.maxLength;
+
+    if (maxLength != null) {
+      return '$currentLength/$maxLength';
+    } else {
+      return currentLength.toString();
+    }
   }
 
   void settingSuffixIcon() {
@@ -507,5 +1118,181 @@ class _MPTextFieldState extends State<MPTextField> {
             (widget.suffixIconEyeOpen ?? _defaultSuffixIconEyeOpen);
       }
     }
+  }
+
+  // Theme-aware border methods
+  // Creates borders with appropriate colors based on state and theme
+  InputBorder _getThemeAwareBorder(
+    MPThemeUtilities themeColors,
+    String borderType,
+  ) {
+    Color borderColor;
+    double borderWidth = 1.5; // Increased from 1.0 for better visibility
+
+    // Determine border color based on state
+    switch (borderType) {
+      case 'enabled':
+        // Use adaptive border color for normal state
+        borderColor = themeColors.adaptiveBorderColor;
+        break;
+      case 'focused':
+        // Use primary focus color with increased width for emphasis
+        borderColor = themeColors.primaryFocus;
+        borderWidth = 2.0;
+        break;
+      case 'error':
+        // Use error color for error indication
+        borderColor = themeColors.errorColor;
+        break;
+      case 'focusedError':
+        // Use error color with increased width for focused error state
+        borderColor = themeColors.errorColor;
+        borderWidth = 2.0;
+        break;
+      case 'disabled':
+        // Use disabled color for disabled state
+        borderColor = themeColors.disabledColor;
+        break;
+      default:
+        // Default to adaptive border color
+        borderColor = themeColors.adaptiveBorderColor;
+    }
+
+    // BORDER and BORDER_PASSWORD types use outline border
+    if (widget.type == MPTextFieldType.BORDER ||
+        widget.type == MPTextFieldType.BORDER_PASSWORD) {
+      return OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_isLandscape ? 6 : 8),
+        borderSide: BorderSide(
+          color: borderColor,
+          width: borderWidth,
+        ),
+      );
+    }
+
+    // DEFAULT and PASSWORD types use underline border for better visibility
+    return UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: borderColor,
+        width: borderWidth,
+      ),
+    );
+  }
+
+  /// Gets semantic label for screen readers
+  String _getSemanticLabel() {
+    String label =
+        widget.semanticLabel ?? widget.label ?? widget.hint ?? 'Text field';
+
+    if (widget.isRequired) {
+      label += ' (required)';
+    }
+
+    return label;
+  }
+
+  /// Gets semantic hint for screen readers
+  String? _getSemanticHint() {
+    if (widget.semanticHint != null) {
+      return widget.semanticHint!;
+    }
+
+    final hints = <String>[];
+
+    if (widget.accessibilityHelperText != null) {
+      hints.add(widget.accessibilityHelperText!);
+    }
+
+    if (widget.helperText != null) {
+      hints.add(widget.helperText!);
+    }
+
+    if (widget.maxLength != null) {
+      hints.add('Maximum ${widget.maxLength} characters');
+    }
+
+    if (widget.obscureText) {
+      hints.add('Password field');
+    }
+
+    if (widget.keyboardType != null) {
+      switch (widget.keyboardType) {
+        case TextInputType.emailAddress:
+          hints.add('Email address');
+          break;
+        case TextInputType.phone:
+          hints.add('Phone number');
+          break;
+        case TextInputType.number:
+          hints.add('Number input');
+          break;
+        case TextInputType.url:
+          hints.add('Website URL');
+          break;
+        default:
+          break;
+      }
+    }
+
+    return hints.isEmpty ? null : hints.join(', ');
+  }
+
+  /// Creates custom semantics actions for accessibility
+  Map<CustomSemanticsAction, VoidCallback>? _getCustomSemanticsActions() {
+    if (widget.customAccessibilityActions == null ||
+        widget.onAccessibilityAction == null) {
+      return null;
+    }
+
+    final Map<CustomSemanticsAction, VoidCallback> actions = {};
+
+    for (final action in widget.customAccessibilityActions!) {
+      actions[CustomSemanticsAction(
+        label: _getActionLabel(action),
+      )] = () => widget.onAccessibilityAction!(action);
+    }
+
+    return actions;
+  }
+
+  /// Gets a user-friendly label for a semantics action
+  String _getActionLabel(SemanticsAction action) {
+    switch (action) {
+      case SemanticsAction.tap:
+        return 'Tap to edit';
+      case SemanticsAction.longPress:
+        return 'Long press';
+      case SemanticsAction.cut:
+        return 'Cut text';
+      case SemanticsAction.copy:
+        return 'Copy text';
+      case SemanticsAction.paste:
+        return 'Paste text';
+      default:
+        return 'Action';
+    }
+  }
+
+  /// Handles keyboard events for text navigation
+  KeyEventResult _handleKeyPress(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      switch (event.logicalKey.keyLabel) {
+        case 'Enter':
+          // Handle submission
+          if (widget.onFieldSubmitted != null) {
+            widget.onFieldSubmitted!(widget.controller.text);
+            return KeyEventResult.handled;
+          }
+          break;
+        case 'Escape':
+          // Handle cancel
+          if (widget.focusNode != null && widget.focusNode!.hasFocus) {
+            widget.focusNode!.unfocus();
+            return KeyEventResult.handled;
+          }
+          break;
+      }
+    }
+    return KeyEventResult.ignored;
   }
 }

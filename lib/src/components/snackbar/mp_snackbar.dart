@@ -1,0 +1,217 @@
+import 'package:flutter/material.dart';
+import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+
+/// MPSnackbar - Theme-aware snackbar component
+///
+/// This component provides consistent theming for snackbars across light and dark modes.
+/// It automatically adapts colors based on the current theme.
+class MPSnackbar {
+  /// Show a themed snackbar
+  ///
+  /// [context] - BuildContext for showing the snackbar
+  /// [message] - Message text to display
+  /// [backgroundColor] - Optional custom background color
+  /// [textColor] - Optional custom text color
+  /// [duration] - How long to show the snackbar
+  /// [action] - Optional action button
+  static void show(
+    BuildContext context, {
+    required String message,
+    Color? backgroundColor,
+    Color? textColor,
+    double? fontSize,
+    Duration? duration,
+    SnackBarAction? action,
+  }) {
+    final themeColors = context.mp;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(
+            color: textColor ?? context.mp.textColor,
+            fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                fontSize ?? 14.0, context),
+          ),
+        ),
+        backgroundColor: backgroundColor ?? themeColors.adaptiveBackgroundColor,
+        duration: duration ?? const Duration(seconds: 3),
+        action: action,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 4,
+      ),
+    );
+  }
+
+  /// Show success snackbar
+  static void success(
+    BuildContext context, {
+    required String message,
+    double? fontSize,
+    Duration? duration,
+  }) {
+    final themeColors = context.mp;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: context.mp.textColor,
+              size: 20,
+            ),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: context.mp.textColor,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: themeColors.successColor,
+        duration: duration ?? const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 4,
+      ),
+    );
+  }
+
+  /// Show error snackbar
+  static void error(
+    BuildContext context, {
+    required String message,
+    double? fontSize,
+    Duration? duration,
+  }) {
+    final themeColors = context.mp;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.error,
+              color: context.mp.textColor,
+              size: 20,
+            ),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: context.mp.textColor,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: themeColors.errorColor,
+        duration: duration ?? const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 4,
+      ),
+    );
+  }
+
+  /// Show warning snackbar
+  static void warning(
+    BuildContext context, {
+    required String message,
+    double? fontSize,
+    Duration? duration,
+  }) {
+    final themeColors = context.mp;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.warning,
+              color: context.mp.textColor,
+              size: 20,
+            ),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: context.mp.textColor,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: themeColors.warningColor,
+        duration: duration ?? const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 4,
+      ),
+    );
+  }
+
+  /// Show info snackbar
+  static void info(
+    BuildContext context, {
+    required String message,
+    double? fontSize,
+    Duration? duration,
+  }) {
+    final themeColors = context.mp;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.info,
+              color: context.mp.textColor,
+              size: 20,
+            ),
+            SizedBox(width: MPResponsivePadding.getXs(context)),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: context.mp.textColor,
+                  fontSize: ResponsiveFontHelper.getResponsiveFontSize(
+                      fontSize ?? 14.0, context),
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: themeColors.infoColor,
+        duration: duration ?? const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 4,
+      ),
+    );
+  }
+}

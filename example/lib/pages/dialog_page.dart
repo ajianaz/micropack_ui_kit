@@ -7,13 +7,20 @@ class DialogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Dialog'),
+        title: MPText.head(
+          'Dialog',
+          style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(20.r),
+            padding: MPResponsivePadding.card(context),
             child: MPButton(
               text: 'Alert Dialog',
               onPressed: () async {
@@ -26,7 +33,7 @@ class DialogPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(20.r),
+            padding: MPResponsivePadding.card(context),
             child: MPButton(
               text: 'Dialog Message',
               onPressed: () async {
@@ -34,7 +41,10 @@ class DialogPage extends StatelessWidget {
                   context,
                   child: Column(
                     children: [
-                      const Icon(FontAwesomeIcons.accessibleIcon),
+                      Icon(
+                        Icons.accessibility,
+                        color: context.mp.textColor,
+                      ),
                       MPText.subhead(
                         'Custom Dialog',
                       ),

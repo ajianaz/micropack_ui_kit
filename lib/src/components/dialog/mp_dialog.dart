@@ -55,7 +55,7 @@ class MPDialogState extends State<MPDialog> {
                 borderRadius: BorderRadius.circular(widget.cornerRadius ?? 16),
               ),
               elevation: widget.elevation,
-              color: widget.background ?? Colors.white,
+              color: widget.background ?? context.mp.adaptiveBackgroundColor,
               child: ScrollConfiguration(
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),

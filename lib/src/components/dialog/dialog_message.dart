@@ -7,19 +7,19 @@ import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 Future<void> showMPDialog(
   BuildContext context, {
-  /// [REQUIRED] Widget content or body of the dialog
+  /// [REQUIRED] Widget content or body of dialog
   required Widget child,
 
-  /// Close the dialog when tapping outside the dialog area. Default is true
-  bool barrierDismissable = true,
+  /// Close dialog when tapping outside dialog area. Default is true
+  bool barrierDismissible = true,
 
-  /// Background color of the dialog
+  /// Background color of dialog
   Color? background,
 
-  /// Maximum height of the dialog. Defaults to device height - 100
+  /// Maximum height of dialog. Defaults to device height - 100
   double? maxHeight,
 
-  /// Corner radius of the dialog
+  /// Corner radius of dialog
   double? cornerRadius,
 
   /// Dialog elevation
@@ -31,16 +31,16 @@ Future<void> showMPDialog(
   await showDialog<void>(
     context: context,
     builder: (context) {
-      return MPDialog(
+      return MPDialogAnimated(
         background: background,
         maxHeight: maxHeight,
-        elevation: elevation,
+        elevation: elevation ?? 8.0,
         padding: padding,
-        cornerRadius: cornerRadius,
+        cornerRadius: cornerRadius ?? 16.0,
         child: child,
       );
     },
-    barrierDismissible: barrierDismissable,
+    barrierDismissible: barrierDismissible,
   );
 }
 
@@ -65,8 +65,8 @@ Future<void> showMPAlertDialog(
   /// Text style for title
   MPTextStyle? titleStyle,
 
-  /// Close the dialog when tapping outside the dialog area. Default is true
-  bool barrierDismissable = true,
+  /// Close dialog when tapping outside dialog area. Default is true
+  bool barrierDismissible = true,
 
   /// Primary button text
   String? textPrimary,
@@ -114,123 +114,133 @@ Future<void> showMPAlertDialog(
     builder: (context) {
       const double width = 420;
 
-      return MPDialog(
-        background: Colors.transparent,
-        elevation: 0,
-        child: SizedBox(
-          width: width,
-          child: Stack(
-            children: [
-              Container(
-                width: width,
-                height: (width * 186) / 286,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: borderColor ?? MpUiKit.colorBrand,
-                    width: borderWidth,
-                  ),
-                  borderRadius: BorderRadius.circular(40),
-                ),
-              ),
-              RotationTransition(
-                turns: const AlwaysStoppedAnimation(352 / 360),
-                child: Container(
-                  width: width,
-                  height: (width * 186) / 286,
-                  decoration: ShapeDecoration(
-                    color: background ?? Colors.white,
-                    shape: RoundedRectangleBorder(
+      return Builder(
+        builder: (context) {
+          final themeColors = context.mp;
+
+          return MPDialogAnimated(
+            // background: Colors.transparent,
+            elevation: 0.0,
+            child: SizedBox(
+              width: width,
+              child: Stack(
+                children: [
+                  Container(
+                    width: width,
+                    height: (width * 186) / 286,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: borderColor ?? themeColors.primary,
+                        width: borderWidth,
+                      ),
                       borderRadius: BorderRadius.circular(40),
                     ),
                   ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(24),
-                width: width,
-                height: (width * 186) / 286,
-                child: Material(
-                  color: background ?? Colors.white,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Visibility(
-                          visible: iconType != DialogIconType.none,
-                          child: icon ?? const SizedBox(),
+                  RotationTransition(
+                    turns: const AlwaysStoppedAnimation(352 / 360),
+                    child: Container(
+                      width: width,
+                      height: (width * 186) / 286,
+                      decoration: ShapeDecoration(
+                        color:
+                            background ?? themeColors.adaptiveBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
                         ),
-                        const SizedBox(height: 16),
-                        Visibility(
-                          visible: title != null,
-                          child: MPText.head(
-                            title ?? '',
-                            style: titleStyle.toTextStyle(),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        MPText(
-                          content ?? '',
-                          style: contentStyle.toTextStyle(),
-                          maxLines: 4,
-                          textOverflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Visibility(
-                              visible:
-                                  textSecondary != null && onSecondary != null,
-                              child: Expanded(
-                                child: MPButton(
-                                  text: '$textSecondary',
-                                  textColor: textColorSecondary,
-                                  strokeColor:
-                                      colorSecondary ?? MpUiKit.colorBrand2,
-                                  strokeWidth: 2,
-                                  textSize: textSizeSecondary,
-                                  background: Colors.white,
-                                  onPressed: onSecondary,
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible:
-                                  (textPrimary != null && onPrimary != null) &&
-                                      (textSecondary != null &&
-                                          onSecondary != null),
-                              child: const SizedBox(width: 16),
-                            ),
-                            Visibility(
-                              visible: textPrimary != null && onPrimary != null,
-                              child: Expanded(
-                                child: MPButton(
-                                  text: '$textPrimary',
-                                  textColor: textColorPrimary,
-                                  textSize: textSizePrimary,
-                                  background:
-                                      colorPrimary ?? MpUiKit.colorBrand,
-                                  onPressed: onPrimary,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    width: width,
+                    height: (width * 186) / 286,
+                    child: Material(
+                      color: background ?? themeColors.adaptiveBackgroundColor,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Visibility(
+                              visible: iconType != DialogIconType.none,
+                              child: icon ?? const SizedBox(),
+                            ),
+                            const SizedBox(height: 16),
+                            Visibility(
+                              visible: title != null,
+                              child: MPText.head(
+                                title ?? '',
+                                style: titleStyle?.toTextStyle(context) ??
+                                    TextStyle(color: themeColors.textColor),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            MPText(
+                              content ?? '',
+                              style: contentStyle?.toTextStyle(context) ??
+                                  TextStyle(color: themeColors.textColor),
+                              maxLines: 4,
+                              textOverflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Visibility(
+                                  visible: textSecondary != null &&
+                                      onSecondary != null,
+                                  child: Expanded(
+                                    child: MPButton(
+                                      text: '$textSecondary',
+                                      textColor: textColorSecondary,
+                                      strokeColor:
+                                          colorSecondary ?? themeColors.primary,
+                                      strokeWidth: 2,
+                                      textSize: textSizeSecondary,
+                                      background: themeColors.primarySurface,
+                                      onPressed: onSecondary,
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: (textPrimary != null &&
+                                          onPrimary != null) &&
+                                      (textSecondary != null &&
+                                          onSecondary != null),
+                                  child: const SizedBox(width: 16),
+                                ),
+                                Visibility(
+                                  visible:
+                                      textPrimary != null && onPrimary != null,
+                                  child: Expanded(
+                                    child: MPButton(
+                                      text: '$textPrimary',
+                                      textColor: textColorPrimary,
+                                      textSize: textSizePrimary,
+                                      background:
+                                          colorPrimary ?? themeColors.primary,
+                                      onPressed: onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      )
-          .animate(
-            onPlay: (controller) => controller.repeat(reverse: true),
+            ),
           )
-          .shake(delay: 5000.ms);
+              .animate(
+                onPlay: (controller) => controller.repeat(reverse: true),
+              )
+              .shake(delay: 5000.ms);
+        },
+      );
     },
-    barrierDismissible: barrierDismissable,
+    barrierDismissible: barrierDismissible,
   );
 }
 

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/theme/mp_theme_config.dart';
 
+/// MPColorTheme - Custom color theme extension for Flutter ThemeData
+///
+/// Provides access to all color variants used throughout the UI kit
+/// including primary colors, neutral colors, and their various states
 class MPColorTheme extends ThemeExtension<MPColorTheme> {
   const MPColorTheme({
     this.primary,
@@ -22,21 +27,52 @@ class MPColorTheme extends ThemeExtension<MPColorTheme> {
     this.neutral100,
   });
 
+  /// Primary brand color
   final Color? primary;
+
+  /// Primary surface color for backgrounds
   final Color? primarySurface;
+
+  /// Primary focus color for focused states
   final Color? primaryFocus;
+
+  /// Primary border color for outlines
   final Color? primaryBorder;
+
+  /// Primary hover color for hover states
   final Color? primaryHover;
+
+  /// Primary pressed color for pressed states
   final Color? primaryPressed;
+
+  /// Neutral color - shade 10 (lightest)
   final Color? neutral10;
+
+  /// Neutral color - shade 20
   final Color? neutral20;
+
+  /// Neutral color - shade 30
   final Color? neutral30;
+
+  /// Neutral color - shade 40
   final Color? neutral40;
+
+  /// Neutral color - shade 50
   final Color? neutral50;
+
+  /// Neutral color - shade 60
   final Color? neutral60;
+
+  /// Neutral color - shade 70
   final Color? neutral70;
+
+  /// Neutral color - shade 80
   final Color? neutral80;
+
+  /// Neutral color - shade 90
   final Color? neutral90;
+
+  /// Neutral color - shade 100 (darkest)
   final Color? neutral100;
 
   @override
@@ -107,43 +143,58 @@ class MPColorTheme extends ThemeExtension<MPColorTheme> {
   }
 
   /// Light color scheme
+  /// Uses MPThemeConfig as single source of truth for all colors
   static final MPColorTheme light = MPColorTheme(
-    primary: MPColors.primary,
-    primarySurface: MPColors.primarySurface,
-    primaryFocus: MPColors.primaryFocus,
-    primaryBorder: MPColors.primaryBorder,
-    primaryHover: MPColors.primaryHover,
-    primaryPressed: MPColors.primaryPressed,
-    neutral10: MPColors.neutral[10],
-    neutral20: MPColors.neutral[20],
-    neutral30: MPColors.neutral[30],
-    neutral40: MPColors.neutral[40],
-    neutral50: MPColors.neutral[50],
-    neutral60: MPColors.neutral[60],
-    neutral70: MPColors.neutral[70],
-    neutral80: MPColors.neutral[80],
-    neutral90: MPColors.neutral[90],
-    neutral100: MPColors.neutral[100],
+    // Primary colors for light mode from MPThemeConfig
+    primary: MPThemeConfig.getPrimary(),
+    primarySurface: MPThemeConfig.getPrimarySurface(),
+    primaryFocus: MPThemeConfig.getPrimaryFocus(),
+    primaryBorder: MPThemeConfig.getPrimaryBorder(),
+    primaryHover: MPThemeConfig.getPrimaryHover(),
+    primaryPressed: MPThemeConfig.getPrimaryPressed(),
+
+    // Neutral colors for light mode from MPThemeConfig
+    neutral10: MPThemeConfig.getNeutral(10), // White - lightest neutral
+    neutral20: MPThemeConfig.getNeutral(20), // Very light gray
+    neutral30: MPThemeConfig.getNeutral(30), // Light gray
+    neutral40: MPThemeConfig.getNeutral(40), // Medium-light gray
+    neutral50: MPThemeConfig.getNeutral(50), // Medium gray
+    neutral60: MPThemeConfig.getNeutral(60), // Medium-dark gray
+    neutral70: MPThemeConfig.getNeutral(70), // Dark gray
+    neutral80: MPThemeConfig.getNeutral(80), // Very dark gray
+    neutral90: MPThemeConfig.getNeutral(90), // Extremely dark gray
+    neutral100: MPThemeConfig.getNeutral(100), // Black - darkest neutral
   );
 
   /// Dark color scheme
+  /// Uses MPThemeConfig as single source of truth for all colors
+  /// Fixed dark mode neutral scale with proper color usage
   static final MPColorTheme dark = MPColorTheme(
-    primary: MPColors.primary,
-    primarySurface: MPColors.primarySurface,
-    primaryFocus: MPColors.primaryFocus,
-    primaryBorder: MPColors.primaryBorder,
-    primaryHover: MPColors.primaryHover,
-    primaryPressed: MPColors.primaryPressed,
-    neutral10: MPColors.neutral[10],
-    neutral20: MPColors.neutral[20],
-    neutral30: MPColors.neutral[30],
-    neutral40: MPColors.neutral[40],
-    neutral50: MPColors.neutral[50],
-    neutral60: MPColors.neutral[60],
-    neutral70: MPColors.neutral[70],
-    neutral80: MPColors.neutral[80],
-    neutral90: MPColors.neutral[90],
-    neutral100: MPColors.neutral[100],
+    // Primary colors for dark mode from MPThemeConfig (consistent with light mode)
+    primary: MPThemeConfig.getPrimary(),
+    primarySurface: MPThemeConfig.getPrimarySurface(),
+    primaryFocus: MPThemeConfig.getPrimaryFocus(),
+    primaryBorder: MPThemeConfig.getPrimaryBorder(),
+    primaryHover: MPThemeConfig.getPrimaryHover(),
+    primaryPressed: MPThemeConfig.getPrimaryPressed(),
+
+    // Neutral colors for dark mode from MPThemeConfig
+    // Fixed: Using proper neutral scale where neutral10 is white (for text)
+    // and neutral100 is dark (for backgrounds)
+    neutral10: MPThemeConfig.getNeutral(
+      10,
+    ), // White - for text on dark backgrounds
+    neutral20: MPThemeConfig.getNeutral(20), // Very light gray
+    neutral30: MPThemeConfig.getNeutral(30), // Light gray
+    neutral40: MPThemeConfig.getNeutral(40), // Medium-light gray
+    neutral50: MPThemeConfig.getNeutral(50), // Medium gray
+    neutral60: MPThemeConfig.getNeutral(60), // Medium-dark gray
+    neutral70: MPThemeConfig.getNeutral(70), // Dark gray
+    neutral80: MPThemeConfig.getNeutral(80), // Very dark gray
+    neutral90: MPThemeConfig.getNeutral(90), // Extremely dark gray
+    neutral100: MPThemeConfig.getNeutral(
+      100,
+    ), // Dark gray - for backgrounds
   );
 
   @override

@@ -2,10 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
 import 'package:micropack_ui_kit_example/app.dart';
-import 'package:micropack_ui_kit_example/contanta.dart';
+import 'package:micropack_ui_kit_example/constants.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MPTextStyle.defaultFontFamily = defaultFontFamily;
+  MPTextStyle.defaultFontFamily = kDefaultFontFamily;
+
+  // Initialize MPErrorHandler before running the app
+  await MPErrorHandler.initialize(
+    enableLogging: true,
+    customHandlers: [],
+  );
+
+  // Initialize MPThemeManager before running the app
+  try {
+    await MPThemeManager.initialize();
+    debugPrint('MPThemeManager initialized successfully');
+  } catch (e) {
+    debugPrint('Failed to initialize MPThemeManager: $e');
+  }
+
   runApp(const App());
 }

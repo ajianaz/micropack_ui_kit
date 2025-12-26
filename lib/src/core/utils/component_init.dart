@@ -18,14 +18,6 @@ class MPComponentInit extends StatelessWidget {
         child: LayoutBuilder(
           builder: (_, constraints) {
             if (constraints.maxWidth != 0) {
-              ScreenUtil.init(
-                _,
-                designSize: Size(
-                  designSize?.width ?? constraints.maxWidth,
-                  designSize?.height ?? constraints.maxHeight,
-                ),
-              );
-
               return builder(context);
             }
 

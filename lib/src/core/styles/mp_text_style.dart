@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
+import 'package:micropack_ui_kit/src/core/fonts/mp_font_manager.dart';
+import 'package:micropack_ui_kit/src/core/styles/mp_font_sizes.dart';
+import 'package:micropack_ui_kit/src/core/error/mp_error_handler.dart';
 
 class MPTextStyle {
   /// Configurable text style for dynamic text usage
@@ -91,7 +93,7 @@ class MPTextStyle {
     );
   }
 
-  /// Internal base text style
+  /// Internal base text style with robust font fallback system
   static TextStyle _base({
     double fontSize = 14,
     FontWeight fontWeight = FontWeight.w400,
@@ -100,18 +102,56 @@ class MPTextStyle {
     Color? color,
     double? height,
     String? fontFamily,
-  }) =>
-      GoogleFonts.getFont(
-        toTitleCase(MpUiKit.fontName ?? fontFamily ?? defaultFontFamily),
-        fontSize: fontSize * 1.sp,
+  }) {
+    final fontManager = MPFontManager();
+    final effectiveFontFamily =
+        MpUiKit.fontName ?? fontFamily ?? defaultFontFamily;
+
+    // Use the enhanced font manager with fallback system and error handling
+    try {
+      return fontManager.getTextStyle(
+        fontFamily: effectiveFontFamily,
+        fontSize: fontSize,
         fontWeight: fontWeight,
-        letterSpacing: letterSpacing * 1.sp,
+        letterSpacing: letterSpacing,
         height: height,
-        textBaseline: TextBaseline.alphabetic,
-        decoration: decoration,
-        locale: const Locale('en', 'US'),
         color: color,
+        decoration: decoration,
       );
+    } catch (e, stackTrace) {
+      // Handle font error through centralized error handler
+      MPErrorHandler.instance.handleFontError(
+        code: 'FONT_LOAD_FAILED',
+        message: 'Font style error for $effectiveFontFamily',
+        technicalDetails: e.toString(),
+        originalError: e,
+        stackTrace: stackTrace,
+        context: {
+          'fontFamily': effectiveFontFamily,
+          'fontSize': fontSize?.toString(),
+          'fontWeight': fontWeight?.toString(),
+          'letterSpacing': letterSpacing?.toString(),
+          'height': height?.toString(),
+        },
+      );
+
+      // Graceful error handling with fallback to system font
+      debugPrint(
+          'Font style error for $effectiveFontFamily: $e. Using fallback.');
+      return TextStyle(
+        fontFamily: MPFontManager.getPlatformFontFamily(effectiveFontFamily),
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        fontStyle: FontStyle.normal, // Ensure consistent style on error
+        letterSpacing: letterSpacing,
+        height: height,
+        color: color,
+        decoration: decoration,
+        // Add fallback font chain for maximum compatibility
+        fontFamilyFallback: ['system', 'Roboto', 'Arial', 'Helvetica'],
+      );
+    }
+  }
 
   // === Text Variants ===
 
@@ -123,7 +163,8 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 42,
+        fontSize: MPFontSizes
+            .title, // Reduced from 42 to 24 for better app bar sizing
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -138,7 +179,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 34,
+        fontSize: MPFontSizes.heading1,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -153,7 +194,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 27,
+        fontSize: MPFontSizes.heading2,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -168,7 +209,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 21,
+        fontSize: MPFontSizes.heading3,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -183,7 +224,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 17,
+        fontSize: MPFontSizes.body1,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -198,7 +239,7 @@ class MPTextStyle {
     String fontFamily = 'Poppins',
   }) =>
       _base(
-        fontSize: 14,
+        fontSize: MPFontSizes.body2,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -213,7 +254,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-        fontSize: 11,
+        fontSize: MPFontSizes.caption,
         fontWeight: fontWeight,
         color: color,
         decoration: decoration,
@@ -228,7 +269,7 @@ class MPTextStyle {
     String? fontFamily,
   }) =>
       _base(
-          fontSize: 8,
+          fontSize: MPFontSizes.overline,
           fontWeight: fontWeight,
           color: color,
           decoration: decoration,
@@ -254,10 +295,17 @@ class MPTextStyle {
 
 /// Extension method to convert `MPTextStyle` to Flutter `TextStyle`
 extension MPTextStyleExtension on MPTextStyle? {
-  TextStyle toTextStyle() {
+  TextStyle toTextStyle([BuildContext? context]) {
+    double? fontSize = this?.fontSize;
+
+    // Apply responsive scaling if context is provided
+    if (context != null && fontSize != null) {
+      fontSize = ResponsiveFontHelper.getResponsiveFontSize(fontSize, context);
+    }
+
     return TextStyle(
       fontFamily: this?.fontFamily,
-      fontSize: this?.fontSize,
+      fontSize: fontSize,
       fontWeight: this?.fontWeight,
       fontStyle: this?.fontStyle,
       color: this?.color,

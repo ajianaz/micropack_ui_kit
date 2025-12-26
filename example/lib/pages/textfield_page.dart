@@ -1,46 +1,311 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:micropack_ui_kit/micropack_ui_kit.dart';
 
-class TextFieldPage extends StatelessWidget {
+class TextFieldPage extends StatefulWidget {
   const TextFieldPage({super.key});
+
+  @override
+  State<TextFieldPage> createState() => _TextFieldPageState();
+}
+
+class _TextFieldPageState extends State<TextFieldPage> {
+  final TextEditingController _defaultController = TextEditingController();
+  final TextEditingController _borderController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _borderPasswordController =
+      TextEditingController();
+  final TextEditingController _validationController = TextEditingController();
+  final TextEditingController _iconController = TextEditingController();
+  final TextEditingController _formatterController = TextEditingController();
+
+  @override
+  void dispose() {
+    _defaultController.dispose();
+    _borderController.dispose();
+    _passwordController.dispose();
+    _borderPasswordController.dispose();
+    _validationController.dispose();
+    _iconController.dispose();
+    _formatterController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.mp.adaptiveBackgroundColor,
       appBar: AppBar(
-        title: const Text('Text Field'),
+        title: MPText.head(
+          'Text Field',
+          style: TextStyle(color: context.mp.textColor),
+          fontSize: 20,
+        ),
+        backgroundColor: context.mp.adaptiveBackgroundColor,
+        elevation: 0,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(20.r),
-            child: MPTextField(
-              TextEditingController(),
-              label: 'Text Field Sample 1',
+      body: SingleChildScrollView(
+        padding: MPResponsivePadding.card(context),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MPText.head('Basic Text Fields'),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Default Text Field
+            MPText.label('Default Text Field'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField(
+                _defaultController,
+                label: 'Username',
+                hint: 'Enter your username',
+                icon: Icon(Icons.person, color: context.mp.textColor),
+                onChange: (value) => print('Default field changed: $value'),
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.r),
-            child: MPTextField.border(
-              TextEditingController(),
-              label: 'Text Field Sample Border',
+
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Border Text Field
+            MPText.label('Border Text Field'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                _borderController,
+                label: 'Email',
+                hint: 'Enter your email address',
+                prefixIcon: Icon(Icons.email, color: context.mp.textColor),
+                suffixText: '@example.com',
+                helperText: 'Please enter a valid email address',
+                onChange: (value) => print('Border field changed: $value'),
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.r),
-            child: MPTextField.password(
-              TextEditingController(),
-              label: 'Text Field Password',
+
+            SizedBox(height: MPResponsivePadding.getLg(context)),
+
+            MPText.head('Password Fields'),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Password Text Field
+            MPText.label('Password Field'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.password(
+                _passwordController,
+                label: 'Password',
+                hint: 'Enter your password',
+                helperText: 'Password must be at least 8 characters',
+                onChange: (value) => print('Password field changed: $value'),
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.r),
-            child: MPTextField.borderPassword(
-              TextEditingController(),
-              label: 'Text Field Password Border',
+
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Border Password Text Field
+            MPText.label('Border Password Field'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.borderPassword(
+                _borderPasswordController,
+                label: 'Confirm Password',
+                hint: 'Confirm your password',
+                helperText: 'Please re-enter your password',
+                onChange: (value) =>
+                    print('Border password field changed: $value'),
+              ),
             ),
-          ),
-        ],
+
+            SizedBox(height: MPResponsivePadding.getLg(context)),
+
+            MPText.head('Validation & Advanced Features'),
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Validation Field
+            MPText.label('Field with Validation'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField(
+                _validationController,
+                label: 'Phone Number',
+                hint: 'Enter your phone number',
+                keyboardType: TextInputType.phone,
+                prefixIcon: Icon(Icons.phone, color: context.mp.textColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Phone number is required';
+                  }
+                  if (value.length < 10) {
+                    return 'Phone number must be at least 10 digits';
+                  }
+                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return 'Phone number can only contain digits';
+                  }
+                  return null;
+                },
+                onChange: (value) => print('Validation field changed: $value'),
+              ),
+            ),
+
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Field with Icons and Custom Elements
+            MPText.label('Field with Custom Icons'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                _iconController,
+                label: 'Search',
+                hint: 'Search for items...',
+                prefixIcon: Icon(Icons.search, color: context.mp.textColor),
+                suffixIcon: Icon(Icons.mic, color: context.mp.textColor),
+                filled: true,
+                fillColor: context.mp.cardColor,
+                onChange: (value) => print('Icon field changed: $value'),
+              ),
+            ),
+
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Field with Input Formatter
+            MPText.label('Field with Input Formatter'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                _formatterController,
+                label: 'Credit Card',
+                hint: 'XXXX-XXXX-XXXX-XXXX',
+                prefixIcon:
+                    Icon(Icons.credit_card, color: context.mp.textColor),
+                keyboardType: TextInputType.number,
+                inputFormatter: [
+                  // Credit card formatter (XXXX-XXXX-XXXX-XXXX)
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  MPInputFormatters.creditCard,
+                ],
+                onChange: (value) => print('Formatter field changed: $value'),
+              ),
+            ),
+
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Disabled Field
+            MPText.label('Disabled Field'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                TextEditingController(text: 'This field is disabled'),
+                label: 'Disabled Field',
+                enabled: false,
+              ),
+            ),
+
+            SizedBox(height: MPResponsivePadding.getSm(context)),
+
+            // Read Only Field
+            MPText.label('Read Only Field'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                TextEditingController(text: 'This field is read only'),
+                label: 'Read Only Field',
+                readOnly: true,
+              ),
+            ),
+
+            // Enhanced TextField with Clear Button and Counter
+            MPText.label('Field with Clear Button and Counter'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                TextEditingController(
+                    text: 'This field has clear button and counter'),
+                label: 'Enhanced Field',
+                hint: 'Type something...',
+                showClearButton: true,
+                showCounter: true,
+                maxLength: 50,
+                onClear: () => print('Clear button pressed'),
+                onChange: (value) => print('Enhanced field changed: $value'),
+              ),
+            ),
+
+            // Phone Number Field with Built-in Formatter
+            MPText.label('Phone Number with Built-in Formatter'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                TextEditingController(),
+                label: 'Phone Number',
+                hint: '(123) 456-7890',
+                prefixIcon: Icon(Icons.phone, color: context.mp.textColor),
+                keyboardType: TextInputType.phone,
+                inputFormatter: [MPInputFormatters.phoneNumber],
+                validator: MPValidators.phoneNumber,
+                onChange: (value) => print('Phone field changed: $value'),
+              ),
+            ),
+
+            // Email Field with Built-in Validator
+            MPText.label('Email Field with Built-in Validator'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                TextEditingController(),
+                label: 'Email Address',
+                hint: 'Enter your email',
+                prefixIcon: Icon(Icons.email, color: context.mp.textColor),
+                keyboardType: TextInputType.emailAddress,
+                validator: MPValidators.email,
+                onChange: (value) => print('Email field changed: $value'),
+              ),
+            ),
+
+            // Password Field with Built-in Validator
+            MPText.label('Password Field with Built-in Validator'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.borderPassword(
+                TextEditingController(),
+                label: 'Password',
+                hint: 'Enter your password',
+                prefixIcon: Icon(Icons.lock, color: context.mp.textColor),
+                validator: MPValidators.password,
+                onChange: (value) => print('Password field changed: $value'),
+              ),
+            ),
+
+            // Currency Field with Built-in Formatter
+            MPText.label('Currency Field with Built-in Formatter'),
+            SizedBox(height: MPResponsivePadding.getXs(context)),
+            Padding(
+              padding: EdgeInsets.all(MPResponsivePadding.getXs(context)),
+              child: MPTextField.border(
+                TextEditingController(),
+                label: 'Amount',
+                hint: '\$0.00',
+                prefixIcon:
+                    Icon(Icons.attach_money, color: context.mp.textColor),
+                keyboardType: TextInputType.number,
+                inputFormatter: [MPInputFormatters.currency],
+                onChange: (value) => print('Currency field changed: $value'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

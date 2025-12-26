@@ -45,7 +45,7 @@ extension SkeletonExtension on Widget {
         ignoreContainers: ignoreContainer,
         justifyMultiLineText: true,
         textBoneBorderRadius: TextBoneBorderRadius(
-          BorderRadius.circular(8.r),
+          BorderRadius.circular(8),
         ),
         child: this,
       );
