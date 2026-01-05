@@ -144,9 +144,11 @@
     "gcc",
     "gradle",
     "gradlew",
+    "ipython",
     "jar",
     "java",
     "javac",
+    "jupyter",
     "kotlin",
     "kotlinc",
     "ld",
@@ -156,8 +158,16 @@
     "mvn",
     "ninja",
     "nm",
+    "notebook",
     "objdump",
+    "pdb",
+    "pip",
+    "pip3",
+    "pipx",
     "pub",
+    "pudb",
+    "python",
+    "python3",
     "strip",
     "swift",
     "swiftc",
@@ -169,6 +179,7 @@
   "custom_commands": [],
   "detected_stack": {
     "languages": [
+      "python",
       "java",
       "kotlin",
       "c",
@@ -198,6 +209,6 @@
     ]
   },
   "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/worktrees/tasks/001-improvement/example",
-  "created_at": "2026-01-05T07:57:06.814101",
-  "project_hash": "e8fc21720371634f4a37e99c2d49a1f5"
+  "created_at": "2026-01-05T08:13:18.748165",
+  "project_hash": "1460f82aa1431cc5a854489df278fde1"
 }
