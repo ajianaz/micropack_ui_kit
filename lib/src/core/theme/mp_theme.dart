@@ -120,7 +120,7 @@ class MPTheme {
       ),
 
       // Card theme
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: MPThemeConfig.getCardColor(),
         elevation: 2,
         shape: RoundedRectangleBorder(
@@ -224,7 +224,7 @@ class MPTheme {
       ),
 
       // Card theme
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: MPThemeConfig.getCardColor(),
         elevation: 2,
         shape: RoundedRectangleBorder(

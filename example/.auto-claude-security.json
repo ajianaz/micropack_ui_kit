@@ -158,10 +158,7 @@
     "mvn",
     "ninja",
     "nm",
-    "node",
     "notebook",
-    "npm",
-    "npx",
     "objdump",
     "pdb",
     "pip",
@@ -176,11 +173,12 @@
     "swiftc",
     "xcodebuild"
   ],
-  "script_commands": [],
+  "script_commands": [
+    "./fix_mp_card_page.sh"
+  ],
   "custom_commands": [],
   "detected_stack": {
     "languages": [
-      "javascript",
       "python",
       "java",
       "kotlin",
@@ -206,9 +204,11 @@
     "make_targets": [],
     "poetry_scripts": [],
     "cargo_aliases": [],
-    "shell_scripts": []
+    "shell_scripts": [
+      "fix_mp_card_page.sh"
+    ]
   },
-  "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit",
-  "created_at": "2026-01-05T09:20:00.000000",
-  "project_hash": "merged_develop_improvement"
+  "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/worktrees/tasks/001-improvement/example",
+  "created_at": "2026-01-05T08:54:18.600624",
+  "project_hash": "fd0946f8424ce8ec1d1c03a133ba2cf5"
 }

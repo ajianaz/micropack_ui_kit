@@ -96,7 +96,7 @@ void main() {
       );
 
       expect(find.byType(MPTextField), findsOneWidget);
-      expect(find.byIcon(FontAwesomeIcons.eyeSlash), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
     });
 
     testWidgets('renders bordered field correctly',
@@ -131,7 +131,7 @@ void main() {
       );
 
       expect(find.byType(MPTextField), findsOneWidget);
-      expect(find.byIcon(FontAwesomeIcons.eyeSlash), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
       // For bordered fields, we just check that the widget exists
       // The border implementation is internal to the component
       expect(find.byType(MPTextField), findsOneWidget);
@@ -500,16 +500,16 @@ void main() {
       );
 
       // Initially obscured
-      expect(find.byIcon(FontAwesomeIcons.eyeSlash), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
       final textField = tester.widget<MPTextField>(find.byType(MPTextField));
       expect(textField.obscureText, isTrue);
 
       // Tap to toggle visibility
-      await tester.tap(find.byIcon(FontAwesomeIcons.eyeSlash));
+      await tester.tap(find.byIcon(Icons.visibility_off));
       await tester.pump();
 
       // Should be visible now
-      expect(find.byIcon(FontAwesomeIcons.eye), findsOneWidget);
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
       final updatedTextField =
           tester.widget<MPTextField>(find.byType(MPTextField));
       expect(updatedTextField.obscureText, isFalse);

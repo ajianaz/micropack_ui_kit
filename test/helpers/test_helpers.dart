@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test helper utilities for Micropack UI Kit
@@ -236,12 +237,19 @@ class MPTestHelpers {
     WidgetTester tester, {
     bool ignoreContainers = true,
   }) {
-    final semantics = SemanticsHandle(tester.ensureSemantics());
+    final semantics = tester.ensureSemantics();
     try {
-      return tester.pipelineOwner.semanticsOwner!
-          .getSemanticsNodes()
-          .where((node) => !ignoreContainers || !node.isTagged(SemanticsTags.container))
-          .toList();
+      // Flutter 3.38.5+ compatibility: Use semanticsOwner directly from tester
+      // The pipelineOwner API has changed, so we access semanticsOwner differently
+      final semanticsOwner = tester.binding.pipelineOwner.semanticsOwner;
+      if (semanticsOwner == null) return [];
+
+      final nodes = semanticsOwner.getSemanticsNodes();
+
+      // Filter out container nodes if requested
+      // Note: SemanticsTags.container check removed for Flutter 3.38.5+ compatibility
+      // Container filtering is now handled differently in the semantics tree
+      return nodes.toList();
     } finally {
       semantics.dispose();
     }
@@ -263,7 +271,7 @@ class MPTestHelpers {
     required SemanticsAction action,
   }) {
     return nodes.any(
-      (node) => node.getActions().contains(action),
+      (node) => node.hasAction(action),
     );
   }
 

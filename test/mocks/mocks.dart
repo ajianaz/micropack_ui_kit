@@ -21,7 +21,7 @@ class _MockUtils {
   const _MockUtils();
 
   /// Create mock theme data
-  static ThemeData createMockTheme({
+  ThemeData createMockTheme({
     Brightness brightness = Brightness.light,
     Color? primaryColor,
     Color? backgroundColor,
@@ -44,7 +44,7 @@ class _MockUtils {
   }
 
   /// Create mock MediaQueryData
-  static MediaQueryData createMockMediaQuery({
+  MediaQueryData createMockMediaQuery({
     Size? size,
     Brightness? brightness,
     double? textScaleFactor,
@@ -53,11 +53,11 @@ class _MockUtils {
     bool? accessibleNavigation,
     EdgeInsets? padding,
   }) {
+    final brightnessValue = brightness ?? Brightness.light;
     return MediaQueryData(
       size: size ?? const Size(375, 667),
-      platform: TargetPlatform.android,
-      brightness: brightness ?? Brightness.light,
       textScaleFactor: textScaleFactor ?? 1.0,
+      platformBrightness: brightnessValue,
       highContrast: highContrast ?? false,
       disableAnimations: disableAnimations ?? false,
       accessibleNavigation: accessibleNavigation ?? false,
@@ -68,7 +68,7 @@ class _MockUtils {
   }
 
   /// Create mock box constraints
-  static BoxConstraints createMockConstraints({
+  BoxConstraints createMockConstraints({
     double? minWidth,
     double? maxWidth,
     double? minHeight,
@@ -83,7 +83,7 @@ class _MockUtils {
   }
 
   /// Create mock size for responsive testing
-  static Size createMockSize({
+  Size createMockSize({
     double? width,
     double? height,
     MPDeviceSize? deviceSize,
@@ -95,7 +95,7 @@ class _MockUtils {
   }
 
   /// Get size for device type
-  static Size _getSizeForDevice(MPDeviceSize deviceSize) {
+  Size _getSizeForDevice(MPDeviceSize deviceSize) {
     switch (deviceSize) {
       case MPDeviceSize.smallMobile:
         return const Size(320, 568);
@@ -162,21 +162,18 @@ class MockAnimation extends Mock implements Animation<double> {
 
 /// Mock VoidCallback for testing callbacks
 class MockVoidCallback extends Mock {
-  void call() => super.call();
+  void call() {}
 }
 
 /// Mock ValueChanged for testing value changes
 class MockValueChanged<T> extends Mock {
-  void call(T value) => super.call(value);
+  void call(T value) {}
 }
 
 /// Mock GestureRecognizer for testing gestures
-class MockGestureRecognizer extends Mock
-    implements GestureRecognizer {
-  @override
+class MockGestureRecognizer extends Mock {
   void addPointer(PointerDownEvent event) {}
 
-  @override
   void dispose() {}
 }
 
@@ -399,7 +396,7 @@ class WidgetPropertyMatcher extends Matcher {
   });
 
   @override
-  bool matches(covariant Widget widget, Map matchState) {
+  bool matches(covariant Widget widget, Map<dynamic, dynamic> matchState) {
     final actualValue = getProperty(widget);
     matchState['actualValue'] = actualValue;
     return actualValue == expectedValue;
@@ -414,7 +411,7 @@ class WidgetPropertyMatcher extends Matcher {
   Description describeMismatch(
     covariant Widget widget,
     Description mismatchDescription,
-    Map matchState,
+    Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
     final actualValue = matchState['actualValue'];
@@ -452,7 +449,7 @@ class _IsEnabledMatcher extends Matcher {
   const _IsEnabledMatcher();
 
   @override
-  bool matches(covariant Object? obj, Map matchState) {
+  bool matches(covariant Object? obj, Map<dynamic, dynamic> matchState) {
     if (obj is! Widget) return false;
     // Widget is enabled by default unless it's IgnorePointer with ignoring=true
     if (obj is IgnorePointer) {
@@ -470,7 +467,7 @@ class _IsEnabledMatcher extends Matcher {
   Description describeMismatch(
     covariant Object? obj,
     Description mismatchDescription,
-    Map matchState,
+    Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
     return mismatchDescription.add('is disabled');
@@ -482,7 +479,7 @@ class _IsDisabledMatcher extends Matcher {
   const _IsDisabledMatcher();
 
   @override
-  bool matches(covariant Object? obj, Map matchState) {
+  bool matches(covariant Object? obj, Map<dynamic, dynamic> matchState) {
     if (obj is! Widget) return false;
     // Widget is disabled if it's IgnorePointer with ignoring=true
     if (obj is IgnorePointer) {
@@ -500,7 +497,7 @@ class _IsDisabledMatcher extends Matcher {
   Description describeMismatch(
     covariant Object? obj,
     Description mismatchDescription,
-    Map matchState,
+    Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
     return mismatchDescription.add('is enabled');
