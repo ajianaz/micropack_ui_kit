@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test helper utilities for Micropack UI Kit
@@ -236,7 +237,7 @@ class MPTestHelpers {
     WidgetTester tester, {
     bool ignoreContainers = true,
   }) {
-    final semantics = SemanticsHandle(tester.ensureSemantics());
+    final semantics = tester.ensureSemantics();
     try {
       return tester.pipelineOwner.semanticsOwner!
           .getSemanticsNodes()

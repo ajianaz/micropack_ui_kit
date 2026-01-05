@@ -19,7 +19,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(MPDropdown<int>, findsOneWidget);
+      expect(find.byType(MPDropdown<int>), findsOneWidget);
     });
 
     testWidgets('renders selected value', (tester) async {
@@ -38,7 +38,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(MPDropdown<int>, findsOneWidget);
+      expect(find.byType(MPDropdown<int>), findsOneWidget);
     });
 
     testWidgets('calls onChanged when item selected', (tester) async {
@@ -59,7 +59,7 @@ void main() {
       );
 
       // Tap dropdown to open menu
-      await tester.tap(find.byType(MPDropdown<int>>);
+      await tester.tap(find.byType(MPDropdown<int>));
       await tester.pumpAndSettle();
 
       // Tap on an item
@@ -104,7 +104,7 @@ void main() {
           ),
         );
 
-        expect(find.byType(MPDropdown<int>, findsOneWidget);
+        expect(find.byType(MPDropdown<int>), findsOneWidget);
       }
     });
 
@@ -124,7 +124,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(MPDropdown<int>>);
+      await tester.tap(find.byType(MPDropdown<int>));
       await tester.pumpAndSettle();
 
       // Menu should not open
@@ -149,7 +149,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(MPDropdown<int>, findsOneWidget);
+      expect(find.byType(MPDropdown<int>), findsOneWidget);
     });
   });
 }

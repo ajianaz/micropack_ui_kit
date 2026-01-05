@@ -84,15 +84,17 @@ void main() {
 
       testWidgets('debug forces specific platform', (tester) async {
         await tester.pumpWidget(
-          MPPlatformAdaptive(
-            debugForcePlatform: MPPlatform.iOS,
-            iOS: Container(
-              color: Colors.blue,
-              child: const Text('iOS'),
-            ),
-            android: Container(
-              color: Colors.green,
-              child: const Text('Android'),
+          const MaterialApp(
+            home: MPPlatformAdaptive(
+              debugForcePlatform: MPPlatform.iOS,
+              iOS: ColoredBox(
+                color: Colors.blue,
+                child: Text('iOS'),
+              ),
+              android: ColoredBox(
+                color: Colors.green,
+                child: Text('Android'),
+              ),
             ),
           ),
         );
@@ -201,14 +203,16 @@ void main() {
         if (isWeb) {
           // On web, verify platform detection works
           await tester.pumpWidget(
-            MPPlatformAdaptive(
-              web: Container(
-                color: Colors.cyan,
-                child: const Text('Web'),
-              ),
-              fallback: Container(
-                color: Colors.grey,
-                child: const Text('Fallback'),
+            const MaterialApp(
+              home: MPPlatformAdaptive(
+                web: ColoredBox(
+                  color: Colors.cyan,
+                  child: Text('Web'),
+                ),
+                fallback: ColoredBox(
+                  color: Colors.grey,
+                  child: Text('Fallback'),
+                ),
               ),
             ),
           );
@@ -219,14 +223,16 @@ void main() {
         } else {
           // On non-web platforms, should show fallback
           await tester.pumpWidget(
-            MPPlatformAdaptive(
-              web: Container(
-                color: Colors.cyan,
-                child: const Text('Web'),
-              ),
-              fallback: Container(
-                color: Colors.grey,
-                child: const Text('Fallback'),
+            const MaterialApp(
+              home: MPPlatformAdaptive(
+                web: ColoredBox(
+                  color: Colors.cyan,
+                  child: Text('Web'),
+                ),
+                fallback: ColoredBox(
+                  color: Colors.grey,
+                  child: Text('Fallback'),
+                ),
               ),
             ),
           );

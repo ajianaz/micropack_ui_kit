@@ -28,7 +28,8 @@ void main() {
               home: Builder(
                 builder: (context) {
                   final color = context.mp.adaptiveTextColor(1.0);
-                  expect(color, MPColorTheme.light.neutral90);
+                  // adaptiveTextColor returns getPrimaryTextColor() which is neutral100 for light mode
+                  expect(color, MPColorTheme.light.neutral100);
                   expect(Theme.of(context).brightness, Brightness.light);
                   return Container();
                 },
