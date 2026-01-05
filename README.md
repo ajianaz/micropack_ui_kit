@@ -296,6 +296,15 @@ MPSwitch(
 
 **Sizes**: `small`, `medium`, `large`
 
+**Note**: MPSwitch uses the [flutter_switch](https://pub.dev/packages/flutter_switch) package to provide advanced features not available in Flutter's native Switch widget:
+- Custom width, height, and thumb size dimensions
+- ON/OFF text indicators
+- Full border customization (BoxBorder support)
+- Arbitrary widget icons (not limited to Material 3)
+- Custom animation duration
+
+While flutter_switch is not actively maintained (last updated in 2021), it remains compatible with the latest Flutter versions. Migration to native Switch was evaluated but rejected due to the significant feature loss that would result. See the full analysis in `.auto-claude/specs/001-improvement/FLUTTER_SWITCH_ANALYSIS.md`.
+
 ### 🏷️ MPChip
 
 Tag and label chip component with variants.
