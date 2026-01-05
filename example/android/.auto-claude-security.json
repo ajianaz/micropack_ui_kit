@@ -129,70 +129,27 @@
   ],
   "stack_commands": [
     "ant",
-    "ar",
-    "clang",
-    "clang++",
-    "cmake",
-    "dart",
-    "dart2js",
-    "dartanalyzer",
-    "dartdoc",
-    "dartfmt",
-    "flutter",
-    "fvm",
-    "g++",
-    "gcc",
     "gradle",
     "gradlew",
-    "ipython",
     "jar",
     "java",
     "javac",
-    "jupyter",
     "kotlin",
     "kotlinc",
-    "ld",
-    "make",
     "maven",
-    "meson",
-    "mvn",
-    "ninja",
-    "nm",
-    "notebook",
-    "objdump",
-    "pdb",
-    "pip",
-    "pip3",
-    "pipx",
-    "pub",
-    "pudb",
-    "python",
-    "python3",
-    "strip",
-    "swift",
-    "swiftc",
-    "xcodebuild"
+    "mvn"
   ],
-  "script_commands": [
-    "./fix_mp_card_page.sh"
-  ],
+  "script_commands": [],
   "custom_commands": [],
   "detected_stack": {
     "languages": [
-      "python",
       "java",
-      "kotlin",
-      "c",
-      "cpp",
-      "swift",
-      "dart"
+      "kotlin"
     ],
     "package_managers": [
-      "pub"
+      "gradle"
     ],
-    "frameworks": [
-      "flutter"
-    ],
+    "frameworks": [],
     "databases": [],
     "infrastructure": [],
     "cloud_providers": [],
@@ -204,11 +161,9 @@
     "make_targets": [],
     "poetry_scripts": [],
     "cargo_aliases": [],
-    "shell_scripts": [
-      "fix_mp_card_page.sh"
-    ]
+    "shell_scripts": []
   },
-  "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/worktrees/tasks/001-improvement/example",
-  "created_at": "2026-01-05T08:54:18.600624",
-  "project_hash": "fd0946f8424ce8ec1d1c03a133ba2cf5"
+  "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/worktrees/tasks/001-improvement/example/android",
+  "created_at": "2026-01-05T09:00:16.272751",
+  "project_hash": "855f471f100dd44660920ce8ba099026"
 }
