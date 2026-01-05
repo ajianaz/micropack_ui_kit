@@ -101,10 +101,10 @@ packages:
     dependency: transitive
     description:
       name: carousel_slider_x
-      sha256: b29ec378b362db1aa093ae65bafb1b787666691d5530cb0ed8069b7749c5aa07
+      sha256: "8afd4becf9bc29a47be6ba30d72adf2b70eaf7fe07654c1a59ccb3764a379c3a"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.5"
+    version: "6.0.7"
   change_app_package_name:
     dependency: "direct dev"
     description:
