@@ -4,7 +4,7 @@ version: 0.3.0
 homepage: https://github.com/ajianaz/micropack-ui-kit.git
 
 environment:
-  sdk: '>=3.0.1 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
   flutter: '>=1.17.0'
 
 dependencies:
@@ -33,7 +33,7 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.5.1
   build_runner: ^2.4.8
-  very_good_analysis: ^8.0.0
+  very_good_analysis: ^9.0.0
 
 flutter:
   uses-material-design: true
