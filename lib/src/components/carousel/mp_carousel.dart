@@ -58,8 +58,8 @@ class MPCarousel extends StatelessWidget {
     // Get carousel height based on variant
     final carouselHeight = height ?? _getHeightForVariant(context);
 
-    return CarouselSlider(
-      options: CarouselOptions(
+    return CarouselSliderX(
+      options: CarouselOptionsX(
         height: carouselHeight,
         aspectRatio: aspectRatio ?? 0.0,
         viewportFraction: _getViewportFraction(),
