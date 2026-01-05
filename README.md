@@ -693,6 +693,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### ✅ Recent Updates
 
+#### [0.3.1] - 2026-01-05
+- 🔧 **Dependency Updates**: Updated multiple packages for compatibility and bug fixes
+  - Updated `flutter_spinkit` from ^5.2.0 to ^5.2.2
+  - Updated `flutter_slidable` from ^4.0.0 to ^4.0.2
+  - Updated `mockito` from ^5.4.4 to ^5.5.1
+  - Updated `very_good_analysis` from ^8.0.0 to ^9.0.0
+- 🐛 **Bug Fix**: Resolved `CarouselController` naming conflict with Flutter 3.24.0+
+- 🔄 **Internal**: Migrated from `carousel_slider` to `carousel_slider_x` for Flutter 3.24.0+ compatibility
+  - No breaking changes to public API
+  - `MPCarousel` component interface remains unchanged
+- 📝 **Documentation**: Added flutter_switch usage rationale in MPSwitch section
+- ✅ **Quality**: Upgraded to Flutter 3.38.5 (Dart 3.10.4) for latest SDK features
+
 #### [0.3.0] - 2025-12-23
 - ✨ **New Demo Pages**: Added 9 new demo pages for all form components
   - Badge, Switch, Chip, Progress, Dropdown, Tooltip, Checkbox, Snackbar, Skeleton
