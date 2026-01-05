@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.12.1"
+  carousel_slider_x:
+    dependency: transitive
+    description:
+      name: carousel_slider_x
+      sha256: b29ec378b362db1aa093ae65bafb1b787666691d5530cb0ed8069b7749c5aa07
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.5"
   change_app_package_name:
     dependency: "direct dev"
     description:
@@ -185,6 +193,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.8"
   extended_image:
     dependency: transitive
     description:
@@ -270,6 +286,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.3"
+  flutter_slidable:
+    dependency: transitive
+    description:
+      name: flutter_slidable
+      sha256: ea369262929d3cc6ebf9d8a00c196127966f117fe433a5e5cb47fb08008ca203
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.3"
   flutter_spinkit:
     dependency: transitive
     description:
@@ -478,7 +502,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.3"
+    version: "0.3.0"
   mime:
     dependency: transitive
     description:

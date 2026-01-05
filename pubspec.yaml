@@ -22,7 +22,7 @@ dependencies:
   nil: ^1.1.1
   shared_preferences: ^2.5.3
   skeletonizer: ^1.4.3
-  carousel_slider: ^5.0.0
+  carousel_slider_x: ^5.0.5
   flutter_slidable: ^4.0.0
   # lottie: ^2.7.0
   # tap_debouncer: ^2.2.0
