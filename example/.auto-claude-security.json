@@ -163,7 +163,9 @@
     "swiftc",
     "xcodebuild"
   ],
-  "script_commands": [],
+  "script_commands": [
+    "./fix_mp_card_page.sh"
+  ],
   "custom_commands": [],
   "detected_stack": {
     "languages": [
@@ -191,9 +193,11 @@
     "make_targets": [],
     "poetry_scripts": [],
     "cargo_aliases": [],
-    "shell_scripts": []
+    "shell_scripts": [
+      "fix_mp_card_page.sh"
+    ]
   },
-  "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/worktrees/tasks/001-improvement",
-  "created_at": "2026-01-05T07:57:14.038330",
-  "project_hash": "b87d4c3630b0f2128622196b705f73b1"
+  "project_dir": "/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/worktrees/tasks/001-improvement/example",
+  "created_at": "2026-01-05T07:57:06.814101",
+  "project_hash": "e8fc21720371634f4a37e99c2d49a1f5"
 }
