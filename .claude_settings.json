@@ -1,0 +1,34 @@
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Glob(./**)",
+      "Grep(./**)",
+      "Read(/Users/mis-puragroup/development/riset/micropack_ui_kit/**)",
+      "Write(/Users/mis-puragroup/development/riset/micropack_ui_kit/**)",
+      "Edit(/Users/mis-puragroup/development/riset/micropack_ui_kit/**)",
+      "Glob(/Users/mis-puragroup/development/riset/micropack_ui_kit/**)",
+      "Grep(/Users/mis-puragroup/development/riset/micropack_ui_kit/**)",
+      "Read(/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/specs/001-improvement/**)",
+      "Write(/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/specs/001-improvement/**)",
+      "Edit(/Users/mis-puragroup/development/riset/micropack_ui_kit/.auto-claude/specs/001-improvement/**)",
+      "Bash(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "mcp__context7__resolve-library-id(*)",
+      "mcp__context7__get-library-docs(*)",
+      "mcp__graphiti-memory__search_nodes(*)",
+      "mcp__graphiti-memory__search_facts(*)",
+      "mcp__graphiti-memory__add_episode(*)",
+      "mcp__graphiti-memory__get_episodes(*)",
+      "mcp__graphiti-memory__get_entity_edge(*)"
+    ]
+  }
+}
